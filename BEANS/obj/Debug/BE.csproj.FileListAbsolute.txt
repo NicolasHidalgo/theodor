@@ -1,0 +1,11 @@
+C:\JMIESES\2022\Proyectos\webapp\BEANS\bin\Debug\BEANS.dll
+C:\JMIESES\2022\Proyectos\webapp\BEANS\bin\Debug\BEANS.pdb
+C:\JMIESES\2022\Proyectos\webapp\BEANS\obj\Debug\BE.csproj.CoreCompileInputs.cache
+C:\JMIESES\2022\Proyectos\webapp\BEANS\obj\Debug\BEANS.dll
+C:\JMIESES\2022\Proyectos\webapp\BEANS\obj\Debug\BEANS.pdb
+C:\JMIESES\2024\webapp\BEANS\bin\Debug\BEANS.dll
+C:\JMIESES\2024\webapp\BEANS\bin\Debug\BEANS.pdb
+C:\JMIESES\2024\webapp\BEANS\obj\Debug\BE.csproj.AssemblyReference.cache
+C:\JMIESES\2024\webapp\BEANS\obj\Debug\BE.csproj.CoreCompileInputs.cache
+C:\JMIESES\2024\webapp\BEANS\obj\Debug\BEANS.dll
+C:\JMIESES\2024\webapp\BEANS\obj\Debug\BEANS.pdb

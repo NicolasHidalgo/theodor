@@ -1,0 +1,307 @@
+﻿@{
+    ViewBag.Title = "Permisos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = new BEANS.SEG_USUARIO_BE();
+    if (Session["Usuario"] != null)
+    {
+        user = (BEANS.SEG_USUARIO_BE)Session["Usuario"];
+    }
+}
+
+<!-- Theme JS files -->
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+<script type="text/javascript" src="~/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+
+<script type="text/javascript" src="~/assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
+
+@section Styles{
+    <style>
+        .datatable-header {
+            display: none;
+        }
+
+        table.dataTable thead tr {
+            background-color: #3f444e;
+            color: white;
+        }
+
+        .modal {
+            text-align: center;
+            padding: 0 !important;
+        }
+
+            .modal:before {
+                content: '';
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
+                margin-right: -4px;
+            }
+
+        .modal-dialog {
+            display: inline-block;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .ui-autocomplete {
+            z-index: 215000000 !important;
+        }
+
+        .select2-no-results {
+            display: none !important;
+        }
+    </style>
+}
+
+<!-- Main content -->
+<div class="container-fluid">
+    <!-- Page header -->
+    <div class="page-header">
+        <div class="page-header-content">
+        </div>
+        <div class="breadcrumb-line breadcrumb-line-component">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="icon-home2 position-left"></i> Configuración Usuario - Aplicacion - Perfil</a></li>
+            </ul>
+            @*<ul class="breadcrumb-elements">
+                    <li><a id="btnConsultaAcceso"><i class="icon-users2"></i> Consultar Usuario</a></li>
+                </ul>*@
+        </div>
+    </div>
+    <!-- /page header -->
+    <!-- Content area -->
+    <div class="content">
+        <!-- Vertical form options -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Basic layout-->
+                <form id="FormAcceso">
+                    <div class="panel panel-flat">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label>Usuario:</label>
+                                <select id="ddlUsuario" name="ddlUsuario" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Aplicacion:</label>
+                                <select id="ddlAplicacion" name="ddlAplicacion" class="form-control">
+                                    <option value="">--Seleccione--</option>
+                                    @foreach (var item in user.Aplicaciones)
+                                    {
+                                        <option value="@item.COD_APLICACION">@item.NOM_APLICACION</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Perfil:</label>
+                                <select id="ddlPerfil" name="ddlPerfil" class="select" multiple="multiple"></select>
+                            </div>
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-primary">Aplicar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- /basic layout -->
+            </div>
+        </div>
+        <!-- /vertical form options -->
+    </div>
+    <!-- /content area -->
+</div>
+<!-- /main content -->
+
+@section Scripts {
+    <script type="text/javascript">
+
+    $("#ddlUsuario").select2({
+        ajax: {
+            //url: 'Url.Content("~")' + 'api/SEG/GetUsuariosPorNombre/N',
+            url: function () {
+                return '../SEG/JSON_BuscarUsuario' //urls.SEGApi.GetUsuariosPorNombre('N');
+            },
+            dataType: 'json',
+            type: "GET",
+            delay: 250,
+            data: function (params) {
+                return {
+                    term: params.term,
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            id: item.IDE_USUARIO,
+                            text: item.NOM_USUARIO + ' ' + '(' + item.COD_USUARIO + ')'
+                        }
+                    })
+                };
+            },
+            cache: true
+        },
+        templateResult: function (item) {
+            if (item.loading) return item.text;
+            return item.text;
+        },
+        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        minimumInputLength: 1,
+        //tags: true, // Esta opcion sirve para que el valor que se escriba aparezca como un select option
+    });
+
+    function GetDDLAplicacion(){
+        var _reply = {
+            ACCION: 'SELECT_ALL',
+        };
+        $.getJSON('@Url.Action("JSON_GetProceso","XLS")', _reply, function (data) {
+            var ddlAplicacion = $('#ddlAplicacion');
+            ddlAplicacion.append('<option value="">--Seleccione--</option>');
+            $.each(data.DATA, function (index, item) {
+                ddlAplicacion.append($('<option/>', {
+                    value: item.ID_PROCESO,
+                    text: item.NOM_CARGA,
+                    //selected: item.Selected
+                }));
+            });
+        });
+        }
+
+    function GetDDLPerfil(CodAplicacion){
+        var _reply = {
+            ACCION: 'SEL_PERFIL',
+            COD_APLICACION: CodAplicacion //$("#txtCodAplicacion").val()
+        };
+        $.getJSON('@Url.Action("JSON_GetPerfil","SEG")', _reply, function (data) {
+            var ddlPerfil = $('#ddlPerfil');
+            ddlPerfil.empty();
+            $.each(data.DATA, function (index, item) {
+                ddlPerfil.append($('<option/>', {
+                    value: item.ID_PERFIL,
+                    text: item.NOM_PERFIL,
+                    //selected: item.Selected
+                    //document.getElementById('personlist').getElementsByTagName('option')[11].selected = 'selected'
+                }));
+            });
+        });
+    }
+
+
+    $(function () {
+
+        //GetDDLAplicacion();
+        //GetDDLPerfil();
+
+        $('#ddlUsuario,#ddlAplicacion').change(function () {
+            var _IdUsuario = $("#ddlUsuario").val();
+            var _CodAplicacion = $("#ddlAplicacion").val();
+            $("#ddlPerfil option:selected").prop("selected", false).trigger('change');
+
+            if (_CodAplicacion != null && _CodAplicacion != '') {
+                GetDDLPerfil(_CodAplicacion);
+            }
+            
+            if (_IdUsuario != null && _IdUsuario != '' && _CodAplicacion != null && _CodAplicacion != '') {
+
+                var _obj = {
+                    IDE_USUARIO: _IdUsuario,
+                    COD_APLICACION: _CodAplicacion
+                };
+
+                var _reply = {
+                    ACCION: 'GET_PERMISO',
+                    DATA: JSON.stringify(_obj),
+                };
+
+                $.getJSON('@Url.Action("JSON_GetPermisos", "SEG")', _reply , function (data) {
+                    $.each(data.DATA, function (index, item) {
+                        $("#ddlPerfil option[value='" + item.ID_PERFIL + "']").prop('selected', true);
+                    });
+                    $("#ddlPerfil").trigger('change');
+                    //$('#ddlPerfil').val([1, 2]).trigger('change');
+                });
+            }
+        });
+
+        var Validator = $('#FormAcceso').validate({
+            rules: {
+                ddlUsuario: {
+                    required: true
+                },
+                ddlAplicacion: {
+                    required: true
+                },
+                //ddlPerfil: {
+                //    required: true,
+                //},
+
+            },
+            messages: {
+                ddlUsuario: {
+                    required: 'Seleccione un usuario'
+                },
+                ddlAplicacion: {
+                    required: 'Seleccione una aplicacion'
+                },
+                //ddlPerfil: {
+                //    required: 'Seleccione un perfil'
+                //}
+            },
+            highlight: function (element) {
+                $(element).parent().addClass('validation-error-label')
+            },
+            unhighlight: function (element) {
+                $(element).parent().removeClass('validation-error-label')
+            },
+
+            submitHandler: function (form, e) {
+
+                var arrPerfil = [];
+                var _perfiles = $('#ddlPerfil').val();
+                if (_perfiles != null) {
+                    _perfiles = $.map($('#ddlPerfil').val(), function (item) {
+                        arrPerfil.push({ ID_PERFIL: Number(item) });
+                        //if (item) {
+                        //    return {
+                        //        Value: Number(item)
+                        //    }
+                        //}
+                    });
+                }
+
+
+                var _obj = {
+                    IDE_USUARIO: $('#ddlUsuario').val(),
+                    COD_APLICACION: $('#ddlAplicacion').val(),
+                    Perfiles: arrPerfil
+                };
+
+                var _reply = {
+                    ACCION: 'START/INSERT_DETAIL',
+                    MENSAJE: '',
+                    IDE_USUARIO: 0,
+                    DATA: JSON.stringify(_obj),
+                };
+
+                var _url = '@Url.Action("Permisos", "SEG")';
+
+                $.post(_url, _reply).done(function (data) {
+                    if (data.Status === 200) {
+                        toastr.success(data.Message)
+                    }
+                    else {
+                        toastr.error(data.Message)
+                    }
+                });
+            }
+        });
+
+    });
+
+    </script>
+}
+

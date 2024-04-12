@@ -1,0 +1,835 @@
+﻿
+@{
+    ViewBag.Title = "CargaExcel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Theme JS files -->
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/uploaders/fileinput/fileinput.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/uploader_bootstrap.js"></script>
+<script type="text/javascript" src="~/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+
+
+<link href="~/assets/otros/datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+<script src="~/assets/otros/datepicker/bootstrap-datepicker.js"></script>
+<script src="~/assets/otros/datepicker/bootstrap-datepicker.es.min.js"></script>
+
+<script src="~/assets/otros/xlsfull/xlsx.full.min.js"></script>
+
+
+<!-- /theme JS files -->
+
+@section Styles{
+    <style>
+        .datatable-header {
+            display: none;
+        }
+
+        table.dataTable thead tr {
+            background-color: #3f444e;
+            color: white;
+        }
+
+        #EstructuraModal thead tr, #CargaDatatable thead tr {
+            background-color: #3f444e;
+            color: white;
+        }
+
+        .modal {
+            text-align: center;
+            padding: 0 !important;
+        }
+
+            .modal:before {
+                content: '';
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
+                margin-right: -4px;
+            }
+
+        .modal-dialog {
+            display: inline-block;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .ui-autocomplete {
+            z-index: 215000000 !important;
+        }
+
+        .select2-no-results {
+            display: none !important;
+        }
+
+    </style>
+}
+
+<div id="EstructuraModal" class="modal fade" role="dialog" aria-labelledby="EstructuraModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="EstructuraModalLabel">Nombre de la Hoja: @ViewBag.NomHoja</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="EstructuraDatatable" class="table table-responsive table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th class="text-left">Campo</th>
+                            <th class="text-center">Tipo</th>
+                            <th class="text-center">Comentario</th>
+                        </tr>
+                    </thead>
+                    <tbody id="BodyEstructura"></tbody>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="btnDescargarEstructura">Descargar Plantilla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Main content -->
+<div class="container-fluid">
+    <!-- Page header -->
+    <div class="page-header">
+        <div class="page-header-content">
+        </div>
+        <div class="breadcrumb-line breadcrumb-line-component">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="icon-home2 position-left"></i> @ViewBag.NomCarga</a></li>
+            </ul>
+            @*<ul class="breadcrumb-elements">
+                    <li><a id="btnConsultaAcceso"><i class="icon-users2"></i> Consultar Usuario</a></li>
+                </ul>*@
+        </div>
+    </div>
+    <!-- /page header -->
+    <!-- Content area -->
+    <div class="content">
+        <!-- Vertical form options -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Basic layout-->
+                <div class="panel panel-flat" style="margin:0">
+                    <div class="panel-body">
+                        <form id="Form" enctype="multipart/form-data">
+                            <label class="hide">Proceso que permite cargar el contenido de una hoja Excel al sistema. Debe respetarse el formato acorde con la configuración de la plantilla y la hoja.</label>
+                            <div class="form-group row hide">
+                                <label for="ddlProceso" class="col-sm-2 col-form-label text-semibold">Proceso:</label>
+                                <input type="text" id="txtCodCarga" value="@ViewBag.CodCarga" readonly class="hide" />
+                                <label class="col-sm-10 col-form-label text-semibold">@ViewBag.NomCarga</label>
+                            </div>
+                            <div class="form-group row">
+                                <label for="txtUploadFile" class="col-sm-2 col-form-label text-semibold">Archivo Excel:</label>
+                                <div class="col-sm-6">
+                                    <input type="file" name="file" id="txtUploadFile" class="file-input">
+                                </div>
+                            </div>
+
+                            <div id="divParametros">
+
+                            </div>
+
+                            @*<div class="text-right">
+                            <button type="submit" class="btn btn-primary">Aplicar</button>
+                        </div>*@
+                        </form>
+                        <div class="row">
+                            <div id="divAlert" class="col-md-8 alert alert-info alert-styled-left alert-bordered hidden"></div>
+                            <div class="col-md-2">
+                                <a data-toggle="modal" data-target="#EstructuraModal"><img src="~/assets/images/i-info.png" height="60" width="60" /></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- /basic layout -->
+            </div>
+        </div>
+
+            @*<div class="col-md-3">
+                <div class="panel panel-flat">
+                    <div class="sidebar-default">
+                        <div class="sidebar-content" style="padding:0">
+
+
+                            <div class="sidebar-category no-margin">
+                                <div class="category-title">
+                                    <span>Filtros</span>
+                                </div>
+                            </div>
+
+                            <div class="sidebar-category">
+                                <div class="category-content no-padding">
+                                    <table class="table table-borderless table-xs content-group-sm">
+                                        <tbody>
+                                            <tr>
+                                                <td>Estado:</td>
+                                                <td class="text-right">
+                                                    <select class="select form-control" id="ddlEstado_Filtro">
+                                                        <option value="TODOS">Todos</option>
+                                                        <option value="En Proceso">En Proceso</option>
+                                                        <option value="Activo">Activo</option>
+                                                        <option value="Inactivo">Inactivo</option>
+                                                        <option value="Error">Error</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Parametros</td>
+                                                <td class="text-right">
+                                                    <input type="text" class="form-control" id="txtParametro01_Filtro" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="category-content" style="padding-top:5px;">
+                                <a id="btnFiltrar" class="btn bg-blue btn-block"><i class="icon-filter3 position-left"></i> FILTRAR</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>*@
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-flat" style="margin:0">
+                    <div class="panel-body no-padding">
+                        <div class="col-md-2 col-md-offset-8 no-padding">
+                            <select class="form-control" id="ddlEstado_Filtro">
+                                <option value="TODOS">Todos</option>
+                                <option value="En Proceso">En Proceso</option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                                <option value="Error">Error</option>
+                            </select>
+                        </div>
+                        <div class="input-group col-md-2 no-padding">
+                            <input type="text" class="form-control" id="txtBuscar_Filtro" placeholder="Buscar" />
+                            <span id="btnFiltrar" style="cursor:pointer;" class="input-group-addon"><i class="icon-filter3 position-center"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-flat">
+
+                    <div class="table-responsive">
+                        <table id="CargaDatatable" class="table table-responsive table-bordered table-striped"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /content area -->
+</div>
+<!-- /main content -->
+
+@section Scripts {
+    <script type="text/javascript">
+
+    function ExportToExcel(tbl, type, fn, dl) {
+        var elt = document.getElementById(tbl);
+        var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+        return dl ?
+            XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+            XLSX.writeFile(wb, fn || ('plantilla.' + (type || 'xlsx')));
+    }
+
+    function GetDDLProceso(){
+        var _CodUsuario = $("#lblCodUsuario").text();
+
+        var _reply = {
+            ACCION: 'SELECT_SEG',
+            COD_USUARIO: _CodUsuario,
+        };
+        $.getJSON('@Url.Action("JSON_GetProceso","XLS")', _reply, function (data) {
+            var ddlProceso = $('#ddlProceso');
+            ddlProceso.append('<option value="">--Seleccione--</option>');
+            $.each(data.DATA, function (index, item) {
+                ddlProceso.append($('<option/>', {
+                    value: item.COD_CARGA,
+                    text: item.NOM_CARGA,
+                    //selected: item.Selected
+                }));
+            });
+        });
+    }
+
+    function GetEstructura(){
+        var _CodCarga = $("#txtCodCarga").val(); //$("#ddlProceso").val();
+        var _CodUsuario = $("#lblCodUsuario").text();
+
+        var _obj = {
+            COD_CARGA: _CodCarga
+        };
+        var _reply = {
+            ACCION: 'SELECT_ESTRUCTURA',
+            MENSAJE: '',
+            COD_USUARIO: _CodUsuario,
+            DATA: JSON.stringify(_obj),
+        };
+
+        $.getJSON('@Url.Action("JSON_GetEstructura","XLS")', _reply, function (data) {
+
+            $("#BodyEstructura").empty();
+            var tblBody = "";
+            $.each(data.DATA, function (index, item) {
+
+                var ID_ESTRUCTURA = item.ID_ESTRUCTURA;
+                var COD_CARGA = item.COD_CARGA;
+                var NOM_CAMPO = item.NOM_CAMPO;
+                var TIPO = item.TIPO;
+                var EQUIVALENCIA = item.EQUIVALENCIA;
+                var ORDEN = item.ORDEN;
+                var COMENTARIO = item.COMENTARIO;
+
+                var row = '<tr>' +
+                    '<td class="text-center ORDEN">' + ORDEN + '</td>' +
+                    '<td class="text-left NOM_CAMPO">' + NOM_CAMPO + '</td>' +
+                    '<td class="text-center TIPO">' + TIPO + '</td>' +
+                    '<td class="text-center COMENTARIO">' + COMENTARIO + '</td>' +
+                    '</tr>';
+                tblBody = tblBody + row;
+            });
+
+
+            $("#BodyEstructura").append(tblBody);
+        });
+    }
+
+    function GetParametros(){
+        var _CodCarga = $("#txtCodCarga").val(); //$("#ddlProceso").val();
+        var _CodUsuario = $("#lblCodUsuario").text();
+
+        if (_CodCarga == "") {
+            return;
+        }
+
+        var _obj = {
+            COD_CARGA: _CodCarga
+        };
+        var _reply = {
+            ACCION: 'SELECT_PARAMETRO',
+            MENSAJE: '',
+            COD_USUARIO: _CodUsuario,
+            DATA: JSON.stringify(_obj),
+        };
+
+        //$("#divMes,#divProyecto").hide();
+
+        $.getJSON('@Url.Action("JSON_GetParametros","XLS")', _reply, function (data) {
+            $("#divParametros").empty();
+            var _control = "";
+            $.each(data.DATA, function (index, item) {
+                _control = "";
+
+                var _NOM_CONTROL = item.NOM_CONTROL;
+                var _ORDEN = numeral(item.ORDEN).format("00");
+                var _COLUMN_NAME = item.COLUMN_NAME;
+                var _ETIQUETA = item.ETIQUETA;
+
+                var _divId = "div_" + _COLUMN_NAME + "_" + _NOM_CONTROL;
+
+                if (_NOM_CONTROL == "Fecha") {
+                    _control = '<div id="' + _divId + '" class="form-group row">' +
+                        '<label class="col-lg-2 control-label text-semibold">' + _ETIQUETA + ':</label>' +
+                        '<div class="col-lg-4">' +
+                        '<div class="input-group date col-md-6">' +
+                        '<input type="text" class="form-control" id="' + _COLUMN_NAME + '" name="CONTROL" data-tipo="' + _NOM_CONTROL + '" readonly />' +
+                        '<span class="input-group-addon">' +
+                        '<span class="glyphicon glyphicon-calendar"></span>' +
+                        '</span>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                    $("#divParametros").append(_control);
+
+                    $("#" + _COLUMN_NAME).datepicker({
+                        //pickTime: false,
+                        autoclose: true,
+                        language: 'es',
+                        format: 'dd/mm/yyyy',
+                        showButtonPanel: true,
+                        orientation: "bottom"
+                    });
+                }
+
+                if (_NOM_CONTROL == "Semana") {
+
+                    _control = '<div id="' + _divId + '" class="form-group row">' +
+                        '<label class="col-md-2 control-label text-semibold">' + _ETIQUETA + ':</label>' +
+                        '<div class="col-md-2">' +
+                        '<input type="number" class="form-control" id="' + _COLUMN_NAME + '" name="CONTROL" placeholder="Formato: 202245" minlength="6" maxlength="6" />' +
+                        '</div>' +
+                        '</div>';
+                    $("#divParametros").append(_control);
+
+                }
+
+                if (_NOM_CONTROL == "Mes") {
+                    _control = '<div id="' + _divId + '" class="form-group row">' +
+                        '<label class="col-lg-2 control-label text-semibold">' + _ETIQUETA + ':</label>' +
+                        '<div class="col-lg-4">' +
+                        '<div class="input-group date col-md-6">' +
+                        '<input type="text" class="form-control" id="' + _COLUMN_NAME + '" name="CONTROL" readonly />' +
+                        '<span class="input-group-addon">' +
+                        '<span class="glyphicon glyphicon-calendar"></span>' +
+                        '</span>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                    $("#divParametros").append(_control);
+
+                    $("#" + _COLUMN_NAME).datepicker({
+                        //pickTime: false,
+                        autoclose: true,
+                        language: 'es',
+                        format: "yyyymm",
+                        showButtonPanel: true,
+                        startView: "months",
+                        minViewMode: "months",
+                        orientation: "bottom"
+                    });
+                }
+
+                if (_NOM_CONTROL.startsWith('#')) {
+                /*if (_NOM_CONTROL == "DDL") {*/
+                    if (item.lstOption != null) {
+                        _control = '<div id="' + _divId + '" class="form-group row">';
+                        _control += '<label class="col-lg-2 control-label text-semibold">' + _ETIQUETA + ':</label>';
+                        _control += '<div class="col-lg-2">';
+                        _control += '<select id="' + _COLUMN_NAME + '" name="CONTROL" class="form-control">';
+                        $.each(item.lstOption, function (index2, item2) {
+                            _control += '<option value="' + item2.CODIGO + '">' + item2.NOM_CONTROL + '</option>';
+                        });
+                        _control += '</select>';
+                        _control += '</div>';
+                        _control += '</div>';
+
+                        $("#divParametros").append(_control);
+                    }
+
+
+                }
+
+            });
+
+        });
+    }
+
+    function Base64ToBytes(base64) {
+        var s = window.atob(base64);
+        var bytes = new Uint8Array(s.length);
+        for (var i = 0; i < s.length; i++) {
+            bytes[i] = s.charCodeAt(i);
+        }
+        return bytes;
+    };
+
+    $(function () {
+
+        $(".file-preview").hide();
+        $("input[type=file]").change(function (e) {
+            $(".btn-file").hide();
+        });
+        $(".fileinput-remove-button").click(function (e) {
+            $(".btn-file").show();
+        });
+
+        $("#divAlert").removeClass("hidden");
+        $("#divAlert").text('');
+        $("#divAlert").append('<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>' + 'Mensajes: ');
+
+        //GetDDLProceso();
+        GetParametros();
+
+        //$('#ddlProceso').change(function () {
+        //    GetParametros();
+        //    CargaDatatable.draw();
+        //});
+
+        $("#btnFiltrar").click(function () {
+            CargaDatatable.draw();
+        });
+
+
+        $("#btnDescargarEstructura").click(function () {
+            //ExportToExcel('EstructuraDatatable','xlsx');
+
+            var _CodCarga = $("#txtCodCarga").val(); //$("#ddlProceso").val();
+            var _CodUsuario = $("#lblCodUsuario").text();
+
+            var _obj = {
+                COD_CARGA: _CodCarga,
+                NOM_HOJA: '@ViewBag.NomHoja'
+            };
+            var _reply = {
+                ACCION: 'SELECT_ESTRUCTURA',
+                MENSAJE: '',
+                COD_USUARIO: _CodUsuario,
+                DATA: JSON.stringify(_obj),
+            };
+
+            $.getJSON('@Url.Action("JSON_GetEstructuraExcel", "XLS")', _reply, function (data) {
+
+                var _base64 = data.Base64;
+                var message = data.Message;
+                console.log(message);
+
+                //Convert Base64 string to Byte Array.
+                var bytes = Base64ToBytes(_base64);
+                var _extension = "xlsx";
+                var fileName = "plantilla." + _extension;
+
+                //Convert Byte Array to BLOB.
+                var blob = new Blob([bytes], { type: "application/octetstream" });
+
+                //Check the Browser type and download the File.
+                var isIE = false || !!document.documentMode;
+                if (isIE) {
+                    window.navigator.msSaveBlob(blob, fileName);
+                } else {
+                    var url = window.URL || window.webkitURL;
+                    link = url.createObjectURL(blob);
+                    var a = $("<a />");
+                    a.attr("download", fileName);
+                    a.attr("href", link);
+                    $("body").append(a);
+                    a[0].click();
+                    $("body").remove(a);
+                }
+            });
+
+
+        });
+
+        $('#EstructuraModal').on('shown.bs.modal', function (e) {
+            var _CodCarga = $("#txtCodCarga").val(); //$("#ddlProceso").val();
+            if (_CodCarga != "") {
+                GetEstructura();
+            }
+
+        });
+
+        $('#CargaDatatable').on('click', 'tr td', function (e) {
+            var column = CargaDatatable.column(this);
+            if (column.index() == 0) {
+                var row = CargaDatatable.row(this).data();
+                console.log(row);
+                if (row.ESTADO == "Activo") {
+
+                    $("#overlay").show();
+                    var _CodUsuario = $("#lblCodUsuario").text();
+                    var _obj = {
+                        IDE_CARGA: row.IDE_CARGA,
+                        ARCHIVO_FISICO: row.ARCHIVO_FISICO,
+                        NOM_HOJA: row.NOM_HOJA
+                    };
+                    var _reply = {
+                        ACCION: '--',
+                        MENSAJE: '',
+                        COD_USUARIO: _CodUsuario,
+                        DATA: JSON.stringify(_obj),
+                    };
+                    $.getJSON('@Url.Action("JSON_GetVistaCargaExcel", "XLS")', _reply, function (data) {
+
+                        var _base64 = data.Base64;
+                        var message = data.Message;
+                        console.log(message);
+
+                        //Convert Base64 string to Byte Array.
+                        var bytes = Base64ToBytes(_base64);
+                        var _extension = ".xlsx";
+                        var fileName = row.ARCHIVO_FISICO + _extension;
+
+                        //Convert Byte Array to BLOB.
+                        var blob = new Blob([bytes], { type: "application/octetstream" });
+
+                        //Check the Browser type and download the File.
+                        var isIE = false || !!document.documentMode;
+                        $("#overlay").hide();
+                        if (isIE) {
+                            window.navigator.msSaveBlob(blob, fileName);
+                        } else {
+                            var url = window.URL || window.webkitURL;
+                            link = url.createObjectURL(blob);
+                            var a = $("<a />");
+                            a.attr("download", fileName);
+                            a.attr("href", link);
+                            $("body").append(a);
+                            a[0].click();
+                            $("body").remove(a);
+                        }
+                        
+                    });
+                }
+
+            }
+
+        });
+
+        var CargaDatatable = $('#CargaDatatable').DataTable({
+            autoWidth: false,
+            responsive: true,
+            searching: false,
+            //ordering: false,
+            order: [[4,"desc"]],
+            processing: true,
+            serverSide: true,
+            stateSave: false,
+            lengthChange: false,
+            info: false,
+
+            ajax: {
+                url: urls.XLSApi.GetDataTable_Carga(),
+                type: 'GET',
+                data: function (data) {
+
+                    var _CodCarga = $("#txtCodCarga").val(); //$("#ddlProceso").val();
+                    var _CodUsuario = $("#lblCodUsuario").text();
+
+                    var _obj = {
+                        COD_CARGA: _CodCarga,
+                        ESTADO: $("#ddlEstado_Filtro option:selected").val(),
+                        //CONTROL_01: $("#txtParametro01_Filtro").val(),
+                        //CONTROL_02: $("#txtParametro02_Filtro").val()
+                    };
+                    var _reply = {
+                        ACCION: 'SELECT_CARGA',
+                        MENSAJE: '',
+                        SEARCH: $("#txtBuscar_Filtro").val(),
+                        COD_USUARIO: _CodUsuario,
+                        DATA: JSON.stringify(_obj),
+                    };
+
+                    var _filter = _reply;
+
+                    var _order = $.map(data.order, function (item) {
+                        return {
+                            Property: data.columns[item.column].data,
+                            Direction: item.dir
+                        };
+                    });
+
+                    delete data.columns;
+                    delete data.order;
+                    delete data.search;
+
+                    data.filter = _filter;
+                    data.orderby = _order;
+                }
+            },
+            columns: [
+                {
+                    title: 'Archivo',
+                    data: 'ARCHIVO_FISICO',
+                    width: "20%",
+                    orderable: false,
+                    className: 'ARCHIVO_FISICO',
+                    render: function (data, type, full, meta) {
+                        //var _full = JSON.stringify(full);
+                        var link = data;
+                        if (full.ESTADO == "Activo") {
+                            link = '<a style="cursor: pointer; text-decoration-line: underline;">' + data + ' </a>';
+                        }
+                        
+                        return link;
+                    },
+                    responsivePriority: 0
+                },
+                {
+                    title: 'Estado',
+                    data: 'ESTADO',
+                    width: "10%",
+                    orderable: false,
+                },
+                {
+                    title: 'Parámetro 1',
+                    data: 'CONTROL_01',
+                    width: "10%",
+                    orderable: true,
+                },
+                {
+                    title: 'Parámetro 2',
+                    data: 'CONTROL_02',
+                    width: "10%",
+                    orderable: false,
+                },
+                {
+                    title: 'Fecha Carga',
+                    data: 'FEC_CARGA',
+                    width: "10%",
+                    orderable: true,
+                    //className: 'reorder',
+                    //targets: 0,
+                    render: function (data, type, full, meta) {
+                        if (data != null) {
+                            return moment(data).format('DD/MM/YY hh:mm');
+                        }
+                        return '-';
+                    }
+                },
+                {
+                    title: 'Detalle de Carga',
+                    data: 'ERROR',
+                    width: "25%",
+                    orderable: false,
+                },
+                {
+                    title: 'Cod. Usuario',
+                    data: 'USERNAME',
+                    width: "10%",
+                    className: 'USERNAME',
+                    orderable: false,
+                },
+                {
+                    title: '#',
+                    data: 'IDE_CARGA',
+                    width: "5%",
+                    orderable: false,
+                },
+                //{
+                //    title: "&nbsp;",
+                //    //orderable: false,
+                //    width: "5%",
+                //    render: function (data, type, full, meta) {
+                //        //var _full = JSON.stringify(full);
+
+                //        var dropdown = '<ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
+                //        dropdown += '<ul class="dropdown-menu dropdown-menu-right">'
+                //        dropdown += '<li><a data-toggle="modal" data-target="#UsuarioModal" data-row=' + meta.row + ' data-operacion="UPDATE"><i class="icon-pencil4"></i> Editar</a></li>';
+                //        dropdown += '<li><a data-toggle="modal" data-target="#ConfirmarModal" data-row=' + meta.row + ' data-operacion="DELETE"><i class="icon-bin"></i> Eliminar</a></li>';
+                //        dropdown += '</ul></li></ul>';
+                //        return dropdown;
+                //    },
+                //    responsivePriority: 0
+                //},
+            ],
+
+        });
+
+        var Form = $('#Form').validate({
+            submitHandler: function (form, e) {
+
+                var _CodCarga = $("#txtCodCarga").val(); //$("#ddlProceso").val();
+                var _CodUsuario = $("#lblCodUsuario").text();
+
+                if (_CodCarga == "") {
+                    alert("Seleccione proceso");
+                    return;
+                }
+
+                $("#overlay").show();
+                //$("#Form").hide();
+                $("#divAlert").empty();
+
+                var files = document.getElementById('txtUploadFile').files;
+                if (files.length > 0) {
+                   if (window.FormData !== undefined) {
+                       var dataForm = new FormData();
+                       for (var x = 0; x < files.length; x++){
+                           dataForm.append("file" + x, files[x]);
+                       }
+
+                       dataForm.append("Accion", "INSERT_CARGA");
+                       dataForm.append("CodUsuario", _CodUsuario);
+                       dataForm.append("CodCarga", _CodCarga);
+
+                       $('input[name="CONTROL"],select[name="CONTROL"]').map(function () {
+                           var _id = this.id;
+                           var value = this.value;
+                           var _tipo = $(this).attr("data-tipo");
+
+                           if (_tipo == "Fecha") {
+                               value = value.split("/").reverse().join("-");
+                           }
+
+                           dataForm.append(_id, value);
+                           //console.log(value);
+                       });
+
+
+                       $.ajax({
+                           type: "POST",
+                           url: '@Url.Content("~")' + 'XLS/CargaXls',
+                           contentType: false,
+                           processData: false,
+                           data: dataForm,
+                           success: function (data) {
+                               $(".fileinput-remove-button").click();
+
+                               if (data.Status === 200) {
+                                   //toastr.success(data.Message);
+                                   CargaDatatable.draw();
+                                   $("#divAlert").removeClass("alert-danger");
+                                   $("#divAlert").addClass("alert-success");
+
+                               } else {
+                                   $("#divAlert").removeClass("alert-success");
+                                   $("#divAlert").addClass("alert-danger");
+
+                               }
+
+                               if (data.Message != null) {
+                                   if (data.Message.includes("666")) {
+                                       window.location.href = '../Login/Login';
+                                       return;
+                                   }
+                               }
+
+                               $("#divAlert").removeClass("alert-info");
+                               $("#divAlert").append('<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>' + data.Message);
+                               $("#overlay").hide();
+                           },
+                           error: function (xhr, status, p3, p4){
+                               var err = "Error " + " " + status + " " + p3 + " " + p4;
+                               if (xhr.responseText && xhr.responseText[0] == "{")
+                                   err = JSON.parse(xhr.responseText).Message;
+                               console.log(err);
+
+                               if (xhr.responseText != null) {
+                                   if (xhr.responseText.includes("666")) {
+                                       window.location.href = '../Login/Login';
+                                       return;
+                                   }
+                               }
+                           }
+                       });
+                   } else {
+                        alert("This browser doesn't support HTML5 file uploads!");
+                   }
+                } else {
+
+                    $("#overlay").hide();
+                    alert("Debe cargar un documento.");
+                }
+            }
+        });
+
+    });
+
+    </script>
+}
+

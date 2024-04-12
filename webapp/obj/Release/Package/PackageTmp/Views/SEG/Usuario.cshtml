@@ -1,0 +1,395 @@
+﻿
+@{
+    ViewBag.Title = "Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Theme JS files -->
+<script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/datatables_advanced.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/components_modals.js"></script>
+
+<script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+<script type="text/javascript" src="~/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+
+<script type="text/javascript" src="~/assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_multiselect.js"></script>
+
+<script type="text/javascript" src="~/assets/otros/stickytableheaders/jquery.stickytableheaders.min.js"></script>
+
+<!-- /theme JS files -->
+<!-- modal buscador -->
+<div id="BuscarModal" class="modal fade" role="dialog" aria-labelledby="BuscarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h6 class="modal-title text-semibold">Buscar</h6>
+                <div class="form-group">
+                    <input class="form-control " id="txtFiltro" placeholder="Buscar...">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /modal buscador -->
+<!-- modal de confirmacion -->
+<div id="ConfirmarModal" class="modal fade" role="dialog" aria-labelledby="ConfirmarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h6 class="modal-title text-semibold">Confirmar</h6>
+                <p>Está seguro de que desea eliminar este registro?</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnEliminar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /modal de confirmacion -->
+
+<div id="UsuarioModal" class="modal fade" role="dialog" aria-labelledby="UsuarioModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="UsuarioModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="FormPlantilla">
+                <div class="modal-body">
+                    <div class="form-group hide">
+                        <label for="txtId" class="col-form-label">#</label>
+                        <input type="text" class="form-control" id="txtId" name="txtId">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtUsername" class="col-form-label">Usuario</label>
+                        <input type="text" class="form-control" id="txtUsername" name="txtUsername">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtNombres" class="col-form-label">Nombre</label>
+                        <input type="text" class="form-control" id="txtNombres" name="txtNombres">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtCorreo" class="col-form-label">Correo</label>
+                        <input type="text" class="form-control" id="txtCorreo" name="txtCorreo">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtPassword" class="col-form-label">Password</label>
+                        <input type="password" class="form-control" id="txtPassword" name="txtPassword">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Aceptar</button>
+                    <input type="text" id="txtOperacion" class="hide" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Main content -->
+<div class="container-fluid">
+    <!--class = "content-wrapper" hace que el width del table sea relativo-->
+    <!-- Page header -->
+    <div class="page-header">
+        <div class="page-header-content">
+        </div>
+        <div class="breadcrumb-line breadcrumb-line-component">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="icon-home2 position-left"></i> Usuarios</a></li>
+            </ul>
+            <ul class="breadcrumb-elements">
+                <li><a id="btnRefrescar"><i class="icon-database-refresh"></i> Refrescar</a></li>
+                <li><a data-toggle="modal" data-target="#BuscarModal"><i class="icon-search4 position-left"></i> Buscar</a></li>
+                @*<li><a data-toggle="modal" data-target="#UsuarioModal" data-operacion="INSERT"><i class="icon-plus3"></i> Agregar</a></li>*@
+            </ul>
+        </div>
+    </div>
+    <!-- /page header -->
+    <!-- Content area -->
+    <div class="content">
+        <!-- Page length options -->
+        <div class="panel panel-flat">
+            <table id="UsuarioDatatable" class="table table-responsive table-bordered table-striped"></table>
+        </div>
+        <!-- /page length options -->
+    </div>
+    <!-- /content area -->
+</div>
+<!-- /main content -->
+
+@section Styles{
+    <style>
+        .datatable-header {
+            display: none;
+        }
+
+        table.dataTable thead tr {
+            background-color: #3f444e;
+            color: white;
+        }
+
+        .modal {
+            text-align: center;
+            padding: 0 !important;
+        }
+
+            .modal:before {
+                content: '';
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
+                margin-right: -4px;
+            }
+
+        .modal-dialog {
+            display: inline-block;
+            text-align: left;
+            vertical-align: middle;
+        }
+    </style>
+}
+
+@section Scripts{
+
+    <script>
+
+$(function () {
+
+    var UsuarioDatatable = $('#UsuarioDatatable').DataTable({
+        autoWidth: false,
+        responsive: true,
+        searching: false,
+        ordering: false,
+        processing: true,
+        serverSide: true,
+        stateSave: false,
+        lengthChange: false,
+        info: false,
+
+        ajax: {
+            url: urls.SEGApi.GetDataTable_Usuario(),
+            type: 'GET',
+            data: function (data) {
+                var _filter = {
+                    ACCION: 'SELECT',
+                    SEARCH: $('#txtFiltro').val(),
+                };
+
+                var _order = $.map(data.order, function (item) {
+                    return {
+                        Property: data.columns[item.column].name,
+                        Direction: item.dir
+                    };
+                });
+
+                delete data.columns;
+                delete data.order;
+                delete data.search;
+
+                data.filter = _filter;
+                data.orderby = _order;
+            }
+        },
+        columns: [
+        {
+            title: '#',
+            data: 'IDE_USUARIO',
+            width: "5%",
+        },
+        {
+            title: 'Usuario',
+            data: 'COD_USUARIO',
+            width: "25%",
+        },
+        {
+            title: 'Nombres',
+            data: 'NOM_USUARIO',
+            width: "25%",
+        },
+        {
+            title: 'Correo',
+            data: 'CORREO_ELECTRONICO',
+            width: "25%",
+        },
+        {
+            title: 'Estado',
+            data: 'EST_USUARIO',
+            width: "25%",
+        },
+        {
+            title: "&nbsp;",
+            //orderable: false,
+            width: "5%",
+            render: function (data, type, full, meta) {
+                //var _full = JSON.stringify(full);
+
+                var dropdown = '<ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
+                dropdown += '<ul class="dropdown-menu dropdown-menu-right">'
+                dropdown += '<li><a data-toggle="modal" data-target="#UsuarioModal" data-row='+ meta.row +' data-operacion="UPDATE"><i class="icon-pencil4"></i> Editar</a></li>';
+                //dropdown += '<li><a data-toggle="modal" data-target="#ConfirmarModal" data-row=' + meta.row +' data-operacion="DELETE"><i class="icon-bin"></i> Eliminar</a></li>';
+                dropdown += '</ul></li></ul>';
+                return dropdown;
+            },
+            responsivePriority: 0
+        },
+        ],
+
+    });
+
+
+    $('#btnRefrescar').on('click', function () {
+        $("#txtFiltro").val('');
+        UsuarioDatatable.draw();
+    });
+    $('#txtFiltro').on('keyup click', function () {
+        UsuarioDatatable.draw();
+    });
+
+    var codValidator = $('#FormPlantilla').validate({
+        rules: {
+            txtUsername: {
+                required: true
+            },
+            txtNombres: {
+                required: true
+            },
+            txtCorreo: {
+                required: true
+            },
+            txtPassword: {
+                required: true
+            }
+        },
+        messages: {
+            txtUsername: {
+                required: 'Ingrese Usuario'
+            },
+            txtNombres: {
+                required: 'Ingrese Nombres'
+            },
+            txtCorreo: {
+                required: 'Ingrese Correo'
+            },
+            txtPassword: {
+                required: 'Ingrese Contraseña'
+            }
+        },
+        highlight: function (element) {
+            $(element).parent().addClass('validation-error-label')
+        },
+        unhighlight: function (element) {
+            $(element).parent().removeClass('validation-error-label')
+        },
+
+        submitHandler: function (form, e) {
+
+            var _reply = CargarUsuario();
+            var _url = '@Url.Action("Edit_Usuario", "SEG")';
+
+            $.post(_url, _reply).done(function (data) {
+                if (data.Status === 200) {
+                    $('#UsuarioModal').modal('toggle');
+                    toastr.success(data.Message);
+                    UsuarioDatatable.draw();
+                }
+                else {
+                    toastr.error(data.Message)
+                }
+            });
+        }
+    });
+
+    function CargarUsuario() {
+        var _obj = {
+            IDE_USUARIO: $('#txtId').val(),
+            COD_USUARIO: $('#txtUsername').val(),
+            PASSWORD: $('#txtPassword').val(),
+            NOM_USUARIO: $('#txtNombres').val(),
+            CORREO_ELECTRONICO: $("#txtCorreo").val()
+        };
+
+        var _reply = {
+            ACCION: $("#txtOperacion").val(),
+            MENSAJE: '',
+            IDE_USUARIO: 0,
+            DATA: JSON.stringify(_obj),
+        };
+
+        return _reply;
+    }
+
+    $('#UsuarioModal,#ConfirmarModal').on('show.bs.modal', function (event) {
+        var modal = $(this);
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var operacion = button.data('operacion');
+        var row = button.data('row');
+        var data = UsuarioDatatable.row(row).data();
+        var titulo = "";
+
+        $("#txtOperacion").val(operacion);
+
+        if (operacion == "INSERT") {
+            titulo = "Registrar";
+        } else if (operacion == "UPDATE") {
+            titulo = "Modificar";
+        } else if (operacion == "DELETE") {
+            titulo = "Confirmar";
+        }
+
+        modal.find('.modal-title').text(titulo)
+
+        if (operacion == 'UPDATE') {
+            $('#txtId').val(data.IDE_USUARIO);
+            $('#txtUsername').val(data.COD_USUARIO);
+            $('#txtPassword').val(data.PASSWORD);
+            $('#txtNombres').val(data.NOM_USUARIO);
+            $('#txtCorreo').val(data.CORREO_ELECTRONICO);
+
+            $("#txtUsername").prop('disabled', true);
+        } else if (operacion == 'INSERT') {
+            $('#txtId').val('');
+            $('#txtUsername').val('');
+            $('#txtPassword').val('');
+            $('#txtNombres').val('');
+            $('#txtCorreo').val('');
+
+            $("#txtUsername").prop('disabled', false);
+        } else {
+            $('#txtId').val(data.IDE_USUARIO);
+        }
+
+    });
+
+    @*$("#btnEliminar").click(function () {
+
+        var _reply = CargarUsuario();
+        var _url = '@Url.Action("Edit_Usuario", "SEG")';
+
+        $.post(_url, _reply).done(function (data) {
+            if (data.Status === 200) {
+                $('#ConfirmarModal').modal('toggle');
+                toastr.success(data.Message);
+                UsuarioDatatable.draw();
+            }
+            else {
+                toastr.error(data.Message)
+            }
+        });
+    });*@
+
+});
+
+
+    </script>
+}
