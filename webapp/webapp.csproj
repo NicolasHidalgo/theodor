@@ -530,14 +530,17 @@
     <Content Include="assets\images\flags\za.png" />
     <Content Include="assets\images\flags\zm.png" />
     <Content Include="assets\images\flags\zw.png" />
+    <Content Include="assets\images\fondo.png" />
     <Content Include="assets\images\i-info.png" />
     <Content Include="assets\images\loader.gif" />
     <Content Include="assets\images\login_cover.jpg" />
+    <Content Include="assets\images\logo_central.png" />
     <Content Include="assets\images\logo_dark.png" />
     <Content Include="assets\images\logo_demo.png" />
     <Content Include="assets\images\logo_icon_dark.png" />
     <Content Include="assets\images\logo_icon_light.png" />
     <Content Include="assets\images\logo_light.png" />
+    <Content Include="assets\images\logo_login.png" />
     <Content Include="assets\images\placeholder.jpg" />
     <Content Include="assets\images\pnotify\danger.png" />
     <Content Include="assets\images\pnotify\default.png" />

@@ -126,6 +126,7 @@ namespace webapp.Controllers
                 return View(model);
             }
 
+            /*
             var CodUsuarioWs = model.CodUsuario;
             var Correo = model.CodUsuario;
             var Dominio = "STRACON";
@@ -139,6 +140,7 @@ namespace webapp.Controllers
             {
                 Dominio = "";
             }
+            */
                 
 
             GEN_REPLY_BE req = new GEN_REPLY_BE();
