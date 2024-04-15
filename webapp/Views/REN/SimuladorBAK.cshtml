@@ -132,16 +132,6 @@
             font-size: 25px !important;
             cursor: pointer;
         }
-
-        .tab-content > .tab-pane {
-            display: block !important;
-            height: 0 !important;
-            overflow: hidden !important;
-        }
-
-            .tab-content > .tab-pane.active {
-                height: auto !important;
-            }
     </style>
 }
 
@@ -577,267 +567,250 @@
                                 </div>
                             </form>
 
-                            <div id="columna2" class="col-md-8">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="tabbable">
-                                            <ul class="nav nav-tabs">
+                            <div id="columna2" class="col-md-4">
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="table-responsive">
+                                                    <table class="table tblRowsHeight">
+                                                        <thead>
+                                                            <tr class="headerTblColorPlomo tipografia1">
+                                                                <th colspan="6" style="text-align:center;"><i class="icon-calculator2 position-left"></i> Contribución EGP (expresado en dólares)</th>
+                                                            </tr>
+                                                            <tr class="headerTblColorPlomo tipografia1">
+                                                                <th align="center"></th>
+                                                                <th align="center">Operación</th>
+                                                                <th align="center">Anual</th>
+                                                                <th align="center">Trimestral</th>
+                                                                <th align="center">Mensual</th>
+                                                                <th align="center">Tasa</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbodyPYG">
+                                                            @foreach (var item in Model.dataPYG)
+                                                            {
+                                                                var trClass = "";
+                                                                if (item.color.Equals("beige"))
+                                                                {
+                                                                    trClass = "colorBeige";
+                                                                }
+                                                                if (item.color.Equals("gray"))
+                                                                {
+                                                                    trClass = "colorGray";
+                                                                }
+                                                                <tr class="@trClass tipografia2">
+                                                                    <td align="left">@item.detalle</td>
+                                                                    <td align="right">@String.Format("{0:#,##0}", @item.operacion)</td>
+                                                                    <td align="right">@String.Format("{0:#,##0}", @item.anual)</td>
+                                                                    <td align="right">@String.Format("{0:#,##0}", @item.trimestral)</td>
+                                                                    <td align="right">@String.Format("{0:#,##0.00}", @item.mensual)</td>
+                                                                    <td align="right">@String.Format("{0:0.00%}", @item.ratio)</td>
+                                                                </tr>
 
-                                                <li class="active"><a href="#basic-tab1" data-toggle="tab">Sección 01</a></li>
-                                                <li><a id="Seccion02" href="#basic-tab2" data-toggle="tab">Sección 02</a></li>
-                                            </ul>
-
-                                            <div class="tab-content">
-                                                <div class="tab-pane active" id="basic-tab1">
-                                                    <fieldset>
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <div class="table-responsive">
-                                                                        <table class="table tblRowsHeight">
-                                                                            <thead>
-                                                                                <tr class="headerTblColorPlomo tipografia1">
-                                                                                    <th colspan="6" style="text-align:center;"><i class="icon-calculator2 position-left"></i> Contribución EGP (expresado en dólares)</th>
-                                                                                </tr>
-                                                                                <tr class="headerTblColorPlomo tipografia1">
-                                                                                    <th align="center"></th>
-                                                                                    <th align="center">Operación</th>
-                                                                                    <th align="center">Anual</th>
-                                                                                    <th align="center">Trimestral</th>
-                                                                                    <th align="center">Mensual</th>
-                                                                                    <th align="center">Tasa</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody id="tbodyPYG">
-                                                                                @foreach (var item in Model.dataPYG)
-                                                                                {
-                                                                                    var trClass = "";
-                                                                                    if (item.color.Equals("beige"))
-                                                                                    {
-                                                                                        trClass = "colorBeige";
-                                                                                    }
-                                                                                    if (item.color.Equals("gray"))
-                                                                                    {
-                                                                                        trClass = "colorGray";
-                                                                                    }
-                                                                                    <tr class="@trClass tipografia2">
-                                                                                        <td align="left">@item.detalle</td>
-                                                                                        <td align="right">@String.Format("{0:#,##0}", @item.operacion)</td>
-                                                                                        <td align="right">@String.Format("{0:#,##0}", @item.anual)</td>
-                                                                                        <td align="right">@String.Format("{0:#,##0}", @item.trimestral)</td>
-                                                                                        <td align="right">@String.Format("{0:#,##0.00}", @item.mensual)</td>
-                                                                                        <td align="right">@String.Format("{0:0.00%}", @item.ratio)</td>
-                                                                                    </tr>
-
-                                                                                }
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- /bordered table -->
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <div class="table-responsive">
-                                                                        <table class="table tblRowsHeight">
-                                                                            <thead>
-                                                                                <tr class="headerTblColorPlomo tipografia1">
-                                                                                    <th colspan="6" style="text-align:center;"><i class="icon-newspaper position-left"></i> Resumen de Escenarios</th>
-                                                                                </tr>
-                                                                                <tr class="headerTblColorPlomo tipografia1">
-                                                                                    <th></th>
-                                                                                    <th>Operación</th>
-                                                                                    <th>Objetivo</th>
-                                                                                    <th>Riesgo</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody id="tbodyResEsc">
-                                                                                @foreach (var item in Model.dataResEsc)
-                                                                                {
-                                                                                    var trClass = "";
-                                                                                    if (item.color.Equals("beige"))
-                                                                                    {
-                                                                                        trClass = "colorBeige";
-                                                                                    }
-                                                                                    <tr class="@trClass tipografia2">
-                                                                                        <td align="left">@item.detalle</td>
-                                                                                        <td align="right">
-                                                                                            @if (item.formato.Equals("%2"))
-                                                                                            {
-                                                                                                @String.Format("{0:0.00%}", @item.operacion)
-                                                                                            }
-                                                                                            else if (item.formato.Equals("%3"))
-                                                                                            {
-                                                                                                @String.Format("{0:0.000%}", @item.operacion)
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                @String.Format("{0:#,##0}", @item.operacion)
-                                                                                            }
-                                                                                        </td>
-                                                                                        <td align="right">
-                                                                                            @if (item.formato.Equals("%2"))
-                                                                                            {
-                                                                                                @String.Format("{0:0.00%}", item.objetivo)
-                                                                                            }
-                                                                                            else if (item.formato.Equals("%3"))
-                                                                                            {
-                                                                                                @String.Format("{0:0.000%}", item.objetivo)
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                @String.Format("{0:#,##0}", item.objetivo)
-                                                                                            }
-                                                                                        </td>
-                                                                                        <td align="right">
-                                                                                            @if (item.formato.Equals("%2"))
-                                                                                            {
-                                                                                                @String.Format("{0:0.00%}", item.primaRiesgo)
-                                                                                            }
-                                                                                            else if (item.formato.Equals("%3"))
-                                                                                            {
-                                                                                                @String.Format("{0:0.000%}", item.primaRiesgo)
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                @String.Format("{0:#,##0}", item.primaRiesgo)
-                                                                                            }
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                }
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- /bordered table -->
-                                                            </div>
-                                                        </div>
-
-
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <div class="table-responsive">
-                                                                        <table class="table tblRowsHeight">
-                                                                            <tbody id="tbodyRoracRes">
-                                                                                @foreach (var item in Model.dataRoracRes)
-                                                                                {
-                                                                                    var xClass = "";
-                                                                                    if (item.estilo.Equals("TIT01"))
-                                                                                    {
-                                                                                        xClass = "colorPlomo";
-                                                                                        
-                                                                                        <tr class="@xClass tipografia1"><td align="center" colspan="6" class="text-semibold">@item.detalle</td></tr>
-                                                                                    }
-                                                                                    else if (item.estilo.Equals("TIT02"))
-                                                                                    {
-                                                                                        //xClass = "borderWhite";
-                                                                                        <tr class="tipografia1"><td align="center" colspan="6" class="text-semibold">@item.detalle</td></tr>
-                                                                                    }
-                                                                                    else if (item.estilo.Equals("") && item.detalle.Equals(""))
-                                                                                    {
-                                                                                        <tr><td colspan="6">&nbsp;</td></tr>
-                                                                                    }
-                                                                                    else if (item.estilo.Equals(""))
-                                                                                    {
-                                                                                        <tr><td colspan="6" class="text-semibold">@item.detalle</td></tr>
-                                                                                    }
-                                                                                    else if (item.estilo.Equals("NORMAL"))
-                                                                                    {
-                                                                                        <tr>
-                                                                                            <td align="left">@item.detalle</td>
-                                                                                            @if (item.formato.Equals("###,####,###"))
-                                                                                            {
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res01)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res02)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res03)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res04)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res05)</td>
-                                                                                            }
-                                                                                            else if (item.formato.Equals("##,##0.00%"))
-                                                                                            {
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res01)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res02)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res03)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res04)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res05)</td>
-                                                                                            }
-                                                                                        </tr>
-                                                                                    }
-                                                                                    else if (item.estilo.Equals("TIT05"))
-                                                                                    {
-                                                                                        xClass = "colorBeige";
-                                                                                        <tr class="@xClass">
-                                                                                            <td align="left">@item.detalle</td>
-                                                                                            @if (item.formato.Equals("###,####,###"))
-                                                                                            {
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res01)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res02)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res03)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res04)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res05)</td>
-                                                                                            }
-                                                                                            else if (item.formato.Equals("##,##0.00%"))
-                                                                                            {
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res01)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res02)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res03)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res04)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res05)</td>
-                                                                                            }
-                                                                                        </tr>
-                                                                                    }
-                                                                                }
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- /bordered table -->
-                                                            </div>
-                                                        </div>
-
-                                                    </fieldset>
+                                                            }
+                                                        </tbody>
+                                                    </table>
                                                 </div>
+                                            </div>
+                                            <!-- /bordered table -->
+                                        </div>
+                                    </div>
 
-                                                <div class="tab-pane" id="basic-tab2">
-                                                    <fieldset>
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="hot-container">
-                                                                    <div id="hot_alignment"></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <canvas id="myChart"></canvas>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <canvas id="myChart2"></canvas>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <canvas id="myChart3"></canvas>
-                                                            </div>
-                                                        </div>
-
-                                                    </fieldset>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="table-responsive">
+                                                    <table class="table tblRowsHeight">
+                                                        <thead>
+                                                            <tr class="headerTblColorPlomo tipografia1">
+                                                                <th colspan="6" style="text-align:center;"><i class="icon-newspaper position-left"></i> Resumen de Escenarios</th>
+                                                            </tr>
+                                                            <tr class="headerTblColorPlomo tipografia1">
+                                                                <th></th>
+                                                                <th>Operación</th>
+                                                                <th>Objetivo</th>
+                                                                <th>Riesgo</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbodyResEsc">
+                                                            @foreach (var item in Model.dataResEsc)
+                                                            {
+                                                                var trClass = "";
+                                                                if (item.color.Equals("beige"))
+                                                                {
+                                                                    trClass = "colorBeige";
+                                                                }
+                                                                <tr class="@trClass tipografia2">
+                                                                    <td align="left">@item.detalle</td>
+                                                                    <td align="right">
+                                                                        @if (item.formato.Equals("%2"))
+                                                                        {
+                                                                            @String.Format("{0:0.00%}", @item.operacion)
+                                                                        }
+                                                                        else if (item.formato.Equals("%3"))
+                                                                        {
+                                                                            @String.Format("{0:0.000%}", @item.operacion)
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @String.Format("{0:#,##0}", @item.operacion)
+                                                                        }
+                                                                    </td>
+                                                                    <td align="right">
+                                                                        @if (item.formato.Equals("%2"))
+                                                                        {
+                                                                            @String.Format("{0:0.00%}", item.objetivo)
+                                                                        }
+                                                                        else if (item.formato.Equals("%3"))
+                                                                        {
+                                                                            @String.Format("{0:0.000%}", item.objetivo)
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @String.Format("{0:#,##0}", item.objetivo)
+                                                                        }
+                                                                    </td>
+                                                                    <td align="right">
+                                                                        @if (item.formato.Equals("%2"))
+                                                                        {
+                                                                            @String.Format("{0:0.00%}", item.primaRiesgo)
+                                                                        }
+                                                                        else if (item.formato.Equals("%3"))
+                                                                        {
+                                                                            @String.Format("{0:0.000%}", item.primaRiesgo)
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @String.Format("{0:#,##0}", item.primaRiesgo)
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
                                                 </div>
+                                            </div>
+                                            <!-- /bordered table -->
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="table-responsive">
+                                                    <table class="tblRowsHeight">
+                                                        <tbody id="tbodyRoracRes">
+                                                            @foreach (var item in Model.dataRoracRes)
+                                                            {
+                                                                var xClass = "";
+                                                                if (item.estilo.Equals("TIT01"))
+                                                                {
+                                                                    xClass = "colorPlomo";
+                                                                    <tr class="@xClass tipografia1"><td align="center" colspan="6" class="text-semibold">@item.detalle</td></tr>
+                                                                }
+                                                                else if (item.estilo.Equals("TIT02"))
+                                                                {
+                                                                    //xClass = "borderWhite";
+                                                                    <tr class="tipografia1"><td align="center" colspan="6" class="text-semibold">@item.detalle</td></tr>
+                                                                }
+                                                                else if (item.estilo.Equals("") && item.detalle.Equals(""))
+                                                                {
+                                                                    <tr><td colspan="6">&nbsp;</td></tr>
+                                                                }
+                                                                else if (item.estilo.Equals(""))
+                                                                {
+                                                                    <tr><td colspan="6" class="text-semibold">@item.detalle</td></tr>
+                                                                }
+                                                                else if (item.estilo.Equals("NORMAL"))
+                                                                {
+                                                                    <tr>
+                                                                        <td align="left">@item.detalle</td>
+                                                                        @if (item.formato.Equals("###,####,###"))
+                                                                        {
+                                                                            <td align="right">@String.Format("{0:#,##0}", @item.res01)</td>
+                                                                            <td align="right">@String.Format("{0:#,##0}", @item.res02)</td>
+                                                                            <td align="right">@String.Format("{0:#,##0}", @item.res03)</td>
+                                                                            <td align="right">@String.Format("{0:#,##0}", @item.res04)</td>
+                                                                            <td align="right">@String.Format("{0:#,##0}", @item.res05)</td>
+                                                                        }
+                                                                        else if (item.formato.Equals("##,##0.00%"))
+                                                                        {
+                                                                            <td align="right">@String.Format("{0:0.00%}", @item.res01)</td>
+                                                                            <td align="right">@String.Format("{0:0.00%}", @item.res02)</td>
+                                                                            <td align="right">@String.Format("{0:0.00%}", @item.res03)</td>
+                                                                            <td align="right">@String.Format("{0:0.00%}", @item.res04)</td>
+                                                                            <td align="right">@String.Format("{0:0.00%}", @item.res05)</td>
+                                                                        }
+                                                                    </tr>
+                                                                }
+                                                                else if (item.estilo.Equals("TIT05"))
+                                                                {
+                                                                    xClass = "colorBeige";
+                                                                    <tr class="@xClass">
+                                                                        <td align="left">@item.detalle</td>
+                                                                        @if (item.formato.Equals("###,####,###"))
+                                                                        {
+                                                                            <td align="right">@String.Format("{0:#,##0}", @item.res01)</td>
+                                                                            <td align="right">@String.Format("{0:#,##0}", @item.res02)</td>
+                                                                            <td align="right">@String.Format("{0:#,##0}", @item.res03)</td>
+                                                                            <td align="right">@String.Format("{0:#,##0}", @item.res04)</td>
+                                                                            <td align="right">@String.Format("{0:#,##0}", @item.res05)</td>
+                                                                        }
+                                                                        else if (item.formato.Equals("##,##0.00%"))
+                                                                        {
+                                                                            <td align="right">@String.Format("{0:0.00%}", @item.res01)</td>
+                                                                            <td align="right">@String.Format("{0:0.00%}", @item.res02)</td>
+                                                                            <td align="right">@String.Format("{0:0.00%}", @item.res03)</td>
+                                                                            <td align="right">@String.Format("{0:0.00%}", @item.res04)</td>
+                                                                            <td align="right">@String.Format("{0:0.00%}", @item.res05)</td>
+                                                                        }
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- /bordered table -->
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </div>
+
+                            <div id="columna3" class="col-md-4">
+                                <fieldset>
+                                    <!--
+                                        <legend class="text-semibold"><i class=" icon-stats-growth position-left"></i> RORAC Bajo Modelo Estándar</legend>
+                                    -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="hot-container">
+                                                <div id="hot_alignment"></div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <canvas id="myChart"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <canvas id="myChart2"></canvas>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <canvas id="myChart3"></canvas>
+                                        </div>
+                                    </div>
+
+                                </fieldset>
                             </div>
-
 
                         </div>
                     </div>
@@ -853,112 +826,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-
-        var jsModel = @Html.Raw(Json.Encode(Model));
-        var dataHot = [
-            { col0: '', col1: 'RORAC Bajo Modelo Estándar', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '' },
-            { col0: '(Plazo en  Meses de la Operación)', col1: '(Tasa efectiva Anual de La Operación)', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '' },
-        ];
-        var roracMenosObjetivo = jsModel.dataRorac.rorac_objetivo - jsModel.dataRorac.autonomia_comercial;
-        $.each(jsModel.dataRoracTbl, function (index, item) {
-            var feed = {
-                col0: '', col1: item.plazo, col2: numeral(item.valor1).format('0.00%'), col3: numeral(item.valor2).format('0.00%')
-                , col4: numeral(item.valor3).format('0.00%'), col5: numeral(item.valor4).format('0.00%')
-                , col6: numeral(item.valor5).format('0.00%'), col7: numeral(item.valor6).format('0.00%')
-                , col8: numeral(item.valor7).format('0.00%'), col9: numeral(item.valor8).format('0.00%')
-                , col10: numeral(item.valor9).format('0.00%')
-            };
-            dataHot.push(feed)
-        });
-        // Define element
-        var hot_alignment = document.getElementById('hot_alignment');
-        // Initialize with options
-        var hot_alignment_init = new Handsontable(hot_alignment, {
-            data: dataHot,
-            rowHeaders: false,
-            colHeaders: false,
-            //rowHeights: 23,
-            //colWidths: 100,
-            licenseKey: 'non-commercial-and-evaluation',
-            colWidths: [30, 30, 80, 80, 80, 80, 80, 80, 80, 80, 80],
-            //rowHeight: function (row) {
-            //    if (row == 0) {
-            //        return 10;
-            //    } else {
-            //        return 50;
-            //    }
-
-            //},
-            //contextMenu: true,
-            autoWrapRow: true,
-            autoWrapCol: true,
-            /*stretchH: 'all',*/
-            mergeCells: [
-                { row: 0, col: 1, rowspan: 1, colspan: 10 },
-                { row: 1, col: 0, rowspan: 11, colspan: 1 },
-                { row: 1, col: 1, rowspan: 1, colspan: 10 }
-            ],
-            className: "htRight",
-            //colHeaders: ['ID', 'Name', 'IP', 'E-mail'],
-            columns: [
-                { data: 'col0' },
-                { data: 'col1', className: 'htLeft' },
-                { data: 'col2' },
-                { data: 'col3' },
-                { data: 'col4' },
-                { data: 'col5' },
-                { data: 'col6' },
-                { data: 'col7' },
-                { data: 'col8' },
-                { data: 'col9' },
-                { data: 'col10' },
-            ],
-        });
-        hot_alignment_init.updateSettings({
-            cells: function (row, col, prop) {
-                var cell = hot_alignment_init.getCell(row, col);   // get the cell for the row and column
-                if (cell != undefined && cell != null) {
-                    if ((row == 0 && col == 0) || (row == 0 && col == 1) || (row == 1 && col == 0) || (row == 1 && col == 1)) {
-                        cell.style.backgroundColor = "#54585b"; // plomo
-                        cell.style.borderColor = "#54585b";
-                        cell.style.color = "white";
-                        //cell.style.align = "center";
-                    }
-                    if (row == 1 && col == 0) {
-                        cell.style.overflowWrap = "break-word";
-                        cell.style.writingMode = "vertical-rl";
-                        cell.style.textAlign = "center";
-                    }
-                    if (row > 2 && col > 1) {
-                        var value = parseFloat(cell.innerHTML) / 100.0;
-                        if (value <= 0) { // regla rojo
-                            cell.style.backgroundColor = "#812b2e";
-                            cell.style.borderColor = "#812b2e";
-                            cell.style.color = "white";
-                        } else if (value > 0 && value < roracMenosObjetivo) { // regla beige
-                            cell.style.backgroundColor = "#969076";
-                            cell.style.borderColor = "#969076";
-                        } else if (value >= roracMenosObjetivo && value < jsModel.dataRorac.rorac_objetivo) { // regla blanco
-                            cell.style.backgroundColor = "white";
-                            cell.style.borderColor = "white";
-                            cell.style.color = "black";
-                        } else if (value >= jsModel.dataRorac.rorac_objetivo) { // regla azul
-                            cell.style.backgroundColor = "#222840";
-                            cell.style.borderColor = "#222840";
-                            cell.style.color = "white";
-                        }
-
-                    }
-                }
-                
-            }
-        });
-
-
-        $("#Seccion02").on("click", function () {
-            //hot_alignment_init.render();
-            //myChart.update();
-        });
 
         $("#btnNuevo").on("click", function () {
             // limpiar controles
@@ -1396,6 +1263,109 @@
 
                 productoAmortizacion($("#ddlProducto option:selected").val());
             });
+        });
+
+        // Alignment
+        // ------------------------------
+        var jsModel = @Html.Raw(Json.Encode(Model));
+        // Generate sample data
+        var dataHot = [
+            { col0: '', col1: 'RORAC Bajo Modelo Estándar', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '' },
+            { col0: '(Plazo en  Meses de la Operación)', col1: '(Tasa efectiva Anual de La Operación)', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '' },
+        ];
+
+        var roracMenosObjetivo = jsModel.dataRorac.rorac_objetivo - jsModel.dataRorac.autonomia_comercial;
+
+        $.each(jsModel.dataRoracTbl, function (index, item) {
+            var feed = {
+                col0: '', col1: item.plazo, col2: numeral(item.valor1).format('0.00%'), col3: numeral(item.valor2).format('0.00%')
+                , col4: numeral(item.valor3).format('0.00%'), col5: numeral(item.valor4).format('0.00%')
+                , col6: numeral(item.valor5).format('0.00%'), col7: numeral(item.valor6).format('0.00%')
+                , col8: numeral(item.valor7).format('0.00%'), col9: numeral(item.valor8).format('0.00%')
+                , col10: numeral(item.valor9).format('0.00%')
+            };
+            dataHot.push(feed)
+        });
+        // Define element
+        var hot_alignment = document.getElementById('hot_alignment');
+
+        // Initialize with options
+        var hot_alignment_init = new Handsontable(hot_alignment, {
+            data: dataHot,
+            rowHeaders: false,
+            colHeaders: false,
+            //rowHeights: 23,
+            //colWidths: 100,
+            licenseKey: 'non-commercial-and-evaluation',
+            colWidths: [30, 30, 80, 80, 80, 80, 80, 80, 80, 80, 80],
+            //rowHeight: function (row) {
+            //    if (row == 0) {
+            //        return 10;
+            //    } else {
+            //        return 50;
+            //    }
+
+            //},
+            //contextMenu: true,
+            autoWrapRow: true,
+            autoWrapCol: true,
+            /*stretchH: 'all',*/
+            mergeCells: [
+                { row: 0, col: 1, rowspan: 1, colspan: 10 },
+                { row: 1, col: 0, rowspan: 11, colspan: 1 },
+                { row: 1, col: 1, rowspan: 1, colspan: 10 }
+            ],
+            className: "htRight",
+            //colHeaders: ['ID', 'Name', 'IP', 'E-mail'],
+            columns: [
+                { data: 'col0' },
+                { data: 'col1', className: 'htLeft' },
+                { data: 'col2' },
+                { data: 'col3' },
+                { data: 'col4' },
+                { data: 'col5' },
+                { data: 'col6' },
+                { data: 'col7' },
+                { data: 'col8' },
+                { data: 'col9' },
+                { data: 'col10' },
+            ],
+        });
+        hot_alignment_init.updateSettings({
+            cells: function (row, col, prop) {
+                var cell = hot_alignment_init.getCell(row, col);   // get the cell for the row and column
+                if ((row == 0 && col == 0) || (row == 0 && col == 1) || (row == 1 && col == 0) || (row == 1 && col == 1)) {
+                    cell.style.backgroundColor = "#54585b"; // plomo
+                    cell.style.borderColor = "#54585b";
+                    cell.style.color = "white";
+                    //cell.style.align = "center";
+                }
+                if (row == 1 && col == 0) {
+                    cell.style.overflowWrap = "break-word";
+                    cell.style.writingMode = "vertical-rl";
+                    cell.style.textAlign = "center";
+                }
+                if (row > 2 && col > 1) {
+                    var value = parseFloat(cell.innerHTML) / 100.0;
+                    if (value <= 0) { // regla rojo
+                        cell.style.backgroundColor = "#812b2e";
+                        cell.style.borderColor = "#812b2e";
+                        cell.style.color = "white";
+                    } else if (value > 0 && value < roracMenosObjetivo) { // regla beige
+                        cell.style.backgroundColor = "#969076";
+                        cell.style.borderColor = "#969076";
+                    } else if (value >= roracMenosObjetivo && value < jsModel.dataRorac.rorac_objetivo) { // regla blanco
+                        cell.style.backgroundColor = "white";
+                        cell.style.borderColor = "white";
+                        cell.style.color = "black";
+                    } else if (value >= jsModel.dataRorac.rorac_objetivo) { // regla azul
+                        cell.style.backgroundColor = "#222840";
+                        cell.style.borderColor = "#222840";
+                        cell.style.color = "white";
+                    }
+
+                }
+            }
         });
 
         function updateChart1(data) {
