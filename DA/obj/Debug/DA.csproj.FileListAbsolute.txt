@@ -25,3 +25,12 @@ C:\JMIESES\2024\webapp\DA\obj\Debug\DA.csproj.CoreCompileInputs.cache
 C:\JMIESES\2024\webapp\DA\obj\Debug\DA.csproj.Up2Date
 C:\JMIESES\2024\webapp\DA\obj\Debug\DA.dll
 C:\JMIESES\2024\webapp\DA\obj\Debug\DA.pdb
+C:\Users\jmieses\OneDrive - D-Gestion\PROYECTOS\Ugarelli\git\theodor\DA\bin\Debug\DA.dll
+C:\Users\jmieses\OneDrive - D-Gestion\PROYECTOS\Ugarelli\git\theodor\DA\bin\Debug\DA.pdb
+C:\Users\jmieses\OneDrive - D-Gestion\PROYECTOS\Ugarelli\git\theodor\DA\bin\Debug\BEANS.dll
+C:\Users\jmieses\OneDrive - D-Gestion\PROYECTOS\Ugarelli\git\theodor\DA\bin\Debug\BEANS.pdb
+C:\Users\jmieses\OneDrive - D-Gestion\PROYECTOS\Ugarelli\git\theodor\DA\obj\Debug\DA.csproj.AssemblyReference.cache
+C:\Users\jmieses\OneDrive - D-Gestion\PROYECTOS\Ugarelli\git\theodor\DA\obj\Debug\DA.csproj.CoreCompileInputs.cache
+C:\Users\jmieses\OneDrive - D-Gestion\PROYECTOS\Ugarelli\git\theodor\DA\obj\Debug\DA.csproj.CopyComplete
+C:\Users\jmieses\OneDrive - D-Gestion\PROYECTOS\Ugarelli\git\theodor\DA\obj\Debug\DA.dll
+C:\Users\jmieses\OneDrive - D-Gestion\PROYECTOS\Ugarelli\git\theodor\DA\obj\Debug\DA.pdb

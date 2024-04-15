@@ -1079,6 +1079,7 @@ a.badge,
 @media (min-width: 769px) {
   .page-container {
     width: 100%;
+    
     display: table;
     table-layout: fixed;
   }

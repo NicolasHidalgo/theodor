@@ -1,0 +1,13 @@
+git clone https://github.com/NicolasHidalgo/theodor.git
+
+comandos git
+-- Para mandar mis cambios
+	git status                                            para ver si hay cambios
+	git add *
+	git status
+	git git commit -m "<Nombre referenvcia>"
+	git push
+	
+	
+-- Para recibir los cambios
+git pull
