@@ -304,7 +304,7 @@
 
                         <div class="row">
                             <form id="FormSim">
-                                <div class="col-md-4">
+                                <div class="col-md-5">
                                     <fieldset>
                                         <legend class="tipografia1 text-semibold"><i class="icon-user-tie position-left"></i> Detalle del Cliente o Prospecto</legend>
 
@@ -577,7 +577,7 @@
                                 </div>
                             </form>
 
-                            <div id="columna2" class="col-md-8">
+                            <div class="col-md-7">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="tabbable">
@@ -730,7 +730,7 @@
                                                                                     if (item.estilo.Equals("TIT01"))
                                                                                     {
                                                                                         xClass = "colorPlomo";
-                                                                                        
+
                                                                                         <tr class="@xClass tipografia1"><td align="center" colspan="6" class="text-semibold">@item.detalle</td></tr>
                                                                                     }
                                                                                     else if (item.estilo.Equals("TIT02"))
@@ -812,17 +812,23 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </fieldset>
+                                                </div>
 
+                                                <div class="tab-pane" id="basic-tab3">
+                                                    <fieldset>
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <canvas id="myChart"></canvas>
                                                             </div>
                                                         </div>
+                                                        <hr />
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <canvas id="myChart2"></canvas>
                                                             </div>
                                                         </div>
+                                                        <hr />
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <canvas id="myChart3"></canvas>
