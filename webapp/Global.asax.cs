@@ -23,7 +23,6 @@ namespace webapp
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             log4net.Config.XmlConfigurator.Configure();
-
         }
 
         protected void ApplicationEnd()

@@ -1,5 +1,6 @@
 ﻿using BEANS;
 using BL;
+using DocumentFormat.OpenXml.EMMA;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -47,7 +48,9 @@ namespace webapp.Controllers
         {
             base.Initialize(requestContext);
 
-            if (!this.Request.IsAuthenticated || Session["Usuario"] == null)
+            var sessionUsuario = Session["Usuario"];
+            if (!this.Request.IsAuthenticated)
+            //if (!this.Request.IsAuthenticated || sessionUsuario == null)
             {
                 //requestContext.HttpContext.Response.Clear();
                 //var routeData = new RouteData();
@@ -72,12 +75,11 @@ namespace webapp.Controllers
                 }
                 else
                 {
+                    var user = HttpContext.GetOwinContext().Authentication.User;
                     requestContext.HttpContext.Response.Clear();
                     var routeData = new RouteData();
                     routeData.Values.Add("controller", "Login");
                     routeData.Values.Add("action", "Login");
-                    //routeData.Values.Add("returnUrl", requestContext.);
-
                     Response.TrySkipIisCustomErrors = true;
                     IController controller = new LoginController();
                     controller.Execute(new RequestContext(requestContext.HttpContext, routeData));
@@ -88,9 +90,59 @@ namespace webapp.Controllers
             }
             else
             {
+                if (sessionUsuario == null)
+                {
+                    GEN_REPLY_BE req = new GEN_REPLY_BE();
+                    SEG_USUARIO_BE user = new SEG_USUARIO_BE();
+                    var userOwin = HttpContext.GetOwinContext().Authentication.User;
+                    user.COD_USUARIO = userOwin.Identity.Name;
+                    req.DATA = user;
+                    req.ACCION = "ACCESO";
+                    SEG_BL seg = new SEG_BL();
+
+                    var res = seg.fn_seg_acceso(req);
+                    if (res.MENSAJE != null)
+                    {
+                        if (res.MENSAJE.Contains("ERROR"))
+                        {
+                            requestContext.HttpContext.Response.Clear();
+                            var routeData = new RouteData();
+                            routeData.Values.Add("controller", "Login");
+                            routeData.Values.Add("action", "Login");
+                            Response.TrySkipIisCustomErrors = true;
+                            IController controller = new LoginController();
+                            controller.Execute(new RequestContext(requestContext.HttpContext, routeData));
+                            Response.End();
+                        }
+                    }
+                    var usuarioSistema = (SEG_USUARIO_BE)res.DATA;
+                    user.IDE_USUARIO = usuarioSistema.IDE_USUARIO;
+                    user.NOM_USUARIO = usuarioSistema.NOM_USUARIO;
+                    user.DIRECCION_USUARIO = usuarioSistema.DIRECCION_USUARIO;
+                    user.COD_APLICACION = usuarioSistema.COD_APLICACION;
+                    user.EST_USUARIO = usuarioSistema.EST_USUARIO;
+                    user.SUSCRIPTOR = usuarioSistema.SUSCRIPTOR;
+                    user.IMG_SUSCRIPTOR = usuarioSistema.IMG_SUSCRIPTOR;
+                    res.DATA = user;
+
+                    res.COD_USUARIO = user.COD_USUARIO;
+                    res.ACCION = "APLICACIONES";
+                    user.Aplicaciones = seg.fn_seg_sel_usu_app(res);
+                    user.COD_APLICACION = user.Aplicaciones.FirstOrDefault().COD_APLICACION;
+                    res.COD_APLICACION = user.COD_APLICACION;
+
+                    res.ACCION = "DIRECTO";
+                    var listOpc = new List<SEG_OPCION_BE>();
+                    res = seg.fn_seg_menuDinamico(res, ref listOpc);
+                    user.Opciones = ((List<SEG_OPCION_BE>)res.DATA).AsEnumerable();
+                    user.OpcionesData = listOpc.AsEnumerable();
+
+                    Session["Usuario"] = user;
+
+                }
                 if (requestContext.HttpContext.Request.HttpMethod != "POST")
                 {
-                    var user = (SEG_USUARIO_BE)Session["Usuario"];
+                    var user = (SEG_USUARIO_BE)sessionUsuario;
                     var _lstOpc = user.OpcionesData;
                     var _AbsoluteUri = requestContext.HttpContext.Request.Url.AbsoluteUri;
                     var _AbsolutePath = requestContext.HttpContext.Request.Url.AbsolutePath;

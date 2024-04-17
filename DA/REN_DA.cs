@@ -409,6 +409,8 @@ namespace DA
                         bean.tipo = DataReader.SafeGetInt32(dr, dr.GetOrdinal("Tipo"));
                         bean.detalle = DataReader.SafeGetString(dr, dr.GetOrdinal("detalle"));
                         bean.valor = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("valor"));
+                        bean.invisible = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("invisible"));
+                        bean.negativo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("negativo"));
 
                         lista.Add(bean);
                     }

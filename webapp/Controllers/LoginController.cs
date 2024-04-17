@@ -36,7 +36,9 @@ namespace webapp.Controllers
                     {
                         var ctx = Request.GetOwinContext();
                         var authenticationManager = ctx.Authentication;
-                        authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                        authenticationManager.SignOut(MyAuthentication.ApplicationCookie);
+                        //Session.Abandon();
+                        //return RedirectToAction("Login");
                     }
                     else
                     {
@@ -141,7 +143,7 @@ namespace webapp.Controllers
                 Dominio = "";
             }
             */
-                
+
 
             GEN_REPLY_BE req = new GEN_REPLY_BE();
             req.ACCION = "LOGIN";
@@ -149,8 +151,6 @@ namespace webapp.Controllers
             user.COD_USUARIO = model.CodUsuario;
             user.PASSWORD = model.Password;
             req.DATA = user;
-            var nombreCompleto = string.Empty;
-
             var res = seg.fn_seg_login(req);
 
             if (res.MENSAJE.Contains("ERROR"))
@@ -162,7 +162,6 @@ namespace webapp.Controllers
 
             req.ACCION = "ACCESO";
             user.COD_USUARIO = model.CodUsuario;
-            user.NOM_USUARIO = nombreCompleto;
             req.DATA = user;
 
             res = seg.fn_seg_acceso(req);
@@ -176,17 +175,16 @@ namespace webapp.Controllers
                     return View(model);
                 }
             }
-            
+
 
             var usuarioSistema = (SEG_USUARIO_BE)res.DATA;
             user.IDE_USUARIO = usuarioSistema.IDE_USUARIO;
+            user.NOM_USUARIO = usuarioSistema.NOM_USUARIO;
             user.DIRECCION_USUARIO = usuarioSistema.DIRECCION_USUARIO;
             user.COD_APLICACION = usuarioSistema.COD_APLICACION;
             user.EST_USUARIO = usuarioSistema.EST_USUARIO;
-            if (nombreCompleto == string.Empty)
-                user.NOM_USUARIO = usuarioSistema.NOM_USUARIO;
-
-            res.DATA = user;
+            user.SUSCRIPTOR = usuarioSistema.SUSCRIPTOR;
+            user.IMG_SUSCRIPTOR = usuarioSistema.IMG_SUSCRIPTOR;
 
             var isPersistent = true;
             this.SignInUser(user.COD_USUARIO, isPersistent);
@@ -238,6 +236,7 @@ namespace webapp.Controllers
             }
             */
 
+            res.DATA = user;
             UsuarioSession(res);
             return RedirectToLocal(returnUrl);
         }

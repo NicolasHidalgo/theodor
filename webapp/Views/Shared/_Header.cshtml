@@ -136,63 +136,67 @@
 
 
                     <!--<a class="dropdown-toggle" data-toggle="dropdown">-->
-
-                        @*<i class="caret"></i>*@
-                        <!--<a id="logout" href="javascript:document.getElementById('logoutForm').submit()"><i class="icon-switch2"></i> Cerrar Sesi&oacute;n</a>-->
+                    @*<i class="caret"></i>*@
+                    <!--<a id="logout" href="javascript:document.getElementById('logoutForm').submit()"><i class="icon-switch2"></i> Cerrar Sesi&oacute;n</a>-->
                     <!--</a>-->
-                    <a class="dropdown-toggle" style="color:black;"><i class="icon-home"></i> BANCO THEODOR</a>
+                    @if (user != null)
+                    {
+                        @*<a class="dropdown-toggle" style="color:black;"><i class="icon-home"></i> BANCO THEODOR</a>*@
+                        <img src="@user.IMG_SUSCRIPTOR" />
+                    }
+
 
 
                     @*@if (user != null)
-                    {
-                        if (Request.IsAuthenticated)
-                        {
-                            using (Html.BeginForm("LogOff", "Login", FormMethod.Post, new { id = "logoutForm" }))
-                            {
-                                <a class="dropdown-toggle" style="color:black" href="javascript:document.getElementById('logoutForm').submit()"><i class="icon-switch2"></i> Cerrar Sesi&oacute;n</a>
-                            }
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Iniciar Sesión", "Login", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })
-                        }
-                    }
-                    else
-                    {
-                        @Html.ActionLink("Iniciar Sesión", "Login", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })
-                    }*@
+        {
+            if (Request.IsAuthenticated)
+            {
+                using (Html.BeginForm("LogOff", "Login", FormMethod.Post, new { id = "logoutForm" }))
+                {
+                    <a class="dropdown-toggle" style="color:black" href="javascript:document.getElementById('logoutForm').submit()"><i class="icon-switch2"></i> Cerrar Sesi&oacute;n</a>
+                }
+            }
+            else
+            {
+                @Html.ActionLink("Iniciar Sesión", "Login", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })
+            }
+        }
+        else
+        {
+            @Html.ActionLink("Iniciar Sesión", "Login", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })
+        }*@
 
 
                     @*<ul class="dropdown-menu dropdown-menu-right">
-                @if (user.Aplicaciones != null)
+            @if (user.Aplicaciones != null)
+            {
+                foreach (var app in user.Aplicaciones)
                 {
-                    foreach (var app in user.Aplicaciones)
-                    {
-                        <li><a class="deutsch" data-id="@app.COD_APLICACION"><i class="@app.ICONO_APLICACION"></i> @app.NOM_APLICACION</a></li>
-                    }
-
+                    <li><a class="deutsch" data-id="@app.COD_APLICACION"><i class="@app.ICONO_APLICACION"></i> @app.NOM_APLICACION</a></li>
                 }
-                @if (user != null)
+
+            }
+            @if (user != null)
+            {
+                if (Request.IsAuthenticated)
                 {
-                    if (Request.IsAuthenticated)
+                    using (Html.BeginForm("LogOff", "Login", FormMethod.Post, new { id = "logoutForm" }))
                     {
-                        using (Html.BeginForm("LogOff", "Login", FormMethod.Post, new { id = "logoutForm" }))
-                        {
-                            <li class="divider"></li>
-                            <li><a id="logout" href="javascript:document.getElementById('logoutForm').submit()"><i class="icon-switch2"></i> Cerrar Sesi&oacute;n</a></li>
-                        }
-                    }
-                    else
-                    {
-                        <li>@Html.ActionLink("Iniciar Sesión", "Login", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                        <li class="divider"></li>
+                        <li><a id="logout" href="javascript:document.getElementById('logoutForm').submit()"><i class="icon-switch2"></i> Cerrar Sesi&oacute;n</a></li>
                     }
                 }
                 else
                 {
                     <li>@Html.ActionLink("Iniciar Sesión", "Login", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
                 }
-            </ul>*@
-                    </li>
+            }
+            else
+            {
+                <li>@Html.ActionLink("Iniciar Sesión", "Login", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+            }
+        </ul>*@
+                </li>
                 </ul>
         </div>
 

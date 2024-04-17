@@ -19,11 +19,12 @@ namespace webapp.Controllers
         public ActionResult Simulador()
         {
             var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
 
             //string ip = Request.UserHostAddress;
 
             var model = new REN_SIM_REQ_BE();
-            model.cod_suscriptor = Constantes.COD_SUSCRIPTOR_DEFAULT;
+            model.cod_suscriptor = user.SUSCRIPTOR;
             model.ide_cliente_producto = 1;
 
             model.accion = "personeria";
@@ -193,10 +194,11 @@ namespace webapp.Controllers
 
         public JsonResult JSON_PersoneriaChange(string codPersoneria)
         {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
             var viewModel = new AuxiliarEdit();
             var model = new REN_SIM_REQ_BE();
 
-            model.cod_suscriptor = Constantes.COD_SUSCRIPTOR_DEFAULT;
+            model.cod_suscriptor = user.SUSCRIPTOR;
             //model.ide_cliente_producto = 1;
             model.accion = "tip_documento";
             model.cod_personeria = codPersoneria;
@@ -221,9 +223,10 @@ namespace webapp.Controllers
         }
         public JsonResult JSON_OperacionChange(string codOperacion)
         {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
             var viewModel = new AuxiliarEdit();
             var model = new REN_SIM_REQ_BE();
-            model.cod_suscriptor = Constantes.COD_SUSCRIPTOR_DEFAULT;
+            model.cod_suscriptor = user.SUSCRIPTOR;
 
             model.accion = "producto";
             model.cod_operacion = codOperacion;
@@ -297,9 +300,10 @@ namespace webapp.Controllers
 
         public JsonResult JSON_ComisionServicioChange(string codProducto)
         {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
             var viewModel = new AuxiliarEdit();
             var model = new REN_SIM_REQ_BE();
-            model.cod_suscriptor = Constantes.COD_SUSCRIPTOR_DEFAULT;
+            model.cod_suscriptor = user.SUSCRIPTOR;
             model.accion = "comision_servicio";
             model.cod_producto = int.Parse(codProducto);
             var dataComisionServicio = bl.fn_ren_sel_ddl(model);
@@ -342,6 +346,7 @@ namespace webapp.Controllers
                 var _sim = JsonConvert.DeserializeObject<REN_SIM_REQ_BE>(_obj[0]);
                 var user = (SEG_USUARIO_BE)Session["Usuario"];
                 _sim.ide_usuario = long.Parse(user.IDE_USUARIO.ToString());
+                _sim.cod_suscriptor = user.SUSCRIPTOR;
                 model.DATA = _sim;
 
                 var reply = bl.fn_ren_pro_clienteProducto(model);
@@ -360,7 +365,7 @@ namespace webapp.Controllers
                 viewModel.dataPYG = dataPYG;
 
                 req.accion = "@Resumen_escenarios";
-                req.cod_suscriptor = Constantes.COD_SUSCRIPTOR_DEFAULT;
+                req.cod_suscriptor = user.SUSCRIPTOR;
                 req.ide_cliente_producto = 1;
                 var dataResEsc = bl.fn_ren_resumenEsc(req);
                 viewModel.dataResEsc = dataResEsc;

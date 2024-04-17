@@ -104,6 +104,8 @@ namespace DA
                         user.CORREO_ELECTRONICO = DataReader.SafeGetString(dr, dr.GetOrdinal("correo_electronico"));
                         user.DIRECCION_USUARIO = DataReader.SafeGetString(dr, dr.GetOrdinal("direccion_usuario"));
                         user.COD_APLICACION = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_aplicacion"));
+                        user.SUSCRIPTOR = DataReader.SafeGetInt64(dr, dr.GetOrdinal("suscriptor"));
+                        user.IMG_SUSCRIPTOR = DataReader.SafeGetString(dr, dr.GetOrdinal("img_suscriptor"));
                     }
                     model.DATA = user;
                 }

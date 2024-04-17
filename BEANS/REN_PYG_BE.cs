@@ -64,6 +64,8 @@ namespace BEANS
         public int tipo { get; set; }
         public string detalle { get; set; }     
         public double? valor { get; set; }
+        public double? invisible { get; set; }
+        public double? negativo { get; set; }
 
     }
 

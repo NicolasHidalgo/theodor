@@ -17,6 +17,8 @@ namespace BEANS
         public string CORREO_ELECTRONICO { get; set; }
         public string DIRECCION_USUARIO { get; set; }
         public string PASSWORD { get; set; }
+        public long SUSCRIPTOR { get; set; }
+        public string IMG_SUSCRIPTOR { get; set; }
 
         public DateTime? FEC_CREACION { get; set; }
         public DateTime? FEC_CESE { get; set; }
