@@ -26,6 +26,7 @@ namespace webapp.Controllers
             var model = new REN_SIM_REQ_BE();
             model.cod_suscriptor = user.SUSCRIPTOR;
             model.ide_cliente_producto = 1;
+            viewModel.IdeClienteProducto = model.ide_cliente_producto;
 
             model.accion = "personeria";
             var dataPersoneria = bl.fn_ren_sel_ddl(model);
@@ -169,24 +170,23 @@ namespace webapp.Controllers
                 Selected = false,
             });
 
-            var dataPYG = bl.fn_ren_pyg(1);
+            var dataPYG = bl.fn_ren_pyg(model.ide_cliente_producto);
             viewModel.dataPYG = dataPYG;
 
             model.accion = "@Resumen_escenarios";
-            model.ide_cliente_producto = 1;
             var dataResEsc = bl.fn_ren_resumenEsc(model);
             viewModel.dataResEsc = dataResEsc;
 
-            var dataRoracRes = bl.fn_ren_vis_clienteProducto_Resumen(1);
+            var dataRoracRes = bl.fn_ren_vis_clienteProducto_Resumen(model.ide_cliente_producto);
             viewModel.dataRoracRes = dataRoracRes;
 
-            var dataRoracTbl = bl.fn_ren_vis_clienteProducto_Tabla(1, 0.001, 1, 100);
+            var dataRoracTbl = bl.fn_ren_vis_clienteProducto_Tabla(model.ide_cliente_producto, 0.001, 1, 100);
             viewModel.dataRoracTbl = dataRoracTbl;
 
-            var dataRorac = bl.fn_ren_vis_clienteProducto_Tabla(1, 0.001, 1, 10);
+            var dataRorac = bl.fn_ren_vis_clienteProducto_Tabla(model.ide_cliente_producto, 0.001, 1, 10);
             viewModel.dataRorac = dataRorac.FirstOrDefault();
 
-            var dataComposicion = bl.fn_ren_vis_clienteProducto_Composicion(1);
+            var dataComposicion = bl.fn_ren_vis_clienteProducto_Composicion(model.ide_cliente_producto);
             viewModel.dataComposicion = dataComposicion;
 
             return View(viewModel);
@@ -221,7 +221,7 @@ namespace webapp.Controllers
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult JSON_OperacionChange(string codOperacion)
+        public JsonResult JSON_OperacionChange(long ide_cliente_producto, string codOperacion)
         {
             var user = (SEG_USUARIO_BE)Session["Usuario"];
             var viewModel = new AuxiliarEdit();
@@ -240,7 +240,7 @@ namespace webapp.Controllers
             });
 
             model.accion = "amortizacion";
-            model.ide_cliente_producto = 1;
+            model.ide_cliente_producto = ide_cliente_producto;
             var dataAmortizacion = bl.fn_ren_sel_ddl(model);
             var amortizacion = new GEN_DDL_BE();
             if (dataAmortizacion != null && dataAmortizacion.Count > 0)
@@ -297,9 +297,12 @@ namespace webapp.Controllers
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
-
         public JsonResult JSON_ComisionServicioChange(string codProducto)
         {
+            if (codProducto == null)
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
             var user = (SEG_USUARIO_BE)Session["Usuario"];
             var viewModel = new AuxiliarEdit();
             var model = new REN_SIM_REQ_BE();
@@ -316,7 +319,6 @@ namespace webapp.Controllers
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
-
         public JsonResult JSON_ReportePYG(long idClienteProducto)
         {
             var viewModel = new AuxiliarEdit();
@@ -324,14 +326,34 @@ namespace webapp.Controllers
             viewModel.dataPYG = dataPYG;
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult JSON_PopUp()
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var param = new REN_SIM_REQ_BE();
+            param.accion = "@POPUP";
+            param.cod_suscriptor = user.SUSCRIPTOR;
+            var data = bl.fn_ren_pro_listarPopup(param);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
 
-        public JsonResult JSON_ReporteRORACModelo(double incremento_tasa, double incremento_plazo)
+        public JsonResult JSON_Get(long IdeClienteProducto)
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var param = new REN_SIM_REQ_BE();
+            param.accion = "@EDITAR";
+            param.cod_suscriptor = user.SUSCRIPTOR;
+            param.ide_cliente_producto = IdeClienteProducto;
+            var data = bl.fn_ren_pro_get(param);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult JSON_ReporteRORACModelo(long ide_cliente_producto, double incremento_tasa, double incremento_plazo)
         {
             var viewModel = new AuxiliarEdit();
-            var dataRoracTbl = bl.fn_ren_vis_clienteProducto_Tabla(1, incremento_tasa, incremento_plazo, 100);
+            var dataRoracTbl = bl.fn_ren_vis_clienteProducto_Tabla(ide_cliente_producto, incremento_tasa, incremento_plazo, 100);
             viewModel.dataRoracTbl = dataRoracTbl;
 
-            var dataRorac = bl.fn_ren_vis_clienteProducto_Tabla(1, incremento_tasa, incremento_plazo, 10);
+            var dataRorac = bl.fn_ren_vis_clienteProducto_Tabla(ide_cliente_producto, incremento_tasa, incremento_plazo, 10);
             viewModel.dataRorac = dataRorac.FirstOrDefault();
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
@@ -361,25 +383,25 @@ namespace webapp.Controllers
 
                 var viewModel = new AuxiliarEdit();
                 var req = new REN_SIM_REQ_BE();
-                var dataPYG = bl.fn_ren_pyg(1);
+                var dataPYG = bl.fn_ren_pyg(_sim.ide_cliente_producto);
                 viewModel.dataPYG = dataPYG;
 
                 req.accion = "@Resumen_escenarios";
                 req.cod_suscriptor = user.SUSCRIPTOR;
-                req.ide_cliente_producto = 1;
+                req.ide_cliente_producto = _sim.ide_cliente_producto;
                 var dataResEsc = bl.fn_ren_resumenEsc(req);
                 viewModel.dataResEsc = dataResEsc;
 
-                var dataRoracRes = bl.fn_ren_vis_clienteProducto_Resumen(1);
+                var dataRoracRes = bl.fn_ren_vis_clienteProducto_Resumen(_sim.ide_cliente_producto);
                 viewModel.dataRoracRes = dataRoracRes;
 
-                var dataRoracTbl = bl.fn_ren_vis_clienteProducto_Tabla(1, _sim.incremento_tasa, _sim.incremento_plazo, 100);
+                var dataRoracTbl = bl.fn_ren_vis_clienteProducto_Tabla(_sim.ide_cliente_producto, _sim.incremento_tasa, _sim.incremento_plazo, 100);
                 viewModel.dataRoracTbl = dataRoracTbl;
 
-                var dataRorac = bl.fn_ren_vis_clienteProducto_Tabla(1, _sim.incremento_tasa, _sim.incremento_plazo, 10);
+                var dataRorac = bl.fn_ren_vis_clienteProducto_Tabla(_sim.ide_cliente_producto, _sim.incremento_tasa, _sim.incremento_plazo, 10);
                 viewModel.dataRorac = dataRorac.FirstOrDefault();
 
-                var dataComposicion = bl.fn_ren_vis_clienteProducto_Composicion(1);
+                var dataComposicion = bl.fn_ren_vis_clienteProducto_Composicion(_sim.ide_cliente_producto);
                 viewModel.dataComposicion = dataComposicion;
 
                 req.accion = "amortizacion";

@@ -142,7 +142,7 @@ namespace webapp.Controllers
                 }
                 if (requestContext.HttpContext.Request.HttpMethod != "POST")
                 {
-                    var user = (SEG_USUARIO_BE)sessionUsuario;
+                    var user = (SEG_USUARIO_BE)Session["Usuario"];
                     var _lstOpc = user.OpcionesData;
                     var _AbsoluteUri = requestContext.HttpContext.Request.Url.AbsoluteUri;
                     var _AbsolutePath = requestContext.HttpContext.Request.Url.AbsolutePath;

@@ -26,18 +26,18 @@ namespace BEANS
         public int cod_producto { get; set; }
         public string cod_operacion { get; set; }
         public int cod_moneda { get; set; }
-        public double monto { get; set; }
+        public double? monto { get; set; }
         public int cod_canal_atencion { get; set; }
-        public double tea { get; set; }
-        public double plazo { get; set; }
+        public double? tea { get; set; }
+        public double? plazo { get; set; }
         public string cod_clasificacion_interna { get; set; }
         public string cod_clasificacion_externa { get; set; }
         public int cod_garantia_real { get; set; }
         public int cod_moneda_garantia_real { get; set; }
-        public double monto_garantia_real { get; set; }
+        public double? monto_garantia_real { get; set; }
         public int cod_garantia_personal { get; set; }
         public int cod_moneda_garantia_personal { get; set; }
-        public double monto_garantia_personal { get; set; }
+        public double? monto_garantia_personal { get; set; }
         public string cod_clasificacion_garantia { get; set; }
         public int cod_modelo_rorac { get; set; }
         public Int64 ide_usuario { get; set; }

@@ -482,6 +482,55 @@ namespace DA
             return lista;
         }
 
+        public List<REN_POPUP_BE> fn_ren_pro_listarPopup(REN_SIM_REQ_BE param)
+        {
+            Mensaje = string.Empty;
+            List<REN_POPUP_BE> lista = new List<REN_POPUP_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_pro_clienteProducto]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 50).Value = param.accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = param.cod_suscriptor;
+            cmd.Parameters.Add("@ide_cliente_producto", System.Data.SqlDbType.BigInt).Value = param.ide_cliente_producto;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    REN_POPUP_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new REN_POPUP_BE();
+                        bean.ide_cliente_Producto = DataReader.SafeGetInt64(dr, dr.GetOrdinal("ide_cliente_Producto"));
+                        bean.Documento = DataReader.SafeGetString(dr, dr.GetOrdinal("Documento"));
+                        bean.Cliente = DataReader.SafeGetString(dr, dr.GetOrdinal("Cliente"));
+                        bean.Operacion = DataReader.SafeGetString(dr, dr.GetOrdinal("Operacion"));
+                        bean.Producto = DataReader.SafeGetString(dr, dr.GetOrdinal("Producto"));
+                        bean.Monto = DataReader.SafeGetString(dr, dr.GetOrdinal("Monto"));
+                        bean.Tea = DataReader.SafeGetString(dr, dr.GetOrdinal("Tea"));
+                        bean.Plazo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Plazo"));
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
 
         public GEN_REPLY_BE fn_ren_pro_clienteProducto(GEN_REPLY_BE model)
         {
@@ -541,6 +590,68 @@ namespace DA
                     con.Close();
             }
             return model;
+        }
+
+        public REN_SIM_REQ_BE fn_ren_pro_get(REN_SIM_REQ_BE param)
+        {
+            Mensaje = string.Empty;
+            REN_SIM_REQ_BE bean = null;
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_pro_clienteProducto]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 50).Value = param.accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = param.cod_suscriptor;
+            cmd.Parameters.Add("@ide_cliente_producto", System.Data.SqlDbType.BigInt).Value = param.ide_cliente_producto;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    while (dr.Read())
+                    {
+                        bean = new REN_SIM_REQ_BE();
+                        bean.ide_cliente_producto = DataReader.SafeGetInt64(dr, dr.GetOrdinal("ide_cliente_Producto"));
+                        bean.cod_tip_documento = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_tip_documento"));
+                        bean.num_documento = DataReader.SafeGetString(dr, dr.GetOrdinal("num_documento"));
+                        bean.nom_cliente = DataReader.SafeGetString(dr, dr.GetOrdinal("nom_cliente"));
+                        bean.cod_personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_personeria"));
+                        bean.cod_tip_cliente = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
+                        bean.cod_tip_prospecto = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_tip_prospecto"));
+                        bean.cod_producto = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto"));
+                        bean.cod_operacion = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_operacion"));
+                        bean.cod_moneda = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_moneda"));
+                        bean.monto = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("monto"));
+                        bean.cod_canal_atencion = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_canal_atencion"));
+                        bean.tea = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("tea"));
+                        bean.plazo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("plazo"));
+                        bean.cod_clasificacion_interna = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_clasificacion_interna"));
+                        bean.cod_clasificacion_externa = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_clasificacion_externa"));
+                        bean.cod_garantia_real = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_garantia_real"));
+                        bean.cod_moneda_garantia_real = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_moneda_garantia_real"));
+                        bean.monto_garantia_real = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("monto_garantia_real"));
+                        bean.cod_garantia_personal = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_garantia_personal"));
+                        bean.cod_moneda_garantia_personal = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_moneda_garantia_personal"));
+                        bean.monto_garantia_personal = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("monto_garantia_personal"));
+                        bean.cod_clasificacion_garantia = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_clasificacion_garantia"));
+                        bean.cod_modelo_rorac = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_modelo_rorac"));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return bean;
         }
     }
 }

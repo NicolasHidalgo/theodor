@@ -16,7 +16,7 @@ namespace BL
         {
             return dat.fn_ren_sel_ddl(model);
         }
-        public List<REN_PYG_BE> fn_ren_pyg(long idClienteProducto) 
+        public List<REN_PYG_BE> fn_ren_pyg(long idClienteProducto)
         {
             return dat.fn_ren_pyg(idClienteProducto);
         }
@@ -43,6 +43,14 @@ namespace BL
         public List<REN_COMISION_BE> fn_ren_pro_clienteComision(REN_COMISION_BE param)
         {
             return dat.fn_ren_pro_clienteComision(param);
+        }
+        public List<REN_POPUP_BE> fn_ren_pro_listarPopup(REN_SIM_REQ_BE param)
+        {
+            return dat.fn_ren_pro_listarPopup(param);
+        }
+        public REN_SIM_REQ_BE fn_ren_pro_get(REN_SIM_REQ_BE param)
+        {
+            return dat.fn_ren_pro_get(param);
         }
     }
 }

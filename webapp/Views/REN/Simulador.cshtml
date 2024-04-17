@@ -14,13 +14,10 @@
 
 <script type="text/javascript" src="~/assets/js/plugins/tables/handsontable/handsontable.min.js"></script>
 <!--<script type="text/javascript" src="~/assets/js/plugins/ui/prism.min.js"></script>-->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-<!-- /theme JS files -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
-
-
+<script src="~/assets/otros/chart/chart.js"></script>
+<script src="~/assets/otros/chart/chartjs-plugin-datalabels.js"></script>
+<script src="~/assets/otros/inputmask/inputmask.js"></script>
 
 @section Styles{
     <style>
@@ -131,7 +128,7 @@
 
         .icon-custom-style {
             font-size: 25px !important;
-            cursor: pointer;
+            cursor: pointer !important;
         }
 
         .tab-content > .tab-pane {
@@ -143,7 +140,8 @@
             .tab-content > .tab-pane.active {
                 height: auto !important;
             }
-        canvas{
+
+        canvas {
             max-width: 720px;
         }
     </style>
@@ -160,82 +158,23 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th align="center"># Esc</th>
-                            <th align="center">Cliente</th>
-                            <th align="center">Operacion</th>
-                            <th align="center">Producto</th>
-                            <th align="center">Monto</th>
-                            <th align="center">Tea</th>
-                            <th align="center">Plazo</th>
-                            <th align="center">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td align="center">01</td>
-                            <td align="left">DNI: 72843916</td>
-                            <td align="left">Depósito</td>
-                            <td align="left">Vista</td>
-                            <td align="right">1,000,00.00 USD</td>
-                            <td align="center">10.00%</td>
-                            <td align="center">24 meses</td>
-                            <td align="center">
-                                <a data-dismiss="modal">Seleccionar</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center">02</td>
-                            <td align="left">RUC: 12345678910</td>
-                            <td align="left">Directo</td>
-                            <td align="left">Tarjeta Negocio</td>
-                            <td align="right">2,000,00.00 USD</td>
-                            <td align="center">10.00%</td>
-                            <td align="center">24 meses</td>
-                            <td align="center">
-                                <a data-dismiss="modal">Seleccionar</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center">03</td>
-                            <td align="left">RUC: 12345678910</td>
-                            <td align="left">Directo</td>
-                            <td align="left">Descuento</td>
-                            <td align="right">2,000,00.00 USD</td>
-                            <td align="center">10.00%</td>
-                            <td align="center">24 meses</td>
-                            <td align="center">
-                                <a data-dismiss="modal">Seleccionar</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center">04</td>
-                            <td align="left">RUC: 12345678910</td>
-                            <td align="left">Directo</td>
-                            <td align="left">Otros Créditos</td>
-                            <td align="right">2,000,00.00 USD</td>
-                            <td align="center">10.00%</td>
-                            <td align="center">24 meses</td>
-                            <td align="center">
-                                <a data-dismiss="modal">Seleccionar</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center">05</td>
-                            <td align="left">DNI: 72843916</td>
-                            <td align="left">Indirecto</td>
-                            <td align="left">Carta Fianza</td>
-                            <td align="right">1,000,00.00 USD</td>
-                            <td align="center">10.00%</td>
-                            <td align="center">24 meses</td>
-                            <td align="center">
-                                <a data-dismiss="modal">Seleccionar</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th align="center">Documento</th>
+                                <th align="center">Cliente</th>
+                                <th align="center">Operación</th>
+                                <th align="center">Producto</th>
+                                <th align="right">Monto</th>
+                                <th align="center">Tea</th>
+                                <th align="center">Plazo</th>
+                                <th align="center"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyPOPUP"></tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -272,7 +211,7 @@
                         <i class="icon-floppy-disk position-left icon-custom-style" id="btnGrabar"></i>
                         <!--<i class="icon-envelop4 position-left" style="font-size:25px"></i>-->
                         <div class="heading-elements">
-                            
+
                             <!--<ul class="icons-list">
                             <li><a data-action="collapse"></a></li>
                             <li><a data-action="reload"></a></li>
@@ -285,11 +224,12 @@
 
 
                         <div class="row">
-                            
+
                             <div class="col-md-5" style="border-right: 1px solid #e8e7e7;">
                                 <fieldset>
                                     <legend class="tipografia1 text-semibold"><i class="icon-user-tie position-left"></i> Detalle del Cliente o Prospecto</legend>
                                     <form id="FormSim">
+                                        <label id="IdeClienteProducto" class="hidden">@Model.IdeClienteProducto</label>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
@@ -376,15 +316,15 @@
                                                     <label>Amortización</label>
                                                     <input type="text" id="txtAmortizacion" value="@Model.amortizacion.Text" class="form-control" readonly />
                                                     <!--
-            <select id="ddlAmortizacion" name="ddlAmortizacion" class="select" disabled>
-                <option value="1">Cuotas Constantes</option>
-                <option value="2">Amortización de intereses y capital al vencimiento</option>
-                <option value="3">Revolventes</option>
-                <option value="4">Descuentos</option>
-                <option value="5">Interes y capital al vencimiento</option>
-                <option value="6"></option>
-            </select>
-                -->
+                                                    <select id="ddlAmortizacion" name="ddlAmortizacion" class="select" disabled>
+                                                        <option value="1">Cuotas Constantes</option>
+                                                        <option value="2">Amortización de intereses y capital al vencimiento</option>
+                                                        <option value="3">Revolventes</option>
+                                                        <option value="4">Descuentos</option>
+                                                        <option value="5">Interes y capital al vencimiento</option>
+                                                        <option value="6"></option>
+                                                    </select>
+                                                        -->
                                                 </div>
                                             </div>
 
@@ -557,7 +497,6 @@
                                     </form>
                                 </fieldset>
                             </div>
-                            
 
                             <div class="col-md-7">
                                 <div class="row">
@@ -847,9 +786,8 @@
                                     </div>
                                 </div>
 
-                                
-                            </div>
 
+                            </div>
 
                         </div>
                     </div>
@@ -864,6 +802,127 @@
 
 
 <script type="text/javascript">
+
+    function Seleccionar(Id) {
+        $('#editModal').modal('hide');
+        $("#overlay").show();
+        $.getJSON('@Url.Action("JSON_Get")', { IdeClienteProducto: Id }, function (data) {
+
+            console.log(data);
+            $("#ddlTipDocumento").val(data.cod_tip_documento).change();
+            $("#txtNumDoc").val(data.num_documento);
+            $("#txtNombreCliente").val(data.nom_cliente);
+            $("#ddlPersoneria").val(data.cod_personeria).change();
+            $("#ddlTipCliente").val(data.cod_tip_cliente).change();
+            $("input:radio[name=rbTipProspecto]:checked").val(data.cod_tip_prospecto);
+            $("#IdeClienteProducto").text(data.ide_cliente_producto);
+
+            if ($("#ddlOperacion option:selected").val() != data.cod_operacion) {
+                $("#ddlOperacion").val(data.cod_operacion).change();
+            }
+
+            //ddlOperacionChange();
+            return;
+
+            $("#ddlProducto").val(data.cod_producto).change();
+            $("#ddlMoneda").val(data.cod_moneda).change();
+            $("#txtMonto").val(data.monto);
+            $("#ddlCanalAtencion").val(data.cod_canal_atencion).change();
+            $("#txtTasaEfectiva").val(data.tea);
+            $("#txtPlazoMeses").val(data.plazo);
+            $("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).change();
+            $("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).change();
+            $("#ddlGarantiaReal").val(data.cod_garantia_real).change();
+            $("#ddlMonedaReal").val(data.cod_moneda_garantia_real).change();
+            $("#txtMontoGarantiaReal").val(data.monto_garantia_real);
+            $("#ddlGarantiaPersonal").val(data.cod_garantia_personal).change();
+            $("#ddlMonedaPersonal").val(data.cod_moneda_garantia_personal).change();
+            $("#txtMontoGarantiaPersonal").val(data.monto_garantia_personal);
+            $("#ddlClasificacionGarantia").val(data.cod_clasificacion_garantia).change();
+            $("#ddlModeloRORAC").val(data.cod_modelo_rorac).change();
+
+
+        }).done(function () {
+            $("#overlay").hide();
+        });
+    }
+
+    function ddlOperacionChange() {
+        debugger;
+        $.getJSON('@Url.Action("JSON_OperacionChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codOperacion: $("#ddlOperacion option:selected").val() }, function (data) {
+
+            $('#ddlProducto').empty();
+            $.each(data.ddlProducto, function (index, item) {
+                $('#ddlProducto').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: item.Selected
+                }));
+            });
+
+            $('#ddlClasificacionInterna').empty();
+            $.each(data.ddlClasificacionInterna, function (index, item) {
+                $('#ddlClasificacionInterna').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: item.Selected
+                }));
+            });
+            $('#ddlClasificacionExterna').empty();
+            $.each(data.ddlClasificacionExterna, function (index, item) {
+                $('#ddlClasificacionExterna').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: item.Selected
+                }));
+            });
+
+            $("#txtAmortizacion").val(data.amortizacion.Text);
+
+            $('#ddlGarantiaReal').empty();
+            $.each(data.ddlGarantiaReal, function (index, item) {
+                $('#ddlGarantiaReal').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: item.Selected
+                }));
+            });
+            $('#ddlGarantiaPersonal').empty();
+            $.each(data.ddlGarantiaPersonal, function (index, item) {
+                $('#ddlGarantiaPersonal').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: item.Selected
+                }));
+            });
+            $('#ddlClasificacionGarantia').empty();
+            $.each(data.ddlClasificacionGarantia, function (index, item) {
+                $('#ddlClasificacionGarantia').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: item.Selected
+                }));
+            });
+
+            let disabled = false;
+            if ($("#ddlOperacion option:selected").val() == "DEP") {
+                disabled = true;
+                $('#txtMontoGarantiaReal').empty();
+                $('#txtMontoGarantiaPersonal').empty();
+            }
+            $('#ddlGarantiaReal').prop('disabled', disabled);
+            $('#ddlGarantiaPersonal').prop('disabled', disabled);
+            $('#ddlClasificacionGarantia').prop('disabled', disabled);
+            $('#txtMontoGarantiaReal').prop('disabled', disabled);
+            $('#txtMontoGarantiaPersonal').prop('disabled', disabled);
+            $('#ddlMonedaReal').prop('disabled', disabled);
+            $('#ddlMonedaPersonal').prop('disabled', disabled);
+        }).done(function () {
+
+        });
+    }
+
+
     $(document).ready(function () {
 
         var jsModel = @Html.Raw(Json.Encode(Model));
@@ -962,7 +1021,7 @@
 
                     }
                 }
-                
+
             }
         });
 
@@ -972,8 +1031,31 @@
         });
 
         $("#btnEditar").on("click", function () {
-            $('#editModal').modal('show');    ;
+            $("#overlay").show();
+            $.getJSON('@Url.Action("JSON_PopUp")', function (data) {
+                let cadena = "";
+                $('#tbodyPOPUP').empty();
+                $.each(data, function (index, item) {
+                    cadena += "<tr>";
+                    cadena += "<td align='center'>" + item.Documento + "</td>";
+                    cadena += "<td align='left'>" + item.Cliente + "</td>";
+                    cadena += "<td align='center'>" + item.Operacion + "</td>";
+                    cadena += "<td align='left'>" + item.Producto + "</td>";
+                    cadena += "<td align='right'>" + item.Monto + "</td>";
+                    cadena += "<td align='right'>" + item.Tea + "</td>";
+                    cadena += "<td align='center'>" + item.Plazo + "</td>";
+                    cadena += "<td align='center'><a onclick='Seleccionar("+item.ide_cliente_Producto+")'>Seleccionar</a></td>";
+                    cadena += "</tr>";
+                });
+                $("#tbodyPOPUP").append(cadena);
+            }).done(function () {
+                $("#overlay").hide();
+                $('#editModal').modal('show');
+            });
+
         });
+
+
 
         $("#btnGrabar").on("click", function () {
             grabar();
@@ -1003,9 +1085,6 @@
             numericInput: true
         });
 
-        var codProducto = $("#ddlProducto option:selected").val();
-        //productoAmortizacion(codProducto);
-
         function getPorcentaje(valor) {
             let tasa = Number(valor);
             if (tasa == 0) {
@@ -1017,26 +1096,6 @@
         function getImporte(valor) {
             let monto = Number(valor.replace(/,/g, ''));
             return monto;
-        }
-
-        function productoAmortizacion(codProducto) {
-            if ($("#ddlOperacion option:selected").val() == "DEP") {
-                $("#ddlAmortizacion").val(6).change();
-                return;
-            }
-            if (codProducto == 1040 || codProducto == 1041 || codProducto == 1042 || codProducto == 1060 || codProducto == 1043 || codProducto == 1044 || codProducto == 1100) {
-                $("#ddlAmortizacion").val(1).change();
-            }
-            if (codProducto == 1010 || codProducto == 1020 || codProducto == 1021 || codProducto == 1022 || codProducto == 3010 || codProducto == 3020) {
-                $("#ddlAmortizacion").val(3).change();
-            }
-            if (codProducto == 1030 || codProducto == 1035) {
-                $("#ddlAmortizacion").val(4).change();
-            }
-            if (codProducto == 1045 || codProducto == 2010 || codProducto == 2020 || codProducto == 2030 || codProducto == 3030) {
-                $("#ddlAmortizacion").val(5).change();
-            }
-
         }
 
         function grabar() {
@@ -1084,7 +1143,7 @@
                 cod_personeria: $("#ddlPersoneria option:selected").val(),
                 cod_tip_cliente: $("#ddlTipCliente option:selected").val(),
                 cod_tip_prospecto: $('input:radio[name=rbTipProspecto]:checked').val(),
-                ide_cliente_producto: 1,
+                ide_cliente_producto: $("#IdeClienteProducto").text(),
                 cod_producto: $("#ddlProducto option:selected").val(),
                 cod_operacion: $("#ddlOperacion option:selected").val(),
                 cod_moneda: $("#ddlMoneda option:selected").val(),
@@ -1102,7 +1161,6 @@
                 monto_garantia_personal: getImporte($("#txtMontoGarantiaPersonal").val()),
                 cod_clasificacion_garantia: $("#ddlClasificacionGarantia option:selected").val(),
                 cod_modelo_rorac: $("#ddlModeloRORAC option:selected").val(),
-                ide_usuario: 1,
                 incremento_tasa: $("#ddlRangoTasa option:selected").val(),
                 incremento_plazo: $("#ddlRangoPlazo option:selected").val(),
             };
@@ -1278,7 +1336,7 @@
 
         $("#ddlRangoTasa, #ddlRangoPlazo").change(function () {
             $("#overlay").show();
-            $.getJSON('@Url.Action("JSON_ReporteRORACModelo")', { incremento_tasa: $("#ddlRangoTasa option:selected").val(), incremento_plazo: $("#ddlRangoPlazo option:selected").val() }, function (data) {
+            $.getJSON('@Url.Action("JSON_ReporteRORACModelo")', { ide_cliente_producto: $("#IdeClienteProducto").text(), incremento_tasa: $("#ddlRangoTasa option:selected").val(), incremento_plazo: $("#ddlRangoPlazo option:selected").val() }, function (data) {
                 reconstruirHandsontable(data);
             });
             $("#overlay").hide();
@@ -1308,78 +1366,7 @@
         });
 
         $("#ddlOperacion").change(function () {
-            $.getJSON('@Url.Action("JSON_OperacionChange")', { codOperacion: $("#ddlOperacion option:selected").val() }, function (data) {
-
-                $('#ddlProducto').empty();
-                $.each(data.ddlProducto, function (index, item) {
-                    $('#ddlProducto').append($('<option/>', {
-                        value: item.Value,
-                        text: item.Text,
-                        selected: item.Selected
-                    }));
-                });
-
-                $('#ddlClasificacionInterna').empty();
-                $.each(data.ddlClasificacionInterna, function (index, item) {
-                    $('#ddlClasificacionInterna').append($('<option/>', {
-                        value: item.Value,
-                        text: item.Text,
-                        selected: item.Selected
-                    }));
-                });
-                $('#ddlClasificacionExterna').empty();
-                $.each(data.ddlClasificacionExterna, function (index, item) {
-                    $('#ddlClasificacionExterna').append($('<option/>', {
-                        value: item.Value,
-                        text: item.Text,
-                        selected: item.Selected
-                    }));
-                });
-
-                $("#txtAmortizacion").val(data.amortizacion.Text);
-
-                $('#ddlGarantiaReal').empty();
-                $.each(data.ddlGarantiaReal, function (index, item) {
-                    $('#ddlGarantiaReal').append($('<option/>', {
-                        value: item.Value,
-                        text: item.Text,
-                        selected: item.Selected
-                    }));
-                });
-                $('#ddlGarantiaPersonal').empty();
-                $.each(data.ddlGarantiaPersonal, function (index, item) {
-                    $('#ddlGarantiaPersonal').append($('<option/>', {
-                        value: item.Value,
-                        text: item.Text,
-                        selected: item.Selected
-                    }));
-                });
-                $('#ddlClasificacionGarantia').empty();
-                $.each(data.ddlClasificacionGarantia, function (index, item) {
-                    $('#ddlClasificacionGarantia').append($('<option/>', {
-                        value: item.Value,
-                        text: item.Text,
-                        selected: item.Selected
-                    }));
-                });
-
-                let disabled = false;
-                if ($("#ddlOperacion option:selected").val() == "DEP") {
-                    disabled = true;
-                    $('#txtMontoGarantiaReal').empty();
-                    $('#txtMontoGarantiaPersonal').empty();
-                }
-                $('#ddlGarantiaReal').prop('disabled', disabled);
-                $('#ddlGarantiaPersonal').prop('disabled', disabled);
-                $('#ddlClasificacionGarantia').prop('disabled', disabled);
-                $('#txtMontoGarantiaReal').prop('disabled', disabled);
-                $('#txtMontoGarantiaPersonal').prop('disabled', disabled);
-                $('#ddlMonedaReal').prop('disabled', disabled);
-                $('#ddlMonedaPersonal').prop('disabled', disabled);
-
-
-                //productoAmortizacion($("#ddlProducto option:selected").val());
-            });
+            ddlOperacionChange();
         });
 
         $("#ddlProducto").change(function () {
@@ -1394,7 +1381,6 @@
                     }));
                 });
 
-                productoAmortizacion($("#ddlProducto option:selected").val());
             });
         });
 
@@ -1477,20 +1463,20 @@
                         data: valuesOPE,
                         borderWidth: 1,
                     },*/
-                    { 
-                        //label: '#', 
-                        //backgroundColor: ["#D2BB8B", "#D2BB8B", "#D2BB8B", "#D2BB8B", "#D2BB8B", "#D2BB8B", "#969076"], 
-                        data: invOPE, //[0.10, 0.10, 0.10, 0.10, 0.10, 0.10], 
+                    {
+                        //label: '#',
+                        //backgroundColor: ["#D2BB8B", "#D2BB8B", "#D2BB8B", "#D2BB8B", "#D2BB8B", "#D2BB8B", "#969076"],
+                        data: invOPE, //[0.10, 0.10, 0.10, 0.10, 0.10, 0.10],
                         borderWidth: 0,
                         //pointRadius: 0,
                         //borderColor: "#0000ff",
                         backgroundColor: "transparent",
-                    }, { 
-                        //label: '#', 
-                        backgroundColor: ["#D2BB8B", "#D2BB8B", "#D2BB8B", "#D2BB8B", "#D2BB8B", "#D2BB8B", "#969076"], 
-                        data: negOPE, //[0.01, 0.02, 0.03, 0.04, 0.05, 0.06], 
+                    }, {
+                        //label: '#',
+                        backgroundColor: ["#D2BB8B", "#D2BB8B", "#D2BB8B", "#D2BB8B", "#D2BB8B", "#D2BB8B", "#969076"],
+                        data: negOPE, //[0.01, 0.02, 0.03, 0.04, 0.05, 0.06],
                         borderWidth: 1,
-                    },   
+                    },
                     /*{
                         label: 'Total',
                         data: [0, 0, 0, 0, 0, 0, 0],
@@ -1517,7 +1503,7 @@
                     datalabels: {
                         align: 'end',
                         anchor: 'end',
-                        color: 'black', 
+                        color: 'black',
                         font: {
                             weight: 'bold',
                         },
@@ -1530,7 +1516,7 @@
                         display: function (ctx) {
                             return ctx.datasetIndex === ctx.chart.$totalizer.utmost
                         },
-                        //color: 'rgba(255,255,255)', 
+                        //color: 'rgba(255,255,255)',
                     }
                 },
                 scales: {
@@ -1578,18 +1564,17 @@
                         data: valuesOBJ,
                         borderWidth: 1,
                     }*/
-                    { 
-                        backgroundColor: ["#3461A8", "#3461A8", "#3461A8", "#3461A8", "#3461A8", "#3461A8", "#969076"], 
+                    {
+                        //backgroundColor: ["#3461A8", "#3461A8", "#3461A8", "#3461A8", "#3461A8", "#3461A8", "#969076"],
                         data: invOBJ,
                         borderWidth: 0,
-                        //backgroundColor: "rgba(255, 10, 13, 0.1)",
                         backgroundColor: "transparent",
-                    }, 
-                    {  
-                        backgroundColor: "#3461A8", 
-                        data: negOBJ, 
+                    },
+                    {
+                        backgroundColor: ["#3461A8", "#3461A8", "#3461A8", "#3461A8", "#3461A8", "#3461A8", "#969076"],
+                        data: negOBJ,
                         borderWidth: 1,
-                    },   
+                    },
                     //{
                         //label: 'Total',
                         //data: [0, 0, 0, 0, 0, 0, 0],
@@ -1616,7 +1601,7 @@
                     datalabels: {
                         align: 'end',
                         anchor: 'end',
-                        color: 'black', 
+                        color: 'black',
                         font: {
                             weight: 'bold',
                         },
@@ -1676,16 +1661,15 @@
                         data: valuesRIE,
                         borderWidth: 1,
                     }*/
-                    { 
-                        backgroundColor: ["#A4343A", "#A4343A", "#A4343A", "#A4343A", "#A4343A", "#A4343A", "#969076"], 
+                    {
+                        //backgroundColor: ["#A4343A", "#A4343A", "#A4343A", "#A4343A", "#A4343A", "#A4343A", "#969076"],
                         data: invRIE,
                         borderWidth: 0,
-                        //backgroundColor: "rgba(255, 10, 13, 0.1)",
                         backgroundColor: "transparent",
-                    }, 
-                    { 
-                        backgroundColor: "#A4343A", 
-                        data: negRIE, 
+                    },
+                    {
+                        backgroundColor: ["#A4343A", "#A4343A", "#A4343A", "#A4343A", "#A4343A", "#A4343A", "#969076"],
+                        data: negRIE,
                         borderWidth: 1,
                     },
                     //{
@@ -1714,7 +1698,7 @@
                     datalabels: {
                         align: 'end',
                         anchor: 'end',
-                        color: 'black', 
+                        color: 'black',
                         font: {
                             weight: 'bold',
                         },
