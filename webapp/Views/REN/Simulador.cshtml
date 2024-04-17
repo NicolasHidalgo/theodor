@@ -969,8 +969,6 @@
         $("#btnNuevo").on("click", function () {
             // limpiar controles
             $('input:text').val('');
-            $('#columna2').hide();
-            $('#columna3').hide();
         });
 
         $("#btnEditar").on("click", function () {
@@ -1048,7 +1046,7 @@
             let plazo = Number($("#txtPlazoMeses").val());
             let tipoDoc = $("#ddlTipDocumento option:selected").val();
             let numDoc = $("#txtNumDoc").val();
-    /*
+            /*
             if (tipoDoc == 1) { // ruc
                 if (numDoc.length != 11) {
                     toastr.warning('RUC debe contener 11 dígitos');
@@ -1077,8 +1075,6 @@
             */
 
             $("#overlay").show();
-            $('#columna2').show();
-            $('#columna3').show();
             var _obj = {
                 accion: '@@GRABAR',
                 ide_cliente: 1,
@@ -1495,10 +1491,10 @@
                         data: negOPE, //[0.01, 0.02, 0.03, 0.04, 0.05, 0.06], 
                         borderWidth: 1,
                     },   
-                    {
+                    /*{
                         label: 'Total',
                         data: [0, 0, 0, 0, 0, 0, 0],
-                    }
+                    }*/
                 ]
             },
             options: {
@@ -1526,9 +1522,10 @@
                             weight: 'bold',
                         },
                         formatter: (value, ctx) => {
-                            const total = ctx.chart.$totalizer.totals[ctx.dataIndex];
-                            const _tot = (total * 100).toFixed(2) + '%';
-                            return _tot; //total.toLocaleString('fr-FR', {});
+                            //const total = ctx.chart.$totalizer.totals[ctx.dataIndex];
+                            //const _tot = (total * 100).toFixed(2) + '%';
+                            //return _tot; //total.toLocaleString('fr-FR', {});
+                            return (value * 100).toFixed(2) + '%';
                         },
                         display: function (ctx) {
                             return ctx.datasetIndex === ctx.chart.$totalizer.utmost
@@ -1592,10 +1589,10 @@
                         data: negOBJ, 
                         borderWidth: 1,
                     },   
-                    {
-                        label: 'Total',
-                        data: [0, 0, 0, 0, 0, 0, 0],
-                    }
+                    //{
+                        //label: 'Total',
+                        //data: [0, 0, 0, 0, 0, 0, 0],
+                    //}
                 ]
             },
             options: {
@@ -1623,9 +1620,10 @@
                             weight: 'bold',
                         },
                         formatter: (value, ctx) => {
-                            const total = ctx.chart.$totalizer.totals[ctx.dataIndex];
-                            const _tot = (total * 100).toFixed(2) + '%';
-                            return _tot; //total.toLocaleString('fr-FR', {});
+                            //const total = ctx.chart.$totalizer.totals[ctx.dataIndex];
+                            //const _tot = (total * 100).toFixed(2) + '%';
+                            //return _tot; //total.toLocaleString('fr-FR', {});
+                            return (value * 100).toFixed(2) + '%';
                         },
                         display: function (ctx) {
                             return ctx.datasetIndex === ctx.chart.$totalizer.utmost
@@ -1688,10 +1686,10 @@
                         data: negRIE, 
                         borderWidth: 1,
                     },
-                    {
-                        label: 'Total',
-                        data: [0, 0, 0, 0, 0, 0, 0],
-                    }
+                    //{
+                        //label: 'Total',
+                        //data: [0, 0, 0, 0, 0, 0, 0],
+                    //}
                 ]
             },
             options: {
@@ -1719,9 +1717,10 @@
                             weight: 'bold',
                         },
                         formatter: (value, ctx) => {
-                            const total = ctx.chart.$totalizer.totals[ctx.dataIndex];
-                            const _tot = (total * 100).toFixed(2) + '%';
-                            return _tot; //total.toLocaleString('fr-FR', {});
+                            //const total = ctx.chart.$totalizer.totals[ctx.dataIndex];
+                            //const _tot = (total * 100).toFixed(2) + '%';
+                            //return _tot; //total.toLocaleString('fr-FR', {});
+                            return (value * 100).toFixed(2) + '%';
                         },
                         display: function (ctx) {
                             return ctx.datasetIndex === ctx.chart.$totalizer.utmost
