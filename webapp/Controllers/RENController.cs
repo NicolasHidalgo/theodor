@@ -199,7 +199,7 @@ namespace webapp.Controllers
             var model = new REN_SIM_REQ_BE();
 
             model.cod_suscriptor = user.SUSCRIPTOR;
-            //model.ide_cliente_producto = 1;
+            model.ide_cliente_producto = 0;
             model.accion = "tip_documento";
             model.cod_personeria = codPersoneria;
             var dataTipDoc = bl.fn_ren_sel_ddl(model);
