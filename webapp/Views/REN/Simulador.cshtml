@@ -809,29 +809,29 @@
         $.getJSON('@Url.Action("JSON_Get")', { IdeClienteProducto: Id }, function (data) {
 
             console.log(data);
-            $("#ddlTipDocumento").val(data.cod_tip_documento).change();
-            $("#txtNumDoc").val(data.num_documento);
-            $("#txtNombreCliente").val(data.nom_cliente);
-            $("#ddlPersoneria").val(data.cod_personeria).change();
-            $("#ddlTipCliente").val(data.cod_tip_cliente).change();
-            $("input:radio[name=rbTipProspecto]:checked").val(data.cod_tip_prospecto);
             $("#IdeClienteProducto").text(data.ide_cliente_producto);
+            $("input:radio[name=rbTipProspecto]:checked").val(data.cod_tip_prospecto);
+            $("#txtNombreCliente").val(data.nom_cliente);
+            if ($("#ddlPersoneria option:selected").val() != data.cod_personeria) {
+                $("#ddlPersoneria").val(data.cod_personeria).trigger('change', [data]);
+            }
+            //$("#ddlTipDocumento").val(data.cod_tip_documento).change();
+            //$("#txtNumDoc").val(data.num_documento);
+            //$("#ddlTipCliente").val(data.cod_tip_cliente).change();
 
             if ($("#ddlOperacion option:selected").val() != data.cod_operacion) {
-                $("#ddlOperacion").val(data.cod_operacion).change();
+                $("#ddlOperacion").val(data.cod_operacion).trigger('change', [data]);
             }
 
-            //ddlOperacionChange();
-            return;
+            //$("#ddlProducto").val(data.cod_producto).change();
+            //$("#ddlMoneda").val(data.cod_moneda).change();
+            //$("#txtMonto").val(data.monto);
+            //$("#ddlCanalAtencion").val(data.cod_canal_atencion).change();
+            //$("#txtTasaEfectiva").val(data.tea);
+            //$("#txtPlazoMeses").val(data.plazo);
+            //$("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).change();
+            //$("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).change();
 
-            $("#ddlProducto").val(data.cod_producto).change();
-            $("#ddlMoneda").val(data.cod_moneda).change();
-            $("#txtMonto").val(data.monto);
-            $("#ddlCanalAtencion").val(data.cod_canal_atencion).change();
-            $("#txtTasaEfectiva").val(data.tea);
-            $("#txtPlazoMeses").val(data.plazo);
-            $("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).change();
-            $("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).change();
             $("#ddlGarantiaReal").val(data.cod_garantia_real).change();
             $("#ddlMonedaReal").val(data.cod_moneda_garantia_real).change();
             $("#txtMontoGarantiaReal").val(data.monto_garantia_real);
@@ -847,10 +847,85 @@
         });
     }
 
-    function ddlOperacionChange() {
-        debugger;
-        $.getJSON('@Url.Action("JSON_OperacionChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codOperacion: $("#ddlOperacion option:selected").val() }, function (data) {
+    function ddlProductoChange(data) {
+        let codProducto = $("#ddlProducto option:selected").val();
+        if (data != undefined && data != null) {
+            codProducto = data.cod_producto;
+        }
+        $.getJSON('@Url.Action("JSON_ComisionServicioChange")', { codProducto: codProducto }, function (data) {
+            $('#ddlComisionServicio,#ddlComisionServicio2').empty();
+            $.each(data.ddlComisionServicio, function (index, item) {
+                $('#ddlComisionServicio,#ddlComisionServicio2').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: item.Selected
+                }));
+            });
+        }).done(function () {
+            if (data != undefined && data != null) {
+                
+            }
+        });
+    }
 
+    function ddlPersoneriaChange(data) {
+        let codPersoneria = $("#ddlPersoneria option:selected").val();
+        if (data != undefined && data != null) {
+            codPersoneria = data.cod_personeria;
+        }
+        $.getJSON('@Url.Action("JSON_PersoneriaChange")', { codPersoneria: codPersoneria }, function (data) {
+            $('#ddlTipDocumento').empty();
+            $.each(data.ddlTipDocumento, function (index, item) {
+                $('#ddlTipDocumento').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: item.Selected
+                }));
+            });
+
+            $('#ddlTipCliente').empty();
+            $.each(data.ddlTipCliente, function (index, item) {
+                $('#ddlTipCliente').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: item.Selected
+                }));
+            });
+        }).done(function () {
+            if (data != undefined && data != null) {
+                $("#ddlTipDocumento").val(data.cod_tip_documento).change();
+                $("#txtNumDoc").val(data.num_documento);
+                $("#ddlTipCliente").val(data.cod_tip_cliente).change();
+            }
+        });
+    }
+
+    function getPorcentaje(valor) {
+        let tasa = Number(valor);
+        if (tasa == 0) {
+            return 0;
+        }
+        return tasa / 100.0;
+    }
+    function getPorcentajeNum(valor) {
+        let tasa = Number(valor);
+        if (tasa == 0) {
+            return 0;
+        }
+        return tasa * 100.0;
+    }
+
+    function getImporte(valor) {
+        let monto = Number(valor.replace(/,/g, ''));
+        return monto;
+    }
+
+    function ddlOperacionChange(data) {
+        let codOperacion = $("#ddlOperacion option:selected").val();
+        if (data != undefined && data != null) {
+            codOperacion = data.cod_operacion;
+        }
+        $.getJSON('@Url.Action("JSON_OperacionChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codOperacion: codOperacion }, function (data) {
             $('#ddlProducto').empty();
             $.each(data.ddlProducto, function (index, item) {
                 $('#ddlProducto').append($('<option/>', {
@@ -905,7 +980,7 @@
             });
 
             let disabled = false;
-            if ($("#ddlOperacion option:selected").val() == "DEP") {
+            if (codOperacion == "DEP") {
                 disabled = true;
                 $('#txtMontoGarantiaReal').empty();
                 $('#txtMontoGarantiaPersonal').empty();
@@ -918,6 +993,20 @@
             $('#ddlMonedaReal').prop('disabled', disabled);
             $('#ddlMonedaPersonal').prop('disabled', disabled);
         }).done(function () {
+
+            if (data != undefined && data != null) {
+                $("#ddlProducto").val(data.cod_producto).change();
+                if ($("#ddlProducto option:selected").val() != data.cod_producto) {
+                    $("#ddlProducto").val(data.cod_producto).trigger('change', [data]);
+                }
+                $("#ddlMoneda").val(data.cod_moneda).change();
+                $("#txtMonto").val(data.monto);
+                $("#ddlCanalAtencion").val(data.cod_canal_atencion).change();
+                $("#txtTasaEfectiva").val(getPorcentajeNum(data.tea));
+                $("#txtPlazoMeses").val(data.plazo);
+                $("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).change();
+                $("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).change();
+            }
 
         });
     }
@@ -1084,19 +1173,6 @@
             max: 100,
             numericInput: true
         });
-
-        function getPorcentaje(valor) {
-            let tasa = Number(valor);
-            if (tasa == 0) {
-                return 0;
-            }
-            return tasa / 100.0;
-        }
-
-        function getImporte(valor) {
-            let monto = Number(valor.replace(/,/g, ''));
-            return monto;
-        }
 
         function grabar() {
 
@@ -1331,7 +1407,7 @@
         }
 
         $("#ddlModeloRORAC,#ddlPersoneria,#ddlTipCliente,#ddlOperacion,#ddlProducto,#ddlMoneda,#txtMonto,#ddlCanalAtencion,#txtTasaEfectiva,#txtPlazoMeses,#ddlClasificacionInterna,#ddlGarantiaReal,#ddlMonedaReal,#txtMontoGarantiaReal,#ddlMonedaPersonal,#txtMontoGarantiaPersonal,#ddlClasificacionGarantia").change(function () {
-            grabar();
+            //grabar();
         });
 
         $("#ddlRangoTasa, #ddlRangoPlazo").change(function () {
@@ -1342,46 +1418,16 @@
             $("#overlay").hide();
         });
 
-        $("#ddlPersoneria").change(function () {
-            $.getJSON('@Url.Action("JSON_PersoneriaChange")', { codPersoneria: $("#ddlPersoneria option:selected").val() }, function (data) {
-
-                $('#ddlTipDocumento').empty();
-                $.each(data.ddlTipDocumento, function (index, item) {
-                    $('#ddlTipDocumento').append($('<option/>', {
-                        value: item.Value,
-                        text: item.Text,
-                        selected: item.Selected
-                    }));
-                });
-
-                $('#ddlTipCliente').empty();
-                $.each(data.ddlTipCliente, function (index, item) {
-                    $('#ddlTipCliente').append($('<option/>', {
-                        value: item.Value,
-                        text: item.Text,
-                        selected: item.Selected
-                    }));
-                });
-            });
+        $("#ddlPersoneria").change(function (e, data) {
+            ddlPersoneriaChange(data);
         });
 
-        $("#ddlOperacion").change(function () {
-            ddlOperacionChange();
+        $("#ddlOperacion").change(function (e, data) {
+            ddlOperacionChange(data);
         });
 
-        $("#ddlProducto").change(function () {
-            $.getJSON('@Url.Action("JSON_ComisionServicioChange")', { codProducto: $("#ddlProducto option:selected").val() }, function (data) {
-
-                $('#ddlComisionServicio,#ddlComisionServicio2').empty();
-                $.each(data.ddlComisionServicio, function (index, item) {
-                    $('#ddlComisionServicio,#ddlComisionServicio2').append($('<option/>', {
-                        value: item.Value,
-                        text: item.Text,
-                        selected: item.Selected
-                    }));
-                });
-
-            });
+        $("#ddlProducto").change(function (e, data) {
+            ddlProductoChange(data);
         });
 
         function updateChart1(data) {
@@ -1668,7 +1714,7 @@
                         backgroundColor: "transparent",
                     },
                     {
-                        backgroundColor: ["#A4343A", "#A4343A", "#A4343A", "#A4343A", "#A4343A", "#A4343A", "#969076"],
+                        backgroundColor: ["#A4343A", "#A4343A", "#A4343A", "#A4343A", "#969076"],
                         data: negRIE,
                         borderWidth: 1,
                     },
