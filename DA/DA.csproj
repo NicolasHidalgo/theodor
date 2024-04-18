@@ -47,7 +47,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="REN_DA.cs" />
     <Compile Include="SEG_DA.cs" />
-    <Compile Include="XLS_DA.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BEANS\BE.csproj">

@@ -25,7 +25,7 @@ namespace webapp.Controllers
 
             var model = new REN_SIM_REQ_BE();
             model.cod_suscriptor = user.SUSCRIPTOR;
-            model.ide_cliente_producto = 1;
+            model.ide_cliente_producto = 0;
             viewModel.IdeClienteProducto = model.ide_cliente_producto;
 
             model.accion = "personeria";

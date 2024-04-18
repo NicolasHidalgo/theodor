@@ -37,6 +37,8 @@ namespace DA
             cmd.Parameters.Add("@ide_cliente_producto", System.Data.SqlDbType.BigInt).Value = model.ide_cliente_producto;
             cmd.Parameters.Add("@cod_producto", System.Data.SqlDbType.Int).Value = model.cod_producto;
             cmd.Parameters.Add("@cod_operacion", System.Data.SqlDbType.VarChar, 5).Value = model.cod_operacion;
+            
+            /*
             cmd.Parameters.Add("@cod_moneda", System.Data.SqlDbType.Int).Value = model.cod_moneda;
             cmd.Parameters.Add("@monto", System.Data.SqlDbType.Float).Value = model.monto;
             cmd.Parameters.Add("@cod_canal_atencion", System.Data.SqlDbType.Int).Value = model.cod_canal_atencion;
@@ -53,6 +55,7 @@ namespace DA
             cmd.Parameters.Add("@cod_clasificacion_garantia", System.Data.SqlDbType.VarChar, 5).Value = model.cod_clasificacion_garantia;
             cmd.Parameters.Add("@cod_modelo_rorac", System.Data.SqlDbType.Int).Value = model.cod_modelo_rorac;
             cmd.Parameters.Add("@ide_usuario", System.Data.SqlDbType.BigInt).Value = model.ide_usuario;
+            */
 
             try
             {

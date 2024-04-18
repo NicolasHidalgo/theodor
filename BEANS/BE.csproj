@@ -44,23 +44,16 @@
   <ItemGroup>
     <Compile Include="GEN_DDL_BE.cs" />
     <Compile Include="GEN_REPLY_BE.cs" />
-    <Compile Include="GEN_UNIDAD_NEGOCIO_BE.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="REN_COMISION_BE.cs" />
+    <Compile Include="REN_PLANTILLA_BE.cs" />
     <Compile Include="REN_PYG_BE.cs" />
     <Compile Include="REN_SIM_REQ_BE.cs" />
     <Compile Include="SEG_APLICACION_BE.cs" />
     <Compile Include="SEG_OPCION_BE.cs" />
     <Compile Include="SEG_PERFIL_BE.cs" />
-    <Compile Include="GEN_TIEMPO_BE.cs" />
     <Compile Include="SEG_SESSION_BE.cs" />
     <Compile Include="SEG_USUARIO_BE.cs" />
-    <Compile Include="PBI_DASHBOARD_BE.cs" />
-    <Compile Include="XLS_CARGA_BE.cs" />
-    <Compile Include="XLS_PROCESO_ESTRUCTURA_BE.cs" />
-    <Compile Include="XLS_PROCESO_PARAMETRO_BE.cs" />
-    <Compile Include="XLS_USUARIO_PROCESO_BE.cs" />
-    <Compile Include="XLS_PROCESO_BE.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

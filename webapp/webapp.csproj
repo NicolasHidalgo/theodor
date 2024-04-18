@@ -189,14 +189,12 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constantes\Constantes.cs" />
     <Compile Include="Controllers\api\SEGController.cs" />
-    <Compile Include="Controllers\api\XLSController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SEGController.cs" />
     <Compile Include="Controllers\RENController.cs" />
-    <Compile Include="Controllers\XLSController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2379,7 +2377,10 @@
     <Content Include="assets\js\plugins\visualization\echarts\echarts.js" />
     <Content Include="assets\js\plugins\visualization\echarts\theme\limitless.js" />
     <Content Include="assets\js\plugins\visualization\sparkline.min.js" />
+    <Content Include="assets\otros\chart\chart.js" />
+    <Content Include="assets\otros\chart\chartjs-plugin-datalabels.js" />
     <Content Include="assets\otros\datepicker\datepicker.css" />
+    <Content Include="assets\otros\inputmask\inputmask.js" />
     <Content Include="assets\otros\stickytableheaders\jquery.stickytableheaders.min.js" />
     <Content Include="assets\otros\string-format\string-format.js" />
     <Content Include="assets\otros\toastr\toastr.css" />
@@ -2731,10 +2732,8 @@
     <Content Include="Views\Error\Error.cshtml" />
     <Content Include="Views\SEG\Usuario.cshtml" />
     <Content Include="Views\SEG\Permisos.cshtml" />
-    <Content Include="Views\XLS\CargaExcel.cshtml" />
-    <Content Include="Views\XLS\Permisos.cshtml" />
-    <Content Include="Views\XLS\Dashboard.cshtml" />
     <Content Include="Views\REN\Simulador.cshtml" />
+    <Content Include="Views\REN\SimuladorBAK.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
