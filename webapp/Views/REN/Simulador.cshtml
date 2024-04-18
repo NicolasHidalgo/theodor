@@ -206,9 +206,9 @@
                 <!-- Basic layout-->
                 <div class="panel panel-flat">
                     <div class="panel-heading">
-                        <i class="icon-file-empty position-left icon-custom-style" id="btnNuevo"></i>
-                        <i class="icon-pencil position-left icon-custom-style" id="btnEditar"></i>
-                        <i class="icon-floppy-disk position-left icon-custom-style" id="btnGrabar"></i>
+                        <i class="icon-file-empty position-left icon-custom-style" title="Nuevo" id="btnNuevo"></i>
+                        <i class="icon-pencil position-left icon-custom-style" title="Editar" id="btnEditar"></i>
+                        <i class="icon-floppy-disk position-left icon-custom-style" title="Grabar" id="btnGrabar"></i>
                         <!--<i class="icon-envelop4 position-left" style="font-size:25px"></i>-->
                         <div class="heading-elements">
 
@@ -357,7 +357,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Plazo en meses</label>
-                                                    <input type="text" id="txtPlazoMeses" name="txtPlazoMeses" onkeypress="return event.charCode >= 48 && event.charCode <= 57" min="1" max="99" maxlength="2" step="1" value="12" class="form-control">
+                                                    <input type="text" id="txtPlazoMeses" name="txtPlazoMeses" onkeypress="return event.charCode >= 48 && event.charCode <= 57" min="1" max="99" maxlength="2" step="1" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -397,25 +397,25 @@
                                                                 <tr>
                                                                     <td>1</td>
                                                                     <td>
-                                                                        @Html.DropDownList("ddlComisionServicio", Model.ddlComisionServicio, new { @data_placeholder = "Comisión", @class = "select" })
+                                                                        @Html.DropDownList("ddlComisionServicio", Model.ddlComisionServicio, new { @class = "select" })
                                                                     </td>
                                                                     <td>
-                                                                        @Html.DropDownList("ddlPeriocidad", Model.ddlPeriocidad, new { @data_placeholder = "Periocidad", @class = "select" })
+                                                                        @Html.DropDownList("ddlPeriocidad", Model.ddlPeriocidad, new { @class = "select" })
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" value="100" class="form-control">
+                                                                        <input type="text" class="form-control">
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>2</td>
                                                                     <td>
-                                                                        @Html.DropDownList("ddlComisionServicio2", Model.ddlComisionServicio, new { @data_placeholder = "Comisión", @class = "select" })
+                                                                        @Html.DropDownList("ddlComisionServicio2", Model.ddlComisionServicio, new { @class = "select" })
                                                                     </td>
                                                                     <td>
-                                                                        @Html.DropDownList("ddlPeriocidad2", Model.ddlPeriocidad, new { @data_placeholder = "Periocidad", @class = "select" })
+                                                                        @Html.DropDownList("ddlPeriocidad2", Model.ddlPeriocidad, new { @class = "select" })
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" value="100" class="form-control">
+                                                                        <input type="text" class="form-control">
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -531,26 +531,29 @@
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody id="tbodyPYG">
-                                                                                @foreach (var item in Model.dataPYG)
+                                                                                @if (Model.dataPYG != null)
                                                                                 {
-                                                                                    var trClass = "";
-                                                                                    if (item.color.Equals("beige"))
+                                                                                    foreach (var item in Model.dataPYG)
                                                                                     {
-                                                                                        trClass = "colorBeige";
-                                                                                    }
-                                                                                    if (item.color.Equals("gray"))
-                                                                                    {
-                                                                                        trClass = "colorGray";
-                                                                                    }
-                                                                                    <tr class="@trClass tipografia2">
-                                                                                        <td align="left">@item.detalle</td>
-                                                                                        <td align="right">@String.Format("{0:#,##0}", @item.operacion)</td>
-                                                                                        <td align="right">@String.Format("{0:#,##0}", @item.anual)</td>
-                                                                                        <td align="right">@String.Format("{0:#,##0}", @item.trimestral)</td>
-                                                                                        <td align="right">@String.Format("{0:#,##0.00}", @item.mensual)</td>
-                                                                                        <td align="right">@String.Format("{0:0.00%}", @item.ratio)</td>
-                                                                                    </tr>
+                                                                                        var trClass = "";
+                                                                                        if (item.color.Equals("beige"))
+                                                                                        {
+                                                                                            trClass = "colorBeige";
+                                                                                        }
+                                                                                        if (item.color.Equals("gray"))
+                                                                                        {
+                                                                                            trClass = "colorGray";
+                                                                                        }
+                                                                                        <tr class="@trClass tipografia2">
+                                                                                            <td align="left">@item.detalle</td>
+                                                                                            <td align="right">@String.Format("{0:#,##0}", @item.operacion)</td>
+                                                                                            <td align="right">@String.Format("{0:#,##0}", @item.anual)</td>
+                                                                                            <td align="right">@String.Format("{0:#,##0}", @item.trimestral)</td>
+                                                                                            <td align="right">@String.Format("{0:#,##0.00}", @item.mensual)</td>
+                                                                                            <td align="right">@String.Format("{0:0.00%}", @item.ratio)</td>
+                                                                                        </tr>
 
+                                                                                    }
                                                                                 }
                                                                             </tbody>
                                                                         </table>
@@ -577,59 +580,63 @@
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody id="tbodyResEsc">
-                                                                                @foreach (var item in Model.dataResEsc)
+                                                                                @if (Model.dataResEsc != null)
                                                                                 {
-                                                                                    var trClass = "";
-                                                                                    if (item.color.Equals("beige"))
+                                                                                    foreach (var item in Model.dataResEsc)
                                                                                     {
-                                                                                        trClass = "colorBeige";
+                                                                                        var trClass = "";
+                                                                                        if (item.color.Equals("beige"))
+                                                                                        {
+                                                                                            trClass = "colorBeige";
+                                                                                        }
+                                                                                        <tr class="@trClass tipografia2">
+                                                                                            <td align="left">@item.detalle</td>
+                                                                                            <td align="right">
+                                                                                                @if (item.formato.Equals("%2"))
+                                                                                                {
+                                                                                                    @String.Format("{0:0.00%}", @item.operacion)
+                                                                                                }
+                                                                                                else if (item.formato.Equals("%3"))
+                                                                                                {
+                                                                                                    @String.Format("{0:0.000%}", @item.operacion)
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    @String.Format("{0:#,##0}", @item.operacion)
+                                                                                                }
+                                                                                            </td>
+                                                                                            <td align="right">
+                                                                                                @if (item.formato.Equals("%2"))
+                                                                                                {
+                                                                                                    @String.Format("{0:0.00%}", item.objetivo)
+                                                                                                }
+                                                                                                else if (item.formato.Equals("%3"))
+                                                                                                {
+                                                                                                    @String.Format("{0:0.000%}", item.objetivo)
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    @String.Format("{0:#,##0}", item.objetivo)
+                                                                                                }
+                                                                                            </td>
+                                                                                            <td align="right">
+                                                                                                @if (item.formato.Equals("%2"))
+                                                                                                {
+                                                                                                    @String.Format("{0:0.00%}", item.primaRiesgo)
+                                                                                                }
+                                                                                                else if (item.formato.Equals("%3"))
+                                                                                                {
+                                                                                                    @String.Format("{0:0.000%}", item.primaRiesgo)
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    @String.Format("{0:#,##0}", item.primaRiesgo)
+                                                                                                }
+                                                                                            </td>
+                                                                                        </tr>
                                                                                     }
-                                                                                    <tr class="@trClass tipografia2">
-                                                                                        <td align="left">@item.detalle</td>
-                                                                                        <td align="right">
-                                                                                            @if (item.formato.Equals("%2"))
-                                                                                            {
-                                                                                                @String.Format("{0:0.00%}", @item.operacion)
-                                                                                            }
-                                                                                            else if (item.formato.Equals("%3"))
-                                                                                            {
-                                                                                                @String.Format("{0:0.000%}", @item.operacion)
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                @String.Format("{0:#,##0}", @item.operacion)
-                                                                                            }
-                                                                                        </td>
-                                                                                        <td align="right">
-                                                                                            @if (item.formato.Equals("%2"))
-                                                                                            {
-                                                                                                @String.Format("{0:0.00%}", item.objetivo)
-                                                                                            }
-                                                                                            else if (item.formato.Equals("%3"))
-                                                                                            {
-                                                                                                @String.Format("{0:0.000%}", item.objetivo)
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                @String.Format("{0:#,##0}", item.objetivo)
-                                                                                            }
-                                                                                        </td>
-                                                                                        <td align="right">
-                                                                                            @if (item.formato.Equals("%2"))
-                                                                                            {
-                                                                                                @String.Format("{0:0.00%}", item.primaRiesgo)
-                                                                                            }
-                                                                                            else if (item.formato.Equals("%3"))
-                                                                                            {
-                                                                                                @String.Format("{0:0.000%}", item.primaRiesgo)
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                @String.Format("{0:#,##0}", item.primaRiesgo)
-                                                                                            }
-                                                                                        </td>
-                                                                                    </tr>
                                                                                 }
+
                                                                             </tbody>
                                                                         </table>
                                                                     </div>
@@ -645,74 +652,78 @@
                                                                     <div class="table-responsive">
                                                                         <table class="table tblRowsHeight">
                                                                             <tbody id="tbodyRoracRes">
-                                                                                @foreach (var item in Model.dataRoracRes)
+                                                                                @if (Model.dataRoracRes != null)
                                                                                 {
-                                                                                    var xClass = "";
-                                                                                    if (item.estilo.Equals("TIT01"))
+                                                                                    foreach (var item in Model.dataRoracRes)
                                                                                     {
-                                                                                        xClass = "colorPlomo";
+                                                                                        var xClass = "";
+                                                                                        if (item.estilo.Equals("TIT01"))
+                                                                                        {
+                                                                                            xClass = "colorPlomo";
 
-                                                                                        <tr class="@xClass tipografia1"><td align="center" colspan="6" class="text-semibold">@item.detalle</td></tr>
-                                                                                    }
-                                                                                    else if (item.estilo.Equals("TIT02"))
-                                                                                    {
-                                                                                        //xClass = "borderWhite";
-                                                                                        <tr class="tipografia1"><td align="center" colspan="6" class="text-semibold">@item.detalle</td></tr>
-                                                                                    }
-                                                                                    else if (item.estilo.Equals("") && item.detalle.Equals(""))
-                                                                                    {
-                                                                                        <tr><td colspan="6">&nbsp;</td></tr>
-                                                                                    }
-                                                                                    else if (item.estilo.Equals(""))
-                                                                                    {
-                                                                                        <tr><td colspan="6" class="text-semibold">@item.detalle</td></tr>
-                                                                                    }
-                                                                                    else if (item.estilo.Equals("NORMAL"))
-                                                                                    {
-                                                                                        <tr>
-                                                                                            <td align="left">@item.detalle</td>
-                                                                                            @if (item.formato.Equals("###,####,###"))
-                                                                                            {
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res01)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res02)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res03)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res04)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res05)</td>
-                                                                                            }
-                                                                                            else if (item.formato.Equals("##,##0.00%"))
-                                                                                            {
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res01)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res02)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res03)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res04)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res05)</td>
-                                                                                            }
-                                                                                        </tr>
-                                                                                    }
-                                                                                    else if (item.estilo.Equals("TIT05"))
-                                                                                    {
-                                                                                        xClass = "colorBeige";
-                                                                                        <tr class="@xClass">
-                                                                                            <td align="left">@item.detalle</td>
-                                                                                            @if (item.formato.Equals("###,####,###"))
-                                                                                            {
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res01)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res02)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res03)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res04)</td>
-                                                                                                <td align="right">@String.Format("{0:#,##0}", @item.res05)</td>
-                                                                                            }
-                                                                                            else if (item.formato.Equals("##,##0.00%"))
-                                                                                            {
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res01)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res02)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res03)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res04)</td>
-                                                                                                <td align="right">@String.Format("{0:0.00%}", @item.res05)</td>
-                                                                                            }
-                                                                                        </tr>
+                                                                                            <tr class="@xClass tipografia1"><td align="center" colspan="6" class="text-semibold">@item.detalle</td></tr>
+                                                                                        }
+                                                                                        else if (item.estilo.Equals("TIT02"))
+                                                                                        {
+                                                                                            //xClass = "borderWhite";
+                                                                                            <tr class="tipografia1"><td align="center" colspan="6" class="text-semibold">@item.detalle</td></tr>
+                                                                                        }
+                                                                                        else if (item.estilo.Equals("") && item.detalle.Equals(""))
+                                                                                        {
+                                                                                            <tr><td colspan="6">&nbsp;</td></tr>
+                                                                                        }
+                                                                                        else if (item.estilo.Equals(""))
+                                                                                        {
+                                                                                            <tr><td colspan="6" class="text-semibold">@item.detalle</td></tr>
+                                                                                        }
+                                                                                        else if (item.estilo.Equals("NORMAL"))
+                                                                                        {
+                                                                                            <tr>
+                                                                                                <td align="left">@item.detalle</td>
+                                                                                                @if (item.formato.Equals("###,####,###"))
+                                                                                                {
+                                                                                                    <td align="right">@String.Format("{0:#,##0}", @item.res01)</td>
+                                                                                                    <td align="right">@String.Format("{0:#,##0}", @item.res02)</td>
+                                                                                                    <td align="right">@String.Format("{0:#,##0}", @item.res03)</td>
+                                                                                                    <td align="right">@String.Format("{0:#,##0}", @item.res04)</td>
+                                                                                                    <td align="right">@String.Format("{0:#,##0}", @item.res05)</td>
+                                                                                                }
+                                                                                                else if (item.formato.Equals("##,##0.00%"))
+                                                                                                {
+                                                                                                    <td align="right">@String.Format("{0:0.00%}", @item.res01)</td>
+                                                                                                    <td align="right">@String.Format("{0:0.00%}", @item.res02)</td>
+                                                                                                    <td align="right">@String.Format("{0:0.00%}", @item.res03)</td>
+                                                                                                    <td align="right">@String.Format("{0:0.00%}", @item.res04)</td>
+                                                                                                    <td align="right">@String.Format("{0:0.00%}", @item.res05)</td>
+                                                                                                }
+                                                                                            </tr>
+                                                                                        }
+                                                                                        else if (item.estilo.Equals("TIT05"))
+                                                                                        {
+                                                                                            xClass = "colorBeige";
+                                                                                            <tr class="@xClass">
+                                                                                                <td align="left">@item.detalle</td>
+                                                                                                @if (item.formato.Equals("###,####,###"))
+                                                                                                {
+                                                                                                    <td align="right">@String.Format("{0:#,##0}", @item.res01)</td>
+                                                                                                    <td align="right">@String.Format("{0:#,##0}", @item.res02)</td>
+                                                                                                    <td align="right">@String.Format("{0:#,##0}", @item.res03)</td>
+                                                                                                    <td align="right">@String.Format("{0:#,##0}", @item.res04)</td>
+                                                                                                    <td align="right">@String.Format("{0:#,##0}", @item.res05)</td>
+                                                                                                }
+                                                                                                else if (item.formato.Equals("##,##0.00%"))
+                                                                                                {
+                                                                                                    <td align="right">@String.Format("{0:0.00%}", @item.res01)</td>
+                                                                                                    <td align="right">@String.Format("{0:0.00%}", @item.res02)</td>
+                                                                                                    <td align="right">@String.Format("{0:0.00%}", @item.res03)</td>
+                                                                                                    <td align="right">@String.Format("{0:0.00%}", @item.res04)</td>
+                                                                                                    <td align="right">@String.Format("{0:0.00%}", @item.res05)</td>
+                                                                                                }
+                                                                                            </tr>
+                                                                                        }
                                                                                     }
                                                                                 }
+
                                                                             </tbody>
                                                                         </table>
                                                                     </div>
@@ -803,217 +814,424 @@
 
 <script type="text/javascript">
 
-    function Seleccionar(Id) {
-        $('#editModal').modal('hide');
-        $("#overlay").show();
-        $.getJSON('@Url.Action("JSON_Get")', { IdeClienteProducto: Id }, function (data) {
-
-            console.log(data);
-            $("#IdeClienteProducto").text(data.ide_cliente_producto);
-            $("input:radio[name=rbTipProspecto]:checked").val(data.cod_tip_prospecto);
-            $("#txtNombreCliente").val(data.nom_cliente);
-            if ($("#ddlPersoneria option:selected").val() != data.cod_personeria) {
-                $("#ddlPersoneria").val(data.cod_personeria).trigger('change', [data]);
-            }
-            //$("#ddlTipDocumento").val(data.cod_tip_documento).change();
-            //$("#txtNumDoc").val(data.num_documento);
-            //$("#ddlTipCliente").val(data.cod_tip_cliente).change();
-
-            if ($("#ddlOperacion option:selected").val() != data.cod_operacion) {
-                $("#ddlOperacion").val(data.cod_operacion).trigger('change', [data]);
-            }
-
-            //$("#ddlProducto").val(data.cod_producto).change();
-            //$("#ddlMoneda").val(data.cod_moneda).change();
-            //$("#txtMonto").val(data.monto);
-            //$("#ddlCanalAtencion").val(data.cod_canal_atencion).change();
-            //$("#txtTasaEfectiva").val(data.tea);
-            //$("#txtPlazoMeses").val(data.plazo);
-            //$("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).change();
-            //$("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).change();
-
-            $("#ddlGarantiaReal").val(data.cod_garantia_real).change();
-            $("#ddlMonedaReal").val(data.cod_moneda_garantia_real).change();
-            $("#txtMontoGarantiaReal").val(data.monto_garantia_real);
-            $("#ddlGarantiaPersonal").val(data.cod_garantia_personal).change();
-            $("#ddlMonedaPersonal").val(data.cod_moneda_garantia_personal).change();
-            $("#txtMontoGarantiaPersonal").val(data.monto_garantia_personal);
-            $("#ddlClasificacionGarantia").val(data.cod_clasificacion_garantia).change();
-            $("#ddlModeloRORAC").val(data.cod_modelo_rorac).change();
-
-
-        }).done(function () {
-            $("#overlay").hide();
-        });
-    }
-
-    function ddlProductoChange(data) {
-        let codProducto = $("#ddlProducto option:selected").val();
-        if (data != undefined && data != null) {
-            codProducto = data.cod_producto;
-        }
-        $.getJSON('@Url.Action("JSON_ComisionServicioChange")', { codProducto: codProducto }, function (data) {
-            $('#ddlComisionServicio,#ddlComisionServicio2').empty();
-            $.each(data.ddlComisionServicio, function (index, item) {
-                $('#ddlComisionServicio,#ddlComisionServicio2').append($('<option/>', {
-                    value: item.Value,
-                    text: item.Text,
-                    selected: item.Selected
-                }));
-            });
-        }).done(function () {
-            if (data != undefined && data != null) {
-                
-            }
-        });
-    }
-
-    function ddlPersoneriaChange(data) {
-        let codPersoneria = $("#ddlPersoneria option:selected").val();
-        if (data != undefined && data != null) {
-            codPersoneria = data.cod_personeria;
-        }
-        $.getJSON('@Url.Action("JSON_PersoneriaChange")', { codPersoneria: codPersoneria }, function (data) {
-            $('#ddlTipDocumento').empty();
-            $.each(data.ddlTipDocumento, function (index, item) {
-                $('#ddlTipDocumento').append($('<option/>', {
-                    value: item.Value,
-                    text: item.Text,
-                    selected: item.Selected
-                }));
-            });
-
-            $('#ddlTipCliente').empty();
-            $.each(data.ddlTipCliente, function (index, item) {
-                $('#ddlTipCliente').append($('<option/>', {
-                    value: item.Value,
-                    text: item.Text,
-                    selected: item.Selected
-                }));
-            });
-        }).done(function () {
-            if (data != undefined && data != null) {
-                $("#ddlTipDocumento").val(data.cod_tip_documento).change();
-                $("#txtNumDoc").val(data.num_documento);
-                $("#ddlTipCliente").val(data.cod_tip_cliente).change();
-            }
-        });
-    }
-
-    function getPorcentaje(valor) {
-        let tasa = Number(valor);
-        if (tasa == 0) {
-            return 0;
-        }
-        return tasa / 100.0;
-    }
-    function getPorcentajeNum(valor) {
-        let tasa = Number(valor);
-        if (tasa == 0) {
-            return 0;
-        }
-        return tasa * 100.0;
-    }
-
-    function getImporte(valor) {
-        let monto = Number(valor.replace(/,/g, ''));
-        return monto;
-    }
-
-    function ddlOperacionChange(data) {
-        let codOperacion = $("#ddlOperacion option:selected").val();
-        if (data != undefined && data != null) {
-            codOperacion = data.cod_operacion;
-        }
-        $.getJSON('@Url.Action("JSON_OperacionChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codOperacion: codOperacion }, function (data) {
-            $('#ddlProducto').empty();
-            $.each(data.ddlProducto, function (index, item) {
-                $('#ddlProducto').append($('<option/>', {
-                    value: item.Value,
-                    text: item.Text,
-                    selected: item.Selected
-                }));
-            });
-
-            $('#ddlClasificacionInterna').empty();
-            $.each(data.ddlClasificacionInterna, function (index, item) {
-                $('#ddlClasificacionInterna').append($('<option/>', {
-                    value: item.Value,
-                    text: item.Text,
-                    selected: item.Selected
-                }));
-            });
-            $('#ddlClasificacionExterna').empty();
-            $.each(data.ddlClasificacionExterna, function (index, item) {
-                $('#ddlClasificacionExterna').append($('<option/>', {
-                    value: item.Value,
-                    text: item.Text,
-                    selected: item.Selected
-                }));
-            });
-
-            $("#txtAmortizacion").val(data.amortizacion.Text);
-
-            $('#ddlGarantiaReal').empty();
-            $.each(data.ddlGarantiaReal, function (index, item) {
-                $('#ddlGarantiaReal').append($('<option/>', {
-                    value: item.Value,
-                    text: item.Text,
-                    selected: item.Selected
-                }));
-            });
-            $('#ddlGarantiaPersonal').empty();
-            $.each(data.ddlGarantiaPersonal, function (index, item) {
-                $('#ddlGarantiaPersonal').append($('<option/>', {
-                    value: item.Value,
-                    text: item.Text,
-                    selected: item.Selected
-                }));
-            });
-            $('#ddlClasificacionGarantia').empty();
-            $.each(data.ddlClasificacionGarantia, function (index, item) {
-                $('#ddlClasificacionGarantia').append($('<option/>', {
-                    value: item.Value,
-                    text: item.Text,
-                    selected: item.Selected
-                }));
-            });
-
-            let disabled = false;
-            if (codOperacion == "DEP") {
-                disabled = true;
-                $('#txtMontoGarantiaReal').empty();
-                $('#txtMontoGarantiaPersonal').empty();
-            }
-            $('#ddlGarantiaReal').prop('disabled', disabled);
-            $('#ddlGarantiaPersonal').prop('disabled', disabled);
-            $('#ddlClasificacionGarantia').prop('disabled', disabled);
-            $('#txtMontoGarantiaReal').prop('disabled', disabled);
-            $('#txtMontoGarantiaPersonal').prop('disabled', disabled);
-            $('#ddlMonedaReal').prop('disabled', disabled);
-            $('#ddlMonedaPersonal').prop('disabled', disabled);
-        }).done(function () {
-
-            if (data != undefined && data != null) {
-                $("#ddlProducto").val(data.cod_producto).change();
-                if ($("#ddlProducto option:selected").val() != data.cod_producto) {
-                    $("#ddlProducto").val(data.cod_producto).trigger('change', [data]);
-                }
-                $("#ddlMoneda").val(data.cod_moneda).change();
-                $("#txtMonto").val(data.monto);
-                $("#ddlCanalAtencion").val(data.cod_canal_atencion).change();
-                $("#txtTasaEfectiva").val(getPorcentajeNum(data.tea));
-                $("#txtPlazoMeses").val(data.plazo);
-                $("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).change();
-                $("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).change();
-            }
-
-        });
-    }
-
+    var fSeleccionar;
 
     $(document).ready(function () {
-        debugger;
+
+        $('input,select').prop('disabled', true);
+
+        fSeleccionar = function (Id) {
+            $('#editModal').modal('hide');
+            $("#overlay").show();
+            $.getJSON('@Url.Action("JSON_Get")', { IdeClienteProducto: Id }, function (data) {
+                var simData = data.simData;
+                $("#IdeClienteProducto").text(simData.ide_cliente_producto);
+                $("input:radio[name=rbTipProspecto][value=" + simData.cod_tip_prospecto + "]").prop('checked', true);
+                $("#txtNombreCliente").val(simData.nom_cliente);
+                if ($("#ddlPersoneria option:selected").val() != simData.cod_personeria) {
+                    $("#ddlPersoneria").val(simData.cod_personeria).trigger('change', [simData]);
+                }
+                //$("#ddlTipDocumento").val(data.cod_tip_documento).change();
+                //$("#txtNumDoc").val(data.num_documento);
+                //$("#ddlTipCliente").val(data.cod_tip_cliente).change();
+
+                if ($("#ddlOperacion option:selected").val() != simData.cod_operacion) {
+                    $("#ddlOperacion").val(simData.cod_operacion).trigger('change', [simData]);
+                }
+
+                //$("#ddlProducto").val(data.cod_producto).change();
+                //$("#ddlMoneda").val(data.cod_moneda).change();
+                //$("#txtMonto").val(data.monto);
+                //$("#ddlCanalAtencion").val(data.cod_canal_atencion).change();
+                //$("#txtTasaEfectiva").val(data.tea);
+                //$("#txtPlazoMeses").val(data.plazo);
+                //$("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).change();
+                //$("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).change();
+
+                $("#ddlGarantiaReal").val(simData.cod_garantia_real).change();
+                $("#ddlMonedaReal").val(simData.cod_moneda_garantia_real).change();
+                $("#txtMontoGarantiaReal").val(simData.monto_garantia_real);
+                $("#ddlGarantiaPersonal").val(simData.cod_garantia_personal).change();
+                $("#ddlMonedaPersonal").val(simData.cod_moneda_garantia_personal).change();
+                $("#txtMontoGarantiaPersonal").val(simData.monto_garantia_personal);
+                $("#ddlClasificacionGarantia").val(simData.cod_clasificacion_garantia).change();
+                $("#ddlModeloRORAC").val(simData.cod_modelo_rorac).change();
+
+                reconstruirReportePYG(data);
+                reconstruirReporteResumenEscenario(data);
+                reconstruirReporteRoracRes(data);
+                reconstruirHandsontable(data);
+                updateChart1(data.dataComposicion);
+                updateChart2(data.dataComposicion);
+                updateChart3(data.dataComposicion);
+                $("#txtAmortizacion").val(data.amortizacion.Text);
+
+            }).done(function () {
+                console.log("fSeleccionar");
+                $('input,select').prop('disabled', false);
+                $("#overlay").hide();
+            });
+        }
+
+        /** DLL CHANGES */
+        $("#ddlPersoneria").change(function (e, data) {
+            ddlPersoneriaChange(data);
+        });
+        $("#ddlOperacion").change(function (e, data) {
+            ddlOperacionChange(data);
+        });
+        $("#ddlProducto").change(function (e, data) {
+            ddlProductoChange(data);
+        });
+        function ddlPersoneriaChange(data) {
+            let codPersoneria = $("#ddlPersoneria option:selected").val();
+            if (data != undefined && data != null) {
+                codPersoneria = data.cod_personeria;
+            }
+            $.getJSON('@Url.Action("JSON_PersoneriaChange")', { codPersoneria: codPersoneria }, function (data) {
+                $('#ddlTipDocumento').empty();
+                $.each(data.ddlTipDocumento, function (index, item) {
+                    $('#ddlTipDocumento').append($('<option/>', {
+                        value: item.Value,
+                        text: item.Text,
+                        selected: item.Selected
+                    }));
+                });
+
+                $('#ddlTipCliente').empty();
+                $.each(data.ddlTipCliente, function (index, item) {
+                    $('#ddlTipCliente').append($('<option/>', {
+                        value: item.Value,
+                        text: item.Text,
+                        selected: item.Selected
+                    }));
+                });
+            }).done(function () {
+                console.log("ddlPersoneriaChange");
+                if (data != undefined && data != null) {
+                    $("#ddlTipDocumento").val(data.cod_tip_documento).change();
+                    $("#txtNumDoc").val(data.num_documento);
+                    $("#ddlTipCliente").val(data.cod_tip_cliente).change();
+                }
+            });
+        }
+        function ddlProductoChange(data) {
+            let codProducto = $("#ddlProducto option:selected").val();
+            if (data != undefined && data != null) {
+                codProducto = data.cod_producto;
+            }
+            $.getJSON('@Url.Action("JSON_ComisionServicioChange")', { codProducto: codProducto }, function (data) {
+                $('#ddlComisionServicio,#ddlComisionServicio2').empty();
+                $.each(data.ddlComisionServicio, function (index, item) {
+                    $('#ddlComisionServicio,#ddlComisionServicio2').append($('<option/>', {
+                        value: item.Value,
+                        text: item.Text,
+                        selected: item.Selected
+                    }));
+                });
+            }).done(function () {
+                console.log("ddlProductoChange");
+                if (data != undefined && data != null) {
+
+                }
+            });
+        }
+        function ddlOperacionChange(data) {
+            let codOperacion = $("#ddlOperacion option:selected").val();
+            if (data != undefined && data != null) {
+                codOperacion = data.cod_operacion;
+            }
+            $.getJSON('@Url.Action("JSON_OperacionChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codOperacion: codOperacion }, function (data) {
+                $('#ddlProducto').empty();
+                $.each(data.ddlProducto, function (index, item) {
+                    $('#ddlProducto').append($('<option/>', {
+                        value: item.Value,
+                        text: item.Text,
+                        selected: item.Selected
+                    }));
+                });
+
+                $('#ddlClasificacionInterna').empty();
+                $.each(data.ddlClasificacionInterna, function (index, item) {
+                    $('#ddlClasificacionInterna').append($('<option/>', {
+                        value: item.Value,
+                        text: item.Text,
+                        selected: item.Selected
+                    }));
+                });
+                $('#ddlClasificacionExterna').empty();
+                $.each(data.ddlClasificacionExterna, function (index, item) {
+                    $('#ddlClasificacionExterna').append($('<option/>', {
+                        value: item.Value,
+                        text: item.Text,
+                        selected: item.Selected
+                    }));
+                });
+
+                //$("#txtAmortizacion").val(data.amortizacion.Text);
+
+                $('#ddlGarantiaReal').empty();
+                $.each(data.ddlGarantiaReal, function (index, item) {
+                    $('#ddlGarantiaReal').append($('<option/>', {
+                        value: item.Value,
+                        text: item.Text,
+                        selected: item.Selected
+                    }));
+                });
+                $('#ddlGarantiaPersonal').empty();
+                $.each(data.ddlGarantiaPersonal, function (index, item) {
+                    $('#ddlGarantiaPersonal').append($('<option/>', {
+                        value: item.Value,
+                        text: item.Text,
+                        selected: item.Selected
+                    }));
+                });
+                $('#ddlClasificacionGarantia').empty();
+                $.each(data.ddlClasificacionGarantia, function (index, item) {
+                    $('#ddlClasificacionGarantia').append($('<option/>', {
+                        value: item.Value,
+                        text: item.Text,
+                        selected: item.Selected
+                    }));
+                });
+
+                let disabled = false;
+                if (codOperacion == "DEP") {
+                    disabled = true;
+                    $('#txtMontoGarantiaReal').empty();
+                    $('#txtMontoGarantiaPersonal').empty();
+                }
+                $('#ddlGarantiaReal').prop('disabled', disabled);
+                $('#ddlGarantiaPersonal').prop('disabled', disabled);
+                $('#ddlClasificacionGarantia').prop('disabled', disabled);
+                $('#txtMontoGarantiaReal').prop('disabled', disabled);
+                $('#txtMontoGarantiaPersonal').prop('disabled', disabled);
+                $('#ddlMonedaReal').prop('disabled', disabled);
+                $('#ddlMonedaPersonal').prop('disabled', disabled);
+            }).done(function () {
+                console.log("ddlOperacionChange");
+                if (data != undefined && data != null) {
+                    $("#ddlProducto").val(data.cod_producto).change();
+                    if ($("#ddlProducto option:selected").val() != data.cod_producto) {
+                        $("#ddlProducto").val(data.cod_producto).trigger('change', [data]);
+                    }
+                    $("#ddlMoneda").val(data.cod_moneda).change();
+                    $("#txtMonto").val(data.monto);
+                    $("#ddlCanalAtencion").val(data.cod_canal_atencion).change();
+                    $("#txtTasaEfectiva").val(getPorcentajeNum(data.tea));
+                    $("#txtPlazoMeses").val(data.plazo);
+                    $("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).change();
+                    $("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).change();
+                }
+
+            });
+        }
+        /** FIN DLL CHANGES */
+
+        function getPorcentaje(valor) {
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa / 100.0;
+        }
+        function getPorcentajeNum(valor) {
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa * 100.0;
+        }
+        function getImporte(valor) {
+            let monto = Number(valor.replace(/,/g, ''));
+            return monto;
+        }
+
+        /** RECONSTRUCCIONES */
+        function reconstruirReportePYG(data) {
+            $("#tbodyPYG").empty();
+            var cadena = "";
+            $.each(data.dataPYG, function (index, item) {
+                var trClass = "";
+                if (item.color == "beige") {
+                    trClass = "colorBeige";
+                }
+                cadena += "<tr class=" + trClass + ">";
+                cadena += "<td align='left'>" + item.detalle + "</td>";
+                cadena += "<td align='right'>" + numeral(item.operacion).format('0,0') + "</td>";
+                cadena += "<td align='right'>" + numeral(item.anual).format('0,0') + "</td>";
+                cadena += "<td align='right'>" + numeral(item.trimestral).format('0,0') + "</td>";
+                cadena += "<td align='right'>" + numeral(item.mensual).format('0,0.00') + "</td>";
+                cadena += "<td align='right'>" + numeral(item.ratio).format('0.00%') + "</td>";
+                cadena += "</tr>";
+            });
+            $("#tbodyPYG").append(cadena);
+        }
+        function reconstruirReporteResumenEscenario(data) {
+            $("#tbodyResEsc").empty();
+            var cadena = "";
+            $.each(data.dataResEsc, function (index, item) {
+                var trClass = "";
+                if (item.color == "beige") {
+                    trClass = "colorBeige";
+                }
+                var _numOpe = 0;
+                var _numObj = 0;
+                var _numPrima = 0;
+
+                if (item.formato == "%2") {
+                    _numOpe = numeral(item.operacion).format('0.00%');
+                    _numObj = numeral(item.objetivo).format('0.00%');
+                    _numPrima = numeral(item.primaRiesg).format('0.00%');
+                }
+                else if (item.formato == "%3") {
+                    _numOpe = numeral(item.operacion).format('0.000%');
+                    _numObj = numeral(item.objetivo).format('0.000%');
+                    _numPrima = numeral(item.primaRiesg).format('0.000%');
+                }
+                else {
+                    _numOpe = numeral(item.operacion).format('0,0');
+                    _numObj = numeral(item.objetivo).format('0,0');
+                    _numPrima = numeral(item.primaRiesg).format('0,0');
+                }
+
+                cadena += "<tr class=" + trClass + ">";
+                cadena += "<td align='left'>" + item.detalle + "</td>";
+                cadena += "<td align='right'>" + _numOpe + "</td>";
+                cadena += "<td align='right'>" + _numObj + "</td>";
+                cadena += "<td align='right'>" + _numPrima + "</td>";;
+                cadena += "</tr>";
+            });
+            $("#tbodyResEsc").append(cadena);
+        }
+        function reconstruirReporteRoracRes(data) {
+            $("#tbodyRoracRes").empty();
+            var cadena = "";
+            $.each(data.dataRoracRes, function (index, item) {
+                if (item.estilo == "TIT01" || item.estilo == "TIT02") {
+                    cadena += "<tr class='colorPlomo'><td align='center' colspan='6' class='text-semibold'>" + item.detalle + "</td></tr>";
+                } else if (item.estilo == "" && item.detalle == "") {
+                    cadena += "<tr><td colspan='6'>&nbsp;</td></tr>";
+                } else if (item.estilo == "") {
+                    cadena += "<tr><td colspan='6' class='text-semibold'>" + item.detalle + "</td></tr>";
+                } else if (item.estilo == "NORMAL") {
+                    cadena += "<tr>";
+                    cadena += "<td align='left'>" + item.detalle + "</td>";
+                    if (item.formato == "###,####,###") {
+                        cadena += "<td align='right'>" + numeral(item.res01).format('0,0') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res02).format('0,0') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res03).format('0,0') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res04).format('0,0') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res05).format('0,0') + "</td>";
+                    } else if (item.formato == "##,##0.00%") {
+                        cadena += "<td align='right'>" + numeral(item.res01).format('0.00%') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res02).format('0.00%') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res03).format('0.00%') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res04).format('0.00%') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res05).format('0.00%') + "</td>";
+                    }
+                    cadena += "</tr>";
+                } else if (item.estilo == "TIT05") {
+                    cadena += "<tr class='colorBeige'>";
+                    cadena += "<td align='left'>" + item.detalle + "</td>";
+                    if (item.formato == "###,####,###") {
+                        cadena += "<td align='right'>" + numeral(item.res01).format('0,0') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res02).format('0,0') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res03).format('0,0') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res04).format('0,0') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res05).format('0,0') + "</td>";
+                    } else if (item.formato == "##,##0.00%") {
+                        cadena += "<td align='right'>" + numeral(item.res01).format('0.00%') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res02).format('0.00%') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res03).format('0.00%') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res04).format('0.00%') + "</td>";
+                        cadena += "<td align='right'>" + numeral(item.res05).format('0.00%') + "</td>";
+                    }
+                    cadena += "</tr>";
+                }
+
+            });
+            $("#tbodyRoracRes").append(cadena);
+        }
+        function reconstruirHandsontable(data) {
+            if (hot_alignment_init) {
+                var dataHot = [
+                    { col0: '', col1: 'RORAC Bajo Modelo Estándar', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '' },
+                    { col0: '(Plazo en  Meses de la Operación)', col1: '(Tasa efectiva Anual de La Operación)', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '' },
+                ];
+
+                $.each(data.dataRoracTbl, function (index, item) {
+                    var feed = {
+                        col0: '', col1: item.plazo, col2: numeral(item.valor1).format('0.00%'), col3: numeral(item.valor2).format('0.00%')
+                        , col4: numeral(item.valor3).format('0.00%'), col5: numeral(item.valor4).format('0.00%')
+                        , col6: numeral(item.valor5).format('0.00%'), col7: numeral(item.valor6).format('0.00%')
+                        , col8: numeral(item.valor7).format('0.00%'), col9: numeral(item.valor8).format('0.00%')
+                        , col10: numeral(item.valor9).format('0.00%')
+                    };
+                    dataHot.push(feed)
+                });
+
+                roracObjetivo = 0.0;
+                roracAutonomia = 0.0;
+                roracMenosObjetivo = 0.0;
+                if (data.dataRorac != null) {
+                    roracObjetivo = data.dataRorac.rorac_objetivo;
+                    roracAutonomia = data.dataRorac.autonomia_comercial;
+                }
+                roracMenosObjetivo = roracObjetivo - roracAutonomia;
+
+                hot_alignment_init.loadData(dataHot);
+                hot_alignment_init.render();
+                return;
+            }
+        }
+        function updateChart1(data) {
+            let dat = data.filter(a => a.tipo == 1);
+            let labels = dat.map(x => x.detalle);
+            let values = dat.map(x => x.valor);
+            let inv = dat.map(x => x.invisible);
+            let neg = dat.map(x => x.negativo);
+
+            myChart.data.labels = labels;
+            //myChart.data.datasets.forEach((dataset) => {
+            //    dataset.data = values;
+            //});
+            myChart.data.datasets[0].data = inv;
+            myChart.data.datasets[1].data = neg;
+            myChart.update();
+        }
+        function updateChart2(data) {
+            let dat = data.filter(a => a.tipo == 2);
+            let labels = dat.map(x => x.detalle);
+            let values = dat.map(x => x.valor);
+            let inv = dat.map(x => x.invisible);
+            let neg = dat.map(x => x.negativo);
+
+            myChart2.data.labels = labels;
+            //myChart2.data.datasets.forEach((dataset) => {
+            //dataset.data = values;
+            //});
+            myChart2.data.datasets[0].data = inv;
+            myChart2.data.datasets[1].data = neg;
+            myChart2.update();
+        }
+        function updateChart3(data) {
+            let dat = data.filter(a => a.tipo == 3);
+            let labels = dat.map(x => x.detalle);
+            let values = dat.map(x => x.valor);
+            let inv = dat.map(x => x.invisible);
+            let neg = dat.map(x => x.negativo);
+
+            myChart3.data.labels = labels;
+            //myChart3.data.datasets.forEach((dataset) => {
+            //dataset.data = values;
+            //});
+            myChart3.data.datasets[0].data = inv;
+            myChart3.data.datasets[1].data = neg;
+            myChart3.update();
+        }
+        /** FIN RECONSTRUCCIONES */
+
         var jsModel = @Html.Raw(Json.Encode(Model));
         var dataHot = [
             { col0: '', col1: 'RORAC Bajo Modelo Estándar', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '' },
@@ -1025,19 +1243,20 @@
         if (jsModel.dataRorac != null) {
             roracObjetivo = jsModel.dataRorac.rorac_objetivo;
             roracAutonomia = jsModel.dataRorac.autonomia_comercial;
+
+            $.each(jsModel.dataRoracTbl, function (index, item) {
+                var feed = {
+                    col0: '', col1: item.plazo, col2: numeral(item.valor1).format('0.00%'), col3: numeral(item.valor2).format('0.00%')
+                    , col4: numeral(item.valor3).format('0.00%'), col5: numeral(item.valor4).format('0.00%')
+                    , col6: numeral(item.valor5).format('0.00%'), col7: numeral(item.valor6).format('0.00%')
+                    , col8: numeral(item.valor7).format('0.00%'), col9: numeral(item.valor8).format('0.00%')
+                    , col10: numeral(item.valor9).format('0.00%')
+                };
+                dataHot.push(feed)
+            });
         }
         var roracMenosObjetivo = roracObjetivo - roracAutonomia;
-
-        $.each(jsModel.dataRoracTbl, function (index, item) {
-            var feed = {
-                col0: '', col1: item.plazo, col2: numeral(item.valor1).format('0.00%'), col3: numeral(item.valor2).format('0.00%')
-                , col4: numeral(item.valor3).format('0.00%'), col5: numeral(item.valor4).format('0.00%')
-                , col6: numeral(item.valor5).format('0.00%'), col7: numeral(item.valor6).format('0.00%')
-                , col8: numeral(item.valor7).format('0.00%'), col9: numeral(item.valor8).format('0.00%')
-                , col10: numeral(item.valor9).format('0.00%')
-            };
-            dataHot.push(feed)
-        });
+        
         // Define element
         var hot_alignment = document.getElementById('hot_alignment');
         // Initialize with options
@@ -1122,11 +1341,18 @@
             }
         });
 
+        /** BOTONES */
         $("#btnNuevo").on("click", function () {
-            // limpiar controles
             $('input:text').val('');
-        });
+            $('#ddlPersoneria').val('').change();
+            $('#ddlOperacion').val('').change();
+            $('#ddlMoneda').val('').change();
+            $('#ddlCanalAtencion').val('').change();
+            $('#ddlMonedaReal').val('').change();
+            $('#ddlMonedaPersonal').val('').change();
 
+            nuevo();
+        });
         $("#btnEditar").on("click", function () {
             $("#overlay").show();
             $.getJSON('@Url.Action("JSON_PopUp")', function (data) {
@@ -1141,7 +1367,7 @@
                     cadena += "<td align='right'>" + item.Monto + "</td>";
                     cadena += "<td align='right'>" + item.Tea + "</td>";
                     cadena += "<td align='center'>" + item.Plazo + "</td>";
-                    cadena += "<td align='center'><a onclick='Seleccionar("+item.ide_cliente_Producto+")'>Seleccionar</a></td>";
+                    cadena += "<td align='center'><a onclick='fSeleccionar("+item.ide_cliente_Producto+")'>Seleccionar</a></td>";
                     cadena += "</tr>";
                 });
                 $("#tbodyPOPUP").append(cadena);
@@ -1151,9 +1377,6 @@
             });
 
         });
-
-
-
         $("#btnGrabar").on("click", function () {
             grabar();
         });
@@ -1166,7 +1389,6 @@
             'digitsOptional': false,
             'placeholder': '0.00'
         });
-
         $("#txtTasaEfectiva").inputmask({
             alias: "decimal",
             radixPoint: ".",
@@ -1181,6 +1403,26 @@
             max: 100,
             numericInput: true
         });
+
+        function nuevo() {
+            $("#overlay").show();
+            
+            var _url = '@Url.Action("New", "REN")';
+
+            $.post(_url).done(function (data) {
+                if (data.Status === 200) {
+                    toastr.success('Nueva simulación aperturada');
+                    console.log(data);
+                    $('input,select').prop('disabled', false);
+                    $("#IdeClienteProducto").text(data.Data.ide_cliente_producto);
+                }
+                else {
+                    toastr.error(data.Message);
+                }
+            }).done(function () {
+                $("#overlay").hide();
+            });
+        }
 
         function grabar() {
 
@@ -1275,143 +1517,9 @@
                 else {
                     toastr.error(data.Message);
                 }
+            }).done(function () {
                 $("#overlay").hide();
             });
-        }
-
-        function reconstruirReportePYG(data) {
-            $("#tbodyPYG").empty();
-            var cadena = "";
-            $.each(data.dataPYG, function (index, item) {
-                var trClass = "";
-                if (item.color == "beige") {
-                    trClass = "colorBeige";
-                }
-                cadena += "<tr class=" + trClass +">";
-                cadena += "<td align='left'>" + item.detalle + "</td>";
-                cadena += "<td align='right'>" + numeral(item.operacion).format('0,0') + "</td>";
-                cadena += "<td align='right'>" + numeral(item.anual).format('0,0') + "</td>";
-                cadena += "<td align='right'>" + numeral(item.trimestral).format('0,0') + "</td>";
-                cadena += "<td align='right'>" + numeral(item.mensual).format('0,0.00') + "</td>";
-                cadena += "<td align='right'>" + numeral(item.ratio).format('0.00%') + "</td>";
-                cadena += "</tr>";
-            });
-            $("#tbodyPYG").append(cadena);
-        }
-
-        function reconstruirReporteResumenEscenario(data) {
-            $("#tbodyResEsc").empty();
-            var cadena = "";
-            $.each(data.dataResEsc, function (index, item) {
-                var trClass = "";
-                if (item.color == "beige") {
-                    trClass = "colorBeige";
-                }
-                var _numOpe = 0;
-                var _numObj = 0;
-                var _numPrima = 0;
-
-                if (item.formato == "%2")
-                {
-                    _numOpe = numeral(item.operacion).format('0.00%');
-                    _numObj = numeral(item.objetivo).format('0.00%');
-                    _numPrima = numeral(item.primaRiesg).format('0.00%');
-                }
-                else if (item.formato == "%3")
-                {
-                    _numOpe = numeral(item.operacion).format('0.000%');
-                    _numObj = numeral(item.objetivo).format('0.000%');
-                    _numPrima = numeral(item.primaRiesg).format('0.000%');
-                }
-                else
-                {
-                    _numOpe = numeral(item.operacion).format('0,0');
-                    _numObj = numeral(item.objetivo).format('0,0');
-                    _numPrima = numeral(item.primaRiesg).format('0,0');
-                }
-
-                cadena += "<tr class=" + trClass+">";
-                cadena += "<td align='left'>" + item.detalle + "</td>";
-                cadena += "<td align='right'>" + _numOpe + "</td>";
-                cadena += "<td align='right'>" + _numObj + "</td>";
-                cadena += "<td align='right'>" + _numPrima + "</td>";;
-                cadena += "</tr>";
-            });
-            $("#tbodyResEsc").append(cadena);
-        }
-
-        function reconstruirReporteRoracRes(data) {
-            $("#tbodyRoracRes").empty();
-            var cadena = "";
-            $.each(data.dataRoracRes, function (index, item) {
-                if (item.estilo == "TIT01" || item.estilo == "TIT02") {
-                    cadena += "<tr class='colorPlomo'><td align='center' colspan='6' class='text-semibold'>"+item.detalle+"</td></tr>";
-                } else if (item.estilo == "" && item.detalle == "") {
-                    cadena += "<tr><td colspan='6'>&nbsp;</td></tr>";
-                } else if (item.estilo == ""){
-                    cadena += "<tr><td colspan='6' class='text-semibold'>"+item.detalle+"</td></tr>";
-                } else if (item.estilo == "NORMAL") {
-                    cadena += "<tr>";
-                    cadena += "<td align='left'>" + item.detalle + "</td>";
-                    if (item.formato == "###,####,###") {
-                        cadena += "<td align='right'>" + numeral(item.res01).format('0,0') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res02).format('0,0') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res03).format('0,0') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res04).format('0,0') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res05).format('0,0') + "</td>";
-                    } else if (item.formato == "##,##0.00%") {
-                        cadena += "<td align='right'>" + numeral(item.res01).format('0.00%') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res02).format('0.00%') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res03).format('0.00%') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res04).format('0.00%') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res05).format('0.00%') + "</td>";
-                    }
-                    cadena += "</tr>";
-                } else if (item.estilo == "TIT05") {
-                    cadena += "<tr class='colorBeige'>";
-                    cadena += "<td align='left'>" + item.detalle + "</td>";
-                    if (item.formato == "###,####,###") {
-                        cadena += "<td align='right'>" + numeral(item.res01).format('0,0') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res02).format('0,0') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res03).format('0,0') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res04).format('0,0') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res05).format('0,0') + "</td>";
-                    } else if (item.formato == "##,##0.00%") {
-                        cadena += "<td align='right'>" + numeral(item.res01).format('0.00%') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res02).format('0.00%') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res03).format('0.00%') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res04).format('0.00%') + "</td>";
-                        cadena += "<td align='right'>" + numeral(item.res05).format('0.00%') + "</td>";
-                    }
-                    cadena += "</tr>";
-                }
-
-            });
-            $("#tbodyRoracRes").append(cadena);
-        }
-
-        function reconstruirHandsontable(data) {
-            if (hot_alignment_init) {
-                var dataHot = [
-                    { col0: '', col1: 'RORAC Bajo Modelo Estándar', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '' },
-                    { col0: '(Plazo en  Meses de la Operación)', col1: '(Tasa efectiva Anual de La Operación)', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '' },
-                ];
-
-                $.each(data.dataRoracTbl, function (index, item) {
-                    var feed = {
-                        col0: '', col1: item.plazo, col2: numeral(item.valor1).format('0.00%'), col3: numeral(item.valor2).format('0.00%')
-                        , col4: numeral(item.valor3).format('0.00%'), col5: numeral(item.valor4).format('0.00%')
-                        , col6: numeral(item.valor5).format('0.00%'), col7: numeral(item.valor6).format('0.00%')
-                        , col8: numeral(item.valor7).format('0.00%'), col9: numeral(item.valor8).format('0.00%')
-                        , col10: numeral(item.valor9).format('0.00%')
-                    };
-                    dataHot.push(feed)
-                });
-
-                hot_alignment_init.loadData(dataHot);
-                hot_alignment_init.render();
-                return;
-            }
         }
 
         $("#ddlModeloRORAC,#ddlPersoneria,#ddlTipCliente,#ddlOperacion,#ddlProducto,#ddlMoneda,#txtMonto,#ddlCanalAtencion,#txtTasaEfectiva,#txtPlazoMeses,#ddlClasificacionInterna,#ddlGarantiaReal,#ddlMonedaReal,#txtMontoGarantiaReal,#ddlMonedaPersonal,#txtMontoGarantiaPersonal,#ddlClasificacionGarantia").change(function () {
@@ -1422,55 +1530,10 @@
             $("#overlay").show();
             $.getJSON('@Url.Action("JSON_ReporteRORACModelo")', { ide_cliente_producto: $("#IdeClienteProducto").text(), incremento_tasa: $("#ddlRangoTasa option:selected").val(), incremento_plazo: $("#ddlRangoPlazo option:selected").val() }, function (data) {
                 reconstruirHandsontable(data);
+            }).done(function () {
+                $("#overlay").hide();
             });
-            $("#overlay").hide();
         });
-
-        $("#ddlPersoneria").change(function (e, data) {
-            ddlPersoneriaChange(data);
-        });
-
-        $("#ddlOperacion").change(function (e, data) {
-            ddlOperacionChange(data);
-        });
-
-        $("#ddlProducto").change(function (e, data) {
-            ddlProductoChange(data);
-        });
-
-        function updateChart1(data) {
-            var dat = data.filter(a => a.tipo == 1);
-            var labels = dat.map(x => x.detalle);
-            var values = dat.map(x => x.valor);
-
-            myChart.data.labels = labels;
-            myChart.data.datasets.forEach((dataset) => {
-                dataset.data = values;
-            });
-            myChart.update();
-        }
-        function updateChart2(data) {
-            var dat = data.filter(a => a.tipo == 2);
-            var labels = dat.map(x => x.detalle);
-            var values = dat.map(x => x.valor);
-
-            myChart2.data.labels = labels;
-            myChart2.data.datasets.forEach((dataset) => {
-                dataset.data = values;
-            });
-            myChart2.update();
-        }
-        function updateChart3(data) {
-            var dat = data.filter(a => a.tipo == 3);
-            var labels = dat.map(x => x.detalle);
-            var values = dat.map(x => x.valor);
-
-            myChart3.data.labels = labels;
-            myChart3.data.datasets.forEach((dataset) => {
-                dataset.data = values;
-            });
-            myChart3.update();
-        }
 
         const totalizer = {
             id: 'totalizer',
@@ -1481,9 +1544,12 @@
                 chart.data.datasets.forEach((dataset, datasetIndex) => {
                     if (chart.isDatasetVisible(datasetIndex)) {
                         utmost = datasetIndex
-                        dataset.data.forEach((value, index) => {
-                            totals[index] = (totals[index] || 0) + value
-                        })
+                        if (dataset.data) {
+                            dataset.data.forEach((value, index) => {
+                                totals[index] = (totals[index] || 0) + value
+                            })
+                        }
+                        
                     }
                 })
                 chart.$totalizer = {
@@ -1493,17 +1559,22 @@
             }
         }
 
-
         Chart.defaults.font.size = 10;
         Chart.defaults.font.family = "Poppins";
         Chart.register(ChartDataLabels);
-        var dataComposicion = jsModel.dataComposicion
-        var compOPE = dataComposicion.filter(a => a.tipo == 1);
-        var labelsOPE = compOPE.map(x => x.detalle);
-        var valuesOPE = compOPE.map(x => x.valor);
-        var invOPE = compOPE.map(x => x.invisible);
-        var negOPE = compOPE.map(x => x.negativo);
+        var dataComposicion = jsModel.dataComposicion;
+        var compOPE, labelsOPE, valuesOPE, invOPE, negOPE = [];
+        var compOBJ, labelsOBJ, valuesOBJ, invOBJ, negOBJ = [];
+        var compRIE, labelsRIE, valuesRIE, invRIE, negRIE = [];
 
+        if (dataComposicion != null) {
+            compOPE = dataComposicion.filter(a => a.tipo == 1);
+            labelsOPE = compOPE.map(x => x.detalle);
+            valuesOPE = compOPE.map(x => x.valor);
+            invOPE = compOPE.map(x => x.invisible);
+            negOPE = compOPE.map(x => x.negativo);
+        }
+        
         const ctx = document.getElementById('myChart');
         ctx.height = 300;
         var myChart = new Chart(ctx, {
@@ -1598,12 +1669,14 @@
             plugins: [totalizer],
         });
 
-        var compOBJ = dataComposicion.filter(a => a.tipo == 2);
-        var labelsOBJ = compOBJ.map(x => x.detalle);
-        var valuesOBJ = compOBJ.map(x => x.valor);
-        var invOBJ = compOBJ.map(x => x.invisible);
-        var negOBJ = compOBJ.map(x => x.negativo);
-
+        if (dataComposicion != null) {
+            compOBJ = dataComposicion.filter(a => a.tipo == 2);
+            labelsOBJ = compOBJ.map(x => x.detalle);
+            valuesOBJ = compOBJ.map(x => x.valor);
+            invOBJ = compOBJ.map(x => x.invisible);
+            negOBJ = compOBJ.map(x => x.negativo);
+        }
+        
         const ctx2 = document.getElementById('myChart2');
         ctx2.height = 300;
         var myChart2 = new Chart(ctx2, {
@@ -1695,11 +1768,13 @@
             plugins: [totalizer]
         });
 
-        var compRIE = dataComposicion.filter(a => a.tipo == 3);
-        var labelsRIE = compRIE.map(x => x.detalle);
-        var valuesRIE = compRIE.map(x => x.valor);
-        var invRIE = compRIE.map(x => x.invisible);
-        var negRIE = compRIE.map(x => x.negativo);
+        if (dataComposicion != null) {
+            compRIE = dataComposicion.filter(a => a.tipo == 3);
+            labelsRIE = compRIE.map(x => x.detalle);
+            valuesRIE = compRIE.map(x => x.valor);
+            invRIE = compRIE.map(x => x.invisible);
+            negRIE = compRIE.map(x => x.negativo);
+        }
 
         const ctx3 = document.getElementById('myChart3');
         ctx3.height = 300;

@@ -52,5 +52,9 @@ namespace BL
         {
             return dat.fn_ren_pro_get(param);
         }
+        public GEN_REPLY_BE fn_ren_pro_clienteProducto_nuevo(long codSuscriptor, long ideUsuario)
+        {
+            return dat.fn_ren_pro_clienteProducto_nuevo(codSuscriptor, ideUsuario);
+        }
     }
 }

@@ -33,6 +33,7 @@ namespace webapp.ViewModels
         public List<REN_COMPOSICION_BE> dataComposicion { get; set; }
         public GEN_DDL_BE amortizacion { get; set; }
         public long IdeClienteProducto { get; set; }
+        public REN_SIM_REQ_BE simData { get; set; }
 
     }
 }
