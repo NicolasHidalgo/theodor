@@ -487,7 +487,7 @@ namespace webapp.Controllers
                 var ideUsuario = long.Parse(user.IDE_USUARIO.ToString());
                 var codSuscriptor = user.SUSCRIPTOR;
 
-                var reply = bl.fn_ren_pro_clienteProducto_nuevo(ideUsuario, user.SUSCRIPTOR);
+                var reply = bl.fn_ren_pro_clienteProducto_nuevo(user.SUSCRIPTOR, ideUsuario);
 
                 var sim = (REN_SIM_REQ_BE)reply.DATA;
                 var comision = bl.fn_ren_pro_clienteComision_vista(codSuscriptor, sim.ide_cliente_producto);
