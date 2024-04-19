@@ -1036,10 +1036,11 @@
             return tasa * 100.0;
         }
         function getImporte(valor) {
-            if (isNaN(valor)) {
+            let _valor = valor.replace(/,/g, '');
+            if (isNaN(_valor)) {
                 return 0;
             }
-            let monto = Number(valor.replace(/,/g, ''));
+            let monto = Number(_valor);
             
             return monto;
         }
