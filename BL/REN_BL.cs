@@ -40,9 +40,13 @@ namespace BL
         {
             return dat.fn_ren_pro_clienteProducto(model);
         }
-        public List<REN_COMISION_BE> fn_ren_pro_clienteComision(REN_COMISION_BE param)
+        public List<REN_COMISION_BE> fn_ren_pro_clienteComision_vista(long codSuscriptor, long ideClienteProducto)
         {
-            return dat.fn_ren_pro_clienteComision(param);
+            return dat.fn_ren_pro_clienteComision_vista(codSuscriptor, ideClienteProducto);
+        }
+        public GEN_REPLY_BE fn_ren_pro_clienteComision_grabar(REN_COMISION_BE param)
+        {
+            return dat.fn_ren_pro_clienteComision_grabar(param);
         }
         public List<REN_POPUP_BE> fn_ren_pro_listarPopup(REN_SIM_REQ_BE param)
         {

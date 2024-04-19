@@ -45,6 +45,7 @@ namespace webapp.Controllers
                 Text = x.Text,
                 Selected = false,
             });
+            /*
             model.accion = "periodicidad";
             var dataPeriocidad = bl.fn_ren_sel_ddl(model);
             viewModel.ddlPeriocidad = dataPeriocidad.Select(x => new ExtendedSelectListItem
@@ -52,7 +53,7 @@ namespace webapp.Controllers
                 Value = x.Value,
                 Text = x.Text,
                 Selected = false,
-            });
+            });*/
             model.accion = "amortizacion";
             var dataAmortizacion = bl.fn_ren_sel_ddl(model);
             var amortizacion = new GEN_DDL_BE();
@@ -358,6 +359,9 @@ namespace webapp.Controllers
             viewModel.simData = bl.fn_ren_pro_get(model);
             model.ide_cliente_producto = viewModel.simData.ide_cliente_producto;
 
+            var comision = bl.fn_ren_pro_clienteComision_vista(model.cod_suscriptor, model.ide_cliente_producto);
+            viewModel.dataComision = comision;
+
             model.accion = "amortizacion";
             var dataAmortizacion = bl.fn_ren_sel_ddl(model);
             var amortizacion = new GEN_DDL_BE();
@@ -426,6 +430,7 @@ namespace webapp.Controllers
 
                 var viewModel = new AuxiliarEdit();
                 var req = new REN_SIM_REQ_BE();
+
                 var dataPYG = bl.fn_ren_pyg(_sim.ide_cliente_producto);
                 viewModel.dataPYG = dataPYG;
 
@@ -476,15 +481,54 @@ namespace webapp.Controllers
         {
             if (ModelState.IsValid)
             {
+                var viewModel = new AuxiliarEdit();
                 var model = new REN_SIM_REQ_BE();
                 var user = (SEG_USUARIO_BE)Session["Usuario"];
                 var ideUsuario = long.Parse(user.IDE_USUARIO.ToString());
                 var codSuscriptor = user.SUSCRIPTOR;
 
                 var reply = bl.fn_ren_pro_clienteProducto_nuevo(ideUsuario, user.SUSCRIPTOR);
+
+                var sim = (REN_SIM_REQ_BE)reply.DATA;
+                var comision = bl.fn_ren_pro_clienteComision_vista(codSuscriptor, sim.ide_cliente_producto);
+                viewModel.simData = sim;
+                viewModel.dataComision = comision;
+
                 var res = new Response();
                 res.Message = reply.MENSAJE;
-                res.Data = reply.DATA;
+                res.Data = viewModel;
+
+                res.Status = HttpStatusCode.BadRequest;
+
+                if (reply.MENSAJE.Equals("") || reply.MENSAJE.Contains(Constantes.SUCCESS))
+                    res.Status = HttpStatusCode.OK;
+
+                return Json(res);
+            }
+
+            return Json(
+                     new Response
+                     {
+                         Status = HttpStatusCode.BadRequest,
+                         Message = "No se puede continuar por errores en el modelo",
+                         Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                     }); ;
+        }
+
+        [HttpPost]
+        public ActionResult EditComision(GEN_REPLY_BE model)
+        {
+            if (ModelState.IsValid)
+            {
+                var _obj = (string[])model.DATA;
+                var _com = JsonConvert.DeserializeObject<REN_COMISION_BE>(_obj[0]);
+                var user = (SEG_USUARIO_BE)Session["Usuario"];
+                _com.cod_suscriptor = user.SUSCRIPTOR;
+                var reply = bl.fn_ren_pro_clienteComision_grabar(_com);
+
+                var res = new Response();
+                res.Message = reply.MENSAJE;
+                //res.Data = viewModel;
 
                 res.Status = HttpStatusCode.BadRequest;
 

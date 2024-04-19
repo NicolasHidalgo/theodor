@@ -432,7 +432,7 @@ namespace DA
             return lista;
         }
 
-        public List<REN_COMISION_BE> fn_ren_pro_clienteComision(REN_COMISION_BE param)
+        public List<REN_COMISION_BE> fn_ren_pro_clienteComision_vista(long codSuscriptor, long ideClienteProducto)
         {
             Mensaje = string.Empty;
             List<REN_COMISION_BE> lista = new List<REN_COMISION_BE>();
@@ -441,13 +441,9 @@ namespace DA
             cmd.Connection = con;
             cmd.CommandText = "[up_ren_pro_clienteComision]";
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 50).Value = param.accion;
-            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = param.cod_suscriptor;
-            cmd.Parameters.Add("@ide_cliente_producto", System.Data.SqlDbType.BigInt).Value = param.ide_cliente_producto;
-            cmd.Parameters.Add("@ide_comision", System.Data.SqlDbType.Int).Value = param.ide_comision;
-            cmd.Parameters.Add("@cod_periodicidad", System.Data.SqlDbType.Int).Value = param.cod_periodicidad;
-            cmd.Parameters.Add("@porcentaje", System.Data.SqlDbType.Float).Value = param.Porcentaje;
-            cmd.Parameters.Add("@comision", System.Data.SqlDbType.Float).Value = param.Comision;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 50).Value = "VISTA";
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@ide_cliente_producto", System.Data.SqlDbType.BigInt).Value = ideClienteProducto;
 
             try
             {
@@ -483,6 +479,43 @@ namespace DA
                     con.Close();
             }
             return lista;
+        }
+        public GEN_REPLY_BE fn_ren_pro_clienteComision_grabar(REN_COMISION_BE param)
+        {
+            Mensaje = string.Empty;
+            GEN_REPLY_BE model = new GEN_REPLY_BE();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_pro_clienteComision]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 50).Value = param.accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = param.cod_suscriptor;
+            cmd.Parameters.Add("@ide_cliente_producto", System.Data.SqlDbType.BigInt).Value = param.ide_cliente_producto;
+            cmd.Parameters.Add("@ide_comision", System.Data.SqlDbType.Int).Value = param.ide_comision;
+            cmd.Parameters.Add("@cod_periodicidad", System.Data.SqlDbType.Int).Value = param.cod_periodicidad;
+            cmd.Parameters.Add("@porcentaje", System.Data.SqlDbType.Float).Value = param.Porcentaje;
+            cmd.Parameters.Add("@comision", System.Data.SqlDbType.Float).Value = param.Comision;
+
+            try
+            {
+                con.InfoMessage += new SqlInfoMessageEventHandler(InfoMessageHandler);
+                con.FireInfoMessageEventOnUserErrors = true;
+                con.Open();
+                var iFilasAfectadas = cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                model.MENSAJE += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                model.MENSAJE += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return model;
         }
 
         public List<REN_POPUP_BE> fn_ren_pro_listarPopup(REN_SIM_REQ_BE param)

@@ -31,6 +31,7 @@ namespace webapp.ViewModels
         public List<REN_RORAC_MODELO_BE> dataRoracTbl { get; set; }
         public REN_RORAC_MODELO_BE dataRorac { get; set; }
         public List<REN_COMPOSICION_BE> dataComposicion { get; set; }
+        public List<REN_COMISION_BE> dataComision { get; set; }
         public GEN_DDL_BE amortizacion { get; set; }
         public long IdeClienteProducto { get; set; }
         public REN_SIM_REQ_BE simData { get; set; }

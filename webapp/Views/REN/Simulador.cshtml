@@ -208,15 +208,16 @@
                     <div class="panel-heading">
                         <i class="icon-file-empty position-left icon-custom-style" title="Nuevo" id="btnNuevo"></i>
                         <i class="icon-pencil position-left icon-custom-style" title="Editar" id="btnEditar"></i>
-                        <i class="icon-floppy-disk position-left icon-custom-style" title="Grabar" id="btnGrabar"></i>
+                        <i class="icon-floppy-disk position-left icon-custom-style hidden" title="Grabar" id="btnGrabar"></i>
+                        <i class="icon-cancel-square position-left icon-custom-style hidden" title="Cancelar" id="btnCancelar"></i>
                         <!--<i class="icon-envelop4 position-left" style="font-size:25px"></i>-->
                         <div class="heading-elements">
 
                             <!--<ul class="icons-list">
-                            <li><a data-action="collapse"></a></li>
-                            <li><a data-action="reload"></a></li>
-                            <li><a data-action="close"></a></li>
-                                                    </ul>-->
+        <li><a data-action="collapse"></a></li>
+        <li><a data-action="reload"></a></li>
+        <li><a data-action="close"></a></li>
+                                </ul>-->
                         </div>
                     </div>
 
@@ -387,38 +388,14 @@
                                                         <table class="table table-bordered">
                                                             <thead>
                                                                 <tr>
-                                                                    <th width="10%">#</th>
-                                                                    <th width="40%">Tipo</th>
-                                                                    <th width="30%">Periodicidad</th>
-                                                                    <th width="20%">Comisión</th>
+                                                                    <th align="center" width="5%">#</th>
+                                                                    <th align="center" width="40%">Servicio</th>
+                                                                    <th align="center" width="25%">Periodicidad</th>
+                                                                    <th align="center" width="5%">Tipo</th>
+                                                                    <th align="center" width="25%">Valor</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>1</td>
-                                                                    <td>
-                                                                        @Html.DropDownList("ddlComisionServicio", Model.ddlComisionServicio, new { @class = "select" })
-                                                                    </td>
-                                                                    <td>
-                                                                        @Html.DropDownList("ddlPeriocidad", Model.ddlPeriocidad, new { @class = "select" })
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="text" class="form-control">
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>2</td>
-                                                                    <td>
-                                                                        @Html.DropDownList("ddlComisionServicio2", Model.ddlComisionServicio, new { @class = "select" })
-                                                                    </td>
-                                                                    <td>
-                                                                        @Html.DropDownList("ddlPeriocidad2", Model.ddlPeriocidad, new { @class = "select" })
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="text" class="form-control">
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
+                                                            <tbody id="tbodyComision"></tbody>
                                                         </table>
                                                     </div>
                                                 </div>
@@ -815,6 +792,7 @@
 <script type="text/javascript">
 
     var fSeleccionar;
+    var fComisionChange;
 
     $(document).ready(function () {
 
@@ -865,6 +843,7 @@
                 updateChart2(data.dataComposicion);
                 updateChart3(data.dataComposicion);
                 $("#txtAmortizacion").val(data.amortizacion.Text);
+                construirComision(data.dataComision);
 
             }).done(function () {
                 console.log("fSeleccionar");
@@ -1029,6 +1008,9 @@
         /** FIN DLL CHANGES */
 
         function getPorcentaje(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
             let tasa = Number(valor);
             if (tasa == 0) {
                 return 0;
@@ -1036,6 +1018,9 @@
             return tasa / 100.0;
         }
         function getPorcentajeNum(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
             let tasa = Number(valor);
             if (tasa == 0) {
                 return 0;
@@ -1043,7 +1028,11 @@
             return tasa * 100.0;
         }
         function getImporte(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
             let monto = Number(valor.replace(/,/g, ''));
+            
             return monto;
         }
 
@@ -1256,7 +1245,7 @@
             });
         }
         var roracMenosObjetivo = roracObjetivo - roracAutonomia;
-        
+
         // Define element
         var hot_alignment = document.getElementById('hot_alignment');
         // Initialize with options
@@ -1351,7 +1340,13 @@
             $('#ddlMonedaReal').val('').change();
             $('#ddlMonedaPersonal').val('').change();
 
+            $("#btnGrabar,#btnCancelar").removeClass("hidden");
+            $("#btnNuevo,#btnEditar").addClass("hidden");
             nuevo();
+        });
+        $("#btnCancelar").on("click", function () {
+            $("#btnGrabar,#btnCancelar").addClass("hidden");
+            $("#btnNuevo,#btnEditar").removeClass("hidden");
         });
         $("#btnEditar").on("click", function () {
             $("#overlay").show();
@@ -1406,7 +1401,7 @@
 
         function nuevo() {
             $("#overlay").show();
-            
+
             var _url = '@Url.Action("New", "REN")';
 
             $.post(_url).done(function (data) {
@@ -1414,13 +1409,128 @@
                     toastr.success('Nueva simulación aperturada');
                     console.log(data);
                     $('input,select').prop('disabled', false);
-                    $("#IdeClienteProducto").text(data.Data.ide_cliente_producto);
+                    $("#IdeClienteProducto").text(data.Data.simData.ide_cliente_producto);
+                    construirComision(data.Data.dataComision);
                 }
                 else {
                     toastr.error(data.Message);
                 }
             }).done(function () {
                 $("#overlay").hide();
+            });
+        }
+
+        function getComisionPeriodo(data) {
+            let cadena = "<select id='ddlComisionPeriodo" + data.ide_comision + "' onchange='fComisionChange(" + JSON.stringify(data) + ")' class='form-control'>";
+            let split1 = data.cPeriodicidad.replaceAll('><', '|').replaceAll('<', '').replaceAll('>', '').split('|');
+            $.each(split1, function (index, value) {
+                let split2 = value.split(',');
+                cadena += "<option value='" + split2[0] + "'>" + split2[1] + "</option>"
+            });
+            cadena += "</select>";
+            return cadena;
+        }
+        function getComisionValor(data) {
+            let tipValor = data.tip_valor;
+            let className = '';
+            let valor = 0.0;
+            if (tipValor != null) {
+                if (tipValor == "V") {
+                    valor = data.Comision;
+                    className = 'maskNumber';
+                }
+                if (tipValor == "%") {
+                    valor = data.Porcentaje;
+                    className = 'maskPercent';
+                }
+            }
+            let cadena = "<input type='text' id='txtComisionValor" + data.ide_comision + "' onchange='fComisionChange(" + JSON.stringify(data) + ")' class='form-control " + className + " ' ";
+            if (valor == undefined || valor == null) {
+                valor = 0;
+
+            }
+            cadena += " value='" + valor + "'>";
+            return cadena;
+        }
+        fComisionChange = function (data) {
+            $("#overlay").show();
+            let codPeriodo = $("#ddlComisionPeriodo" + data.ide_comision + " option:selected").val();
+            let porcentaje = 0.0;
+            let comision = 0.0;
+
+            if (data.tip_valor == "V") {
+                porcentaje = getImporte($("#txtComisionValor" + data.ide_comision).val());
+            }
+            if (data.tip_valor == "%") {
+                comision = getPorcentaje($("#txtComisionValor" + data.ide_comision).val());
+            }
+
+            var _obj = {
+                accion: 'GRABAR',
+                ide_cliente_producto: $("#IdeClienteProducto").text(),
+                ide_comision: data.ide_comision,
+                cod_periodicidad: codPeriodo,
+                //tip_valor: data.tip_valor,
+                Porcentaje: porcentaje,
+                Comision: comision
+            };
+
+            var _reply = {
+                ACCION: 'GRABAR',
+                MENSAJE: '',
+                DATA: JSON.stringify(_obj),
+            };
+            var _url = '@Url.Action("EditComision", "REN")';
+
+            $.post(_url, _reply).done(function (data) {
+                if (data.Status === 200) {
+                    toastr.success('Comisión Actualizada');
+                    // reconstruir reportes
+                }
+                else {
+                    toastr.error(data.Message);
+                }
+            }).done(function () {
+                $("#overlay").hide();
+            });
+
+        }
+
+        function construirComision(data) {
+            let cadena = "";
+            $('#tbodyComision').empty();
+            $.each(data, function (index, item) {
+                cadena += "<tr class='trComision"+item.ide_comision +"'>";
+                cadena += "<td class='' align='center'>" + item.ide_comision + "</td>";
+                cadena += "<td align='left'>" + item.comision_servicio + "</td>";
+                cadena += "<td class='tdPeriodo' align='center'>" + getComisionPeriodo(item) + "</td>";
+                cadena += "<td align='center'>" + item.tip_valor + "</td>";
+                cadena += "<td class='tdValor' align='center'>" + getComisionValor(item) + "</td>";
+                cadena += "</tr>";
+            });
+            $("#tbodyComision").append(cadena);
+
+            $('input.maskNumber').inputmask({
+                'alias': 'decimal',
+                'groupSeparator': ',',
+                'autoGroup': true,
+                'digits': 2,
+                'digitsOptional': false,
+                'placeholder': '0.00'
+            });
+            $("input.maskPercent").inputmask({
+                alias: "decimal",
+                radixPoint: ".",
+                digits: "2",
+                rightAlign: false,
+                integerDigits: 5,
+                digitsOptional: true,
+                allowPlus: true,
+                allowMinus: true,
+                placeholder: "0",
+                min: 0,
+                max: 100,
+                numericInput: true
             });
         }
 
@@ -1549,7 +1659,7 @@
                                 totals[index] = (totals[index] || 0) + value
                             })
                         }
-                        
+
                     }
                 })
                 chart.$totalizer = {
@@ -1574,7 +1684,7 @@
             invOPE = compOPE.map(x => x.invisible);
             negOPE = compOPE.map(x => x.negativo);
         }
-        
+
         const ctx = document.getElementById('myChart');
         ctx.height = 300;
         var myChart = new Chart(ctx, {
@@ -1676,7 +1786,7 @@
             invOBJ = compOBJ.map(x => x.invisible);
             negOBJ = compOBJ.map(x => x.negativo);
         }
-        
+
         const ctx2 = document.getElementById('myChart2');
         ctx2.height = 300;
         var myChart2 = new Chart(ctx2, {
