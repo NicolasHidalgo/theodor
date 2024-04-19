@@ -1322,11 +1322,11 @@
                         } else if (value > 0 && value < roracMenosObjetivo) { // regla beige
                             cell.style.backgroundColor = "#969076";
                             cell.style.borderColor = "#969076";
-                        } else if (value >= roracMenosObjetivo && value < jsModel.dataRorac.rorac_objetivo) { // regla blanco
+                        } else if (value >= roracMenosObjetivo && value < roracObjetivo) { // regla blanco
                             cell.style.backgroundColor = "white";
                             cell.style.borderColor = "white";
                             cell.style.color = "black";
-                        } else if (value >= jsModel.dataRorac.rorac_objetivo) { // regla azul
+                        } else if (value >= roracObjetivo) { // regla azul
                             cell.style.backgroundColor = "#222840";
                             cell.style.borderColor = "#222840";
                             cell.style.color = "white";
@@ -1391,11 +1391,10 @@
                 });
                 $("#tbodyPOPUP").append(cadena);
             }).done(function () {
-                debugger;
                 if ($.fn.DataTable.isDataTable('#tblPOPUP')) {
                     $('#tblPOPUP').DataTable().destroy();
                 }
-                var tblPOPUP = $('#tblPOPUP').DataTable({
+                $('#tblPOPUP').DataTable({
                     autoWidth: false,
                     responsive: true,
                     searching: true,
