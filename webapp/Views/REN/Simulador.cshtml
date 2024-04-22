@@ -215,7 +215,9 @@
                     <div class="panel-heading">
                         <i class="icon-file-empty position-left icon-custom-style" title="Nuevo" id="btnNuevo"></i>
                         <i class="icon-pencil position-left icon-custom-style" title="Editar" id="btnEditar"></i>
-                        <i class="icon-floppy-disk position-left icon-custom-style hidden" title="Grabar" id="btnGrabar"></i>
+                        <i class="icon-hammer2 position-left icon-custom-style" title="Simular" id="btnSimular"></i>
+                        <i class="icon-floppy-disk position-left icon-custom-style hidden" title="Fin" id="btnFin"></i>
+                        <i class="icon-floppy-disks position-left icon-custom-style" title="Fin2" id="btnFin2"></i>
                         <i class="icon-cancel-square position-left icon-custom-style hidden" title="Cancelar" id="btnCancelar"></i>
                         <!--<i class="icon-envelop4 position-left" style="font-size:25px"></i>-->
                         <div class="heading-elements">
@@ -808,7 +810,7 @@
             $('#editModal').modal('hide');
             $("#overlay").show();
             $("#btnNuevo,#btnEditar").addClass("hidden");
-            $("#btnGrabar,#btnCancelar").removeClass("hidden");
+            $("#btnFin,#btnCancelar").removeClass("hidden");
             $.getJSON('@Url.Action("JSON_Get")', { IdeClienteProducto: Id }, function (data) {
                 var simData = data.simData;
                 $("#IdeClienteProducto").text(simData.ide_cliente_producto);
@@ -834,14 +836,15 @@
                 //$("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).change();
                 //$("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).change();
 
-                $("#ddlGarantiaReal").val(simData.cod_garantia_real).change();
-                $("#ddlMonedaReal").val(simData.cod_moneda_garantia_real).change();
-                $("#txtMontoGarantiaReal").val(simData.monto_garantia_real);
-                $("#ddlGarantiaPersonal").val(simData.cod_garantia_personal).change();
-                $("#ddlMonedaPersonal").val(simData.cod_moneda_garantia_personal).change();
-                $("#txtMontoGarantiaPersonal").val(simData.monto_garantia_personal);
-                $("#ddlClasificacionGarantia").val(simData.cod_clasificacion_garantia).change();
-                $("#ddlModeloRORAC").val(simData.cod_modelo_rorac).change();
+                $("#ddlGarantiaReal").val(simData.cod_garantia_real).trigger('change', 'fSeleccionar');
+                $("#ddlMonedaReal").val(simData.cod_moneda_garantia_real).trigger('change', 'fSeleccionar');
+                $("#txtMontoGarantiaReal").val(simData.monto_garantia_real).trigger('change', 'fSeleccionar');
+                $("#ddlGarantiaPersonal").val(simData.cod_garantia_personal).trigger('change', 'fSeleccionar');
+                $("#ddlMonedaPersonal").val(simData.cod_moneda_garantia_personal).trigger('change', 'fSeleccionar');
+                $("#txtMontoGarantiaPersonal").val(simData.monto_garantia_personal).trigger('change', 'fSeleccionar');
+                $("#ddlClasificacionGarantia").val(simData.cod_clasificacion_garantia).trigger('change', 'fSeleccionar');
+                $("#ddlModeloRORAC").val(simData.cod_modelo_rorac).trigger('change', 'fSeleccionar');
+                construirComision(data.dataComision);
 
                 reconstruirReportePYG(data);
                 reconstruirReporteResumenEscenario(data);
@@ -851,7 +854,6 @@
                 updateChart2(data.dataComposicion);
                 updateChart3(data.dataComposicion);
                 $("#txtAmortizacion").val(data.amortizacion.Text);
-                construirComision(data.dataComision);
 
             }).done(function () {
                 console.log("fSeleccionar");
@@ -873,6 +875,9 @@
         function ddlPersoneriaChange(data) {
             let codPersoneria = $("#ddlPersoneria option:selected").val();
             if (data != undefined && data != null) {
+                if (data == "btnNuevo") {
+                    return;
+                }
                 codPersoneria = data.cod_personeria;
             }
             $.getJSON('@Url.Action("JSON_PersoneriaChange")', { codPersoneria: codPersoneria }, function (data) {
@@ -896,26 +901,23 @@
             }).done(function () {
                 console.log("ddlPersoneriaChange");
                 if (data != undefined && data != null) {
-                    $("#ddlTipDocumento").val(data.cod_tip_documento).change();
-                    $("#txtNumDoc").val(data.num_documento);
-                    $("#ddlTipCliente").val(data.cod_tip_cliente).change();
+                    $("#ddlTipDocumento").val(data.cod_tip_documento).trigger('change', 'fSeleccionar');
+                    $("#txtNumDoc").val(data.num_documento).trigger('change', 'fSeleccionar');
+                    $("#ddlTipCliente").val(data.cod_tip_cliente).trigger('change', 'fSeleccionar');
                 }
             });
         }
         function ddlProductoChange(data) {
             let codProducto = $("#ddlProducto option:selected").val();
             if (data != undefined && data != null) {
+                if (data == "btnNuevo") {
+                    return;
+                }
                 codProducto = data.cod_producto;
             }
-            $.getJSON('@Url.Action("JSON_ComisionServicioChange")', { codProducto: codProducto }, function (data) {
-                $('#ddlComisionServicio,#ddlComisionServicio2').empty();
-                $.each(data.ddlComisionServicio, function (index, item) {
-                    $('#ddlComisionServicio,#ddlComisionServicio2').append($('<option/>', {
-                        value: item.Value,
-                        text: item.Text,
-                        selected: item.Selected
-                    }));
-                });
+            $.getJSON('@Url.Action("JSON_ProductoChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codProducto: codProducto }, function (data) {
+                construirComision(data.dataComision);
+
             }).done(function () {
                 console.log("ddlProductoChange");
                 if (data != undefined && data != null) {
@@ -926,6 +928,9 @@
         function ddlOperacionChange(data) {
             let codOperacion = $("#ddlOperacion option:selected").val();
             if (data != undefined && data != null) {
+                if (data == "btnNuevo") {
+                    return;
+                }
                 codOperacion = data.cod_operacion;
             }
             $.getJSON('@Url.Action("JSON_OperacionChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codOperacion: codOperacion }, function (data) {
@@ -998,17 +1003,17 @@
             }).done(function () {
                 console.log("ddlOperacionChange");
                 if (data != undefined && data != null) {
-                    $("#ddlProducto").val(data.cod_producto).change();
+                    //$("#ddlProducto").val(data.cod_producto).change();
                     if ($("#ddlProducto option:selected").val() != data.cod_producto) {
                         $("#ddlProducto").val(data.cod_producto).trigger('change', [data]);
                     }
-                    $("#ddlMoneda").val(data.cod_moneda).change();
-                    $("#txtMonto").val(data.monto);
-                    $("#ddlCanalAtencion").val(data.cod_canal_atencion).change();
-                    $("#txtTasaEfectiva").val(getPorcentajeNum(data.tea));
-                    $("#txtPlazoMeses").val(data.plazo);
-                    $("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).change();
-                    $("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).change();
+                    $("#ddlMoneda").val(data.cod_moneda).trigger('change', 'fSeleccionar');
+                    $("#txtMonto").val(data.monto).trigger('change', 'fSeleccionar');
+                    $("#ddlCanalAtencion").val(data.cod_canal_atencion).trigger('change', 'fSeleccionar');
+                    $("#txtTasaEfectiva").val(getPorcentajeNum(data.tea)).trigger('change', 'fSeleccionar');
+                    $("#txtPlazoMeses").val(data.plazo).trigger('change', 'fSeleccionar');
+                    $("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).trigger('change', 'fSeleccionar');
+                    $("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).trigger('change', 'fSeleccionar');
                 }
 
             });
@@ -1341,20 +1346,20 @@
 
         /** BOTONES */
         $("#btnNuevo").on("click", function () {
-            $('input:text').val('');
-            $('#ddlPersoneria').val('').change();
-            $('#ddlOperacion').val('').change();
-            $('#ddlMoneda').val('').change();
-            $('#ddlCanalAtencion').val('').change();
-            $('#ddlMonedaReal').val('').change();
-            $('#ddlMonedaPersonal').val('').change();
+            $('input:text').val('').trigger('change', 'btnNuevo');
+            $("#ddlPersoneria").val('').trigger('change', 'btnNuevo');
+            $("#ddlOperacion").val('').trigger('change', 'btnNuevo');
+            $("#ddlMoneda").val('').trigger('change', 'btnNuevo');
+            $("#ddlCanalAtencion").val('').trigger('change', 'btnNuevo');
+            $("#ddlMonedaReal").val('').trigger('change', 'btnNuevo');
+            $("#ddlMonedaPersonal").val('').trigger('change', 'btnNuevo');
 
-            $("#btnGrabar,#btnCancelar").removeClass("hidden");
+            $("#btnFin,#btnCancelar").removeClass("hidden");
             $("#btnNuevo,#btnEditar").addClass("hidden");
             nuevo();
         });
         $("#btnCancelar").on("click", function () {
-            $("#btnGrabar,#btnCancelar").addClass("hidden");
+            $("#btnFin,#btnCancelar").addClass("hidden");
             $("#btnNuevo,#btnEditar").removeClass("hidden");
 
             $("#btnCancelar").empty();
@@ -1415,8 +1420,14 @@
             });
 
         });
-        $("#btnGrabar").on("click", function () {
-            grabar();
+        $("#btnSimular").on("click", function () {
+            fnGrabar('simular');
+        });
+        $("#btnFin").on("click", function () {
+            fnGrabar('fin');
+        });
+        $("#btnFin2").on("click", function () {
+            fnGrabar('fin2');
         });
 
         $('#txtMonto,#txtMontoGarantiaReal,#txtMontoGarantiaPersonal').inputmask({
@@ -1521,7 +1532,9 @@
                 cod_periodicidad: codPeriodo,
                 //tip_valor: data.tip_valor,
                 Porcentaje: porcentaje,
-                Comision: comision
+                Comision: comision,
+                incremento_tasa: $("#ddlRangoTasa option:selected").val(),
+                incremento_plazo: $("#ddlRangoPlazo option:selected").val(),
             };
 
             var _reply = {
@@ -1535,6 +1548,14 @@
                 if (data.Status === 200) {
                     toastr.success('Comisión Actualizada');
                     // reconstruir reportes
+                    debugger;
+                    reconstruirReportePYG(data.Data);
+                    reconstruirReporteResumenEscenario(data.Data);
+                    reconstruirReporteRoracRes(data.Data);
+                    reconstruirHandsontable(data.Data);
+                    updateChart1(data.Data.dataComposicion);
+                    updateChart2(data.Data.dataComposicion);
+                    updateChart3(data.Data.dataComposicion);
                 }
                 else {
                     toastr.error(data.Message);
@@ -1583,7 +1604,7 @@
             });
         }
 
-        function grabar() {
+        function fnGrabar(act) {
 
             let monto = getImporte($("#txtMonto").val());
             let tea = getPorcentaje($("#txtTasaEfectiva").val());
@@ -1618,9 +1639,20 @@
             }
             */
 
+            var action = '@@GRABAR';
+            if (act == 'simular') {
+                action = '@@GRABAR';
+            }
+            if (act == 'fin') {
+                action = '@@FIN';
+            }
+            if (act == 'fin2') {
+                action = '@@FIN2';
+            }
+
             $("#overlay").show();
             var _obj = {
-                accion: '@@GRABAR',
+                accion: action,
                 ide_cliente: 1,
                 cod_tip_documento: tipoDoc,
                 num_documento: numDoc,
@@ -1633,7 +1665,7 @@
                 cod_operacion: $("#ddlOperacion option:selected").val(),
                 cod_moneda: $("#ddlMoneda option:selected").val(),
                 monto: monto,
-                cod_canal_atencion: $("#ddlCanalAtencion").val(),
+                cod_canal_atencion: $("#ddlCanalAtencion option:selected").val(),
                 tea: tea,
                 plazo: plazo,
                 cod_clasificacion_interna: $("#ddlClasificacionInterna option:selected").val(),
@@ -1651,7 +1683,7 @@
             };
 
             var _reply = {
-                ACCION: '@@GRABAR',
+                ACCION: action,
                 MENSAJE: '',
                 IDE_USUARIO: 0,
                 DATA: JSON.stringify(_obj),
@@ -1681,8 +1713,19 @@
             });
         }
 
-        $("#ddlModeloRORAC,#ddlPersoneria,#ddlTipCliente,#ddlOperacion,#ddlProducto,#ddlMoneda,#txtMonto,#ddlCanalAtencion,#txtTasaEfectiva,#txtPlazoMeses,#ddlClasificacionInterna,#ddlGarantiaReal,#ddlMonedaReal,#txtMontoGarantiaReal,#ddlMonedaPersonal,#txtMontoGarantiaPersonal,#ddlClasificacionGarantia").change(function () {
-            //grabar();
+        var controlsChangeSimular = '#ddlPersoneria,#ddlTipCliente,#ddlOperacion,#ddlProducto,#ddlMoneda,#txtMonto,#ddlCanalAtencion,#txtTasaEfectiva,#txtPlazoMeses,#ddlClasificacionInterna,#ddlGarantiaReal,#ddlMonedaReal,#txtMontoGarantiaReal,#ddlMonedaPersonal,#txtMontoGarantiaPersonal,#ddlClasificacionGarantia,#ddlModeloRORAC';
+        $(controlsChangeSimular).change(function (e, data) {
+            if (data != undefined && data != null) {
+                if (data == "btnNuevo") {
+                    return;
+                }
+                if (data == "fSeleccionar") {
+                    return;
+                }
+            } else {
+                fnGrabar('simular');
+            }
+            
         });
 
         $("#ddlRangoTasa, #ddlRangoPlazo").change(function () {

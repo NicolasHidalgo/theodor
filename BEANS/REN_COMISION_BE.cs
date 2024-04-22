@@ -19,7 +19,8 @@ namespace BEANS
         public string tip_valor { get; set; }
         public double? Porcentaje { get; set; }
         public double? Comision { get; set; }
-
+        public double incremento_tasa { get; set; }
+        public double incremento_plazo { get; set; }
 
     }
 }
