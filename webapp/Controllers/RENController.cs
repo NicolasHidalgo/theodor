@@ -206,6 +206,10 @@ namespace webapp.Controllers
 
         public JsonResult JSON_PersoneriaChange(string codPersoneria)
         {
+            if (codPersoneria == null)
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
             var user = (SEG_USUARIO_BE)Session["Usuario"];
             var viewModel = new AuxiliarEdit();
             var model = new REN_SIM_REQ_BE();
@@ -235,6 +239,10 @@ namespace webapp.Controllers
         }
         public JsonResult JSON_OperacionChange(long ide_cliente_producto, string codOperacion)
         {
+            if (codOperacion == null)
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
             var user = (SEG_USUARIO_BE)Session["Usuario"];
             var viewModel = new AuxiliarEdit();
             var model = new REN_SIM_REQ_BE();
@@ -319,20 +327,20 @@ namespace webapp.Controllers
             var viewModel = new AuxiliarEdit();
             var model = new REN_SIM_REQ_BE();
             model.cod_suscriptor = user.SUSCRIPTOR;
-            //model.ide_cliente_producto = ide_cliente_producto;
-            //model.accion = "comision_servicio";
+            model.ide_cliente_producto = ide_cliente_producto;
             model.cod_producto = int.Parse(codProducto);
-            var comision = bl.fn_ren_pro_clienteComision_vista(model.cod_suscriptor, model.ide_cliente_producto);
-            viewModel.dataComision = comision;
+            var comisiones = bl.fn_ren_pro_clienteComision_vista(model.cod_suscriptor, model.ide_cliente_producto);
+            viewModel.dataComision = comisiones;
 
-            /*
-            var dataComisionServicio = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlComisionServicio = dataComisionServicio.Select(x => new ExtendedSelectListItem
+            model.accion = "amortizacion";
+            var dataAmortizacion = bl.fn_ren_sel_ddl(model);
+            var amortizacion = new GEN_DDL_BE();
+            if (dataAmortizacion != null && dataAmortizacion.Count > 0)
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
-            });*/
+                amortizacion.Value = dataAmortizacion.FirstOrDefault().Value;
+                amortizacion.Text = dataAmortizacion.FirstOrDefault().Text;
+            }
+            viewModel.amortizacion = amortizacion;
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }

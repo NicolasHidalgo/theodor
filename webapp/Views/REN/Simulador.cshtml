@@ -215,10 +215,10 @@
                     <div class="panel-heading">
                         <i class="icon-file-empty position-left icon-custom-style" title="Nuevo" id="btnNuevo"></i>
                         <i class="icon-pencil position-left icon-custom-style" title="Editar" id="btnEditar"></i>
-                        <i class="icon-hammer2 position-left icon-custom-style" title="Simular" id="btnSimular"></i>
+                        <i class="icon-sync position-left icon-custom-style hidden" title="Simular" id="btnSimular"></i>
                         <i class="icon-floppy-disk position-left icon-custom-style hidden" title="Fin" id="btnFin"></i>
-                        <i class="icon-floppy-disks position-left icon-custom-style" title="Fin2" id="btnFin2"></i>
-                        <i class="icon-cancel-square position-left icon-custom-style hidden" title="Cancelar" id="btnCancelar"></i>
+                        <i class="icon-floppy-disks position-left icon-custom-style hidden" title="Guardar como" id="btnFin2"></i>
+                        <i class="icon-x position-left icon-custom-style hidden" title="Cancelar" id="btnCancelar"></i>
                         <!--<i class="icon-envelop4 position-left" style="font-size:25px"></i>-->
                         <div class="heading-elements">
 
@@ -810,7 +810,7 @@
             $('#editModal').modal('hide');
             $("#overlay").show();
             $("#btnNuevo,#btnEditar").addClass("hidden");
-            $("#btnFin,#btnCancelar").removeClass("hidden");
+            $("#btnSimular,#btnFin,#btnFin2,#btnCancelar").removeClass("hidden");
             $.getJSON('@Url.Action("JSON_Get")', { IdeClienteProducto: Id }, function (data) {
                 var simData = data.simData;
                 $("#IdeClienteProducto").text(simData.ide_cliente_producto);
@@ -904,6 +904,7 @@
                     $("#ddlTipDocumento").val(data.cod_tip_documento).trigger('change', 'fSeleccionar');
                     $("#txtNumDoc").val(data.num_documento).trigger('change', 'fSeleccionar');
                     $("#ddlTipCliente").val(data.cod_tip_cliente).trigger('change', 'fSeleccionar');
+
                 }
             });
         }
@@ -917,12 +918,14 @@
             }
             $.getJSON('@Url.Action("JSON_ProductoChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codProducto: codProducto }, function (data) {
                 construirComision(data.dataComision);
-
+                $("#txtAmortizacion").val(data.amortizacion.Text);
             }).done(function () {
                 console.log("ddlProductoChange");
+                //fnGrabar('simular');
                 if (data != undefined && data != null) {
-
+                    
                 }
+                
             });
         }
         function ddlOperacionChange(data) {
@@ -960,7 +963,7 @@
                     }));
                 });
 
-                //$("#txtAmortizacion").val(data.amortizacion.Text);
+                $("#txtAmortizacion").val(data.amortizacion.Text);
 
                 $('#ddlGarantiaReal').empty();
                 $.each(data.ddlGarantiaReal, function (index, item) {
@@ -1003,7 +1006,6 @@
             }).done(function () {
                 console.log("ddlOperacionChange");
                 if (data != undefined && data != null) {
-                    //$("#ddlProducto").val(data.cod_producto).change();
                     if ($("#ddlProducto option:selected").val() != data.cod_producto) {
                         $("#ddlProducto").val(data.cod_producto).trigger('change', [data]);
                     }
@@ -1014,8 +1016,10 @@
                     $("#txtPlazoMeses").val(data.plazo).trigger('change', 'fSeleccionar');
                     $("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).trigger('change', 'fSeleccionar');
                     $("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).trigger('change', 'fSeleccionar');
-                }
 
+                    
+                }
+                
             });
         }
         /** FIN DLL CHANGES */
@@ -1260,9 +1264,8 @@
         }
         var roracMenosObjetivo = roracObjetivo - roracAutonomia;
 
-        // Define element
+        // Ini Handsontable
         var hot_alignment = document.getElementById('hot_alignment');
-        // Initialize with options
         var hot_alignment_init = new Handsontable(hot_alignment, {
             data: dataHot,
             rowHeaders: false,
@@ -1344,38 +1347,44 @@
             }
         });
 
-        /** BOTONES */
-        $("#btnNuevo").on("click", function () {
-            $('input:text').val('').trigger('change', 'btnNuevo');
-            $("#ddlPersoneria").val('').trigger('change', 'btnNuevo');
-            $("#ddlOperacion").val('').trigger('change', 'btnNuevo');
-            $("#ddlMoneda").val('').trigger('change', 'btnNuevo');
-            $("#ddlCanalAtencion").val('').trigger('change', 'btnNuevo');
-            $("#ddlMonedaReal").val('').trigger('change', 'btnNuevo');
-            $("#ddlMonedaPersonal").val('').trigger('change', 'btnNuevo');
-
-            $("#btnFin,#btnCancelar").removeClass("hidden");
-            $("#btnNuevo,#btnEditar").addClass("hidden");
-            nuevo();
-        });
-        $("#btnCancelar").on("click", function () {
-            $("#btnFin,#btnCancelar").addClass("hidden");
-            $("#btnNuevo,#btnEditar").removeClass("hidden");
-
-            $("#btnCancelar").empty();
+        function fnCleanControles() {
             $("#tbodyComision").empty();
+            $('input:text').val('').trigger('change', 'clean');
+            $("#ddlPersoneria").val('').trigger('change', 'clean');
+            $("#ddlOperacion").val('').trigger('change', 'clean');
+            $("#ddlMoneda").val('').trigger('change', 'clean');
+            $("#ddlCanalAtencion").val('').trigger('change', 'clean');
+            $("#ddlMonedaReal").val('').trigger('change', 'clean');
+            $("#ddlMonedaPersonal").val('').trigger('change', 'clean');
+        }
+        function fnCleanReports() {
+            $("#tbodyPYG").empty();
             $("#tbodyResEsc").empty();
             $("#tbodyRoracRes").empty();
-            $("#tbodyPYG").empty();
             if (hot_alignment_init) {
-                //hot_alignment_init.clear();
                 hot_alignment_init.updateSettings({
                     data: []
                 });
             }
-            myChart.reset();
-            myChart2.reset();
-            myChart3.reset();
+            myChart.clear();
+            myChart2.clear();
+            myChart3.clear();
+        }
+
+        /** BOTONES */
+        $("#btnNuevo").on("click", function () {
+            fnCleanControles();
+            fnCleanReports();
+            $("#btnSimular,#btnFin,#btnFin2,#btnCancelar").removeClass("hidden");
+            $("#btnNuevo,#btnEditar").addClass("hidden");
+            fnNuevo();
+        });
+        $("#btnCancelar").on("click", function () {
+            fnCleanControles();
+            fnCleanReports();
+            $("#btnSimular,#btnFin,#btnFin2,#btnCancelar").addClass("hidden");
+            $("#btnNuevo,#btnEditar").removeClass("hidden");
+            $('input,select').prop('disabled', true);
         });
         $("#btnEditar").on("click", function () {
             $("#overlay").show();
@@ -1453,7 +1462,7 @@
             numericInput: true
         });
 
-        function nuevo() {
+        function fnNuevo() {
             $("#overlay").show();
 
             var _url = '@Url.Action("New", "REN")';
@@ -1713,10 +1722,11 @@
             });
         }
 
-        var controlsChangeSimular = '#ddlPersoneria,#ddlTipCliente,#ddlOperacion,#ddlProducto,#ddlMoneda,#txtMonto,#ddlCanalAtencion,#txtTasaEfectiva,#txtPlazoMeses,#ddlClasificacionInterna,#ddlGarantiaReal,#ddlMonedaReal,#txtMontoGarantiaReal,#ddlMonedaPersonal,#txtMontoGarantiaPersonal,#ddlClasificacionGarantia,#ddlModeloRORAC';
+        //var controlChangeSimularIndependientes = "#ddlPersoneria,#ddlOperacion,#ddlProducto";
+        var controlsChangeSimular = '#ddlTipCliente,#ddlMoneda,#txtMonto,#ddlCanalAtencion,#txtTasaEfectiva,#txtPlazoMeses,#ddlClasificacionInterna,#ddlGarantiaReal,#ddlMonedaReal,#txtMontoGarantiaReal,#ddlMonedaPersonal,#txtMontoGarantiaPersonal,#ddlClasificacionGarantia,#ddlModeloRORAC';
         $(controlsChangeSimular).change(function (e, data) {
             if (data != undefined && data != null) {
-                if (data == "btnNuevo") {
+                if (data == "clean") {
                     return;
                 }
                 if (data == "fSeleccionar") {
