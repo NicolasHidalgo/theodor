@@ -324,7 +324,7 @@
                                             <div class="col-md-5">
                                                 <div class="form-group">
                                                     <label>Amortización</label>
-                                                    <input type="text" id="txtAmortizacion" value="@Model.amortizacion.Text" class="form-control" readonly />
+                                                    <input type="text" id="txtAmortizacion" value="" class="form-control" readonly />
                                                     <!--
                                                     <select id="ddlAmortizacion" name="ddlAmortizacion" class="select" disabled>
                                                         <option value="1">Cuotas Constantes</option>
@@ -341,7 +341,10 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>Monto:</label>
-                                                    <input type="text" id="txtMonto" name="txtMonto" min="0" value="0" class="form-control">
+                                                    <div class="input-group">
+                                                        <input type="text" id="txtMonto" name="txtMonto" min="0" value="0" class="form-control">
+                                                        <span class="input-group-addon">$</span>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -621,7 +624,6 @@
                                                                                         </tr>
                                                                                     }
                                                                                 }
-
                                                                             </tbody>
                                                                         </table>
                                                                     </div>
@@ -825,6 +827,8 @@
 
                 if ($("#ddlOperacion option:selected").val() != simData.cod_operacion) {
                     $("#ddlOperacion").val(simData.cod_operacion).trigger('change', [simData]);
+                } else {
+
                 }
 
                 //$("#ddlProducto").val(data.cod_producto).change();
@@ -853,11 +857,12 @@
                 updateChart1(data.dataComposicion);
                 updateChart2(data.dataComposicion);
                 updateChart3(data.dataComposicion);
-                $("#txtAmortizacion").val(data.amortizacion.Text);
+                $("#txtAmortizacion").val(data.amortizacion);
 
             }).done(function () {
                 console.log("fSeleccionar");
                 $('input,select').prop('disabled', false);
+                $("#Seccion01").click();
                 $("#overlay").hide();
             });
         }
@@ -875,7 +880,7 @@
         function ddlPersoneriaChange(data) {
             let codPersoneria = $("#ddlPersoneria option:selected").val();
             if (data != undefined && data != null) {
-                if (data == "btnNuevo") {
+                if (data == "clean") {
                     return;
                 }
                 codPersoneria = data.cod_personeria;
@@ -911,27 +916,27 @@
         function ddlProductoChange(data) {
             let codProducto = $("#ddlProducto option:selected").val();
             if (data != undefined && data != null) {
-                if (data == "btnNuevo") {
+                if (data == "clean") {
                     return;
                 }
                 codProducto = data.cod_producto;
             }
             $.getJSON('@Url.Action("JSON_ProductoChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codProducto: codProducto }, function (data) {
                 construirComision(data.dataComision);
-                $("#txtAmortizacion").val(data.amortizacion.Text);
+                $("#txtAmortizacion").val(data.amortizacion);
             }).done(function () {
                 console.log("ddlProductoChange");
                 //fnGrabar('simular');
                 if (data != undefined && data != null) {
-                    
+
                 }
-                
+
             });
         }
         function ddlOperacionChange(data) {
             let codOperacion = $("#ddlOperacion option:selected").val();
             if (data != undefined && data != null) {
-                if (data == "btnNuevo") {
+                if (data == "clean") {
                     return;
                 }
                 codOperacion = data.cod_operacion;
@@ -962,9 +967,6 @@
                         selected: item.Selected
                     }));
                 });
-
-                $("#txtAmortizacion").val(data.amortizacion.Text);
-
                 $('#ddlGarantiaReal').empty();
                 $.each(data.ddlGarantiaReal, function (index, item) {
                     $('#ddlGarantiaReal').append($('<option/>', {
@@ -1017,9 +1019,9 @@
                     $("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).trigger('change', 'fSeleccionar');
                     $("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).trigger('change', 'fSeleccionar');
 
-                    
+
                 }
-                
+
             });
         }
         /** FIN DLL CHANGES */
@@ -1050,13 +1052,14 @@
                 return 0;
             }
             let monto = Number(_valor);
-            
+
             return monto;
         }
 
         /** RECONSTRUCCIONES */
         function reconstruirReportePYG(data) {
             $("#tbodyPYG").empty();
+            if (data.dataPYG == undefined || data.dataPYG == null) return;
             var cadena = "";
             $.each(data.dataPYG, function (index, item) {
                 var trClass = "";
@@ -1076,6 +1079,7 @@
         }
         function reconstruirReporteResumenEscenario(data) {
             $("#tbodyResEsc").empty();
+            if (data.dataResEsc == undefined || data.dataResEsc == null) return;
             var cadena = "";
             $.each(data.dataResEsc, function (index, item) {
                 var trClass = "";
@@ -1113,6 +1117,7 @@
         }
         function reconstruirReporteRoracRes(data) {
             $("#tbodyRoracRes").empty();
+            if (data.dataRoracRes == undefined || data.dataRoracRes == null) return;
             var cadena = "";
             $.each(data.dataRoracRes, function (index, item) {
                 if (item.estilo == "TIT01" || item.estilo == "TIT02") {
@@ -1161,6 +1166,7 @@
             $("#tbodyRoracRes").append(cadena);
         }
         function reconstruirHandsontable(data) {
+            if (data.dataRoracTbl == undefined || data.dataRoracTbl == null) return;
             if (hot_alignment_init) {
                 var dataHot = [
                     { col0: '', col1: 'RORAC Bajo Modelo Estándar', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '', col8: '', col9: '', col10: '' },
@@ -1193,6 +1199,7 @@
             }
         }
         function updateChart1(data) {
+            if (data == undefined || data == null) return;
             let dat = data.filter(a => a.tipo == 1);
             let labels = dat.map(x => x.detalle);
             let values = dat.map(x => x.valor);
@@ -1208,6 +1215,7 @@
             myChart.update();
         }
         function updateChart2(data) {
+            if (data == undefined || data == null) return;
             let dat = data.filter(a => a.tipo == 2);
             let labels = dat.map(x => x.detalle);
             let values = dat.map(x => x.valor);
@@ -1223,6 +1231,7 @@
             myChart2.update();
         }
         function updateChart3(data) {
+            if (data == undefined || data == null) return;
             let dat = data.filter(a => a.tipo == 3);
             let labels = dat.map(x => x.detalle);
             let values = dat.map(x => x.valor);
@@ -1349,13 +1358,16 @@
 
         function fnCleanControles() {
             $("#tbodyComision").empty();
-            $('input:text').val('').trigger('change', 'clean');
+            $('#FormSim input:text').val('').trigger('change', 'clean');
+            $('#FormSim select').val('').trigger('change', 'clean');
+            /*
             $("#ddlPersoneria").val('').trigger('change', 'clean');
             $("#ddlOperacion").val('').trigger('change', 'clean');
             $("#ddlMoneda").val('').trigger('change', 'clean');
             $("#ddlCanalAtencion").val('').trigger('change', 'clean');
             $("#ddlMonedaReal").val('').trigger('change', 'clean');
             $("#ddlMonedaPersonal").val('').trigger('change', 'clean');
+            */
         }
         function fnCleanReports() {
             $("#tbodyPYG").empty();
@@ -1366,9 +1378,19 @@
                     data: []
                 });
             }
-            myChart.clear();
-            myChart2.clear();
-            myChart3.clear();
+            //myChart.clear();
+            //myChart2.clear();
+            //myChart3.clear();
+            myChart.data.datasets[0].data = [];
+            myChart.data.datasets[1].data = [];
+            myChart2.data.datasets[0].data = [];
+            myChart2.data.datasets[1].data = [];
+            myChart3.data.datasets[0].data = [];
+            myChart3.data.datasets[1].data = [];
+
+            myChart.update();
+            myChart2.update();
+            myChart3.update();
         }
 
         /** BOTONES */
@@ -1380,6 +1402,8 @@
             fnNuevo();
         });
         $("#btnCancelar").on("click", function () {
+            $("#IdeClienteProducto").text('0');
+            $("#Seccion01").click();
             fnCleanControles();
             fnCleanReports();
             $("#btnSimular,#btnFin,#btnFin2,#btnCancelar").addClass("hidden");
@@ -1470,7 +1494,6 @@
             $.post(_url).done(function (data) {
                 if (data.Status === 200) {
                     toastr.success('Nueva simulación aperturada');
-                    console.log(data);
                     $('input,select').prop('disabled', false);
                     $("#IdeClienteProducto").text(data.Data.simData.ide_cliente_producto);
                     construirComision(data.Data.dataComision);
@@ -1479,7 +1502,9 @@
                     toastr.error(data.Message);
                 }
             }).done(function () {
+                $("#Seccion01").click();
                 $("#overlay").hide();
+
             });
         }
 
@@ -1557,7 +1582,6 @@
                 if (data.Status === 200) {
                     toastr.success('Comisión Actualizada');
                     // reconstruir reportes
-                    debugger;
                     reconstruirReportePYG(data.Data);
                     reconstruirReporteResumenEscenario(data.Data);
                     reconstruirReporteRoracRes(data.Data);
@@ -1570,7 +1594,9 @@
                     toastr.error(data.Message);
                 }
             }).done(function () {
+                $("#Seccion01").click();
                 $("#overlay").hide();
+
             });
 
         }
@@ -1711,13 +1737,12 @@
                     updateChart1(data.Data.dataComposicion);
                     updateChart2(data.Data.dataComposicion);
                     updateChart3(data.Data.dataComposicion);
-
-                    $("#txtAmortizacion").val(data.Data.amortizacion.Text);
                 }
                 else {
                     toastr.error(data.Message);
                 }
             }).done(function () {
+                $("#Seccion01").click();
                 $("#overlay").hide();
             });
         }
@@ -1735,16 +1760,46 @@
             } else {
                 fnGrabar('simular');
             }
-            
+
         });
 
-        $("#ddlRangoTasa, #ddlRangoPlazo").change(function () {
+        function fnCallHandsontableService() {
+            let IdeClienteProducto = $("#IdeClienteProducto").text();
+            if (IdeClienteProducto == undefined || IdeClienteProducto == null || IdeClienteProducto == 0) {
+                return;
+            }
             $("#overlay").show();
-            $.getJSON('@Url.Action("JSON_ReporteRORACModelo")', { ide_cliente_producto: $("#IdeClienteProducto").text(), incremento_tasa: $("#ddlRangoTasa option:selected").val(), incremento_plazo: $("#ddlRangoPlazo option:selected").val() }, function (data) {
+            $.getJSON('@Url.Action("JSON_ReporteRORACModelo")', { ide_cliente_producto: IdeClienteProducto, incremento_tasa: $("#ddlRangoTasa option:selected").val(), incremento_plazo: $("#ddlRangoPlazo option:selected").val() }, function (data) {
                 reconstruirHandsontable(data);
             }).done(function () {
                 $("#overlay").hide();
             });
+        }
+        function fnCallChartsService() {
+            let IdeClienteProducto = $("#IdeClienteProducto").text();
+            if (IdeClienteProducto == undefined || IdeClienteProducto == null || IdeClienteProducto == 0) {
+                return;
+            }
+            $("#overlay").show();
+            $.getJSON('@Url.Action("JSON_ReporteComposicion")', { ide_cliente_producto: IdeClienteProducto }, function (data) {
+                updateChart1(data);
+                updateChart2(data);
+                updateChart3(data);
+            }).done(function () {
+                $("#overlay").hide();
+            });
+        }
+
+
+        $("#Seccion02").click(function () {
+            fnCallHandsontableService();
+        });
+        $("#Seccion03").click(function () {
+            fnCallChartsService();
+        });
+
+        $("#ddlRangoTasa, #ddlRangoPlazo").change(function () {
+            fnCallHandsontableService();
         });
 
         const totalizer = {

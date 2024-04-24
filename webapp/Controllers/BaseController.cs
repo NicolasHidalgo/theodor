@@ -138,7 +138,6 @@ namespace webapp.Controllers
                     user.OpcionesData = listOpc.AsEnumerable();
 
                     Session["Usuario"] = user;
-
                 }
                 if (requestContext.HttpContext.Request.HttpMethod != "POST")
                 {

@@ -22,184 +22,43 @@ namespace webapp.Controllers
             var user = (SEG_USUARIO_BE)Session["Usuario"];
 
             //string ip = Request.UserHostAddress;
+            viewModel.IdeClienteProducto = 0;
 
-            var model = new REN_SIM_REQ_BE();
-            model.cod_suscriptor = user.SUSCRIPTOR;
-            model.ide_cliente_producto = 0;
-            viewModel.IdeClienteProducto = model.ide_cliente_producto;
-
-            // combos independientes
-            model.accion = "moneda";
-            var dataMoneda = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlMoneda = dataMoneda.Select(x => new ExtendedSelectListItem
+            var dataInfo = new REN_INFO_BE();
+            if (Session["dataInfo"] == null)
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
-            });
-            model.accion = "canal_atencion";
-            var dataCanalAtencion = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlCanalAtencion = dataCanalAtencion.Select(x => new ExtendedSelectListItem
-            {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
-            });
-            /*
-            model.accion = "periodicidad";
-            var dataPeriocidad = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlPeriocidad = dataPeriocidad.Select(x => new ExtendedSelectListItem
-            {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
-            });*/
-            model.accion = "amortizacion";
-            var dataAmortizacion = bl.fn_ren_sel_ddl(model);
-            var amortizacion = new GEN_DDL_BE();
-            if (dataAmortizacion != null && dataAmortizacion.Count > 0)
-            {
-                amortizacion.Value = dataAmortizacion.FirstOrDefault().Value;
-                amortizacion.Text = dataAmortizacion.FirstOrDefault().Text;
+                dataInfo = bl.fn_ren_sel_info("INFO1", user.SUSCRIPTOR);
+                Session["dataInfo"] = dataInfo;
             }
-            viewModel.amortizacion = amortizacion;
-            // fin combos independientes
-
-            model.accion = "personeria";
-            var dataPersoneria = bl.fn_ren_sel_ddl(model);
-            var personeriaSelected = dataPersoneria.FirstOrDefault();
-            viewModel.ddlPersoneria = dataPersoneria.Select(x => new ExtendedSelectListItem
+            else
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = x.Value == personeriaSelected.Value,
-            });
+                dataInfo = (REN_INFO_BE)Session["dataInfo"];
+            }
 
-            // ddl dependientes de personeria
-            /*
-            model.accion = "tip_documento";
-            model.cod_personeria = personeriaSelected.Value;
-            var dataTipDoc = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlTipDocumento = dataTipDoc.Select(x => new ExtendedSelectListItem
+            viewModel.ddlMoneda = dataInfo.lstMoneda.Select(x => new ExtendedSelectListItem
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected,
             });
-
-            model.accion = "tip_cliente";
-            var dataTipCliente = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlTipCliente = dataTipCliente.Select(x => new ExtendedSelectListItem
+            viewModel.ddlCanalAtencion = dataInfo.lstCanal.Select(x => new ExtendedSelectListItem
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected,
             });
-            // fin ddl dependientes de personeria
-            */
-
-
-            model.accion = "operacion";
-            var dataOperacion = bl.fn_ren_sel_ddl(model);
-            var operacionSelected = dataOperacion.FirstOrDefault();
-            viewModel.ddlOperacion = dataOperacion.Select(x => new ExtendedSelectListItem
+            viewModel.ddlPersoneria = dataInfo.lstPersoneria.Select(x => new ExtendedSelectListItem
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = x.Value == operacionSelected.Value,
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected,
             });
-
-            // ddl dependientes de operacion
-            /*
-            model.accion = "producto";
-            model.cod_operacion = operacionSelected.Value;
-            var dataProducto = bl.fn_ren_sel_ddl(model);
-            var productoSelected = dataProducto.FirstOrDefault();
-            viewModel.ddlProducto = dataProducto.Select(x => new ExtendedSelectListItem
+            viewModel.ddlOperacion = dataInfo.lstOperacion.Select(x => new ExtendedSelectListItem
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = x.Value == productoSelected.Value,
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected,
             });
-
-            model.accion = "clasificacion_interna";
-            var dataClasificacionInt = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlClasificacionInterna = dataClasificacionInt.Select(x => new ExtendedSelectListItem
-            {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
-            });
-
-            model.accion = "clasificacion_externa";
-            var dataClasificacionExt = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlClasificacionExterna = dataClasificacionExt.Select(x => new ExtendedSelectListItem
-            {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
-            });
-
-
-            model.accion = "comision_servicio";
-            model.cod_producto = int.Parse(productoSelected.Value);
-            var dataComisionServicio = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlComisionServicio = dataComisionServicio.Select(x => new ExtendedSelectListItem
-            {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
-            });
-
-            model.accion = "garantia_real";
-            var dataGarantiaReal = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlGarantiaReal = dataGarantiaReal.Select(x => new ExtendedSelectListItem
-            {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
-            });
-
-            model.accion = "garantia_personal";
-            var dataGarantiaPersonal = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlGarantiaPersonal = dataGarantiaPersonal.Select(x => new ExtendedSelectListItem
-            {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
-            });
-
-            model.accion = "clasificacion_garantia";
-            var dataClasificacionGarantia = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlClasificacionGarantia = dataClasificacionGarantia.Select(x => new ExtendedSelectListItem
-            {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
-            });
-            // fin ddl dependientes de operacion
-            */
-
-            /*
-            var dataPYG = bl.fn_ren_pyg(model.ide_cliente_producto);
-            viewModel.dataPYG = dataPYG;
-
-            model.accion = "@Resumen_escenarios";
-            var dataResEsc = bl.fn_ren_resumenEsc(model);
-            viewModel.dataResEsc = dataResEsc;
-
-            var dataRoracRes = bl.fn_ren_vis_clienteProducto_Resumen(model.ide_cliente_producto);
-            viewModel.dataRoracRes = dataRoracRes;
-
-            var dataRoracTbl = bl.fn_ren_vis_clienteProducto_Tabla(model.ide_cliente_producto, 0.001, 1, 100);
-            viewModel.dataRoracTbl = dataRoracTbl;
-
-            var dataRorac = bl.fn_ren_vis_clienteProducto_Tabla(model.ide_cliente_producto, 0.001, 1, 10);
-            viewModel.dataRorac = dataRorac.FirstOrDefault();
-
-            var dataComposicion = bl.fn_ren_vis_clienteProducto_Composicion(model.ide_cliente_producto);
-            viewModel.dataComposicion = dataComposicion;
-            */
 
             return View(viewModel);
         }
@@ -212,27 +71,32 @@ namespace webapp.Controllers
             }
             var user = (SEG_USUARIO_BE)Session["Usuario"];
             var viewModel = new AuxiliarEdit();
-            var model = new REN_SIM_REQ_BE();
-
-            model.cod_suscriptor = user.SUSCRIPTOR;
-            model.ide_cliente_producto = 0;
-            model.accion = "tip_documento";
-            model.cod_personeria = codPersoneria;
-            var dataTipDoc = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlTipDocumento = dataTipDoc.Select(x => new ExtendedSelectListItem
+            var dataInfo = new REN_INFO_BE();
+            if (Session["dataInfo"] == null)
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false
+                dataInfo = bl.fn_ren_sel_info("INFO1", user.SUSCRIPTOR);
+                Session["dataInfo"] = dataInfo;
+            }
+            else
+            {
+                dataInfo = (REN_INFO_BE)Session["dataInfo"];
+            }
+
+            viewModel.ddlTipDocumento = dataInfo.lstTipDocumento
+                                        .Where(x => x.cod_personeria.Equals("@") || x.cod_personeria.Equals(codPersoneria))
+                                        .Select(x => new ExtendedSelectListItem
+            {
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected
             });
-
-            model.accion = "tip_cliente";
-            var dataTipCliente = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlTipCliente = dataTipCliente.Select(x => new ExtendedSelectListItem
+            viewModel.ddlTipCliente = dataInfo.lstTipCliente
+                                        .Where(x => x.cod_personeria.Equals("@") || x.cod_personeria.Equals(codPersoneria))
+                                        .Select(x => new ExtendedSelectListItem
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected
             });
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
@@ -245,74 +109,64 @@ namespace webapp.Controllers
             }
             var user = (SEG_USUARIO_BE)Session["Usuario"];
             var viewModel = new AuxiliarEdit();
-            var model = new REN_SIM_REQ_BE();
-            model.cod_suscriptor = user.SUSCRIPTOR;
-
-            model.accion = "producto";
-            model.cod_operacion = codOperacion;
-            var dataProducto = bl.fn_ren_sel_ddl(model);
-            var productoSelected = dataProducto.FirstOrDefault();
-            viewModel.ddlProducto = dataProducto.Select(x => new ExtendedSelectListItem
+            var dataInfo = new REN_INFO_BE();
+            if (Session["dataInfo"] == null)
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = x.Value == productoSelected.Value,
-            });
-
-            model.accion = "amortizacion";
-            model.ide_cliente_producto = ide_cliente_producto;
-            var dataAmortizacion = bl.fn_ren_sel_ddl(model);
-            var amortizacion = new GEN_DDL_BE();
-            if (dataAmortizacion != null && dataAmortizacion.Count > 0)
-            {
-                amortizacion.Value = dataAmortizacion.FirstOrDefault().Value;
-                amortizacion.Text = dataAmortizacion.FirstOrDefault().Text;
+                dataInfo = bl.fn_ren_sel_info("INFO1", user.SUSCRIPTOR);
+                Session["dataInfo"] = dataInfo;
             }
-            viewModel.amortizacion = amortizacion;
-            model.ide_cliente_producto = 0;
+            else
+            {
+                dataInfo = (REN_INFO_BE)Session["dataInfo"];
+            }
 
-            model.accion = "clasificacion_interna";
-            var dataClasificacionInt = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlClasificacionInterna = dataClasificacionInt.Select(x => new ExtendedSelectListItem
+            viewModel.ddlProducto = dataInfo.lstProducto
+                                    .Where(x => x.cod_operacion.Equals("@") || x.cod_operacion.Equals(codOperacion))
+                                    .Select(x => new ExtendedSelectListItem
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected
             });
-            model.accion = "clasificacion_externa";
-            var dataClasificacionExt = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlClasificacionExterna = dataClasificacionExt.Select(x => new ExtendedSelectListItem
+            viewModel.ddlClasificacionInterna = dataInfo.lstClasificacionInterna
+                                                .Where(x => x.cod_operacion.Equals("@") || x.cod_operacion.Equals(codOperacion))
+                                                .Select(x => new ExtendedSelectListItem
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected
             });
-
-            model.accion = "garantia_real";
-            var dataGarantiaReal = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlGarantiaReal = dataGarantiaReal.Select(x => new ExtendedSelectListItem
+            viewModel.ddlClasificacionExterna = dataInfo.lstClasificacionExterna
+                                                .Where(x => x.cod_operacion.Equals("@") || x.cod_operacion.Equals(codOperacion))
+                                                .Select(x => new ExtendedSelectListItem
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected
             });
-
-            model.accion = "garantia_personal";
-            var dataGarantiaPersonal = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlGarantiaPersonal = dataGarantiaPersonal.Select(x => new ExtendedSelectListItem
+            viewModel.ddlGarantiaReal = dataInfo.lstGarantiaReal
+                                        .Where(x => x.cod_operacion.Equals("@") || x.cod_operacion.Equals(codOperacion))
+                                        .Select(x => new ExtendedSelectListItem
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected
             });
-
-            model.accion = "clasificacion_garantia";
-            var dataClasificacionGarantia = bl.fn_ren_sel_ddl(model);
-            viewModel.ddlClasificacionGarantia = dataClasificacionGarantia.Select(x => new ExtendedSelectListItem
+            viewModel.ddlGarantiaPersonal = dataInfo.lstGarantiaPersonal
+                                            .Where(x => x.cod_operacion.Equals("@") || x.cod_operacion.Equals(codOperacion))
+                                            .Select(x => new ExtendedSelectListItem
             {
-                Value = x.Value,
-                Text = x.Text,
-                Selected = false,
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected
+            });
+            viewModel.ddlClasificacionGarantia = dataInfo.lstClasificacionGarantia
+                                                    .Where(x => x.cod_operacion.Equals("@") || x.cod_operacion.Equals(codOperacion))
+                                                    .Select(x => new ExtendedSelectListItem
+            {
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected
             });
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
@@ -325,22 +179,20 @@ namespace webapp.Controllers
             }
             var user = (SEG_USUARIO_BE)Session["Usuario"];
             var viewModel = new AuxiliarEdit();
-            var model = new REN_SIM_REQ_BE();
-            model.cod_suscriptor = user.SUSCRIPTOR;
-            model.ide_cliente_producto = ide_cliente_producto;
-            model.cod_producto = int.Parse(codProducto);
-            var comisiones = bl.fn_ren_pro_clienteComision_vista(model.cod_suscriptor, model.ide_cliente_producto);
+            var dataInfo = new REN_INFO_BE();
+            if (Session["dataInfo"] == null)
+            {
+                dataInfo = bl.fn_ren_sel_info("INFO1", user.SUSCRIPTOR);
+                Session["dataInfo"] = dataInfo;
+            }
+            else
+            {
+                dataInfo = (REN_INFO_BE)Session["dataInfo"];
+            }
+            var comisiones = bl.fn_ren_pro_clienteComision_vista(user.SUSCRIPTOR, ide_cliente_producto);
             viewModel.dataComision = comisiones;
 
-            model.accion = "amortizacion";
-            var dataAmortizacion = bl.fn_ren_sel_ddl(model);
-            var amortizacion = new GEN_DDL_BE();
-            if (dataAmortizacion != null && dataAmortizacion.Count > 0)
-            {
-                amortizacion.Value = dataAmortizacion.FirstOrDefault().Value;
-                amortizacion.Text = dataAmortizacion.FirstOrDefault().Text;
-            }
-            viewModel.amortizacion = amortizacion;
+            viewModel.amortizacion = dataInfo.lstProducto.Where(x => x.cod.Equals(codProducto)).FirstOrDefault().nom2;
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
@@ -369,21 +221,13 @@ namespace webapp.Controllers
             model.accion = "@EDITAR";
             model.cod_suscriptor = user.SUSCRIPTOR;
             model.ide_cliente_producto = IdeClienteProducto;
-            viewModel.simData = bl.fn_ren_pro_get(model);
+            var simData = bl.fn_ren_pro_get(model);
+            viewModel.simData = simData;
             model.ide_cliente_producto = viewModel.simData.ide_cliente_producto;
 
             var comision = bl.fn_ren_pro_clienteComision_vista(model.cod_suscriptor, model.ide_cliente_producto);
             viewModel.dataComision = comision;
-
-            model.accion = "amortizacion";
-            var dataAmortizacion = bl.fn_ren_sel_ddl(model);
-            var amortizacion = new GEN_DDL_BE();
-            if (dataAmortizacion != null && dataAmortizacion.Count > 0)
-            {
-                amortizacion.Value = dataAmortizacion.FirstOrDefault().Value;
-                amortizacion.Text = dataAmortizacion.FirstOrDefault().Text;
-            }
-            viewModel.amortizacion = amortizacion;
+            viewModel.amortizacion = simData.cod_tip_amortizacion.ToString();
 
             var dataPYG = bl.fn_ren_pyg(model.ide_cliente_producto);
             viewModel.dataPYG = dataPYG;
@@ -395,6 +239,7 @@ namespace webapp.Controllers
             var dataRoracRes = bl.fn_ren_vis_clienteProducto_Resumen(model.ide_cliente_producto);
             viewModel.dataRoracRes = dataRoracRes;
 
+            /*
             var dataRoracTbl = bl.fn_ren_vis_clienteProducto_Tabla(model.ide_cliente_producto, 0.001, 1, 100);
             viewModel.dataRoracTbl = dataRoracTbl;
 
@@ -403,6 +248,7 @@ namespace webapp.Controllers
 
             var dataComposicion = bl.fn_ren_vis_clienteProducto_Composicion(model.ide_cliente_producto);
             viewModel.dataComposicion = dataComposicion;
+            */
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
@@ -417,6 +263,12 @@ namespace webapp.Controllers
             viewModel.dataRorac = dataRorac.FirstOrDefault();
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult JSON_ReporteComposicion(long ide_cliente_producto)
+        {
+            var dataComposicion = bl.fn_ren_vis_clienteProducto_Composicion(ide_cliente_producto);
+            return Json(dataComposicion, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -456,6 +308,7 @@ namespace webapp.Controllers
                 var dataRoracRes = bl.fn_ren_vis_clienteProducto_Resumen(_sim.ide_cliente_producto);
                 viewModel.dataRoracRes = dataRoracRes;
 
+                /*
                 var dataRoracTbl = bl.fn_ren_vis_clienteProducto_Tabla(_sim.ide_cliente_producto, _sim.incremento_tasa, _sim.incremento_plazo, 100);
                 viewModel.dataRoracTbl = dataRoracTbl;
 
@@ -464,16 +317,7 @@ namespace webapp.Controllers
 
                 var dataComposicion = bl.fn_ren_vis_clienteProducto_Composicion(_sim.ide_cliente_producto);
                 viewModel.dataComposicion = dataComposicion;
-
-                req.accion = "amortizacion";
-                var dataAmortizacion = bl.fn_ren_sel_ddl(req);
-                var amortizacion = new GEN_DDL_BE();
-                if (dataAmortizacion != null && dataAmortizacion.Count > 0)
-                {
-                    amortizacion.Value = dataAmortizacion.FirstOrDefault().Value;
-                    amortizacion.Text = dataAmortizacion.FirstOrDefault().Text;
-                }
-                viewModel.amortizacion = amortizacion;
+                */
 
                 res.Data = viewModel;
 
@@ -509,7 +353,6 @@ namespace webapp.Controllers
 
                 var res = new Response();
                 res.Message = reply.MENSAJE;
-                res.Data = viewModel;
 
                 res.Status = HttpStatusCode.BadRequest;
 
@@ -564,6 +407,7 @@ namespace webapp.Controllers
                 var dataRoracRes = bl.fn_ren_vis_clienteProducto_Resumen(_com.ide_cliente_producto);
                 viewModel.dataRoracRes = dataRoracRes;
 
+                /*
                 var dataRoracTbl = bl.fn_ren_vis_clienteProducto_Tabla(_com.ide_cliente_producto, _com.incremento_tasa, _com.incremento_plazo, 100);
                 viewModel.dataRoracTbl = dataRoracTbl;
 
@@ -572,16 +416,7 @@ namespace webapp.Controllers
 
                 var dataComposicion = bl.fn_ren_vis_clienteProducto_Composicion(_com.ide_cliente_producto);
                 viewModel.dataComposicion = dataComposicion;
-
-                req.accion = "amortizacion";
-                var dataAmortizacion = bl.fn_ren_sel_ddl(req);
-                var amortizacion = new GEN_DDL_BE();
-                if (dataAmortizacion != null && dataAmortizacion.Count > 0)
-                {
-                    amortizacion.Value = dataAmortizacion.FirstOrDefault().Value;
-                    amortizacion.Text = dataAmortizacion.FirstOrDefault().Text;
-                }
-                viewModel.amortizacion = amortizacion;
+                */
 
                 res.Data = viewModel;
 

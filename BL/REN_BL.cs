@@ -16,6 +16,44 @@ namespace BL
         {
             return dat.fn_ren_sel_ddl(model);
         }
+        public REN_INFO_BE fn_ren_sel_info(string accion, long cod_suscriptor)
+        {
+            var info = new REN_INFO_BE();
+            var data = dat.fn_ren_sel_info(accion, cod_suscriptor);
+            var empty = new GEN_INFO_BE();
+            empty.cod = "";
+            empty.nom = "";
+            empty.cod_personeria = "@";
+            empty.cod_operacion = "@";
+            empty.selected = true;
+
+            info.lstOperacion = data.Where(x => x.info.Equals("OPERACION")).ToList();
+            info.lstOperacion.Add(empty);
+            info.lstCanal = data.Where(x => x.info.Equals("CANAL")).ToList();
+            info.lstCanal.Add(empty);
+            info.lstMoneda = data.Where(x => x.info.Equals("MONEDA")).ToList();
+            info.lstMoneda.Add(empty);
+            info.lstPersoneria = data.Where(x => x.info.Equals("PERSONERIA")).ToList();
+            info.lstPersoneria.Add(empty);
+            info.lstTipDocumento = data.Where(x => x.info.Equals("TIP_DOCUMENTO")).ToList();
+            info.lstTipDocumento.Add(empty);
+            info.lstTipCliente = data.Where(x => x.info.Equals("TIP_CLIENTE")).ToList();
+            info.lstTipCliente.Add(empty);
+            info.lstProducto = data.Where(x => x.info.Equals("PRODUCTO")).ToList();
+            info.lstProducto.Add(empty);
+            info.lstClasificacionInterna = data.Where(x => x.info.Equals("CLASIFICACION_INTERNA")).ToList();
+            info.lstClasificacionInterna.Add(empty);
+            info.lstClasificacionExterna = data.Where(x => x.info.Equals("CLASIFICACION_EXTERNA")).ToList();
+            info.lstClasificacionExterna.Add(empty);
+            info.lstGarantiaReal = data.Where(x => x.info.Equals("GARANTIA_REAL")).ToList();
+            info.lstGarantiaReal.Add(empty);
+            info.lstGarantiaPersonal = data.Where(x => x.info.Equals("GARANTIA_PERSONAL")).ToList();
+            info.lstGarantiaPersonal.Add(empty);
+            info.lstClasificacionGarantia = data.Where(x => x.info.Equals("CLASIFICACION_GARANTIA")).ToList();
+            info.lstClasificacionGarantia.Add(empty);
+
+            return info;
+        }
         public List<REN_PYG_BE> fn_ren_pyg(long idClienteProducto)
         {
             return dat.fn_ren_pyg(idClienteProducto);

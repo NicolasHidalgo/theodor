@@ -16,6 +16,55 @@ namespace DA
         {
             Mensaje += e.Message + "\n";
         }
+        public List<GEN_INFO_BE> fn_ren_sel_info(string accion, long cod_suscriptor)
+        {
+            Mensaje = string.Empty;
+            List<GEN_INFO_BE> lista = new List<GEN_INFO_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_pro_clienteProducto]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 50).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = cod_suscriptor;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    GEN_INFO_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new GEN_INFO_BE();
+                        if (accion.Equals("INFO1"))
+                        {
+                            bean.info = DataReader.SafeGetString(dr, dr.GetOrdinal("info"));
+                            bean.cod = DataReader.SafeGetString(dr, dr.GetOrdinal("cod"));
+                            bean.nom = DataReader.SafeGetString(dr, dr.GetOrdinal("nom"));
+                            bean.nom2 = DataReader.SafeGetString(dr, dr.GetOrdinal("nom2"));
+                            bean.cod_personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_personeria"));
+                            bean.cod_operacion = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_operacion"));
+                        }
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
         public List<GEN_DDL_BE> fn_ren_sel_ddl(REN_SIM_REQ_BE model)
         {
             Mensaje = string.Empty;
@@ -743,6 +792,7 @@ namespace DA
                         bean.monto_garantia_personal = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("monto_garantia_personal"));
                         bean.cod_clasificacion_garantia = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_clasificacion_garantia"));
                         bean.cod_modelo_rorac = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_modelo_rorac"));
+                        bean.cod_tip_amortizacion = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_tip_amortizacion"));
                     }
                 }
             }
