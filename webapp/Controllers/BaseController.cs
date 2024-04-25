@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Web;
@@ -65,17 +66,16 @@ namespace webapp.Controllers
                 //Response.End();
 
                 if (requestContext.HttpContext.Request.HttpMethod == "POST")
-                {
+                {              
+                    /*
                     var jsonString = "{\"Status\":400,\"Message\": \"666: FIN SESION\" }";
-                    byte[] data = Encoding.UTF8.GetBytes(jsonString);
-
                     requestContext.HttpContext.Response.Clear();
                     requestContext.HttpContext.Response.Write(jsonString);
                     requestContext.HttpContext.Response.ContentType = "application/json";
+                    */
                 }
                 else
                 {
-                    var user = HttpContext.GetOwinContext().Authentication.User;
                     requestContext.HttpContext.Response.Clear();
                     var routeData = new RouteData();
                     routeData.Values.Add("controller", "Login");

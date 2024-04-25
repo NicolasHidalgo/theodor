@@ -1402,13 +1402,7 @@
             fnNuevo();
         });
         $("#btnCancelar").on("click", function () {
-            $("#IdeClienteProducto").text('0');
-            $("#Seccion01").click();
-            fnCleanControles();
-            fnCleanReports();
-            $("#btnSimular,#btnFin,#btnFin2,#btnCancelar").addClass("hidden");
-            $("#btnNuevo,#btnEditar").removeClass("hidden");
-            $('input,select').prop('disabled', true);
+            fnGrabar('cancelar');
         });
         $("#btnEditar").on("click", function () {
             $("#overlay").show();
@@ -1686,6 +1680,9 @@
             if (act == 'fin2') {
                 action = '@@FIN2';
             }
+            if (act == 'cancelar') {
+                action = '@@CANCELAR';
+            }
 
             $("#overlay").show();
             var _obj = {
@@ -1731,7 +1728,7 @@
             $.post(_url, _reply).done(function (data) {
                 if (data.Status === 200) {
                     //toastr.success(data.Message);
-                    if (act == 'fin' || act == 'fin2') {
+                    if (act == 'fin' || act == 'fin2' || act == 'cancelar') {
                         $("#IdeClienteProducto").text('0');
                         fnCleanControles();
                         fnCleanReports();
