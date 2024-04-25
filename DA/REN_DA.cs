@@ -545,6 +545,7 @@ namespace DA
             cmd.Parameters.Add("@cod_periodicidad", System.Data.SqlDbType.Int).Value = param.cod_periodicidad;
             cmd.Parameters.Add("@porcentaje", System.Data.SqlDbType.Float).Value = param.Porcentaje;
             cmd.Parameters.Add("@comision", System.Data.SqlDbType.Float).Value = param.Comision;
+            cmd.Parameters.Add("@tip_valor", System.Data.SqlDbType.Char).Value = param.tip_valor;
 
             try
             {
@@ -793,6 +794,7 @@ namespace DA
                         bean.cod_clasificacion_garantia = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_clasificacion_garantia"));
                         bean.cod_modelo_rorac = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_modelo_rorac"));
                         bean.cod_tip_amortizacion = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_tip_amortizacion"));
+                        bean.tip_amortizacion = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_amortizacion"));
                     }
                 }
             }

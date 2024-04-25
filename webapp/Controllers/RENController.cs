@@ -227,7 +227,6 @@ namespace webapp.Controllers
 
             var comision = bl.fn_ren_pro_clienteComision_vista(model.cod_suscriptor, model.ide_cliente_producto);
             viewModel.dataComision = comision;
-            viewModel.amortizacion = simData.cod_tip_amortizacion.ToString();
 
             var dataPYG = bl.fn_ren_pyg(model.ide_cliente_producto);
             viewModel.dataPYG = dataPYG;
@@ -294,19 +293,24 @@ namespace webapp.Controllers
 
 
                 var viewModel = new AuxiliarEdit();
-                var req = new REN_SIM_REQ_BE();
 
-                var dataPYG = bl.fn_ren_pyg(_sim.ide_cliente_producto);
-                viewModel.dataPYG = dataPYG;
+                if (model.ACCION.Equals("@GRABAR")) // grabar = simular
+                {
+                    var req = new REN_SIM_REQ_BE();
 
-                req.accion = "@Resumen_escenarios";
-                req.cod_suscriptor = user.SUSCRIPTOR;
-                req.ide_cliente_producto = _sim.ide_cliente_producto;
-                var dataResEsc = bl.fn_ren_resumenEsc(req);
-                viewModel.dataResEsc = dataResEsc;
+                    var dataPYG = bl.fn_ren_pyg(_sim.ide_cliente_producto);
+                    viewModel.dataPYG = dataPYG;
 
-                var dataRoracRes = bl.fn_ren_vis_clienteProducto_Resumen(_sim.ide_cliente_producto);
-                viewModel.dataRoracRes = dataRoracRes;
+                    req.accion = "@Resumen_escenarios";
+                    req.cod_suscriptor = user.SUSCRIPTOR;
+                    req.ide_cliente_producto = _sim.ide_cliente_producto;
+                    var dataResEsc = bl.fn_ren_resumenEsc(req);
+                    viewModel.dataResEsc = dataResEsc;
+
+                    var dataRoracRes = bl.fn_ren_vis_clienteProducto_Resumen(_sim.ide_cliente_producto);
+                    viewModel.dataRoracRes = dataRoracRes;
+                }
+                
 
                 /*
                 var dataRoracTbl = bl.fn_ren_vis_clienteProducto_Tabla(_sim.ide_cliente_producto, _sim.incremento_tasa, _sim.incremento_plazo, 100);

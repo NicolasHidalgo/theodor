@@ -15,15 +15,15 @@ namespace BEANS
         }
         public string accion { get; set; }
         public Int64 cod_suscriptor { get; set; }
-        public Int64 ide_cliente { get; set; }
-        public int cod_tip_documento { get; set; }
+        public Int64? ide_cliente { get; set; }
+        public int? cod_tip_documento { get; set; }
         public string num_documento { get; set; }
         public string nom_cliente { get; set; }
         public string cod_personeria { get; set; }
         public string cod_tip_cliente { get; set; }
-        public int cod_tip_prospecto { get; set; }
+        public int? cod_tip_prospecto { get; set; }
         public Int64 ide_cliente_producto { get; set; }
-        public int cod_producto { get; set; }
+        public int? cod_producto { get; set; }
         public string cod_operacion { get; set; }
         public int? cod_moneda { get; set; }
         public double? monto { get; set; }
@@ -39,10 +39,11 @@ namespace BEANS
         public int? cod_moneda_garantia_personal { get; set; }
         public double? monto_garantia_personal { get; set; }
         public string cod_clasificacion_garantia { get; set; }
-        public int cod_modelo_rorac { get; set; }
+        public int? cod_modelo_rorac { get; set; }
         public Int64 ide_usuario { get; set; }
         public double incremento_tasa { get; set; }
         public double incremento_plazo { get; set; }
-        public int cod_tip_amortizacion { get; set; }
+        public int? cod_tip_amortizacion { get; set; }
+        public string tip_amortizacion { get; set; }
     }
 }

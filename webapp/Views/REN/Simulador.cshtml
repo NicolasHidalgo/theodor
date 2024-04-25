@@ -207,6 +207,14 @@
     <!-- /page header -->
     <!-- Content area -->
     <div class="content" style="padding-top:0px;">
+
+        <!-- Bordered alerts -->
+        <div id="alertSim" class="alert alert-danger alert-bordered hidden">
+            <button type="button" class="close" onclick="fOnAlertClose()"><span>&times;</span><span class="sr-only">Close</span></button>
+            <span id="alertText" class="text-semibold">Errores</span>
+        </div>
+        <!-- /bordered alerts -->
+
         <!-- Vertical form options -->
         <div class="row">
             <div class="col-md-12">
@@ -215,18 +223,18 @@
                     <div class="panel-heading">
                         <i class="icon-file-empty position-left icon-custom-style" title="Nuevo" id="btnNuevo"></i>
                         <i class="icon-pencil position-left icon-custom-style" title="Editar" id="btnEditar"></i>
-                        <i class="icon-sync position-left icon-custom-style hidden" title="Simular" id="btnSimular"></i>
-                        <i class="icon-floppy-disk position-left icon-custom-style hidden" title="Fin" id="btnFin"></i>
+                        <i class="icon-sync position-left icon-custom-style hidden" title="Refrescar" id="btnSimular"></i>
+                        <i class="icon-floppy-disk position-left icon-custom-style hidden" title="Guardar" id="btnFin"></i>
                         <i class="icon-floppy-disks position-left icon-custom-style hidden" title="Guardar como" id="btnFin2"></i>
                         <i class="icon-x position-left icon-custom-style hidden" title="Cancelar" id="btnCancelar"></i>
                         <!--<i class="icon-envelop4 position-left" style="font-size:25px"></i>-->
                         <div class="heading-elements">
 
                             <!--<ul class="icons-list">
-        <li><a data-action="collapse"></a></li>
-        <li><a data-action="reload"></a></li>
-        <li><a data-action="close"></a></li>
-                                </ul>-->
+                        <li><a data-action="collapse"></a></li>
+                        <li><a data-action="reload"></a></li>
+                        <li><a data-action="close"></a></li>
+                                                </ul>-->
                         </div>
                     </div>
 
@@ -326,15 +334,15 @@
                                                     <label>Amortización</label>
                                                     <input type="text" id="txtAmortizacion" value="" class="form-control" readonly />
                                                     <!--
-                                                    <select id="ddlAmortizacion" name="ddlAmortizacion" class="select" disabled>
-                                                        <option value="1">Cuotas Constantes</option>
-                                                        <option value="2">Amortización de intereses y capital al vencimiento</option>
-                                                        <option value="3">Revolventes</option>
-                                                        <option value="4">Descuentos</option>
-                                                        <option value="5">Interes y capital al vencimiento</option>
-                                                        <option value="6"></option>
-                                                    </select>
-                                                        -->
+                                                <select id="ddlAmortizacion" name="ddlAmortizacion" class="select" disabled>
+                                                    <option value="1">Cuotas Constantes</option>
+                                                    <option value="2">Amortización de intereses y capital al vencimiento</option>
+                                                    <option value="3">Revolventes</option>
+                                                    <option value="4">Descuentos</option>
+                                                    <option value="5">Interes y capital al vencimiento</option>
+                                                    <option value="6"></option>
+                                                </select>
+                                                    -->
                                                 </div>
                                             </div>
 
@@ -803,17 +811,22 @@
 
     var fSeleccionar;
     var fComisionChange;
+    var fOnAlertClose
 
     $(document).ready(function () {
 
         $('input,select').prop('disabled', true);
 
+        fOnAlertClose = function () {
+            $("#alertSim").addClass('hidden');
+        }
+
         fSeleccionar = function (Id) {
             $('#editModal').modal('hide');
             $("#overlay").show();
-            $("#btnNuevo,#btnEditar").addClass("hidden");
-            $("#btnSimular,#btnFin,#btnFin2,#btnCancelar").removeClass("hidden");
             $.getJSON('@Url.Action("JSON_Get")', { IdeClienteProducto: Id }, function (data) {
+                $("#btnNuevo,#btnEditar").addClass("hidden");
+                $("#btnSimular,#btnFin,#btnFin2,#btnCancelar").removeClass("hidden");
                 var simData = data.simData;
                 $("#IdeClienteProducto").text(simData.ide_cliente_producto);
                 $("input:radio[name=rbTipProspecto][value=" + simData.cod_tip_prospecto + "]").prop('checked', true);
@@ -830,7 +843,6 @@
                 } else {
 
                 }
-
                 //$("#ddlProducto").val(data.cod_producto).change();
                 //$("#ddlMoneda").val(data.cod_moneda).change();
                 //$("#txtMonto").val(data.monto);
@@ -853,11 +865,11 @@
                 reconstruirReportePYG(data);
                 reconstruirReporteResumenEscenario(data);
                 reconstruirReporteRoracRes(data);
-                reconstruirHandsontable(data);
-                updateChart1(data.dataComposicion);
-                updateChart2(data.dataComposicion);
-                updateChart3(data.dataComposicion);
-                $("#txtAmortizacion").val(data.amortizacion);
+                //reconstruirHandsontable(data);
+                //updateChart1(data.dataComposicion);
+                //updateChart2(data.dataComposicion);
+                //updateChart3(data.dataComposicion);
+                $("#txtAmortizacion").val(data.simData.tip_amortizacion);
 
             }).done(function () {
                 console.log("fSeleccionar");
@@ -1360,14 +1372,6 @@
             $("#tbodyComision").empty();
             $('#FormSim input:text').val('').trigger('change', 'clean');
             $('#FormSim select').val('').trigger('change', 'clean');
-            /*
-            $("#ddlPersoneria").val('').trigger('change', 'clean');
-            $("#ddlOperacion").val('').trigger('change', 'clean');
-            $("#ddlMoneda").val('').trigger('change', 'clean');
-            $("#ddlCanalAtencion").val('').trigger('change', 'clean');
-            $("#ddlMonedaReal").val('').trigger('change', 'clean');
-            $("#ddlMonedaPersonal").val('').trigger('change', 'clean');
-            */
         }
         function fnCleanReports() {
             $("#tbodyPYG").empty();
@@ -1395,10 +1399,6 @@
 
         /** BOTONES */
         $("#btnNuevo").on("click", function () {
-            fnCleanControles();
-            fnCleanReports();
-            $("#btnSimular,#btnFin,#btnFin2,#btnCancelar").removeClass("hidden");
-            $("#btnNuevo,#btnEditar").addClass("hidden");
             fnNuevo();
         });
         $("#btnCancelar").on("click", function () {
@@ -1488,11 +1488,15 @@
 
         function fnNuevo() {
             $("#overlay").show();
-
             var _url = '@Url.Action("New", "REN")';
-
             $.post(_url).done(function (data) {
                 if (data.Status === 200) {
+
+                    fnCleanControles();
+                    fnCleanReports();
+                    $("#btnSimular,#btnFin,#btnFin2,#btnCancelar").removeClass("hidden");
+                    $("#btnNuevo,#btnEditar").addClass("hidden");
+
                     toastr.success('Nueva simulación aperturada');
                     $('input,select').prop('disabled', false);
                     $("#IdeClienteProducto").text(data.Data.simData.ide_cliente_producto);
@@ -1530,7 +1534,7 @@
                     simbolo = "$";
                 }
                 if (tipValor == "%") {
-                    valor = data.Porcentaje;
+                    valor = getPorcentajeNum(data.Porcentaje);
                     className = 'maskPercent';
                     simbolo = "%";
                 }
@@ -1539,7 +1543,6 @@
             cadena += "<input type='text' id='txtComisionValor" + data.ide_comision + "' onchange='fComisionChange(" + JSON.stringify(data) + ")' class='form-control " + className + " ' ";
             if (valor == undefined || valor == null) {
                 valor = 0;
-
             }
             cadena += " value='" + valor + "'>";
             cadena += "<span class='input-group-addon'>" + simbolo + "</span>";
@@ -1553,10 +1556,11 @@
             let comision = 0.0;
 
             if (data.tip_valor == "V") {
-                porcentaje = getImporte($("#txtComisionValor" + data.ide_comision).val());
-            }
-            if (data.tip_valor == "%") {
-                comision = getPorcentaje($("#txtComisionValor" + data.ide_comision).val());
+                comision = getImporte($("#txtComisionValor" + data.ide_comision).val());
+            } else if (data.tip_valor == "%") {
+                porcentaje = getPorcentaje($("#txtComisionValor" + data.ide_comision).val());
+            } else {
+                comision = getImporte($("#txtComisionValor" + data.ide_comision).val());
             }
 
             var _obj = {
@@ -1564,7 +1568,7 @@
                 ide_cliente_producto: $("#IdeClienteProducto").text(),
                 ide_comision: data.ide_comision,
                 cod_periodicidad: codPeriodo,
-                //tip_valor: data.tip_valor,
+                tip_valor: data.tip_valor,
                 Porcentaje: porcentaje,
                 Comision: comision,
                 incremento_tasa: $("#ddlRangoTasa option:selected").val(),
@@ -1580,15 +1584,14 @@
 
             $.post(_url, _reply).done(function (data) {
                 if (data.Status === 200) {
-                    toastr.success('Comisión Actualizada');
-                    // reconstruir reportes
+                    //toastr.success('Comisión Actualizada');
                     reconstruirReportePYG(data.Data);
                     reconstruirReporteResumenEscenario(data.Data);
                     reconstruirReporteRoracRes(data.Data);
-                    reconstruirHandsontable(data.Data);
-                    updateChart1(data.Data.dataComposicion);
-                    updateChart2(data.Data.dataComposicion);
-                    updateChart3(data.Data.dataComposicion);
+                    //reconstruirHandsontable(data.Data);
+                    //updateChart1(data.Data.dataComposicion);
+                    //updateChart2(data.Data.dataComposicion);
+                    //updateChart3(data.Data.dataComposicion);
                 }
                 else {
                     toastr.error(data.Message);
@@ -1596,7 +1599,6 @@
             }).done(function () {
                 $("#Seccion01").click();
                 $("#overlay").hide();
-
             });
 
         }
@@ -1729,17 +1731,29 @@
             $.post(_url, _reply).done(function (data) {
                 if (data.Status === 200) {
                     //toastr.success(data.Message);
-                    // reconstruir reportes
-                    reconstruirReportePYG(data.Data);
-                    reconstruirReporteResumenEscenario(data.Data);
-                    reconstruirReporteRoracRes(data.Data);
-                    reconstruirHandsontable(data.Data);
-                    updateChart1(data.Data.dataComposicion);
-                    updateChart2(data.Data.dataComposicion);
-                    updateChart3(data.Data.dataComposicion);
+                    if (act == 'fin' || act == 'fin2') {
+                        $("#IdeClienteProducto").text('0');
+                        fnCleanControles();
+                        fnCleanReports();
+                        $("#btnSimular,#btnFin,#btnFin2,#btnCancelar").addClass("hidden");
+                        $("#btnNuevo,#btnEditar").removeClass("hidden");
+                        $('input,select').prop('disabled', true);
+                    }
+
+                    if (act == 'simular') {
+                        reconstruirReportePYG(data.Data);
+                        reconstruirReporteResumenEscenario(data.Data);
+                        reconstruirReporteRoracRes(data.Data);
+                        //reconstruirHandsontable(data.Data);
+                        //updateChart1(data.Data.dataComposicion);
+                        //updateChart2(data.Data.dataComposicion);
+                        //updateChart3(data.Data.dataComposicion);
+                    }
                 }
                 else {
-                    toastr.error(data.Message);
+                    $("#alertSim").removeClass('hidden');
+                    $("#alertText").text(data.Message);
+                    //toastr.error(data.Message);
                 }
             }).done(function () {
                 $("#Seccion01").click();
