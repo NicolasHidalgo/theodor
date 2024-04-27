@@ -28,28 +28,13 @@ namespace webapp.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            try
+            if (this.Request.IsAuthenticated)
             {
-                if (this.Request.IsAuthenticated)
-                {
-                    if (Session["Usuario"] == null)
-                    {
-                        var ctx = Request.GetOwinContext();
-                        var authenticationManager = ctx.Authentication;
-                        authenticationManager.SignOut(MyAuthentication.ApplicationCookie);
-                        //Session.Abandon();
-                        //return RedirectToAction("Login");
-                    }
-                    else
-                    {
-                        return this.RedirectToLocal(returnUrl);
-                    }
-                }
+                return this.RedirectToLocal(returnUrl);
             }
-            catch (Exception)
+            else
             {
-
-                throw;
+                Session.Abandon();
             }
 
 
@@ -275,7 +260,7 @@ namespace webapp.Controllers
                 // settings
                 claims.Add(new Claim(ClaimTypes.Name, username));
                 //var claimIdentities = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
-                var claimIdentities = new ClaimsIdentity(claims, MyAuthentication.ApplicationCookie);
+                var claimIdentities = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
                 var ctx = Request.GetOwinContext();
                 var authenticationManager = ctx.Authentication;
 
@@ -296,8 +281,7 @@ namespace webapp.Controllers
         {
             var ctx = Request.GetOwinContext();
             var authenticationManager = ctx.Authentication;
-            //authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            authenticationManager.SignOut(MyAuthentication.ApplicationCookie);
+            authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             Session.Abandon();
             return RedirectToAction("Login");
         }

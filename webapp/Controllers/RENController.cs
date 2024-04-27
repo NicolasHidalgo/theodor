@@ -273,10 +273,6 @@ namespace webapp.Controllers
         [HttpPost]
         public ActionResult Edit(GEN_REPLY_BE model)
         {
-            if (!this.Request.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "SEG");
-            }
             if (ModelState.IsValid)
             {
                 var _obj = (string[])model.DATA;
@@ -344,10 +340,6 @@ namespace webapp.Controllers
         [HttpPost]
         public ActionResult New()
         {
-            if (!this.Request.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "SEG");
-            }
             if (ModelState.IsValid)
             {
                 var viewModel = new AuxiliarEdit();
@@ -388,10 +380,6 @@ namespace webapp.Controllers
         [HttpPost]
         public ActionResult EditComision(GEN_REPLY_BE model)
         {
-            if (!this.Request.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "SEG");
-            }
             if (ModelState.IsValid)
             {
                 var viewModel = new AuxiliarEdit();

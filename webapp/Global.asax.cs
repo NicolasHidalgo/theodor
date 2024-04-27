@@ -8,6 +8,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Web.Security;
 using webapp.Controllers;
 
 namespace webapp
@@ -38,6 +39,51 @@ namespace webapp
         protected void Application_EndRequest()
         {
             //MiniProfiler.Stop();
+            // con esto controlo la autenticacion si via por ajax
+            if (!this.Request.IsAuthenticated && Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                Context.Response.Clear();
+                Context.Response.StatusCode = 401;
+            }
+
+
+            /*
+            var context = new HttpContextWrapper(Context);
+            // MVC retuns a 302 for unauthorized ajax requests so alter to request status to be a 401
+            if (context.Response.StatusCode == 302 && context.Request.IsAjaxRequest() && !context.Request.IsAuthenticated)
+            {
+                context.Response.Clear();
+                context.Response.StatusCode = 401;
+            }
+            */
+
+            /*
+            var context = new HttpContextWrapper(Context);
+            // MVC returns a 302 for unauthorized ajax requests so alter to request status to be a 401
+
+            if (context.Response.StatusCode == 302 && context.Request.IsAjaxRequest())
+            {
+                //Unfortunately the redirect also clears the results of any authentication
+                //Try to manually authenticate the user...
+                var authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
+                if (authCookie != null)
+                {
+                    var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+                    if (authTicket != null && !authTicket.Expired)
+                    {
+                        var roles = authTicket.UserData.Split(',');
+                        HttpContext.Current.User = new System.Security.Principal.GenericPrincipal(new FormsIdentity(authTicket), roles);
+                    }
+                }
+
+                if (!context.Request.IsAuthenticated)
+                {
+                    context.Response.Clear();
+                    context.Response.StatusCode = 401;
+                }
+
+            }
+            */
         }
         public void Application_Error(Object sender, EventArgs e)
         {

@@ -811,9 +811,16 @@
 
     var fSeleccionar;
     var fComisionChange;
-    var fOnAlertClose
+    var fOnAlertClose;
+
+    $(document).ajaxError(function (e, xhr, settings) {
+        if (xhr.status == 401) {
+            window.location.href = '@Url.Action("Login", "Login")';
+        }
+    });
 
     $(document).ready(function () {
+
 
         $('input,select').prop('disabled', true);
 
@@ -831,34 +838,20 @@
                 $("#IdeClienteProducto").text(simData.ide_cliente_producto);
                 $("input:radio[name=rbTipProspecto][value=" + simData.cod_tip_prospecto + "]").prop('checked', true);
                 $("#txtNombreCliente").val(simData.nom_cliente);
-                if ($("#ddlPersoneria option:selected").val() != simData.cod_personeria) {
-                    $("#ddlPersoneria").val(simData.cod_personeria).trigger('change', [simData]);
-                }
-                //$("#ddlTipDocumento").val(data.cod_tip_documento).change();
-                //$("#txtNumDoc").val(data.num_documento);
-                //$("#ddlTipCliente").val(data.cod_tip_cliente).change();
+                $("#ddlMoneda").val(simData.cod_moneda).trigger('change', 'fSeleccionar');
+                $("#ddlCanalAtencion").val(simData.cod_canal_atencion).trigger('change', 'fSeleccionar');
+                $("#txtMonto").val(simData.monto).trigger('change', 'fSeleccionar');
+                $("#txtTasaEfectiva").val(getPorcentajeNum(simData.tea)).trigger('change', 'fSeleccionar');
+                $("#txtPlazoMeses").val(simData.plazo).trigger('change', 'fSeleccionar');
 
-                if ($("#ddlOperacion option:selected").val() != simData.cod_operacion) {
-                    $("#ddlOperacion").val(simData.cod_operacion).trigger('change', [simData]);
-                } else {
+                $("#ddlPersoneria").val(simData.cod_personeria).trigger('change', [simData]);
+                $("#ddlOperacion").val(simData.cod_operacion).trigger('change', [simData]);
 
-                }
-                //$("#ddlProducto").val(data.cod_producto).change();
-                //$("#ddlMoneda").val(data.cod_moneda).change();
-                //$("#txtMonto").val(data.monto);
-                //$("#ddlCanalAtencion").val(data.cod_canal_atencion).change();
-                //$("#txtTasaEfectiva").val(data.tea);
-                //$("#txtPlazoMeses").val(data.plazo);
-                //$("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).change();
-                //$("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).change();
-
-                $("#ddlGarantiaReal").val(simData.cod_garantia_real).trigger('change', 'fSeleccionar');
-                $("#ddlMonedaReal").val(simData.cod_moneda_garantia_real).trigger('change', 'fSeleccionar');
                 $("#txtMontoGarantiaReal").val(simData.monto_garantia_real).trigger('change', 'fSeleccionar');
-                $("#ddlGarantiaPersonal").val(simData.cod_garantia_personal).trigger('change', 'fSeleccionar');
-                $("#ddlMonedaPersonal").val(simData.cod_moneda_garantia_personal).trigger('change', 'fSeleccionar');
                 $("#txtMontoGarantiaPersonal").val(simData.monto_garantia_personal).trigger('change', 'fSeleccionar');
-                $("#ddlClasificacionGarantia").val(simData.cod_clasificacion_garantia).trigger('change', 'fSeleccionar');
+                $("#ddlMonedaReal").val(simData.cod_moneda_garantia_real).trigger('change', 'fSeleccionar');
+                $("#ddlMonedaPersonal").val(simData.cod_moneda_garantia_personal).trigger('change', 'fSeleccionar');
+
                 $("#ddlModeloRORAC").val(simData.cod_modelo_rorac).trigger('change', 'fSeleccionar');
                 construirComision(data.dataComision);
 
@@ -869,10 +862,8 @@
                 //updateChart1(data.dataComposicion);
                 //updateChart2(data.dataComposicion);
                 //updateChart3(data.dataComposicion);
-                $("#txtAmortizacion").val(data.simData.tip_amortizacion);
-
+                $("#txtAmortizacion").val(data.simData.tip_amortizacion);;
             }).done(function () {
-                console.log("fSeleccionar");
                 $('input,select').prop('disabled', false);
                 $("#Seccion01").click();
                 $("#overlay").hide();
@@ -889,13 +880,13 @@
         $("#ddlProducto").change(function (e, data) {
             ddlProductoChange(data);
         });
-        function ddlPersoneriaChange(data) {
+        function ddlPersoneriaChange(info) {
             let codPersoneria = $("#ddlPersoneria option:selected").val();
-            if (data != undefined && data != null) {
-                if (data == "clean") {
+            if (info != undefined && info != null) {
+                if (info == "clean") {
                     return;
                 }
-                codPersoneria = data.cod_personeria;
+                codPersoneria = info.cod_personeria;
             }
             $.getJSON('@Url.Action("JSON_PersoneriaChange")', { codPersoneria: codPersoneria }, function (data) {
                 $('#ddlTipDocumento').empty();
@@ -916,42 +907,20 @@
                     }));
                 });
             }).done(function () {
-                console.log("ddlPersoneriaChange");
-                if (data != undefined && data != null) {
-                    $("#ddlTipDocumento").val(data.cod_tip_documento).trigger('change', 'fSeleccionar');
-                    $("#txtNumDoc").val(data.num_documento).trigger('change', 'fSeleccionar');
-                    $("#ddlTipCliente").val(data.cod_tip_cliente).trigger('change', 'fSeleccionar');
-
+                if (info != undefined && info != null) {
+                    $("#ddlTipDocumento").val(info.cod_tip_documento).trigger('change', 'fSeleccionar');
+                    $("#txtNumDoc").val(info.num_documento).trigger('change', 'fSeleccionar');
+                    $("#ddlTipCliente").val(info.cod_tip_cliente).trigger('change', 'fSeleccionar');
                 }
             });
         }
-        function ddlProductoChange(data) {
-            let codProducto = $("#ddlProducto option:selected").val();
-            if (data != undefined && data != null) {
-                if (data == "clean") {
-                    return;
-                }
-                codProducto = data.cod_producto;
-            }
-            $.getJSON('@Url.Action("JSON_ProductoChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codProducto: codProducto }, function (data) {
-                construirComision(data.dataComision);
-                $("#txtAmortizacion").val(data.amortizacion);
-            }).done(function () {
-                console.log("ddlProductoChange");
-                //fnGrabar('simular');
-                if (data != undefined && data != null) {
-
-                }
-
-            });
-        }
-        function ddlOperacionChange(data) {
+        function ddlOperacionChange(info) {
             let codOperacion = $("#ddlOperacion option:selected").val();
-            if (data != undefined && data != null) {
-                if (data == "clean") {
+            if (info != undefined && info != null) {
+                if (info == "clean") {
                     return;
                 }
-                codOperacion = data.cod_operacion;
+                codOperacion = info.cod_operacion;
             }
             $.getJSON('@Url.Action("JSON_OperacionChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codOperacion: codOperacion }, function (data) {
                 $('#ddlProducto').empty();
@@ -1007,35 +976,50 @@
                 let disabled = false;
                 if (codOperacion == "DEP") {
                     disabled = true;
-                    $('#txtMontoGarantiaReal').empty();
-                    $('#txtMontoGarantiaPersonal').empty();
+                    $('#txtMontoGarantiaReal,#txtMontoGarantiaPersonal').val('');
+                    $("#ddlMonedaReal,#ddlMonedaPersonal").val('').trigger('change', 'fSeleccionar');
                 }
                 $('#ddlGarantiaReal').prop('disabled', disabled);
                 $('#ddlGarantiaPersonal').prop('disabled', disabled);
-                $('#ddlClasificacionGarantia').prop('disabled', disabled);
                 $('#txtMontoGarantiaReal').prop('disabled', disabled);
                 $('#txtMontoGarantiaPersonal').prop('disabled', disabled);
                 $('#ddlMonedaReal').prop('disabled', disabled);
                 $('#ddlMonedaPersonal').prop('disabled', disabled);
+                $('#ddlClasificacionGarantia').prop('disabled', disabled);
             }).done(function () {
-                console.log("ddlOperacionChange");
-                if (data != undefined && data != null) {
-                    if ($("#ddlProducto option:selected").val() != data.cod_producto) {
-                        $("#ddlProducto").val(data.cod_producto).trigger('change', [data]);
-                    }
-                    $("#ddlMoneda").val(data.cod_moneda).trigger('change', 'fSeleccionar');
-                    $("#txtMonto").val(data.monto).trigger('change', 'fSeleccionar');
-                    $("#ddlCanalAtencion").val(data.cod_canal_atencion).trigger('change', 'fSeleccionar');
-                    $("#txtTasaEfectiva").val(getPorcentajeNum(data.tea)).trigger('change', 'fSeleccionar');
-                    $("#txtPlazoMeses").val(data.plazo).trigger('change', 'fSeleccionar');
-                    $("#ddlClasificacionInterna").val(data.cod_clasificacion_interna).trigger('change', 'fSeleccionar');
-                    $("#ddlClasificacionExterna").val(data.cod_clasificacion_externa).trigger('change', 'fSeleccionar');
-
+                if (info != undefined && info != null) {
+                    $("#ddlProducto").val(info.cod_producto).trigger('change', [info]);
+                    $("#ddlClasificacionInterna").val(info.cod_clasificacion_interna).trigger('change', 'fSeleccionar');
+                    $("#ddlClasificacionExterna").val(info.cod_clasificacion_externa).trigger('change', 'fSeleccionar');
+                    $("#ddlGarantiaReal").val(info.cod_garantia_real).trigger('change', 'fSeleccionar');
+                    $("#ddlGarantiaPersonal").val(info.cod_garantia_personal).trigger('change', 'fSeleccionar');
+                    $("#ddlClasificacionGarantia").val(info.cod_clasificacion_garantia).trigger('change', 'fSeleccionar');
 
                 }
 
             });
         }
+        function ddlProductoChange(info) {
+            let codProducto = $("#ddlProducto option:selected").val();
+            if (info != undefined && info != null) {
+                if (info == "clean") {
+                    return;
+                }
+                codProducto = info.cod_producto;
+            }
+            $.getJSON('@Url.Action("JSON_ProductoChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codProducto: codProducto }, function (data) {
+                construirComision(data.dataComision);
+                $("#txtAmortizacion").val(data.amortizacion);
+            }).done(function () {
+                if (info != undefined && info != null) {
+
+                } else {
+                    fnGrabar('simular');
+                }
+
+            });
+        }
+
         /** FIN DLL CHANGES */
 
         function getPorcentaje(valor) {
@@ -1399,6 +1383,7 @@
 
         /** BOTONES */
         $("#btnNuevo").on("click", function () {
+            fOnAlertClose();
             fnNuevo();
         });
         $("#btnCancelar").on("click", function () {
@@ -1499,10 +1484,10 @@
                 else {
                     toastr.error(data.Message);
                 }
-            }).done(function () {
+            }).fail(function (e) {
+            }).always(function () {
                 $("#Seccion01").click();
                 $("#overlay").hide();
-
             });
         }
 
@@ -1590,7 +1575,8 @@
                 else {
                     toastr.error(data.Message);
                 }
-            }).done(function () {
+            }).fail(function (e) {
+            }).always(function () {
                 $("#Seccion01").click();
                 $("#overlay").hide();
             });
@@ -1636,7 +1622,7 @@
         }
 
         function fnGrabar(act) {
-
+            fOnAlertClose();
             let monto = getImporte($("#txtMonto").val());
             let tea = getPorcentaje($("#txtTasaEfectiva").val());
             let plazo = Number($("#txtPlazoMeses").val());
@@ -1752,7 +1738,8 @@
                     $("#alertText").text(data.Message);
                     //toastr.error(data.Message);
                 }
-            }).done(function () {
+            }).fail(function (e) {
+            }).always(function () {
                 $("#Seccion01").click();
                 $("#overlay").hide();
             });
