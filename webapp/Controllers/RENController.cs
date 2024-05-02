@@ -101,9 +101,9 @@ namespace webapp.Controllers
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult JSON_OperacionChange(long ide_cliente_producto, string codOperacion)
+        public JsonResult JSON_OperacionChange(long ide_cliente_producto, string codOperacion, string codTipCliente)
         {
-            if (codOperacion == null)
+            if (codOperacion == null || codTipCliente == null)
             {
                 return Json(null, JsonRequestBehavior.AllowGet);
             }
@@ -121,7 +121,7 @@ namespace webapp.Controllers
             }
 
             viewModel.ddlProducto = dataInfo.lstProducto
-                                    .Where(x => x.cod_operacion.Equals("@") || x.cod_operacion.Equals(codOperacion))
+                                    .Where(x => x.cod_operacion.Equals("@") || (x.cod_operacion.Equals(codOperacion) && x.cod_tip_cliente.Equals(codTipCliente)))
                                     .Select(x => new ExtendedSelectListItem
             {
                 Value = x.cod,

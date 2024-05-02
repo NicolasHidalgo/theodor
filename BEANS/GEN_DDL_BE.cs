@@ -39,6 +39,7 @@ namespace BEANS
         public string nom2 { get; set; }
         public string cod_personeria { get; set; }
         public string cod_operacion { get; set; }
+        public string cod_tip_cliente { get; set; }
         public bool selected { get; set; }
     }
 }

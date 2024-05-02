@@ -46,6 +46,7 @@ namespace DA
                             bean.nom2 = DataReader.SafeGetString(dr, dr.GetOrdinal("nom2"));
                             bean.cod_personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_personeria"));
                             bean.cod_operacion = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_operacion"));
+                            bean.cod_tip_cliente = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
                         }
 
                         lista.Add(bean);
