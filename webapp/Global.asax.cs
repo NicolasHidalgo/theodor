@@ -40,12 +40,12 @@ namespace webapp
         {
             //MiniProfiler.Stop();
             // con esto controlo la autenticacion si via por ajax
+            
             if (!this.Request.IsAuthenticated && Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 Context.Response.Clear();
                 Context.Response.StatusCode = 401;
             }
-
 
             /*
             var context = new HttpContextWrapper(Context);

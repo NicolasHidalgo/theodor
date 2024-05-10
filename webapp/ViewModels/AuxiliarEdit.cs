@@ -34,6 +34,7 @@ namespace webapp.ViewModels
         public List<REN_COMISION_BE> dataComision { get; set; }
         public string amortizacion { get; set; }
         public long IdeClienteProducto { get; set; }
+        public long CodSuscriptor { get; set; }
         public REN_SIM_REQ_BE simData { get; set; }
 
     }

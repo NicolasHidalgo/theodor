@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GEN_Conexion.cs" />
+    <Compile Include="DEMO_DA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="REN_DA.cs" />
     <Compile Include="SEG_DA.cs" />

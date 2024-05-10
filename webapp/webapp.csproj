@@ -188,8 +188,11 @@
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constantes\Constantes.cs" />
+    <Compile Include="Controllers\api\DEMOController.cs" />
+    <Compile Include="Controllers\api\RENController.cs" />
     <Compile Include="Controllers\api\SEGController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\DEMOController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -2733,7 +2736,7 @@
     <Content Include="Views\SEG\Usuario.cshtml" />
     <Content Include="Views\SEG\Permisos.cshtml" />
     <Content Include="Views\REN\Simulador.cshtml" />
-    <Content Include="Views\REN\SimuladorBAK.cshtml" />
+    <Content Include="Views\DEMO\Demo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

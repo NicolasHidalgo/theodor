@@ -58,6 +58,14 @@ namespace BL
         {
             return dat.fn_ren_pyg(idClienteProducto);
         }
+        public List<REN_PYG_BE> fn_ren_pyg(string accion, long idClienteProducto)
+        {
+            return dat.fn_ren_pyg(accion, idClienteProducto);
+        }
+        public List<REN_CRONOGRAMA_BE> fn_ren_calendario(string accion, long ideClienteProducto)
+        {
+            return dat.fn_ren_cronograma(accion, ideClienteProducto);
+        }
         public List<REN_RESUMEN_ESC_BE> fn_ren_resumenEsc(REN_SIM_REQ_BE model)
         {
             return dat.fn_ren_resumenEsc(model);

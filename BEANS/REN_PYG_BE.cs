@@ -11,10 +11,15 @@ namespace BEANS
         public int ide { get; set; }
         public string detalle { get; set; }
         public double? operacion { get; set; }
+        public string strOperacion { get; set; }
         public double? anual { get; set; }
+        public string strAnual { get; set; }
         public double? trimestral { get; set; }
+        public string strTrimestral { get; set; }
         public double? mensual { get; set; }
+        public string strMensual { get; set; }
         public double? ratio { get; set; }
+        public string strRatio { get; set; }
         public string color { get; set; }
     }
 
@@ -67,6 +72,19 @@ namespace BEANS
         public double? invisible { get; set; }
         public double? negativo { get; set; }
 
+    }
+    public class REN_CRONOGRAMA_BE
+    {
+        public double? ide { get; set; }
+        public string col1 { get; set; }
+        public string col2 { get; set; }
+        public string col3 { get; set; }
+        public string col4 { get; set; }
+        public string col5 { get; set; }
+        public string col6 { get; set; }
+        public string col7 { get; set; }
+        public string color { get; set; }
+        public string alineacion { get; set; }
     }
 
 

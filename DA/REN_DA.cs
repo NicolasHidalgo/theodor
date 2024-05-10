@@ -258,6 +258,99 @@ namespace DA
             return lista;
         }
 
+        public List<REN_PYG_BE> fn_ren_pyg(string accion, long ideClienteProducto)
+        {
+            Mensaje = string.Empty;
+            List<REN_PYG_BE> lista = new List<REN_PYG_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_pro_clienteProducto]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 50).Value = accion;
+            cmd.Parameters.Add("@ide_cliente_producto", System.Data.SqlDbType.BigInt).Value = ideClienteProducto;
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    REN_PYG_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new REN_PYG_BE();
+                        bean.ide = DataReader.SafeGetInt32(dr, dr.GetOrdinal("ide"));
+                        bean.detalle = DataReader.SafeGetString(dr, dr.GetOrdinal("detalle"));
+                        bean.strOperacion = DataReader.SafeGetString(dr, dr.GetOrdinal("operacion"));
+                        bean.strAnual = DataReader.SafeGetString(dr, dr.GetOrdinal("anual"));
+                        bean.strTrimestral = DataReader.SafeGetString(dr, dr.GetOrdinal("trimestral"));
+                        bean.strMensual = DataReader.SafeGetString(dr, dr.GetOrdinal("mensual"));
+                        bean.strRatio = DataReader.SafeGetString(dr, dr.GetOrdinal("ratio"));
+                        bean.color = DataReader.SafeGetString(dr, dr.GetOrdinal("color"));
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+        public List<REN_CRONOGRAMA_BE> fn_ren_cronograma(string accion, long ideClienteProducto)
+        {
+            Mensaje = string.Empty;
+            List<REN_CRONOGRAMA_BE> lista = new List<REN_CRONOGRAMA_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_pro_clienteProducto]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 50).Value = accion;
+            cmd.Parameters.Add("@ide_cliente_producto", System.Data.SqlDbType.BigInt).Value = ideClienteProducto;
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    REN_CRONOGRAMA_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new REN_CRONOGRAMA_BE();
+                        bean.ide = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("ide"));
+                        bean.col1 = DataReader.SafeGetString(dr, dr.GetOrdinal("col1"));
+                        bean.col2 = DataReader.SafeGetString(dr, dr.GetOrdinal("col2"));
+                        bean.col3 = DataReader.SafeGetString(dr, dr.GetOrdinal("col3"));
+                        bean.col4 = DataReader.SafeGetString(dr, dr.GetOrdinal("col4"));
+                        bean.col5 = DataReader.SafeGetString(dr, dr.GetOrdinal("col5"));
+                        bean.col6 = DataReader.SafeGetString(dr, dr.GetOrdinal("col6"));
+                        bean.col7 = DataReader.SafeGetString(dr, dr.GetOrdinal("col7"));
+                        bean.color = DataReader.SafeGetString(dr, dr.GetOrdinal("color"));
+                        bean.alineacion = DataReader.SafeGetString(dr, dr.GetOrdinal("alineacion"));
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
         public List<REN_RESUMEN_ESC_BE> fn_ren_resumenEsc(REN_SIM_REQ_BE model)
         {
             Mensaje = string.Empty;
@@ -310,7 +403,7 @@ namespace DA
                         bean.detalle = DataReader.SafeGetString(dr, dr.GetOrdinal("Detalle"));
                         bean.operacion = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Operacion"));
                         bean.objetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Objetivo"));
-                        bean.primaRiesgo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("PrimaRiesgo"));
+                        //bean.primaRiesgo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("PrimaRiesgo"));
                         bean.formato = DataReader.SafeGetString(dr, dr.GetOrdinal("formato"));
                         bean.color = DataReader.SafeGetString(dr, dr.GetOrdinal("color"));
                         lista.Add(bean);

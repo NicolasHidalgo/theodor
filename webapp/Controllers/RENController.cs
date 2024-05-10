@@ -23,6 +23,7 @@ namespace webapp.Controllers
 
             //string ip = Request.UserHostAddress;
             viewModel.IdeClienteProducto = 0;
+            viewModel.CodSuscriptor = user.SUSCRIPTOR;
 
             var dataInfo = new REN_INFO_BE();
             if (Session["dataInfo"] == null)
@@ -61,6 +62,7 @@ namespace webapp.Controllers
             });
 
             return View(viewModel);
+
         }
 
         public JsonResult JSON_PersoneriaChange(string codPersoneria)
@@ -199,7 +201,7 @@ namespace webapp.Controllers
         public JsonResult JSON_ReportePYG(long idClienteProducto)
         {
             var viewModel = new AuxiliarEdit();
-            var dataPYG = bl.fn_ren_pyg(idClienteProducto);
+            var dataPYG = bl.fn_ren_pyg("@PYG", idClienteProducto);
             viewModel.dataPYG = dataPYG;
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
@@ -228,7 +230,7 @@ namespace webapp.Controllers
             var comision = bl.fn_ren_pro_clienteComision_vista(model.cod_suscriptor, model.ide_cliente_producto);
             viewModel.dataComision = comision;
 
-            var dataPYG = bl.fn_ren_pyg(model.ide_cliente_producto);
+            var dataPYG = bl.fn_ren_pyg("@PYG", model.ide_cliente_producto);
             viewModel.dataPYG = dataPYG;
 
             model.accion = "@Resumen_escenarios";
@@ -264,10 +266,16 @@ namespace webapp.Controllers
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult JSON_Cronograma(long ide_cliente_producto)
+        {
+            var data = bl.fn_ren_calendario("@CRONOGRAMA", ide_cliente_producto);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult JSON_ReporteComposicion(long ide_cliente_producto)
         {
-            var dataComposicion = bl.fn_ren_vis_clienteProducto_Composicion(ide_cliente_producto);
-            return Json(dataComposicion, JsonRequestBehavior.AllowGet);
+            var data = bl.fn_ren_vis_clienteProducto_Composicion(ide_cliente_producto);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -298,7 +306,7 @@ namespace webapp.Controllers
                 {
                     var req = new REN_SIM_REQ_BE();
 
-                    var dataPYG = bl.fn_ren_pyg(_sim.ide_cliente_producto);
+                    var dataPYG = bl.fn_ren_pyg("@PYG",_sim.ide_cliente_producto);
                     viewModel.dataPYG = dataPYG;
 
                     req.accion = "@Resumen_escenarios";
@@ -399,7 +407,7 @@ namespace webapp.Controllers
 
                 var req = new REN_SIM_REQ_BE();
 
-                var dataPYG = bl.fn_ren_pyg(_com.ide_cliente_producto);
+                var dataPYG = bl.fn_ren_pyg("@PYG", _com.ide_cliente_producto);
                 viewModel.dataPYG = dataPYG;
 
                 req.accion = "@Resumen_escenarios";

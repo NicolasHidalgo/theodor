@@ -11,29 +11,31 @@ using webapp.ViewModels;
 
 namespace webapp.Controllers.api
 {
-    [RoutePrefix("api/SEG")]
-    public class SEGController : ApiController
+    [RoutePrefix("api/REN")]
+    public class RENController : ApiController
     {
-        private readonly SEG_BL db = new SEG_BL();
+        private readonly REN_BL db = new REN_BL();
 
         [HttpGet]
-        [Route("GetDataTable_Usuario")]
-        public DataTable<SEG_USUARIO_BE> GetDataTable_Usuario([FromUri] DataTableRequest_<GEN_REPLY_BE> model)
+        [Route("GetDataTable_PopUp")]
+        public DataTable<REN_POPUP_BE> GetDataTable_PopUp([FromUri] DataTableRequest_<REN_SIM_REQ_BE> model)
         {
             var reply = model.Filter;
-            IQueryable<SEG_USUARIO_BE> query = db.fn_seg_sel_usuario(reply).AsQueryable();
+            //reply.accion = "@POPUP";
+            //reply.cod_suscriptor = user.SUSCRIPTOR;
+            IQueryable<REN_POPUP_BE> query = db.fn_ren_pro_listarPopup(reply).AsQueryable();
 
             var recordsTotal = query.Count();
 
             if (model.Filter != null)
             {
-                if (model.Filter.SEARCH != null)
-                {
-                    var _search = model.Filter.SEARCH.ToUpper();
-                    query = query.Where(x => x.COD_USUARIO.ToUpper().Contains(_search)
-                                    || x.NOM_USUARIO.ToUpper().Contains(_search)
-                                    || x.CORREO_ELECTRONICO.ToUpper().Contains(_search));
-                }
+                //if (model.Filter.SEARCH != null)
+                //{
+                //    var _search = model.Filter.SEARCH.ToUpper();
+                //    query = query.Where(x => x.COD_USUARIO.ToUpper().Contains(_search)
+                //                    || x.NOM_USUARIO.ToUpper().Contains(_search)
+                //                    || x.CORREO_ELECTRONICO.ToUpper().Contains(_search));
+                //}
             }
 
             if (model.OrderBy.Count() > 0)
@@ -59,18 +61,19 @@ namespace webapp.Controllers.api
 
             var data = query
                 .AsEnumerable()
-                .Select(x => new SEG_USUARIO_BE
+                .Select(x => new REN_POPUP_BE
                 {
-                    IDE_USUARIO = x.IDE_USUARIO,
-                    COD_USUARIO = x.COD_USUARIO,
-                    NOM_USUARIO = x.NOM_USUARIO,
-                    EST_USUARIO = x.EST_USUARIO,
-                    CORREO_ELECTRONICO = x.CORREO_ELECTRONICO,
-                    PASSWORD = x.PASSWORD,
-                    FEC_CESE = x.FEC_CESE,
+                    ide_cliente_Producto = x.ide_cliente_Producto,
+                    Documento = x.Documento,
+                    Cliente = x.Cliente,
+                    Operacion = x.Operacion,
+                    Producto = x.Producto,
+                    Monto = x.Monto,
+                    Tea = x.Tea,
+                    Plazo = x.Plazo,
                 });
 
-            var dataTable = new DataTable<SEG_USUARIO_BE>()
+            var dataTable = new DataTable<REN_POPUP_BE>()
             {
                 data = data,
                 draw = model.Draw.GetValueOrDefault(),

@@ -1,0 +1,498 @@
+﻿@model webapp.ViewModels.AuxiliarEdit
+@{
+    ViewBag.Title = "Plantilla";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Theme JS files -->
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+<script type="text/javascript" src="~/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+
+<script type="text/javascript" src="~/assets/js/plugins/tables/handsontable/handsontable.min.js"></script>
+<!--<script type="text/javascript" src="~/assets/js/plugins/ui/prism.min.js"></script>-->
+
+<script src="~/assets/otros/chart/chart.js"></script>
+<script src="~/assets/otros/chart/chartjs-plugin-datalabels.js"></script>
+<script src="~/assets/otros/inputmask/inputmask.js"></script>
+
+@section Styles{
+    <style>
+        .datatable-header {
+            display: none;
+        }
+
+        table.dataTable thead tr {
+            background-color: #3f444e;
+            color: white;
+        }
+
+        #EstructuraModal thead tr, #CargaDatatable thead tr {
+            background-color: #3f444e;
+            color: white;
+        }
+
+        .modal {
+            text-align: center;
+            padding: 0 !important;
+        }
+
+            .modal:before {
+                content: '';
+                display: inline-block;
+                height: 100%;
+                vertical-align: middle;
+                margin-right: -4px;
+            }
+
+        .modal-dialog {
+            display: inline-block;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .ui-autocomplete {
+            z-index: 215000000 !important;
+        }
+
+        .select2-no-results {
+            display: none !important;
+        }
+
+
+
+        #hot_alignment .ht_master.handsontable {
+            overflow: visible;
+        }
+
+        #hot_alignment {
+            overflow-x: auto;
+            display: block;
+        }
+
+            #hot_alignment .wtHolder {
+                width: auto !important;
+                height: auto !important;
+            }
+
+        .htColumnHL {
+            overflow-wrap: break-word;
+            writing-mode: vertical-rl;
+            /*transform: scale(-1);*/
+        }
+
+        .tblx, .tblx th, .tblx td {
+            border: 1px solid;
+        }
+
+        .headerTblColorPlomo {
+            background-color: #55585A;
+            color: white;
+            border-color: #55585A;
+        }
+
+            .headerTblColorPlomo th {
+                border-color: #55585A !important;
+            }
+
+        .colorBeige {
+            background-color: #969076;
+            color: white;
+        }
+
+        .colorGray {
+            background-color: #F2F2F2;
+        }
+
+        .colorPlomo {
+            background-color: #55585A;
+            color: white;
+        }
+
+        .tblRowsHeight tr {
+            line-height: 15px;
+            min-height: 15px;
+            height: 15px;
+        }
+
+        .tblRowsHeight th, td {
+            padding: 5px !important;
+        }
+
+        .borderWhite {
+            border-color: white;
+        }
+
+        .icon-custom-style {
+            font-size: 25px !important;
+            cursor: pointer !important;
+        }
+
+        .tab-content > .tab-pane {
+            display: block !important;
+            height: 0 !important;
+            overflow: hidden !important;
+        }
+
+            .tab-content > .tab-pane.active {
+                height: auto !important;
+            }
+
+        canvas {
+            max-width: 720px;
+        }
+
+        table.dataTable tbody th, table.dataTable tbody td {
+            padding: 1px 1px !important; /* e.g. change 8x to 4px here */
+        }
+
+        tr.odd {
+            background-color: #ebebeb !important;
+        }
+    </style>
+}
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titulo">Grabar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">COD CIA</label>
+                    <input type="text" class="form-control" id="txtCodCia">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">CIA VENTA</label>
+                    <input type="text" class="form-control" id="txtCompaniaVenta">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">ALMACEN</label>
+                    <input type="text" class="form-control" id="txtAlmacenVenta">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">TIPO MOV</label>
+                    <input type="text" class="form-control" id="txtTipoMovimiento">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">TIPO DOC</label>
+                    <input type="text" class="form-control" id="txtTipoDocumento">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">NUM DOC</label>
+                    <input type="text" class="form-control" id="txtNumDocumento">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">COD ITEM</label>
+                    <input type="text" class="form-control" id="txtCodItem">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">CANTIDAD</label>
+                    <input type="text" class="form-control" id="txtCantidad">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">PROVEEDOR</label>
+                    <input type="text" class="form-control" id="txtProveedor">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">MONEDA</label>
+                    <input type="text" class="form-control" id="txtMoneda">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnGrabar">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<div class="container-fluid">
+    <!-- Page header -->
+    <!--
+    <div class="page-header">
+        <div class="page-header-content">
+        </div>
+        <div class="breadcrumb-line breadcrumb-line-component">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="icon-home2 position-left"></i> Simulador</a></li>
+            </ul>
+        </div>
+    </div>-->
+    <!-- /page header -->
+    <!-- Content area -->
+    <div class="content" style="padding-top:0px;">
+
+        <!-- Bordered alerts -->
+        <div id="alertSim" class="alert alert-danger alert-bordered hidden">
+            <button type="button" class="close" onclick="fOnAlertClose()"><span>&times;</span><span class="sr-only">Close</span></button>
+            <span id="alertText" class="text-semibold">Errores</span>
+        </div>
+        <!-- /bordered alerts -->
+        <!-- Vertical form options -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Basic layout-->
+                <div class="panel panel-flat">
+                    <div class="panel-heading">
+                        <i class="icon-file-empty position-left icon-custom-style" title="Nuevo" id="btnNuevo"></i>
+                        <!--<i class="icon-envelop4 position-left" style="font-size:25px"></i>-->
+                        <div class="heading-elements">
+
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <div class="form-inline">
+                            <div class="form-group mb-2">
+                                <label for="staticEmail2">Fecha Inicio</label>
+                                <input type="text" class="form-control" id="txtFecIni">
+                            </div>
+                            <div class="form-group mx-sm-3 mb-2">
+                                <label for="inputPassword2">Fecha Fin</label>
+                                <input type="text" class="form-control" id="txtFecFin">
+                            </div>
+                            <div class="form-group mx-sm-3 mb-2">
+                                <label for="inputPassword2">Tipo Mov</label>
+                                <input type="text" class="form-control" id="txtTipMov">
+                            </div>
+                            <div class="form-group mx-sm-3 mb-2">
+                                <label for="inputPassword2">Nro Documento</label>
+                                <input type="text" class="form-control" id="txtNroDoc">
+                            </div>
+                            <button type="button" class="btn btn-primary mb-2" id="btnBuscar">Buscar</button>
+                        </div>
+
+                        <br />
+                        <div class="table-responsive">
+                            <table id="PlantillaDataTable" class="table table-responsive table-bordered table-striped"></table>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /content area -->
+    </div>
+    <!-- /main content -->
+</div>
+
+
+<script type="text/javascript">
+
+    var fSeleccionar;
+
+    function fSeleccionar2(data) {
+        console.log("fSeleccionar2", data)
+    }
+
+    $(document).ready(function () {
+
+        fSeleccionar = function (data) {
+            $('#editModal').modal('show');
+            $("#txtCodCia").val(data.COD_CIA);
+            $("#txtCompaniaVenta").val(data.COMPANIA_VENTA_3);
+            $("#txtAlmacenVenta").val(data.ALMACEN_VENTA);
+            $("#txtTipoMovimiento").val(data.TIPO_MOVIMIENTO);
+            $("#txtNumDocumento").val(data.NRO_DOCUMENTO);
+            $("#txtCodItem").val(data.COD_ITEM_2);
+            $("#txtTipoDocumento").val(data.TIPO_DOCUMENTO);
+            $("#txtCantidad").val(data.CANTIDAD);
+            $("#txtProveedor").val(data.PROVEEDOR);
+            $("#txtMoneda").val(data.MONEDA);
+
+            $('#txtCodCia,#txtCompaniaVenta,#txtAlmacenVenta,#txtTipoMovimiento,#txtTipoDocumento,#txtNumDocumento,#txtCodItem').prop('disabled', true);
+            $("#titulo").text('Editar');
+        }
+
+        $("#btnNuevo").on("click", function () {
+            //$('#editModal').modal('hide');
+            $('#editModal').modal('show');
+            $('input').val('');
+            $('#txtCodCia,#txtCompaniaVenta,#txtAlmacenVenta,#txtTipoMovimiento,#txtTipoDocumento,#txtNumDocumento,#txtCodItem').prop('disabled', false);
+            $("#titulo").text('Grabar');
+        });
+        $("#btnGrabar").on("click", function () {
+            $('#editModal').modal('hide');
+
+             $("#overlay").show();
+             var _obj = {
+                 ACCION: $("#titulo").text() == 'Editar' ? 'UPDATE' : 'INSERT',
+                 COD_CIA: $("#txtCodCia").val(),
+                 COMPANIA_VENTA_3: $("#txtCompaniaVenta").val(),
+                 ALMACEN_VENTA: $("#txtAlmacenVenta").val(),
+                 TIPO_MOVIMIENTO: $("#txtTipoMovimiento").val(),
+                 NRO_DOCUMENTO: $("#txtNumDocumento").val(),
+                 COD_ITEM_2: $("#txtCodItem").val(),
+                 TIPO_DOCUMENTO: $("#txtTipoDocumento").val(),
+                 CANTIDAD: $("#txtCantidad").val(),
+                 PROVEEDOR: $("#txtProveedor").val(),
+                 MONEDA: $("#txtMoneda").val(),
+            };
+
+             var _url = '@Url.Action("EditMov", "DEMO")';
+
+            $.post(_url, _obj).done(function (data) {
+                 if (data.Status === 200) {
+                     toastr.success('Registro exitoso');
+                     PlantillaDataTable.draw();
+                 }
+                 else {
+                     toastr.error(data.Message);
+                 }
+             }).fail(function (e) {
+             }).always(function () {
+                 $("#overlay").hide();
+             });
+
+
+
+        });
+
+        $('#btnBuscar').on('click', function () {
+            //$("#global_filter").val('');
+            PlantillaDataTable.draw();
+        });
+
+        var PlantillaDataTable = $('#PlantillaDataTable').DataTable({
+            autoWidth: false,
+            responsive: true,
+            searching: false,
+            ordering: false,
+            processing: true,
+            serverSide: true,
+            stateSave: false,
+            lengthChange: false,
+            info: false,
+
+            ajax: {
+                url: urls.DEMOApi.GetDataTable_Movimiento(),
+                type: 'GET',
+                data: function (data) {
+                    var _filter = {
+                        FEC_INI: $('#txtFecIni').val(),
+                        FEC_FIN: $('#txtFecFin').val(),
+                        TIPO_MOVIMIENTO: $('#txtTipMov').val(),
+                        NRO_DOCUMENTO: $('#txtNroDoc').val(),
+                        ACCION: 'SELECT'
+                    };
+
+                    var _order = $.map(data.order, function (item) {
+                        return {
+                            Property: data.columns[item.column].name,
+                            Direction: item.dir
+                        };
+                    });
+
+                    delete data.columns;
+                    delete data.order;
+                    delete data.search;
+
+                    data.filter = _filter;
+                    data.orderby = _order;
+                }
+            },
+            columns: [
+                {
+                    title: 'COD_CIA',
+                    data: 'COD_CIA',
+                    name: 'COD_CIA',
+                    className: 'COD_CIA',
+                },
+                {
+                    title: 'COMPANIA_VENTA_3',
+                    data: 'COMPANIA_VENTA_3',
+                    name: 'COMPANIA_VENTA_3',
+                    className: 'COMPANIA_VENTA_3',
+                },
+                {
+                    title: 'ALMACEN_VENTA',
+                    data: 'ALMACEN_VENTA',
+                    name: 'ALMACEN_VENTA',
+                    className: 'ALMACEN_VENTA',
+                },
+                {
+                    title: 'TIPO_MOVIMIENTO',
+                    data: 'TIPO_MOVIMIENTO',
+                    name: 'TIPO_MOVIMIENTO',
+                    className: 'TIPO_MOVIMIENTO',
+                },
+                {
+                    title: 'NRO_DOCUMENTO',
+                    data: 'NRO_DOCUMENTO',
+                    name: 'NRO_DOCUMENTO',
+                    className: 'NRO_DOCUMENTO',
+                },
+                {
+                    title: 'COD_ITEM_2',
+                    data: 'COD_ITEM_2',
+                    name: 'COD_ITEM_2',
+                    className: 'COD_ITEM_2',
+                },
+                {
+                    title: 'FECHA_TRANSACCION',
+                    data: 'FECHA_TRANSACCION',
+                    name: 'FECHA_TRANSACCION',
+                    className: 'FECHA_TRANSACCION',
+                },
+                {
+                    title: 'TIPO_DOCUMENTO',
+                    data: 'TIPO_DOCUMENTO',
+                    name: 'TIPO_DOCUMENTO',
+                    className: 'TIPO_DOCUMENTO',
+                },
+                {
+                    title: 'CANTIDAD',
+                    data: 'CANTIDAD',
+                    name: 'CANTIDAD',
+                    className: 'CANTIDAD',
+                },
+                {
+                    title: 'PROVEEDOR',
+                    data: 'PROVEEDOR',
+                    name: 'PROVEEDOR',
+                    className: 'PROVEEDOR',
+                },
+                {
+                    title: 'MONEDA',
+                    data: 'MONEDA',
+                    name: 'MONEDA',
+                    className: 'MONEDA',
+                },
+                {
+                    title: "&nbsp;",
+                    //orderable: false,
+                    width: "5%",
+                    render: function (data, type, full, meta) {
+                        var dropdown = '<ul class="icons-list text-center"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
+                        dropdown += '<ul class="dropdown-menu dropdown-menu-right">';
+                        dropdown += "<li><a onclick='fSeleccionar(" + JSON.stringify(full) + ") '><i class='icon-pencil'></i> Editar</a></li>";
+                        dropdown += '</ul></li></ul>';
+                        return dropdown;
+                    },
+                    responsivePriority: 0
+                }
+
+
+            ],
+
+        });
+
+
+    });
+
+
+
+</script>
