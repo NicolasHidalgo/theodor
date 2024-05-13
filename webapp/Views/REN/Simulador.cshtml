@@ -174,9 +174,30 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="form-inline">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="" class="">Buscar</label>
+                            <input type="text" class="form-control" id="txtBuscar" oninput="fOnInputBuscar()" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio" checked>Todos
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="optradio">Por usuario
+                            </label>
+                        </div>
+                        
+                    </div>
+
+                </div>
+                <br />
                 <div class="table-responsive">
                     <table id="tblPOPUP" class="table table-striped"></table>
                 </div>
+                
+                    
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -629,18 +650,6 @@
                                                             <div class="col-md-12">
                                                                 <div class="table-responsive">
                                                                     <table class="table tblRowsHeight table-borderless">
-                                                                        <thead>
-                                                                            <tr class="headerTblColorPlomo tipografia1">
-                                                                                <th>ide</th>
-                                                                                <th>col1</th>
-                                                                                <th>col2</th>
-                                                                                <th>col3</th>
-                                                                                <th>col4</th>
-                                                                                <th>col5</th>
-                                                                                <th>col6</th>
-                                                                                <th>col7</th>
-                                                                            </tr>
-                                                                        </thead>
                                                                         <tbody id="tbodyCalendario"></tbody>
                                                                     </table>
                                                                 </div>
@@ -676,14 +685,20 @@
     var fSeleccionar;
     var fComisionChange;
     var fOnAlertClose;
+    var fOnInputBuscar;
 
     $(document).ready(function () {
 
 
         $('input,select').prop('disabled', true);
+        $('#txtBuscar').prop('disabled', false);
 
         fOnAlertClose = function () {
             $("#alertSim").addClass('hidden');
+        }
+
+        fOnInputBuscar = function() {
+            PlantillaDataTable.draw();
         }
 
         var PlantillaDataTable = $('#tblPOPUP').DataTable({
@@ -708,6 +723,7 @@
                     var _filter = {
                         accion: '@@POPUP',
                         cod_suscriptor: $("#CodSuscriptor").text(),
+                        buscar: $("#txtBuscar").val(),
                     };
 
                     var _order = $.map(data.order, function (item) {
@@ -749,9 +765,9 @@
                     className: 'dt-left',
                 },
                 {
-                    title: 'Operación',
-                    data: 'Operacion',
-                    name: 'Operacion',
+                    title: 'Escenario',
+                    data: 'Esc',
+                    name: 'Esc',
                     className: 'dt-center',
                 },
                 {
@@ -777,6 +793,12 @@
                     data: 'Plazo',
                     name: 'Plazo',
                     className: 'dt-center',
+                },
+                {
+                    title: 'Usuario',
+                    data: 'cod_usuario',
+                    name: 'cod_usuario',
+                    className: 'dt-left',
                 },
             ],
 
@@ -809,6 +831,7 @@
 
                 $("#ddlModeloRORAC").val(simData.cod_modelo_rorac).trigger('change', 'fSeleccionar');
                 construirComision(data.dataComision);
+                debugger;
 
                 reconstruirReportePYG(data);
                 reconstruirReporteResumenEscenario(data);
@@ -817,7 +840,9 @@
                 //updateChart1(data.dataComposicion);
                 //updateChart2(data.dataComposicion);
                 //updateChart3(data.dataComposicion);
-                $("#txtAmortizacion").val(data.simData.tip_amortizacion);;
+
+                //$("#txtAmortizacion").val(data.simData.tip_amortizacion);
+                $("#txtAmortizacion").val(data.amortizacion);
             }).done(function () {
                 $('input,select').prop('disabled', false);
                 $("#Seccion01").click();
@@ -880,7 +905,11 @@
                 codTipCliente = info.cod_tip_cliente;
             }
             $.getJSON('@Url.Action("JSON_OperacionChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codOperacion: codOperacion, codTipCliente: codTipCliente }, function (data) {
+                debugger;
                 $('#ddlProducto').empty();
+                if (info == undefined) {
+                    $('#tbodyComision').empty();
+                }
                 $.each(data.ddlProducto, function (index, item) {
                     $('#ddlProducto').append($('<option/>', {
                         value: item.Value,
@@ -963,18 +992,20 @@
                     return;
                 }
                 codProducto = info.cod_producto;
+            } else {
+                fnGrabar('simular');
+                @*$.getJSON('@Url.Action("JSON_ProductoChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codProducto: codProducto }, function (data) {
+                    construirComision(data.dataComision);
+                    $("#txtAmortizacion").val(data.amortizacion);
+                }).done(function () {
+                    if (info != undefined && info != null) {
+
+                    } else {
+                        fnGrabar('simular');
+                    }
+                });*@
             }
-            $.getJSON('@Url.Action("JSON_ProductoChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codProducto: codProducto }, function (data) {
-                construirComision(data.dataComision);
-                $("#txtAmortizacion").val(data.amortizacion);
-            }).done(function () {
-                if (info != undefined && info != null) {
 
-                } else {
-                    fnGrabar('simular');
-                }
-
-            });
         }
 
         /** FIN DLL CHANGES */
@@ -1368,6 +1399,8 @@
             PlantillaDataTable.draw();
             $("#overlay").hide();
             $('#editModal').modal('show');
+            $("#txtBuscar").val('');
+            $('#txtBuscar').prop('disabled', false);
         });
         $("#btnSimular").on("click", function () {
             fnGrabar('simular');
@@ -1666,6 +1699,9 @@
                     }
 
                     if (act == 'simular') {
+                        construirComision(data.Data.dataComision);
+                        $("#txtAmortizacion").val(data.Data.amortizacion);
+
                         reconstruirReportePYG(data.Data);
                         reconstruirReporteResumenEscenario(data.Data);
                         reconstruirReporteRoracRes(data.Data);
@@ -1768,7 +1804,6 @@
                         trClass = "colorDark";
                     }
                     cadena += "<tr class=" + trClass + ">";
-                    cadena += "<td align='" + item.alineacion +"'>" + item.ide + "</td>";
                     cadena += "<td align='" + item.alineacion +"'>" + item.col1 + "</td>";
                     cadena += "<td align='" + item.alineacion + "'>" + item.col2 + "</td>";
                     cadena += "<td align='" + item.alineacion + "'>" + item.col3 + "</td>";

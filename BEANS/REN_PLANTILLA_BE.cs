@@ -14,8 +14,10 @@ namespace BEANS
         public string Operacion { get; set; }
         public string Producto { get; set; }
         public string Monto { get; set; }
+        public string Esc { get; set; }
 
         public string Tea { get; set; }
         public double? Plazo { get; set; }
+        public string cod_usuario { get; set; }
     }
 }

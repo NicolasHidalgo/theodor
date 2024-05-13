@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography.Xml;
 using System.Web.Http;
 using webapp.Interfaces;
 using webapp.ViewModels;
@@ -29,13 +30,15 @@ namespace webapp.Controllers.api
 
             if (model.Filter != null)
             {
-                //if (model.Filter.SEARCH != null)
-                //{
-                //    var _search = model.Filter.SEARCH.ToUpper();
-                //    query = query.Where(x => x.COD_USUARIO.ToUpper().Contains(_search)
-                //                    || x.NOM_USUARIO.ToUpper().Contains(_search)
-                //                    || x.CORREO_ELECTRONICO.ToUpper().Contains(_search));
-                //}
+                if (model.Filter.buscar != null)
+                {
+                    var _search = model.Filter.buscar.ToLower();
+                    query = query.Where(x => x.Documento.ToLower().Contains(_search)
+                                    || x.Cliente.ToLower().Contains(_search)
+                                    || x.Esc.ToLower().Contains(_search)
+                                    || x.Producto.ToLower().Contains(_search)
+                                    );
+                }
             }
 
             if (model.OrderBy.Count() > 0)
@@ -67,10 +70,12 @@ namespace webapp.Controllers.api
                     Documento = x.Documento,
                     Cliente = x.Cliente,
                     Operacion = x.Operacion,
+                    Esc = x.Esc,
                     Producto = x.Producto,
                     Monto = x.Monto,
                     Tea = x.Tea,
                     Plazo = x.Plazo,
+                    cod_usuario = x.cod_usuario
                 });
 
             var dataTable = new DataTable<REN_POPUP_BE>()

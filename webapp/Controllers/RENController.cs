@@ -251,6 +251,18 @@ namespace webapp.Controllers
             viewModel.dataComposicion = dataComposicion;
             */
 
+            var dataInfo = new REN_INFO_BE();
+            if (Session["dataInfo"] == null)
+            {
+                dataInfo = bl.fn_ren_sel_info("INFO1", user.SUSCRIPTOR);
+                Session["dataInfo"] = dataInfo;
+            }
+            else
+            {
+                dataInfo = (REN_INFO_BE)Session["dataInfo"];
+            }
+            viewModel.amortizacion = dataInfo.lstProducto.Where(x => x.cod.Equals(simData.cod_producto.ToString())).FirstOrDefault().nom2;
+
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
@@ -306,12 +318,28 @@ namespace webapp.Controllers
                 {
                     var req = new REN_SIM_REQ_BE();
 
+                    var dataInfo = new REN_INFO_BE();
+                    if (Session["dataInfo"] == null)
+                    {
+                        dataInfo = bl.fn_ren_sel_info("INFO1", user.SUSCRIPTOR);
+                        Session["dataInfo"] = dataInfo;
+                    }
+                    else
+                    {
+                        dataInfo = (REN_INFO_BE)Session["dataInfo"];
+                    }
+
                     var dataPYG = bl.fn_ren_pyg("@PYG",_sim.ide_cliente_producto);
                     viewModel.dataPYG = dataPYG;
 
                     req.accion = "@Resumen_escenarios";
                     req.cod_suscriptor = user.SUSCRIPTOR;
                     req.ide_cliente_producto = _sim.ide_cliente_producto;
+
+                    var comisiones = bl.fn_ren_pro_clienteComision_vista(user.SUSCRIPTOR, req.ide_cliente_producto);
+                    viewModel.dataComision = comisiones;
+                    viewModel.amortizacion = dataInfo.lstProducto.Where(x => x.cod.Equals(_sim.cod_producto.ToString())).FirstOrDefault().nom2;
+
                     var dataResEsc = bl.fn_ren_resumenEsc(req);
                     viewModel.dataResEsc = dataResEsc;
 

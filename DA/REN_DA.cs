@@ -688,11 +688,12 @@ namespace DA
                         bean.ide_cliente_Producto = DataReader.SafeGetInt64(dr, dr.GetOrdinal("ide_cliente_Producto"));
                         bean.Documento = DataReader.SafeGetString(dr, dr.GetOrdinal("Documento"));
                         bean.Cliente = DataReader.SafeGetString(dr, dr.GetOrdinal("Cliente"));
-                        bean.Operacion = DataReader.SafeGetString(dr, dr.GetOrdinal("Operacion"));
+                        bean.Esc = DataReader.SafeGetString(dr, dr.GetOrdinal("Esc"));
                         bean.Producto = DataReader.SafeGetString(dr, dr.GetOrdinal("Producto"));
                         bean.Monto = DataReader.SafeGetString(dr, dr.GetOrdinal("Monto"));
                         bean.Tea = DataReader.SafeGetString(dr, dr.GetOrdinal("Tea"));
                         bean.Plazo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Plazo"));
+                        bean.cod_usuario = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_usuario"));
 
                         lista.Add(bean);
                     }

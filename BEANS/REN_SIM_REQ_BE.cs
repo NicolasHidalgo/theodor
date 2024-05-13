@@ -45,5 +45,6 @@ namespace BEANS
         public double incremento_plazo { get; set; }
         public int? cod_tip_amortizacion { get; set; }
         public string tip_amortizacion { get; set; }
+        public string buscar { get; set; }
     }
 }
