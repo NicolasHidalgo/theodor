@@ -94,9 +94,9 @@
             border-color: #55585A;
         }
 
-            .headerTblColorPlomo th {
-                border-color: #55585A !important;
-            }
+        .headerTblColorPlomo th {
+            border-color: #55585A !important;
+        }
 
         .colorBeige {
             background-color: #969076;
@@ -159,6 +159,12 @@
         }
         th.dt-right, td.dt-right {
             text-align: right;
+        }
+        .center{
+            text-align:center;
+        }
+        .cursor {
+            cursor: pointer;
         }
     </style>
 }
@@ -237,13 +243,25 @@
                 <!-- Basic layout-->
                 <div class="panel panel-flat">
                     <div class="panel-heading">
-                        <i class="icon-file-empty position-left icon-custom-style" title="Nuevo" id="btnNuevo"></i>
-                        <i class="icon-pencil position-left icon-custom-style" title="Editar" id="btnEditar"></i>
-                        <i class="icon-sync position-left icon-custom-style hidden" title="Refrescar" id="btnSimular"></i>
-                        <i class="icon-floppy-disk position-left icon-custom-style hidden" title="Guardar" id="btnFin"></i>
-                        <i class="icon-floppy-disks position-left icon-custom-style hidden" title="Guardar como" id="btnFin2"></i>
-                        <i class="icon-x position-left icon-custom-style hidden" title="Cancelar" id="btnCancelar"></i>
-                        <i class="icon-trash position-left icon-custom-style hidden" title="Borrar" id="btnBorrar"></i>
+                        <table>
+                            <tr>
+                                <td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a style="color:ThreeDDarkShadow">Nuevo</a></td>
+                                <td class="center"><i class="icon-floppy-disk icon-custom-style " title="Guardar" id="btnFin"></i><br /><a style="color: ThreeDDarkShadow">Grabar</a></td>
+                                <td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a style="color: ThreeDDarkShadow">Borrar</a></td>
+                                <td class="center"><i class="icon-search4 icon-custom-style" title="Editar" id="btnBuscar"></i><br /><a style="color: ThreeDDarkShadow">Buscar</a></td>
+                            </tr>
+                            @*<tr>
+                                <td class="center cursor" id="btnNuevo">Nuevo</td>
+                                <td class="center cursor" id="btnFin">Grabar</td>
+                                <td class="center cursor" id="btnBorrar">Borrar</td>
+                                <td class="center cursor" id="btnBuscar">Buscar</td>
+                            </tr>*@
+                        </table>
+
+                        @*<i class="icon-sync position-left icon-custom-style " title="Refrescar" id="btnSimular"></i>*@
+                        @*<i class="icon-floppy-disks position-left icon-custom-style " title="Guardar como" id="btnFin2"></i>*@
+                        @*<i class="icon-x position-left icon-custom-style " title="Cancelar" id="btnCancelar"></i>*@
+
                         <!--<i class="icon-envelop4 position-left" style="font-size:25px"></i>-->
                         <div class="heading-elements">
 
@@ -359,7 +377,7 @@
                                                     <label>Monto:</label>
                                                     <div class="input-group">
                                                         <input type="text" id="txtMonto" name="txtMonto" min="0" value="0" class="form-control">
-                                                        <span class="input-group-addon">$</span>
+                                                        <span class="input-group-addon currency"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -414,12 +432,12 @@
                                                     <div class="table-responsive" style="overflow-y: scroll; max-height:22rem;">
                                                         <table class="table table-bordered">
                                                             <thead>
-                                                                <tr>
-                                                                    <th align="center" width="5%">#</th>
-                                                                    <th align="center" width="40%">Servicio</th>
-                                                                    <th align="center" width="20%">Periodicidad</th>
+                                                                <tr class="headerTblColorPlomo">
+                                                                    <th class="center" width="5%">#</th>
+                                                                    <th class="center" width="40%">Servicio</th>
+                                                                    <th class="center" width="20%">Periodicidad</th>
                                                                     @*<th align="center" width="5%">Tipo</th>*@
-                                                                    <th align="center" width="35%">Valor</th>
+                                                                    <th class="center" width="35%">Valor</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbodyComision"></tbody>
@@ -524,10 +542,10 @@
                                                                     <div class="table-responsive">
                                                                         <table class="table tblRowsHeight table-borderless">
                                                                             <thead>
-                                                                                <tr class="headerTblColorPlomo tipografia1">
+                                                                                <tr class="headerTblColorPlomo">
                                                                                     <th colspan="6" style="text-align:center;"><i class="icon-calculator2 position-left"></i> Contribución EGP (expresado en dólares)</th>
                                                                                 </tr>
-                                                                                <tr class="headerTblColorPlomo tipografia1">
+                                                                                <tr class="headerTblColorPlomo">
                                                                                     <th align="right"></th>
                                                                                     <th style="text-align: right">Operación</th>
                                                                                     <th style="text-align: right">Anual</th>
@@ -557,7 +575,7 @@
                                                                                 <tr class="headerTblColorPlomo tipografia1">
                                                                                     <th></th>
                                                                                     <th style="text-align: right">Operación</th>
-                                                                                    <th style="text-align: right">Objetivo</th>
+                                                                                    <th style="text-align: right">Base</th>
                                                                                     @*<th style="text-align: right">Riesgo</th>*@
                                                                                 </tr>
                                                                             </thead>
@@ -809,8 +827,8 @@
             $('#editModal').modal('hide');
             $("#overlay").show();
             $.getJSON('@Url.Action("JSON_Get")', { IdeClienteProducto: Id }, function (data) {
-                $("#btnNuevo,#btnEditar").addClass("hidden");
-                $("#btnSimular,#btnFin,#btnFin2,#btnCancelar,#btnBorrar").removeClass("hidden");
+                //$("#btnNuevo,#btnBuscar").addClass("hidden");
+                //$("#btnSimular,#btnFin,#btnFin2,#btnCancelar,#btnBorrar").removeClass("hidden");
                 var simData = data.simData;
                 $("#IdeClienteProducto").text(simData.ide_cliente_producto);
                 $("input:radio[name=rbTipProspecto][value=" + simData.cod_tip_prospecto + "]").prop('checked', true);
@@ -831,7 +849,6 @@
 
                 $("#ddlModeloRORAC").val(simData.cod_modelo_rorac).trigger('change', 'fSeleccionar');
                 construirComision(data.dataComision);
-                debugger;
 
                 reconstruirReportePYG(data);
                 reconstruirReporteResumenEscenario(data);
@@ -905,7 +922,6 @@
                 codTipCliente = info.cod_tip_cliente;
             }
             $.getJSON('@Url.Action("JSON_OperacionChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codOperacion: codOperacion, codTipCliente: codTipCliente }, function (data) {
-                debugger;
                 $('#ddlProducto').empty();
                 if (info == undefined) {
                     $('#tbodyComision').empty();
@@ -1394,7 +1410,7 @@
         $("#btnBorrar").on("click", function () {
             fnGrabar('borrar');
         });
-        $("#btnEditar").on("click", function () {
+        $("#btnBuscar").on("click", function () {
             $("#overlay").show();
             PlantillaDataTable.draw();
             $("#overlay").hide();
@@ -1443,8 +1459,8 @@
 
                     fnCleanControles();
                     fnCleanReports();
-                    $("#btnSimular,#btnFin,#btnCancelar,#btnBorrar").removeClass("hidden");
-                    $("#btnNuevo,#btnEditar").addClass("hidden");
+                    //$("#btnSimular,#btnFin,#btnCancelar,#btnBorrar").removeClass("hidden");
+                    //$("#btnNuevo,#btnBuscar").addClass("hidden");
 
                     toastr.success('Nueva simulación aperturada');
                     $('input,select').prop('disabled', false);
@@ -1471,16 +1487,18 @@
             cadena += "</select>";
             return cadena;
         }
-        function getComisionValor(data) {
+        function getComisionValor(data, moneda) {
             let tipValor = data.tip_valor;
             let className = '';
             let valor = 0.0;
             let simbolo = "";
+            let addon = ""
             if (tipValor != null) {
                 if (tipValor == "V") {
                     valor = data.Comision;
                     className = 'maskNumber';
-                    simbolo = "$";
+                    simbolo = moneda;
+                    addon = "currency";
                 }
                 if (tipValor == "%") {
                     valor = getPorcentajeNum(data.Porcentaje);
@@ -1494,7 +1512,7 @@
                 valor = 0;
             }
             cadena += " value='" + valor + "'>";
-            cadena += "<span class='input-group-addon'>" + simbolo + "</span>";
+            cadena += "<span class='input-group-addon " + addon + "'>" + simbolo + "</span>";
             cadena += "</div>";
             return cadena;
         }
@@ -1556,13 +1574,23 @@
         function construirComision(data) {
             let cadena = "";
             $('#tbodyComision').empty();
+
+            let _moneda = $("#ddlMoneda option:selected").val();
+            let currency = "";
+            if (_moneda == 0) {
+                currency = "S/."
+            }
+            if (_moneda == 1) {
+                currency = "$"
+            }
+
             $.each(data, function (index, item) {
-                cadena += "<tr class='trComision"+item.ide_comision +"'>";
-                cadena += "<td class='' align='center'>" + item.ide_comision + "</td>";
+                cadena += "<tr>";
+                cadena += "<td align='center'>" + item.ide_comision + "</td>";
                 cadena += "<td align='left'>" + item.comision_servicio + "</td>";
-                cadena += "<td class='tdPeriodo' align='center'>" + getComisionPeriodo(item) + "</td>";
+                cadena += "<td align='center'>" + getComisionPeriodo(item) + "</td>";
                 //cadena += "<td align='center'>" + item.tip_valor + "</td>";
-                cadena += "<td class='tdValor' align='center'>" + getComisionValor(item) + "</td>";
+                cadena += "<td align='center'>" + getComisionValor(item, currency) + "</td>";
                 cadena += "</tr>";
             });
             $("#tbodyComision").append(cadena);
@@ -1693,8 +1721,8 @@
                             fnCleanControles();
                         }
                         fnCleanReports();
-                        $("#btnSimular,#btnFin,#btnFin2,#btnCancelar,#btnBorrar").addClass("hidden");
-                        $("#btnNuevo,#btnEditar").removeClass("hidden");
+                        //$("#btnSimular,#btnFin,#btnFin2,#btnCancelar,#btnBorrar").addClass("hidden");
+                        //$("#btnNuevo,#btnBuscar").removeClass("hidden");
                         $('input,select').prop('disabled', true);
                     }
 
@@ -1739,6 +1767,18 @@
             myChart2.update();
             //myChart2.update();
         });
+        $("#ddlMoneda").change(function () {
+            let _moneda = $("#ddlMoneda option:selected").val();
+            let spanMoneda = "";
+            if (_moneda == 0) {
+                spanMoneda = "S/."
+            }
+            if (_moneda == 1) {
+                spanMoneda = "$"
+            }
+            $(".currency").text(spanMoneda);
+        });
+
         //var controlChangeSimularIndependientes = "#ddlPersoneria,#ddlOperacion,#ddlProducto";
         var controlsChangeSimular = '#ddlTipCliente,#ddlMoneda,#txtMonto,#ddlCanalAtencion,#txtTasaEfectiva,#txtPlazoMeses,#ddlClasificacionInterna,#ddlGarantiaReal,#ddlMonedaReal,#txtMontoGarantiaReal,#ddlMonedaPersonal,#txtMontoGarantiaPersonal,#ddlClasificacionGarantia,#ddlModeloRORAC';
         $(controlsChangeSimular).change(function (e, data) {
