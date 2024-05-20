@@ -18,7 +18,10 @@ namespace BEANS
         public int cod_periodicidad { get; set; }
         public string tip_valor { get; set; }
         public double? Porcentaje { get; set; }
+        public double? veces { get; set; }
         public double? Comision { get; set; }
+        public string simbolo { get; set; }
+        public double? valor { get; set; }
         public double incremento_tasa { get; set; }
         public double incremento_plazo { get; set; }
 

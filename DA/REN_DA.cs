@@ -603,8 +603,11 @@ namespace DA
                         bean.comision_servicio = DataReader.SafeGetString(dr, dr.GetOrdinal("comision_servicio"));
                         bean.cPeriodicidad = DataReader.SafeGetString(dr, dr.GetOrdinal("cPeriodicidad"));
                         bean.cod_periodicidad = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_periodicidad"));
+                        bean.veces = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("veces"));
                         bean.tip_valor = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_valor"));
-                        bean.Porcentaje = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Porcentaje"));
+                        bean.valor = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("valor"));
+                        bean.simbolo = DataReader.SafeGetString(dr, dr.GetOrdinal("simbolo"));
+                        //bean.Porcentaje = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Porcentaje"));
                         bean.Comision = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Comision"));
 
                         lista.Add(bean);
@@ -637,9 +640,10 @@ namespace DA
             cmd.Parameters.Add("@ide_cliente_producto", System.Data.SqlDbType.BigInt).Value = param.ide_cliente_producto;
             cmd.Parameters.Add("@ide_comision", System.Data.SqlDbType.Int).Value = param.ide_comision;
             cmd.Parameters.Add("@cod_periodicidad", System.Data.SqlDbType.Int).Value = param.cod_periodicidad;
-            cmd.Parameters.Add("@porcentaje", System.Data.SqlDbType.Float).Value = param.Porcentaje;
-            cmd.Parameters.Add("@comision", System.Data.SqlDbType.Float).Value = param.Comision;
             cmd.Parameters.Add("@tip_valor", System.Data.SqlDbType.Char).Value = param.tip_valor;
+            cmd.Parameters.Add("@veces", System.Data.SqlDbType.Float).Value = param.veces;
+            cmd.Parameters.Add("@valor", System.Data.SqlDbType.Float).Value = param.valor;
+            
 
             try
             {
@@ -686,13 +690,17 @@ namespace DA
                     {
                         bean = new REN_POPUP_BE();
                         bean.ide_cliente_Producto = DataReader.SafeGetInt64(dr, dr.GetOrdinal("ide_cliente_Producto"));
-                        bean.Documento = DataReader.SafeGetString(dr, dr.GetOrdinal("Documento"));
+                        bean.codigo = DataReader.SafeGetString(dr, dr.GetOrdinal("codigo"));
+                        bean.tip_documento = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_documento"));
+                        bean.num_documento = DataReader.SafeGetString(dr, dr.GetOrdinal("num_documento"));
                         bean.Cliente = DataReader.SafeGetString(dr, dr.GetOrdinal("Cliente"));
-                        bean.Esc = DataReader.SafeGetString(dr, dr.GetOrdinal("Esc"));
                         bean.Producto = DataReader.SafeGetString(dr, dr.GetOrdinal("Producto"));
                         bean.Monto = DataReader.SafeGetString(dr, dr.GetOrdinal("Monto"));
-                        bean.Tea = DataReader.SafeGetString(dr, dr.GetOrdinal("Tea"));
-                        bean.Plazo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Plazo"));
+                        bean.Tea_base = DataReader.SafeGetString(dr, dr.GetOrdinal("Tea_base"));
+                        bean.Tea_efectiva = DataReader.SafeGetString(dr, dr.GetOrdinal("Tea_efectiva"));
+                        bean.plazo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("plazo"));
+                        bean.Profit = DataReader.SafeGetString(dr, dr.GetOrdinal("Profit"));
+                        bean.RORAC = DataReader.SafeGetString(dr, dr.GetOrdinal("RORAC"));
                         bean.cod_usuario = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_usuario"));
 
                         lista.Add(bean);

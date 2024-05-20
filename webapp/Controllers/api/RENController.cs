@@ -33,10 +33,11 @@ namespace webapp.Controllers.api
                 if (model.Filter.buscar != null)
                 {
                     var _search = model.Filter.buscar.ToLower();
-                    query = query.Where(x => x.Documento.ToLower().Contains(_search)
-                                    || x.Cliente.ToLower().Contains(_search)
-                                    || x.Esc.ToLower().Contains(_search)
-                                    || x.Producto.ToLower().Contains(_search)
+                    query = query.Where(
+                                       x => x.tip_documento.ToLower().Contains(_search)
+                                        || x.num_documento.ToLower().Contains(_search)
+                                        || x.Cliente.ToLower().Contains(_search)
+                                        || x.Producto.ToLower().Contains(_search)
                                     );
                 }
             }
@@ -67,14 +68,18 @@ namespace webapp.Controllers.api
                 .Select(x => new REN_POPUP_BE
                 {
                     ide_cliente_Producto = x.ide_cliente_Producto,
-                    Documento = x.Documento,
+                    codigo = x.codigo,
+                    tip_documento = x.tip_documento,
+                    num_documento = x.num_documento,
                     Cliente = x.Cliente,
                     Operacion = x.Operacion,
-                    Esc = x.Esc,
                     Producto = x.Producto,
                     Monto = x.Monto,
-                    Tea = x.Tea,
-                    Plazo = x.Plazo,
+                    Tea_base = x.Tea_base,
+                    Tea_efectiva = x.Tea_efectiva,
+                    plazo = x.plazo,
+                    Profit = x.Profit,
+                    RORAC = x.RORAC,
                     cod_usuario = x.cod_usuario
                 });
 

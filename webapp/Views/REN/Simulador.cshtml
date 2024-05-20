@@ -433,10 +433,10 @@
                                                         <table class="table table-bordered">
                                                             <thead>
                                                                 <tr class="headerTblColorPlomo">
-                                                                    <th class="center" width="5%">#</th>
-                                                                    <th class="center" width="40%">Servicio</th>
-                                                                    <th class="center" width="20%">Periodicidad</th>
-                                                                    @*<th align="center" width="5%">Tipo</th>*@
+                                                                    @*<th class="center" width="5%">#</th>*@
+                                                                    <th class="center" width="30%">Servicio</th>
+                                                                    <th class="center" width="15%">Periodicidad</th>
+                                                                    <th class="center" width="10%">Veces</th>
                                                                     <th class="center" width="35%">Valor</th>
                                                                 </tr>
                                                             </thead>
@@ -772,21 +772,16 @@
                 },
                 {
                     title: 'Documento',
-                    data: 'Documento',
-                    name: 'Documento',
                     className: 'dt-left',
+                    render: function (data, type, full, meta) {
+                        return full.tip_documento + ": " + full.num_documento;
+                    },
                 },
                 {
                     title: 'Cliente',
                     data: 'Cliente',
                     name: 'Cliente',
                     className: 'dt-left',
-                },
-                {
-                    title: 'Escenario',
-                    data: 'Esc',
-                    name: 'Esc',
-                    className: 'dt-center',
                 },
                 {
                     title: 'Producto',
@@ -801,15 +796,33 @@
                     className: 'dt-right',
                 },
                 {
-                    title: 'Tea',
-                    data: 'Tea',
-                    name: 'Tea',
+                    title: 'Tea Base',
+                    data: 'Tea_base',
+                    name: 'Tea_base',
+                    className: 'dt-center',
+                },
+                {
+                    title: 'Tea Efec.',
+                    data: 'Tea_efectiva',
+                    name: 'Tea_efectiva',
                     className: 'dt-center',
                 },
                 {
                     title: 'Plazo',
-                    data: 'Plazo',
-                    name: 'Plazo',
+                    data: 'plazo',
+                    name: 'plazo',
+                    className: 'dt-center',
+                },
+                {
+                    title: 'Profit',
+                    data: 'Profit',
+                    name: 'Profit',
+                    className: 'dt-center',
+                },
+                {
+                    title: 'RORAC',
+                    data: 'RORAC',
+                    name: 'RORAC',
                     className: 'dt-center',
                 },
                 {
@@ -1487,6 +1500,15 @@
             cadena += "</select>";
             return cadena;
         }
+        function getComisionVeces(data) {
+            let valor = data.veces;
+            let cadena = "<input type='number' id='txtComisionVeces" + data.ide_comision + "' onchange='fComisionChange(" + JSON.stringify(data) + ")' class='form-control' ";
+            if (valor == undefined || valor == null) {
+                valor = 0;
+            }
+            cadena += " value='" + valor + "'>";
+            return cadena;
+        }
         function getComisionValor(data, moneda) {
             let tipValor = data.tip_valor;
             let className = '';
@@ -1519,15 +1541,15 @@
         fComisionChange = function (data) {
             $("#overlay").show();
             let codPeriodo = $("#ddlComisionPeriodo" + data.ide_comision + " option:selected").val();
-            let porcentaje = 0.0;
-            let comision = 0.0;
+            let valor = 0.0;
+            let veces = $("#txtComisionVeces" + data.ide_comision).val()
 
             if (data.tip_valor == "V") {
-                comision = getImporte($("#txtComisionValor" + data.ide_comision).val());
+                valor = getImporte($("#txtComisionValor" + data.ide_comision).val());
             } else if (data.tip_valor == "%") {
-                porcentaje = getPorcentaje($("#txtComisionValor" + data.ide_comision).val());
+                valor = getPorcentaje($("#txtComisionValor" + data.ide_comision).val());
             } else {
-                comision = getImporte($("#txtComisionValor" + data.ide_comision).val());
+                valor = getImporte($("#txtComisionValor" + data.ide_comision).val());
             }
 
             var _obj = {
@@ -1536,8 +1558,8 @@
                 ide_comision: data.ide_comision,
                 cod_periodicidad: codPeriodo,
                 tip_valor: data.tip_valor,
-                Porcentaje: porcentaje,
-                Comision: comision,
+                veces: veces,
+                valor: valor,
                 incremento_tasa: $("#ddlRangoTasa option:selected").val(),
                 incremento_plazo: $("#ddlRangoPlazo option:selected").val(),
             };
@@ -1586,10 +1608,10 @@
 
             $.each(data, function (index, item) {
                 cadena += "<tr>";
-                cadena += "<td align='center'>" + item.ide_comision + "</td>";
+                /*cadena += "<td align='center'>" + item.ide_comision + "</td>";*/
                 cadena += "<td align='left'>" + item.comision_servicio + "</td>";
                 cadena += "<td align='center'>" + getComisionPeriodo(item) + "</td>";
-                //cadena += "<td align='center'>" + item.tip_valor + "</td>";
+                cadena += "<td align='center'>" + getComisionVeces(item) + "</td>";
                 cadena += "<td align='center'>" + getComisionValor(item, currency) + "</td>";
                 cadena += "</tr>";
             });
