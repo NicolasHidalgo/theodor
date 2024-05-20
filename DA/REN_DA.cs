@@ -702,6 +702,7 @@ namespace DA
                         bean.Profit = DataReader.SafeGetString(dr, dr.GetOrdinal("Profit"));
                         bean.RORAC = DataReader.SafeGetString(dr, dr.GetOrdinal("RORAC"));
                         bean.cod_usuario = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_usuario"));
+                        bean.Fecha = DataReader.SafeGetString(dr, dr.GetOrdinal("Fecha"));
 
                         lista.Add(bean);
                     }

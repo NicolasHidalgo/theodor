@@ -153,12 +153,15 @@
         }
         th.dt-center, td.dt-center {
             text-align: center;
+            white-space: nowrap;
         }
         th.dt-left, td.dt-left {
             text-align: left;
+            white-space: nowrap;
         }
         th.dt-right, td.dt-right {
             text-align: right;
+            white-space: nowrap;
         }
         .center{
             text-align:center;
@@ -195,7 +198,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Seleccionar Escenario</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Buscar</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -207,14 +210,14 @@
                             <label for="" class="">Buscar</label>
                             <input type="text" class="form-control" id="txtBuscar" oninput="fOnInputBuscar()" />
                         </div>
-                        <div class="col-md-6">
+                        @*<div class="col-md-6">
                             <label class="radio-inline">
                                 <input type="radio" name="optradio" checked>Todos
                             </label>
                             <label class="radio-inline">
                                 <input type="radio" name="optradio">Por usuario
                             </label>
-                        </div>
+                        </div>*@
                         
                     </div>
 
@@ -792,65 +795,95 @@
                     responsivePriority: 0
                 },
                 {
-                    title: 'Documento',
+                    title: 'Código',
+                    data: 'codigo',
+                    name: 'codigo',
                     className: 'dt-left',
-                    render: function (data, type, full, meta) {
-                        return full.tip_documento + ": " + full.num_documento;
-                    },
+                    width: "7%",
+                },
+                {
+                    title: 'Tipo',
+                    data: 'tip_documento',
+                    name: 'tip_documento',
+                    className: 'dt-left',
+                    width: "7%",
+                },
+                {
+                    title: 'Documento',
+                    data: 'num_documento',
+                    name: 'num_documento',
+                    className: 'dt-left',
+                    width: "7%",
                 },
                 {
                     title: 'Cliente',
                     data: 'Cliente',
                     name: 'Cliente',
                     className: 'dt-left',
+                    width: "7%",
                 },
                 {
                     title: 'Producto',
                     data: 'Producto',
                     name: 'Producto',
                     className: 'dt-left',
+                    width: "7%",
                 },
                 {
                     title: 'Monto',
                     data: 'Monto',
                     name: 'Monto',
                     className: 'dt-right',
+                    width: "7%",
                 },
                 {
-                    title: 'Tea Base',
+                    title: 'T. Base',
                     data: 'Tea_base',
                     name: 'Tea_base',
                     className: 'dt-center',
+                    width: "20%",
                 },
                 {
-                    title: 'Tea Efec.',
+                    title: 'T. Efectiva',
                     data: 'Tea_efectiva',
                     name: 'Tea_efectiva',
                     className: 'dt-center',
+                    width: "7%",
                 },
                 {
                     title: 'Plazo',
                     data: 'plazo',
                     name: 'plazo',
                     className: 'dt-center',
+                    width: "7%",
                 },
                 {
                     title: 'Profit',
                     data: 'Profit',
                     name: 'Profit',
                     className: 'dt-center',
+                    width: "7%",
                 },
                 {
                     title: 'RORAC',
                     data: 'RORAC',
                     name: 'RORAC',
                     className: 'dt-center',
+                    width: "7%",
                 },
                 {
                     title: 'Usuario',
                     data: 'cod_usuario',
                     name: 'cod_usuario',
                     className: 'dt-left',
+                    width: "7%",
+                },
+                {
+                    title: 'Fecha',
+                    data: 'Fecha',
+                    name: 'Fecha',
+                    className: 'dt-left',
+                    width: "7%",
                 },
             ],
 
@@ -1543,13 +1576,13 @@
             let addon = ""
             if (tipValor != null) {
                 if (tipValor == "V") {
-                    valor = data.Comision;
+                    valor = data.valor;
                     className = 'maskNumber';
                     simbolo = moneda;
                     addon = "currency";
                 }
                 if (tipValor == "%") {
-                    valor = getPorcentajeNum(data.Porcentaje);
+                    valor = getPorcentajeNum(data.valor);
                     className = 'maskPercent';
                     simbolo = "%";
                 }

@@ -23,5 +23,6 @@ namespace BEANS
         public string Tea_efectiva { get; set; }
         public double? plazo { get; set; }
         public string cod_usuario { get; set; }
+        public string Fecha { get; set; }
     }
 }
