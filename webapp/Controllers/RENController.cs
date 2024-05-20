@@ -298,11 +298,23 @@ namespace webapp.Controllers
                 var _obj = (string[])model.DATA;
                 var _sim = JsonConvert.DeserializeObject<REN_SIM_REQ_BE>(_obj[0]);
                 var user = (SEG_USUARIO_BE)Session["Usuario"];
+                var viewModel = new AuxiliarEdit();
                 _sim.ide_usuario = long.Parse(user.IDE_USUARIO.ToString());
                 _sim.cod_suscriptor = user.SUSCRIPTOR;
                 model.DATA = _sim;
 
-                var reply = bl.fn_ren_pro_clienteProducto(model);
+                var reply = new GEN_REPLY_BE();
+                if (model.ACCION.Equals("@BORRAR"))
+                {
+                    reply = bl.fn_ren_pro_clienteProducto_borrar(user.SUSCRIPTOR, _sim.ide_cliente_producto, _sim.ide_usuario);
+                    _sim = (REN_SIM_REQ_BE)reply.DATA;
+                    viewModel.simData = _sim;
+                }
+                else
+                {
+                    reply = bl.fn_ren_pro_clienteProducto(model);
+                }
+                
                 var res = new Response();
                 res.Message = reply.MENSAJE;
 
@@ -310,9 +322,6 @@ namespace webapp.Controllers
 
                 if (reply.MENSAJE.Equals("") || reply.MENSAJE.Contains(Constantes.SUCCESS))
                     res.Status = HttpStatusCode.OK;
-
-
-                var viewModel = new AuxiliarEdit();
 
                 if (model.ACCION.Equals("@GRABAR")) // grabar = simular
                 {
@@ -384,7 +393,8 @@ namespace webapp.Controllers
                 var ideUsuario = long.Parse(user.IDE_USUARIO.ToString());
                 var codSuscriptor = user.SUSCRIPTOR;
 
-                var reply = bl.fn_ren_pro_clienteProducto_nuevo(user.SUSCRIPTOR, ideUsuario);
+                var reply = new GEN_REPLY_BE();
+                reply = bl.fn_ren_pro_clienteProducto_nuevo(user.SUSCRIPTOR, ideUsuario);
 
                 var _sim = (REN_SIM_REQ_BE)reply.DATA;
                 var comision = bl.fn_ren_pro_clienteComision_vista(codSuscriptor, _sim.ide_cliente_producto);

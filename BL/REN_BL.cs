@@ -86,6 +86,10 @@ namespace BL
         {
             return dat.fn_ren_pro_clienteProducto(model);
         }
+        public GEN_REPLY_BE fn_ren_pro_clienteProducto_borrar(long codSuscriptor, long ideClienteProducto, long ideUsuario)
+        {
+            return dat.fn_ren_pro_clienteProducto_borrar(codSuscriptor, ideClienteProducto, ideUsuario);
+        }
         public List<REN_COMISION_BE> fn_ren_pro_clienteComision_vista(long codSuscriptor, long ideClienteProducto)
         {
             return dat.fn_ren_pro_clienteComision_vista(codSuscriptor, ideClienteProducto);
