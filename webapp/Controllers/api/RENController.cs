@@ -80,7 +80,8 @@ namespace webapp.Controllers.api
                     plazo = x.plazo,
                     Profit = x.Profit,
                     RORAC = x.RORAC,
-                    cod_usuario = x.cod_usuario
+                    cod_usuario = x.cod_usuario,
+                    Fecha = x.Fecha
                 });
 
             var dataTable = new DataTable<REN_POPUP_BE>()

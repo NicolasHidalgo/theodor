@@ -169,10 +169,14 @@
         .cursor {
             cursor: pointer;
         }
+        .btn-activo {
+            background-color: #e8e8e8 !important;
+            border-color: #999999 !important;
+        }
     </style>
 }
 
-<div class="modal" id="confirmModal" tabindex="-1" role="dialog">
+<div class="modal" id="confirmBorrarModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -187,6 +191,45 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" id="btnConfirmarBorrar">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="confirmGuardarModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Seleccione opción</p>
+                <!-- Seamless button group -->
+                <div class="content-group">
+                    @*<div class="row row-seamless btn-block-group">*@
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <button type="button" id="btnFin1" class="btn btn-default btn-block btn-float btn-float-lg btn-activo">
+                                <i class="icon-floppy-disk text-warning-600"></i>
+                                <span>Grabar</span>
+                            </button>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <button type="button" id="btnFin2" class="btn btn-default btn-block btn-float btn-float-lg">
+                                <i class="icon-floppy-disks text-blue"></i>
+                                <span>Grabar Como</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /seamless button group -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmGuardar">Aceptar</button>
             </div>
         </div>
     </div>
@@ -230,7 +273,7 @@
                     
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>*@
                 <!--<button type="button" class="btn btn-primary"></button>-->
             </div>
         </div>
@@ -270,9 +313,9 @@
                         <table>
                             <tr>
                                 <td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a style="color:ThreeDDarkShadow">Nuevo</a></td>
-                                <td class="center"><i class="icon-floppy-disk icon-custom-style " title="Guardar" id="btnFin"></i><br /><a style="color: ThreeDDarkShadow">Grabar</a></td>
+                                <td class="center"><i class="icon-floppy-disk icon-custom-style " title="Grabar" id="btnGrabar"></i><br /><a style="color: ThreeDDarkShadow">Grabar</a></td>
                                 <td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a style="color: ThreeDDarkShadow">Borrar</a></td>
-                                <td class="center"><i class="icon-search4 icon-custom-style" title="Editar" id="btnBuscar"></i><br /><a style="color: ThreeDDarkShadow">Buscar</a></td>
+                                <td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a style="color: ThreeDDarkShadow">Buscar</a></td>
                             </tr>
                             @*<tr>
                                 <td class="center cursor" id="btnNuevo">Nuevo</td>
@@ -474,21 +517,21 @@
 
                                         <legend class="tipografia1 text-semibold"><i class="icon-price-tag position-left"></i> Garantías</legend>
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Real Mobiliaria</label>
                                                     @Html.DropDownList("ddlGarantiaReal", Model.ddlGarantiaReal, new { @class = "select" })
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>Monto Garantía:</label>
                                                     <input type="text" id="txtMontoGarantiaReal" name="txtMontoGarantiaReal" value="0" min="0" class="form-control">
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>Moneda:</label>
                                                     @Html.DropDownList("ddlMonedaReal", Model.ddlMoneda, new { @class = "select" })
@@ -497,21 +540,21 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Personales y Derivadas</label>
                                                     @Html.DropDownList("ddlGarantiaPersonal", Model.ddlGarantiaPersonal, new { @class = "select" })
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>Monto Garantía:</label>
                                                     <input type="text" id="txtMontoGarantiaPersonal" name="txtMontoGarantiaPersonal" value="0" min="0" class="form-control">
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>Moneda:</label>
                                                     @Html.DropDownList("ddlMonedaPersonal", Model.ddlMoneda, new { @class = "select" })
@@ -521,7 +564,7 @@
 
 
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Rating del Garante</label>
                                                     @Html.DropDownList("ddlClasificacionGarantia", Model.ddlClasificacionGarantia, new { @class = "select" })
@@ -530,7 +573,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Modelo RORAC</label>
                                                     <select id="ddlModeloRORAC" name="ddlModeloRORAC" class="select">
@@ -799,96 +842,105 @@
                     data: 'codigo',
                     name: 'codigo',
                     className: 'dt-left',
-                    width: "7%",
                 },
                 {
                     title: 'Tipo',
                     data: 'tip_documento',
                     name: 'tip_documento',
                     className: 'dt-left',
-                    width: "7%",
                 },
                 {
                     title: 'Documento',
                     data: 'num_documento',
                     name: 'num_documento',
                     className: 'dt-left',
-                    width: "7%",
                 },
                 {
                     title: 'Cliente',
                     data: 'Cliente',
                     name: 'Cliente',
                     className: 'dt-left',
-                    width: "7%",
                 },
                 {
                     title: 'Producto',
                     data: 'Producto',
                     name: 'Producto',
                     className: 'dt-left',
-                    width: "7%",
                 },
                 {
                     title: 'Monto',
                     data: 'Monto',
                     name: 'Monto',
                     className: 'dt-right',
-                    width: "7%",
                 },
                 {
                     title: 'T. Base',
                     data: 'Tea_base',
                     name: 'Tea_base',
                     className: 'dt-center',
-                    width: "20%",
                 },
                 {
                     title: 'T. Efectiva',
                     data: 'Tea_efectiva',
                     name: 'Tea_efectiva',
                     className: 'dt-center',
-                    width: "7%",
                 },
                 {
                     title: 'Plazo',
                     data: 'plazo',
                     name: 'plazo',
                     className: 'dt-center',
-                    width: "7%",
                 },
                 {
                     title: 'Profit',
                     data: 'Profit',
                     name: 'Profit',
                     className: 'dt-center',
-                    width: "7%",
                 },
                 {
                     title: 'RORAC',
                     data: 'RORAC',
                     name: 'RORAC',
                     className: 'dt-center',
-                    width: "7%",
                 },
                 {
                     title: 'Usuario',
                     data: 'cod_usuario',
                     name: 'cod_usuario',
                     className: 'dt-left',
-                    width: "7%",
                 },
                 {
                     title: 'Fecha',
                     data: 'Fecha',
                     name: 'Fecha',
                     className: 'dt-left',
-                    width: "7%",
                 },
             ],
 
         });
 
+        function fnPrecargarValores(data) {
+            var simData = data.simData;
+            $("#IdeClienteProducto").text(simData.ide_cliente_producto);
+            $("input:radio[name=rbTipProspecto][value=" + simData.cod_tip_prospecto + "]").prop('checked', true);
+            $("#txtNombreCliente").val(simData.nom_cliente);
+            $("#ddlMoneda").val(simData.cod_moneda).trigger('change', 'fSeleccionar');
+            $("#ddlCanalAtencion").val(simData.cod_canal_atencion).trigger('change', 'fSeleccionar');
+            $("#txtMonto").val(simData.monto).trigger('change', 'fSeleccionar');
+            $("#txtTasaEfectiva").val(getPorcentajeNum(simData.tea)).trigger('change', 'fSeleccionar');
+            $("#txtPlazoMeses").val(simData.plazo).trigger('change', 'fSeleccionar');
+
+            $("#ddlPersoneria").val(simData.cod_personeria).trigger('change', [simData]);
+            $("#ddlOperacion").val(simData.cod_operacion).trigger('change', [simData]);
+
+            $("#txtMontoGarantiaReal").val(simData.monto_garantia_real).trigger('change', 'fSeleccionar');
+            $("#txtMontoGarantiaPersonal").val(simData.monto_garantia_personal).trigger('change', 'fSeleccionar');
+            $("#ddlMonedaReal").val(simData.cod_moneda_garantia_real).trigger('change', 'fSeleccionar');
+            $("#ddlMonedaPersonal").val(simData.cod_moneda_garantia_personal).trigger('change', 'fSeleccionar');
+
+            $("#ddlModeloRORAC").val(simData.cod_modelo_rorac).trigger('change', 'fSeleccionar');
+            $("#txtAmortizacion").val(data.amortizacion);
+        }
 
         fSeleccionar = function (Id) {
             $('#editModal').modal('hide');
@@ -896,27 +948,10 @@
             $.getJSON('@Url.Action("JSON_Get")', { IdeClienteProducto: Id }, function (data) {
                 //$("#btnNuevo,#btnBuscar").addClass("hidden");
                 //$("#btnSimular,#btnFin,#btnFin2,#btnCancelar,#btnBorrar").removeClass("hidden");
-                var simData = data.simData;
-                $("#IdeClienteProducto").text(simData.ide_cliente_producto);
-                $("input:radio[name=rbTipProspecto][value=" + simData.cod_tip_prospecto + "]").prop('checked', true);
-                $("#txtNombreCliente").val(simData.nom_cliente);
-                $("#ddlMoneda").val(simData.cod_moneda).trigger('change', 'fSeleccionar');
-                $("#ddlCanalAtencion").val(simData.cod_canal_atencion).trigger('change', 'fSeleccionar');
-                $("#txtMonto").val(simData.monto).trigger('change', 'fSeleccionar');
-                $("#txtTasaEfectiva").val(getPorcentajeNum(simData.tea)).trigger('change', 'fSeleccionar');
-                $("#txtPlazoMeses").val(simData.plazo).trigger('change', 'fSeleccionar');
 
-                $("#ddlPersoneria").val(simData.cod_personeria).trigger('change', [simData]);
-                $("#ddlOperacion").val(simData.cod_operacion).trigger('change', [simData]);
+                fnPrecargarValores(data);
 
-                $("#txtMontoGarantiaReal").val(simData.monto_garantia_real).trigger('change', 'fSeleccionar');
-                $("#txtMontoGarantiaPersonal").val(simData.monto_garantia_personal).trigger('change', 'fSeleccionar');
-                $("#ddlMonedaReal").val(simData.cod_moneda_garantia_real).trigger('change', 'fSeleccionar');
-                $("#ddlMonedaPersonal").val(simData.cod_moneda_garantia_personal).trigger('change', 'fSeleccionar');
-
-                $("#ddlModeloRORAC").val(simData.cod_modelo_rorac).trigger('change', 'fSeleccionar');
                 construirComision(data.dataComision);
-
                 reconstruirReportePYG(data);
                 reconstruirReporteResumenEscenario(data);
                 reconstruirReporteRoracRes(data);
@@ -924,9 +959,7 @@
                 //updateChart1(data.dataComposicion);
                 //updateChart2(data.dataComposicion);
                 //updateChart3(data.dataComposicion);
-
-                //$("#txtAmortizacion").val(data.simData.tip_amortizacion);
-                $("#txtAmortizacion").val(data.amortizacion);
+                
             }).done(function () {
                 $('input,select').prop('disabled', false);
                 $("#Seccion01").click();
@@ -1475,11 +1508,11 @@
             fnGrabar('cancelar');
         });
         $("#btnBorrar").on("click", function () {
-            $('#confirmModal').modal('show'); 
+            $('#confirmBorrarModal').modal('show'); 
             //fnGrabar('borrar');
         });
         $("#btnConfirmarBorrar").on("click", function () {
-            $('#confirmModal').modal('hide');
+            $('#confirmBorrarModal').modal('hide');
             fnGrabar('borrar');
         });
         $("#btnBuscar").on("click", function () {
@@ -1493,11 +1526,26 @@
         $("#btnSimular").on("click", function () {
             fnGrabar('simular');
         });
-        $("#btnFin").on("click", function () {
-            fnGrabar('fin');
+        $("#btnGrabar").on("click", function () {
+            $('#confirmGuardarModal').modal('show'); 
+        });
+        $("#btnFin1").on("click", function () {
+            $("#btnFin1").addClass('btn-activo');
+            $("#btnFin2").removeClass('btn-activo');
+            
         });
         $("#btnFin2").on("click", function () {
-            fnGrabar('fin2');
+            $("#btnFin2").addClass('btn-activo');
+            $("#btnFin1").removeClass('btn-activo');
+        });
+        $("#btnConfirmGuardar").on("click", function () {
+            $('#confirmGuardarModal').modal('hide');
+            if ($("#btnFin1").hasClass("btn-activo")) {
+                fnGrabar('fin');
+            } else {
+                fnGrabar('fin2');
+            }
+            
         });
 
         $('#txtMonto,#txtMontoGarantiaReal,#txtMontoGarantiaPersonal').inputmask({
@@ -1536,7 +1584,30 @@
 
                     toastr.success('Nueva simulación aperturada');
                     $('input,select').prop('disabled', false);
-                    $("#IdeClienteProducto").text(data.Data.simData.ide_cliente_producto);
+
+                    fnPrecargarValores(data.Data);
+                    //var simData = data.Data.simData;
+                    //$("#IdeClienteProducto").text(simData.ide_cliente_producto);
+                    //$("input:radio[name=rbTipProspecto][value=" + simData.cod_tip_prospecto + "]").prop('checked', true);
+                    //$("#txtNombreCliente").val(simData.nom_cliente);
+                    //$("#ddlMoneda").val(simData.cod_moneda).trigger('change', 'fSeleccionar');
+                    //$("#ddlCanalAtencion").val(simData.cod_canal_atencion).trigger('change', 'fSeleccionar');
+                    //$("#txtMonto").val(simData.monto).trigger('change', 'fSeleccionar');
+                    //$("#txtTasaEfectiva").val(getPorcentajeNum(simData.tea)).trigger('change', 'fSeleccionar');
+                    //$("#txtPlazoMeses").val(simData.plazo).trigger('change', 'fSeleccionar');
+
+                    //$("#ddlPersoneria").val(simData.cod_personeria).trigger('change', [simData]);
+                    //$("#ddlOperacion").val(simData.cod_operacion).trigger('change', [simData]);
+
+                    //$("#txtMontoGarantiaReal").val(simData.monto_garantia_real).trigger('change', 'fSeleccionar');
+                    //$("#txtMontoGarantiaPersonal").val(simData.monto_garantia_personal).trigger('change', 'fSeleccionar');
+                    //$("#ddlMonedaReal").val(simData.cod_moneda_garantia_real).trigger('change', 'fSeleccionar');
+                    //$("#ddlMonedaPersonal").val(simData.cod_moneda_garantia_personal).trigger('change', 'fSeleccionar');
+
+                    //$("#ddlModeloRORAC").val(simData.cod_modelo_rorac).trigger('change', 'fSeleccionar');
+                    //$("#txtAmortizacion").val(data.amortizacion);
+
+
                     construirComision(data.Data.dataComision);
                 }
                 else {
@@ -1805,6 +1876,11 @@
                         //$("#btnSimular,#btnFin,#btnFin2,#btnCancelar,#btnBorrar").addClass("hidden");
                         //$("#btnNuevo,#btnBuscar").removeClass("hidden");
                         $('input,select').prop('disabled', true);
+
+                        if (act == 'borrar') {
+                            $('input,select').prop('disabled', false);
+                            fnPrecargarValores(data.Data);
+                        }
                     }
 
                     if (act == 'simular') {
