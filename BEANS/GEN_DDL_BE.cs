@@ -34,6 +34,7 @@ namespace BEANS
     public class GEN_INFO_BE
     {
         public string info { get; set; } = "";
+        public long ide { get; set; }
         public string cod { get; set; } = "";
         public string nom { get; set; }
         public string nom2 { get; set; }

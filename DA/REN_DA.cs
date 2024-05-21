@@ -41,6 +41,7 @@ namespace DA
                         if (accion.Equals("INFO1"))
                         {
                             bean.info = DataReader.SafeGetString(dr, dr.GetOrdinal("info"));
+                            bean.ide = DataReader.SafeGetInt64(dr, dr.GetOrdinal("ide"));
                             bean.cod = DataReader.SafeGetString(dr, dr.GetOrdinal("cod"));
                             bean.nom = DataReader.SafeGetString(dr, dr.GetOrdinal("nom"));
                             bean.nom2 = DataReader.SafeGetString(dr, dr.GetOrdinal("nom2"));

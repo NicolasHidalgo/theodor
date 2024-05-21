@@ -959,7 +959,7 @@
                 //updateChart1(data.dataComposicion);
                 //updateChart2(data.dataComposicion);
                 //updateChart3(data.dataComposicion);
-                
+
             }).done(function () {
                 $('input,select').prop('disabled', false);
                 $("#Seccion01").click();
@@ -971,6 +971,9 @@
         $("#ddlPersoneria").change(function (e, data) {
             ddlPersoneriaChange(data);
         });
+        $("#ddlTipCliente").change(function (e, data) {
+            ddlTipoClienteChange(data);
+        });
         $("#ddlOperacion").change(function (e, data) {
             ddlOperacionChange(data);
         });
@@ -979,13 +982,15 @@
         });
         function ddlPersoneriaChange(info) {
             let codPersoneria = $("#ddlPersoneria option:selected").val();
+            let codOperacion = $("#ddlOperacion option:selected").val();
             if (info != undefined && info != null) {
                 if (info == "clean") {
                     return;
                 }
                 codPersoneria = info.cod_personeria;
+                codOperacion = info.cod_operacion;
             }
-            $.getJSON('@Url.Action("JSON_PersoneriaChange")', { codPersoneria: codPersoneria }, function (data) {
+            $.getJSON('@Url.Action("JSON_PersoneriaChange")', { codPersoneria: codPersoneria, codOperacion: codOperacion }, function (data) {
                 $('#ddlTipDocumento').empty();
                 $.each(data.ddlTipDocumento, function (index, item) {
                     $('#ddlTipDocumento').append($('<option/>', {
@@ -1003,11 +1008,45 @@
                         selected: item.Selected
                     }));
                 });
+
+                $('#ddlProducto').empty();
+                $.each(data.ddlProducto, function (index, item) {
+                    $('#ddlProducto').append($('<option/>', {
+                        value: item.Value,
+                        text: item.Text,
+                        selected: item.Selected
+                    }));
+                });
             }).done(function () {
                 if (info != undefined && info != null) {
                     $("#ddlTipDocumento").val(info.cod_tip_documento).trigger('change', 'fSeleccionar');
                     $("#txtNumDoc").val(info.num_documento).trigger('change', 'fSeleccionar');
                     $("#ddlTipCliente").val(info.cod_tip_cliente).trigger('change', 'fSeleccionar');
+                }
+            });
+        }
+        function ddlTipoClienteChange(info) {
+            let codOperacion = $("#ddlOperacion option:selected").val();
+            let codTipCliente = $("#ddlTipCliente option:selected").val();
+            if (info != undefined && info != null) {
+                if (info == "clean") {
+                    return;
+                }
+                codOperacion = info.cod_operacion;
+                codTipCliente = info.cod_tip_cliente;
+            }
+            $.getJSON('@Url.Action("JSON_TipoClienteChange")', { codOperacion: codOperacion, codTipCliente: codTipCliente }, function (data) {
+                $('#ddlProducto').empty();
+                $.each(data.ddlProducto, function (index, item) {
+                    $('#ddlProducto').append($('<option/>', {
+                        value: item.Value,
+                        text: item.Text,
+                        selected: item.Selected
+                    }));
+                });
+            }).done(function () {
+                if (info != undefined && info != null) {
+                    
                 }
             });
         }
@@ -1508,7 +1547,7 @@
             fnGrabar('cancelar');
         });
         $("#btnBorrar").on("click", function () {
-            $('#confirmBorrarModal').modal('show'); 
+            $('#confirmBorrarModal').modal('show');
             //fnGrabar('borrar');
         });
         $("#btnConfirmarBorrar").on("click", function () {
@@ -1527,12 +1566,12 @@
             fnGrabar('simular');
         });
         $("#btnGrabar").on("click", function () {
-            $('#confirmGuardarModal').modal('show'); 
+            $('#confirmGuardarModal').modal('show');
         });
         $("#btnFin1").on("click", function () {
             $("#btnFin1").addClass('btn-activo');
             $("#btnFin2").removeClass('btn-activo');
-            
+
         });
         $("#btnFin2").on("click", function () {
             $("#btnFin2").addClass('btn-activo');
@@ -1545,7 +1584,7 @@
             } else {
                 fnGrabar('fin2');
             }
-            
+
         });
 
         $('#txtMonto,#txtMontoGarantiaReal,#txtMontoGarantiaPersonal').inputmask({
@@ -1619,7 +1658,6 @@
                 $("#overlay").hide();
             });
         }
-
         function getComisionPeriodo(data) {
             let cadena = "<select id='ddlComisionPeriodo" + data.ide_comision + "' onchange='fComisionChange(" + JSON.stringify(data) + ")' class='form-control'>";
             let split1 = data.cPeriodicidad.replaceAll('><', '|').replaceAll('<', '').replaceAll('>', '').split('|');
@@ -1770,7 +1808,6 @@
                 numericInput: true
             });
         }
-
         function fnGrabar(act) {
             fOnAlertClose();
             let monto = getImporte($("#txtMonto").val());
@@ -1870,9 +1907,9 @@
                     if (act == 'fin' || act == 'fin2' || act == 'cancelar' || act == 'borrar') {
                         $("#IdeClienteProducto").text('0');
                         if (act != 'cancelar') {
-                            fnCleanControles();
+                            //fnCleanControles();
                         }
-                        fnCleanReports();
+                        //fnCleanReports();
                         //$("#btnSimular,#btnFin,#btnFin2,#btnCancelar,#btnBorrar").addClass("hidden");
                         //$("#btnNuevo,#btnBuscar").removeClass("hidden");
                         $('input,select').prop('disabled', true);

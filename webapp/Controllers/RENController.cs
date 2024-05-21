@@ -65,9 +65,9 @@ namespace webapp.Controllers
 
         }
 
-        public JsonResult JSON_PersoneriaChange(string codPersoneria)
+        public JsonResult JSON_PersoneriaChange(string codPersoneria, string codOperacion)
         {
-            if (codPersoneria == null)
+            if (codPersoneria == null || codPersoneria == string.Empty)
             {
                 return Json(null, JsonRequestBehavior.AllowGet);
             }
@@ -85,7 +85,7 @@ namespace webapp.Controllers
             }
 
             viewModel.ddlTipDocumento = dataInfo.lstTipDocumento
-                                        .Where(x => x.cod_personeria.Equals("@") || x.cod_personeria.Equals(codPersoneria))
+                                        .Where(x => x.cod_personeria.Equals(codPersoneria))
                                         .Select(x => new ExtendedSelectListItem
             {
                 Value = x.cod,
@@ -93,7 +93,7 @@ namespace webapp.Controllers
                 Selected = x.selected
             });
             viewModel.ddlTipCliente = dataInfo.lstTipCliente
-                                        .Where(x => x.cod_personeria.Equals("@") || x.cod_personeria.Equals(codPersoneria))
+                                        .Where(x => x.cod_personeria.Equals(codPersoneria))
                                         .Select(x => new ExtendedSelectListItem
             {
                 Value = x.cod,
@@ -101,11 +101,30 @@ namespace webapp.Controllers
                 Selected = x.selected
             });
 
+            //cargar producto
+            if (codOperacion != null && codOperacion != string.Empty)
+            {
+                var defTipCliente = viewModel.ddlTipCliente.FirstOrDefault();
+                if (defTipCliente.Value != null && defTipCliente.Value != "")
+                {
+                    viewModel.ddlProducto = dataInfo.lstProducto
+                                            .Where(x => x.cod_operacion.Equals(codOperacion) && x.cod_tip_cliente.Equals(defTipCliente.Value))
+                                            .Select(x => new ExtendedSelectListItem
+                                            {
+                                                Value = x.cod,
+                                                Text = x.nom,
+                                                Selected = x.selected
+                                            });
+                }
+            }
+            
+
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult JSON_OperacionChange(long ide_cliente_producto, string codOperacion, string codTipCliente)
+        public JsonResult JSON_TipoClienteChange(string codOperacion, string codTipCliente)
         {
-            if (codOperacion == null || codTipCliente == null)
+            if (codTipCliente == null || codTipCliente == string.Empty || 
+                codOperacion == null || codOperacion == string.Empty)
             {
                 return Json(null, JsonRequestBehavior.AllowGet);
             }
@@ -123,15 +142,50 @@ namespace webapp.Controllers
             }
 
             viewModel.ddlProducto = dataInfo.lstProducto
-                                    .Where(x => x.cod_operacion.Equals("@") || (x.cod_operacion.Equals(codOperacion) && x.cod_tip_cliente.Equals(codTipCliente)))
-                                    .Select(x => new ExtendedSelectListItem
+                                        .Where(x => x.cod_operacion.Equals(codOperacion) && x.cod_tip_cliente.Equals(codTipCliente))
+                                        .Select(x => new ExtendedSelectListItem
+                                        {
+                                            Value = x.cod,
+                                            Text = x.nom,
+                                            Selected = x.selected
+                                        });
+
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult JSON_OperacionChange(long ide_cliente_producto, string codOperacion, string codTipCliente)
+        {
+            if (codOperacion == null || codOperacion == string.Empty)
             {
-                Value = x.cod,
-                Text = x.nom,
-                Selected = x.selected
-            });
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var viewModel = new AuxiliarEdit();
+            var dataInfo = new REN_INFO_BE();
+            if (Session["dataInfo"] == null)
+            {
+                dataInfo = bl.fn_ren_sel_info("INFO1", user.SUSCRIPTOR);
+                Session["dataInfo"] = dataInfo;
+            }
+            else
+            {
+                dataInfo = (REN_INFO_BE)Session["dataInfo"];
+            }
+
+            if (codTipCliente != null && codTipCliente != string.Empty)
+            {
+                viewModel.ddlProducto = dataInfo.lstProducto
+                                    .Where(x => (x.cod_operacion.Equals(codOperacion) && x.cod_tip_cliente.Equals(codTipCliente)))
+                                    .Select(x => new ExtendedSelectListItem
+                                    {
+                                        Value = x.cod,
+                                        Text = x.nom,
+                                        Selected = x.selected
+                                    });
+            }
+            
             viewModel.ddlClasificacionInterna = dataInfo.lstClasificacionInterna
-                                                .Where(x => x.cod_operacion.Equals("@") || x.cod_operacion.Equals(codOperacion))
+                                                .Where(x => x.cod_operacion.Equals(codOperacion))
                                                 .Select(x => new ExtendedSelectListItem
             {
                 Value = x.cod,
@@ -139,7 +193,7 @@ namespace webapp.Controllers
                 Selected = x.selected
             });
             viewModel.ddlClasificacionExterna = dataInfo.lstClasificacionExterna
-                                                .Where(x => x.cod_operacion.Equals("@") || x.cod_operacion.Equals(codOperacion))
+                                                .Where(x => x.cod_operacion.Equals(codOperacion))
                                                 .Select(x => new ExtendedSelectListItem
             {
                 Value = x.cod,
@@ -147,7 +201,7 @@ namespace webapp.Controllers
                 Selected = x.selected
             });
             viewModel.ddlGarantiaReal = dataInfo.lstGarantiaReal
-                                        .Where(x => x.cod_operacion.Equals("@") || x.cod_operacion.Equals(codOperacion))
+                                        .Where(x => x.cod_operacion.Equals(codOperacion))
                                         .Select(x => new ExtendedSelectListItem
             {
                 Value = x.cod,
@@ -155,7 +209,7 @@ namespace webapp.Controllers
                 Selected = x.selected
             });
             viewModel.ddlGarantiaPersonal = dataInfo.lstGarantiaPersonal
-                                            .Where(x => x.cod_operacion.Equals("@") || x.cod_operacion.Equals(codOperacion))
+                                            .Where(x => x.cod_operacion.Equals(codOperacion))
                                             .Select(x => new ExtendedSelectListItem
             {
                 Value = x.cod,
@@ -163,7 +217,7 @@ namespace webapp.Controllers
                 Selected = x.selected
             });
             viewModel.ddlClasificacionGarantia = dataInfo.lstClasificacionGarantia
-                                                    .Where(x => x.cod_operacion.Equals("@") || x.cod_operacion.Equals(codOperacion))
+                                                    .Where(x => x.cod_operacion.Equals(codOperacion))
                                                     .Select(x => new ExtendedSelectListItem
             {
                 Value = x.cod,
@@ -175,7 +229,7 @@ namespace webapp.Controllers
         }
         public JsonResult JSON_ProductoChange(long ide_cliente_producto, string codProducto)
         {
-            if (codProducto == null)
+            if (codProducto == null || codProducto == string.Empty)
             {
                 return Json(null, JsonRequestBehavior.AllowGet);
             }
@@ -214,7 +268,6 @@ namespace webapp.Controllers
             var data = bl.fn_ren_pro_listarPopup(param);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-
         public JsonResult JSON_Get(long IdeClienteProducto)
         {
             var viewModel = new AuxiliarEdit();
