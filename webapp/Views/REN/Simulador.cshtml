@@ -1905,14 +1905,15 @@
                 if (data.Status === 200) {
                     //toastr.success(data.Message);
                     if (act == 'fin' || act == 'fin2' || act == 'cancelar' || act == 'borrar') {
-                        $("#IdeClienteProducto").text('0');
+                        //$("#IdeClienteProducto").text('0');
                         if (act != 'cancelar') {
                             //fnCleanControles();
                         }
                         //fnCleanReports();
                         //$("#btnSimular,#btnFin,#btnFin2,#btnCancelar,#btnBorrar").addClass("hidden");
                         //$("#btnNuevo,#btnBuscar").removeClass("hidden");
-                        $('input,select').prop('disabled', true);
+
+                        //$('input,select').prop('disabled', true);
 
                         if (act == 'borrar') {
                             $('input,select').prop('disabled', false);
