@@ -1,5 +1,6 @@
 ﻿using BEANS;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -767,8 +768,16 @@ namespace DA
                 con.InfoMessage += new SqlInfoMessageEventHandler(InfoMessageHandler);
                 con.FireInfoMessageEventOnUserErrors = true;
                 con.Open();
-                var iFilasAfectadas = cmd.ExecuteNonQuery();
-                
+                //var iFilasAfectadas = cmd.ExecuteNonQuery();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    while (dr.Read())
+                    {
+                        model.DATA = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("tea_objetivo"));
+                    }
+                }
+
             }
             catch (Exception ex)
             {

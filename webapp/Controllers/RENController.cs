@@ -352,6 +352,7 @@ namespace webapp.Controllers
                 var _sim = JsonConvert.DeserializeObject<REN_SIM_REQ_BE>(_obj[0]);
                 var user = (SEG_USUARIO_BE)Session["Usuario"];
                 var viewModel = new AuxiliarEdit();
+                viewModel.simData = new REN_SIM_REQ_BE();
                 _sim.ide_usuario = long.Parse(user.IDE_USUARIO.ToString());
                 _sim.cod_suscriptor = user.SUSCRIPTOR;
                 model.DATA = _sim;
@@ -366,6 +367,7 @@ namespace webapp.Controllers
                 else
                 {
                     reply = bl.fn_ren_pro_clienteProducto(model);
+                    viewModel.simData.tea = reply.DATA == null ? 0 : (double)reply.DATA;
                 }
                 
                 var res = new Response();

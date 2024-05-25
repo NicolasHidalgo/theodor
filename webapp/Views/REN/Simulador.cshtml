@@ -173,6 +173,9 @@
             background-color: #e8e8e8 !important;
             border-color: #999999 !important;
         }
+        .botonera {
+            color: ThreeDDarkShadow;
+        }
     </style>
 }
 
@@ -312,10 +315,10 @@
                     <div class="panel-heading">
                         <table>
                             <tr>
-                                <td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a style="color:ThreeDDarkShadow">Nuevo</a></td>
-                                <td class="center"><i class="icon-floppy-disk icon-custom-style " title="Grabar" id="btnGrabar"></i><br /><a style="color: ThreeDDarkShadow">Grabar</a></td>
-                                <td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a style="color: ThreeDDarkShadow">Borrar</a></td>
-                                <td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a style="color: ThreeDDarkShadow">Buscar</a></td>
+                                <td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>
+                                <td class="center"><i class="icon-floppy-disk icon-custom-style " title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>
+                                <td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a class="botonera classBorrar">Borrar</a></td>
+                                <td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>
                             </tr>
                             @*<tr>
                                 <td class="center cursor" id="btnNuevo">Nuevo</td>
@@ -432,7 +435,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-5">
+                                            <div class="col-md-5 hidden">
                                                 <div class="form-group">
                                                     <label>Amortización</label>
                                                     <input type="text" id="txtAmortizacion" value="" class="form-control" readonly />
@@ -471,11 +474,11 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Plazo en meses</label>
-                                                    <input type="text" id="txtPlazoMeses" name="txtPlazoMeses" onkeypress="return event.charCode >= 48 && event.charCode <= 57" min="1" max="99" maxlength="2" step="1" class="form-control">
+                                                    <input type="text" id="txtPlazoMeses" name="txtPlazoMeses" onkeypress="return event.charCode >= 48 && event.charCode <= 57" min="1" max="999" maxlength="3" step="1" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row" id="divClasificacion">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Clasificación Interna</label>
@@ -771,6 +774,7 @@
     var fComisionChange;
     var fOnAlertClose;
     var fOnInputBuscar;
+    var flgTEA = 0;
 
     $(document).ready(function () {
 
@@ -1115,10 +1119,18 @@
                 });
 
                 let disabled = false;
+                if (codOperacion == "DIR") {
+                    $("#Seccion02,#Seccion03,#Seccion04").removeClass("hidden");
+                } else {
+                    $("#Seccion02,#Seccion03,#Seccion04").addClass("hidden");
+                }
                 if (codOperacion == "DEP") {
+                    $("#divClasificacion").addClass("hidden");
                     disabled = true;
                     $('#txtMontoGarantiaReal,#txtMontoGarantiaPersonal').val('');
                     $("#ddlMonedaReal,#ddlMonedaPersonal").val('').trigger('change', 'fSeleccionar');
+                } else {
+                    $("#divClasificacion").removeClass("hidden");
                 }
                 $('#ddlGarantiaReal').prop('disabled', disabled);
                 $('#ddlGarantiaPersonal').prop('disabled', disabled);
@@ -1539,14 +1551,14 @@
         }
 
         /** BOTONES */
-        $("#btnNuevo").on("click", function () {
+        $("#btnNuevo,.classNuevo").on("click", function () {
             fOnAlertClose();
             fnNuevo();
         });
         $("#btnCancelar").on("click", function () {
             fnGrabar('cancelar');
         });
-        $("#btnBorrar").on("click", function () {
+        $("#btnBorrar,.classBorrar").on("click", function () {
             $('#confirmBorrarModal').modal('show');
             //fnGrabar('borrar');
         });
@@ -1554,7 +1566,7 @@
             $('#confirmBorrarModal').modal('hide');
             fnGrabar('borrar');
         });
-        $("#btnBuscar").on("click", function () {
+        $("#btnBuscar,.classBuscar").on("click", function () {
             $("#overlay").show();
             PlantillaDataTable.draw();
             $("#overlay").hide();
@@ -1565,7 +1577,7 @@
         $("#btnSimular").on("click", function () {
             fnGrabar('simular');
         });
-        $("#btnGrabar").on("click", function () {
+        $("#btnGrabar,.classGrabar").on("click", function () {
             $('#confirmGuardarModal').modal('show');
         });
         $("#btnFin1").on("click", function () {
@@ -1612,6 +1624,8 @@
 
         function fnNuevo() {
             $("#overlay").show();
+            flgTEA = 0;
+
             var _url = '@Url.Action("New", "REN")';
             $.post(_url).done(function (data) {
                 if (data.Status === 200) {
@@ -1921,7 +1935,12 @@
                         }
                     }
 
-                    if (act == 'simular') {
+                    if (act == 'simular') { 
+                        debugger;
+                        if (flgTEA == 0) {
+                            $("#txtTasaEfectiva").val(getPorcentajeNum(data.Data.simData.tea)).trigger('change', 'fSeleccionar');
+                        }
+                        
                         construirComision(data.Data.dataComision);
                         $("#txtAmortizacion").val(data.Data.amortizacion);
 
@@ -1945,7 +1964,12 @@
                 $("#overlay").hide();
             });
         }
-        $("#txtTasaEfectiva").change(function (e) {
+        $("#txtTasaEfectiva").change(function (e, data) {
+            debugger;
+            if (data != "fSeleccionar" && data != "clean") {
+                flgTEA = 1;
+            }
+            
             let porcent = getPorcentaje($(this).val());
             let cociente = 0;
             if ((porcent + 0.1) > 1) {
