@@ -2737,6 +2737,7 @@
     <Content Include="Views\SEG\Permisos.cshtml" />
     <Content Include="Views\REN\Simulador.cshtml" />
     <Content Include="Views\DEMO\Demo.cshtml" />
+    <Content Include="Views\REN\Simulador - Copia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

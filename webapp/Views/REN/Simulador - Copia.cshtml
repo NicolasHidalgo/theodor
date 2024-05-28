@@ -371,24 +371,22 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Nombre o Razón Social</label>
                                                     <input type="text" id="txtNombreCliente" name="txtNombreCliente" class="form-control">
                                                 </div>
                                             </div>
 
-                                            
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Personería</label>
                                                     @Html.DropDownList("ddlPersoneria", Model.ddlPersoneria, new { @class = "select" })
                                                 </div>
                                             </div>
+                                        </div>
 
+                                        <div class="row">
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>Tip. Doc.</label>
@@ -403,7 +401,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Tipo Cliente:</label>
                                                     @Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @class = "select" })
@@ -414,25 +412,37 @@
                                         <legend class="tipografia1 text-semibold"><i class=" icon-cash3 position-left"></i> Detalle de la Operación</legend>
 
                                         <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>Operación:</label>
                                                     @Html.DropDownList("ddlOperacion", Model.ddlOperacion, new { @class = "select" })
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-9">
+                                            <div class="col-md-5">
                                                 <div class="form-group">
                                                     <label>Producto:</label>
                                                     @Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })
                                                 </div>
                                             </div>
 
-                                            
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Moneda:</label>
+                                                    @Html.DropDownList("ddlMoneda", Model.ddlMoneda, new { @class = "select" })
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-5 hidden">
+                                                <div class="form-group">
+                                                    <label>Amortización</label>
+                                                    <input type="text" id="txtAmortizacion" value="" class="form-control" readonly />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>Monto:</label>
                                                     <div class="input-group">
@@ -444,29 +454,6 @@
 
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label>Moneda:</label>
-                                                    @Html.DropDownList("ddlMoneda", Model.ddlMoneda, new { @class = "select" })
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label>Plazo en meses</label>
-                                                    <input type="text" id="txtPlazoMeses" name="txtPlazoMeses" onkeypress="return event.charCode >= 48 && event.charCode <= 57" min="1" max="999" maxlength="3" step="1" class="form-control">
-                                                </div>
-                                            </div>
-
-                                            <!--
-                                            <div class="col-md-5 hidden">
-                                                <div class="form-group">
-                                                    <label>Amortización</label>
-                                                    <input type="text" id="txtAmortizacion" value="" class="form-control" readonly />
-                                                </div>
-                                            </div>
-                                            -->
-
-                                            <div class="col-md-3">
-                                                <div class="form-group">
                                                     <label>Canal:</label>
                                                     @Html.DropDownList("ddlCanalAtencion", Model.ddlCanalAtencion, new { @class = "select" })
                                                 </div>
@@ -474,28 +461,20 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Tasa Base (TEA)</label>
+                                                    <label>Tasa Efectiva (Anual)</label>
                                                     <div class="input-group">
                                                         <input type="text" id="txtTasaEfectiva" name="txtTasaEfectiva" value="0" class="form-control">
                                                         <span class="input-group-addon">%</span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+
+                                            <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Tasa Operación (TEA)</label>
-                                                    <div class="input-group">
-                                                        <input type="text" id="txtTasaEfectiva2" name="txtTasaEfectiva2" value="0" class="form-control">
-                                                        <span class="input-group-addon">%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>Autonomía</label>
-                                                    <input type="button" id="" name="" class="form-control bg-success" value="Dentro de Autonomía" />
+                                                    <label>Plazo en meses</label>
+                                                    <input type="text" id="txtPlazoMeses" name="txtPlazoMeses" onkeypress="return event.charCode >= 48 && event.charCode <= 57" min="1" max="999" maxlength="3" step="1" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -598,7 +577,7 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="row hidden">
+                                        <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Modelo RORAC</label>
@@ -802,7 +781,7 @@
     $(document).ready(function () {
 
 
-        $('input:text,input:radio,input[type=number],select').prop('disabled', true);
+        $('input,select').prop('disabled', true);
         $('#txtBuscar').prop('disabled', false);
 
         fOnAlertClose = function () {
@@ -988,7 +967,7 @@
                 //updateChart3(data.dataComposicion);
 
             }).done(function () {
-                $('input:text,input:radio,input[type=number],select').prop('disabled', false);
+                $('input,select').prop('disabled', false);
                 $("#Seccion01").click();
                 $("#overlay").hide();
             });
@@ -1633,7 +1612,7 @@
             'digitsOptional': false,
             'placeholder': '0.00'
         });
-        $("#txtTasaEfectiva,#txtTasaEfectiva2").inputmask({
+        $("#txtTasaEfectiva").inputmask({
             alias: "decimal",
             radixPoint: ".",
             digits: "2",
@@ -1662,7 +1641,7 @@
                     //$("#btnNuevo,#btnBuscar").addClass("hidden");
 
                     toastr.success('Nueva simulación aperturada');
-                    $('input:text,input:radio,input[type=number],select').prop('disabled', false);
+                    $('input,select').prop('disabled', false);
 
                     fnPrecargarValores(data.Data);
                     //var simData = data.Data.simData;
@@ -1953,10 +1932,10 @@
                         //$("#btnSimular,#btnFin,#btnFin2,#btnCancelar,#btnBorrar").addClass("hidden");
                         //$("#btnNuevo,#btnBuscar").removeClass("hidden");
 
-                        //$('input:text,input:radio,input[type=number],select').prop('disabled', true);
+                        //$('input,select').prop('disabled', true);
 
                         if (act == 'borrar') {
-                            $('input:text,input:radio,input[type=number],select').prop('disabled', false);
+                            $('input,select').prop('disabled', false);
                             fnPrecargarValores(data.Data);
                         }
                     }
