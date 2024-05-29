@@ -29,6 +29,7 @@ namespace BEANS
         public double? monto { get; set; }
         public int? cod_canal_atencion { get; set; }
         public double? tea { get; set; }
+        public double? tea_base { get; set; }
         public double? plazo { get; set; }
         public string cod_clasificacion_interna { get; set; }
         public string cod_clasificacion_externa { get; set; }

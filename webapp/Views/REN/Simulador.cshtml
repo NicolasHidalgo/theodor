@@ -478,7 +478,7 @@
                                                 <div class="form-group">
                                                     <label>Tasa Base (TEA)</label>
                                                     <div class="input-group">
-                                                        <input type="text" id="txtTasaEfectiva" name="txtTasaEfectiva" value="0" class="form-control">
+                                                        <input type="text" id="txtTasaBase" name="txtTasaBase" value="0" class="form-control" readonly>
                                                         <span class="input-group-addon">%</span>
                                                     </div>
                                                 </div>
@@ -487,7 +487,7 @@
                                                 <div class="form-group">
                                                     <label>Tasa Operación (TEA)</label>
                                                     <div class="input-group">
-                                                        <input type="text" id="txtTasaEfectiva2" name="txtTasaEfectiva2" value="0" class="form-control">
+                                                        <input type="text" id="txtTasaEfectiva" name="txtTasaEfectiva" value="0" class="form-control">
                                                         <span class="input-group-addon">%</span>
                                                     </div>
                                                 </div>
@@ -955,6 +955,7 @@
             $("#ddlCanalAtencion").val(simData.cod_canal_atencion).trigger('change', 'fSeleccionar');
             $("#txtMonto").val(simData.monto).trigger('change', 'fSeleccionar');
             $("#txtTasaEfectiva").val(getPorcentajeNum(simData.tea)).trigger('change', 'fSeleccionar');
+            $("#txtTasaBase").val(getPorcentajeNum(simData.tea_base)).trigger('change', 'fSeleccionar');
             $("#txtPlazoMeses").val(simData.plazo).trigger('change', 'fSeleccionar');
 
             $("#ddlPersoneria").val(simData.cod_personeria).trigger('change', [simData]);
@@ -1633,7 +1634,7 @@
             'digitsOptional': false,
             'placeholder': '0.00'
         });
-        $("#txtTasaEfectiva,#txtTasaEfectiva2").inputmask({
+        $("#txtTasaEfectiva,#txtTasaBase").inputmask({
             alias: "decimal",
             radixPoint: ".",
             digits: "2",

@@ -900,6 +900,7 @@ namespace DA
                         bean.monto = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("monto"));
                         bean.cod_canal_atencion = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_canal_atencion"));
                         bean.tea = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("tea"));
+                        bean.tea_base = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("tea_base"));
                         bean.plazo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("plazo"));
                         bean.cod_clasificacion_interna = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_clasificacion_interna"));
                         bean.cod_clasificacion_externa = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_clasificacion_externa"));
@@ -965,6 +966,7 @@ namespace DA
                         bean.monto = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("monto"));
                         bean.cod_canal_atencion = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_canal_atencion"));
                         bean.tea = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("tea"));
+                        bean.tea_base = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("tea_base"));
                         bean.plazo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("plazo"));
                         bean.cod_clasificacion_interna = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_clasificacion_interna"));
                         bean.cod_clasificacion_externa = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_clasificacion_externa"));
