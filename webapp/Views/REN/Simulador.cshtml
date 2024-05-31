@@ -382,7 +382,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>Personería</label>
                                                     @Html.DropDownList("ddlPersoneria", Model.ddlPersoneria, new { @class = "select" })
@@ -403,7 +403,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>Tipo Cliente:</label>
                                                     @Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @class = "select" })
@@ -495,7 +495,7 @@
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>Autonomía</label>
-                                                    <input type="button" id="" name="" class="form-control bg-success" value="Dentro de Autonomía" />
+                                                    <input type="button" id="inputAutonomia" name="" class="form-control" value="Dentro de Autonomía" />
                                                 </div>
                                             </div>
                                         </div>
@@ -636,7 +636,7 @@
                                                                         <table class="table tblRowsHeight table-borderless">
                                                                             <thead>
                                                                                 <tr class="headerTblColorPlomo">
-                                                                                    <th colspan="6" style="text-align:center;"><i class="icon-calculator2 position-left"></i> Contribución EGP (expresado en dólares)</th>
+                                                                                    <th colspan="6" style="text-align:center;"><i class="icon-calculator2 position-left"></i> Contribución EGP <span id="spanExpresado"></span></th>
                                                                                 </tr>
                                                                                 <tr class="headerTblColorPlomo">
                                                                                     <th align="right"></th>
@@ -1176,7 +1176,6 @@
                 } else {
                     fnGrabar('simular');
                 }
-
             });
         }
         function ddlProductoChange(info) {
@@ -1699,6 +1698,38 @@
                 $("#overlay").hide();
             });
         }
+
+        function fnAutonomia() {
+            let codOperacion = $("#ddlOperacion option:selected").val();
+            let tea = getPorcentaje($("#txtTasaEfectiva").val());
+            let tea_base = getPorcentaje($("#txtTasaBase").val());
+
+            if (codOperacion == undefined || codOperacion == "") {
+                $("#inputAutonomia").val("");
+                $("#inputAutonomia").removeClass("bg-success").removeClass("bg-danger");
+                return;
+            }
+
+            if (codOperacion == "DEP") {
+                if (tea > tea_base) {
+                    $("#inputAutonomia").val("Fuera de Autonomía");
+                    $("#inputAutonomia").removeClass("bg-success").addClass("bg-danger");
+                } else {
+                    $("#inputAutonomia").val("Dentro de Autonomía");
+                    $("#inputAutonomia").removeClass("bg-danger").addClass("bg-success");
+                }
+            } else {
+                if (tea >= tea_base) {
+                    $("#inputAutonomia").val("Dentro de Autonomía");
+                    $("#inputAutonomia").removeClass("bg-danger").addClass("bg-success");
+                } else {
+                    $("#inputAutonomia").val("Fuera de Autonomía");
+                    $("#inputAutonomia").removeClass("bg-success").addClass("bg-danger");
+                }
+            }
+
+
+        }
         function getComisionPeriodo(data) {
             let cadena = "<select id='ddlComisionPeriodo" + data.ide_comision + "' onchange='fComisionChange(" + JSON.stringify(data) + ")' class='form-control'>";
             let split1 = data.cPeriodicidad.replaceAll('><', '|').replaceAll('<', '').replaceAll('>', '').split('|');
@@ -1963,10 +1994,11 @@
                     }
 
                     if (act == 'simular') { 
-                        debugger;
+                        $("#txtTasaBase").val(getPorcentajeNum(data.Data.simData.tea_base)).trigger('change', 'fSeleccionar');
                         if (flgTEA == 0) {
                             $("#txtTasaEfectiva").val(getPorcentajeNum(data.Data.simData.tea)).trigger('change', 'fSeleccionar');
                         }
+                        fnAutonomia();
                         
                         construirComision(data.Data.dataComision);
                         $("#txtAmortizacion").val(data.Data.amortizacion);
@@ -2013,20 +2045,30 @@
             myChart2.update();
             //myChart2.update();
         });
-        $("#ddlMoneda").change(function () {
+
+        function fnMonedaChange() {
             let _moneda = $("#ddlMoneda option:selected").val();
             let spanMoneda = "";
+            if (_moneda == "") {
+                return;
+            }
             if (_moneda == 0) {
                 spanMoneda = "S/."
+                $("#spanExpresado").text('(expresado en soles)');
             }
             if (_moneda == 1) {
                 spanMoneda = "$"
+                $("#spanExpresado").text('(expresado en dólares)');
             }
             $(".currency").text(spanMoneda);
+        }
+        fnMonedaChange();
+        $("#ddlMoneda").change(function () {
+            fnMonedaChange();
         });
 
         //var controlChangeSimularIndependientes = "#ddlPersoneria,#ddlOperacion,#ddlProducto";
-        var controlsChangeSimular = '#ddlTipCliente,#ddlMoneda,#txtMonto,#ddlCanalAtencion,#txtTasaEfectiva,#txtPlazoMeses,#ddlClasificacionInterna,#ddlGarantiaReal,#ddlMonedaReal,#txtMontoGarantiaReal,#ddlMonedaPersonal,#txtMontoGarantiaPersonal,#ddlClasificacionGarantia,#ddlModeloRORAC';
+        var controlsChangeSimular = '#ddlTipCliente,#ddlMoneda,#txtMonto,#ddlCanalAtencion,#txtTasaEfectiva,#txtPlazoMeses,#ddlClasificacionInterna,#ddlClasificacionExterna,#ddlGarantiaReal,#ddlMonedaReal,#txtMontoGarantiaReal,#ddlGarantiaPersonal,#ddlMonedaPersonal,#txtMontoGarantiaPersonal,#ddlClasificacionGarantia,#ddlModeloRORAC';
         $(controlsChangeSimular).change(function (e, data) {
             if (data != undefined && data != null) {
                 if (data == "clean") {
