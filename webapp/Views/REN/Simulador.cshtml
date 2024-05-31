@@ -1978,7 +1978,7 @@
                     if (act == 'simular') { 
                         $("#txtTasaBase").val(getPorcentajeNum(data.Data.simData.tea_base)).trigger('change', 'fSeleccionar');
                         if (flgTEA == 0) {
-                            $("#txtTasaEfectiva").val(getPorcentajeNum(data.Data.simData.tea)).trigger('change', 'fSeleccionar');
+                            $("#txtTasaEfectiva").val(getPorcentajeNum(data.Data.simData.tea_base)).trigger('change', 'fSeleccionar');
                         }
                         fnAutonomia();
                         
