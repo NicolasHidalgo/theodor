@@ -977,7 +977,9 @@
                 //$("#btnNuevo,#btnBuscar").addClass("hidden");
                 //$("#btnSimular,#btnFin,#btnFin2,#btnCancelar,#btnBorrar").removeClass("hidden");
 
+                flgTEA = 1;
                 fnPrecargarValores(data);
+                fnAutonomia();
 
                 construirComision(data.dataComision);
                 reconstruirReportePYG(data);
@@ -1665,27 +1667,7 @@
                     $('input:text,input:radio,input[type=number],select').prop('disabled', false);
 
                     fnPrecargarValores(data.Data);
-                    //var simData = data.Data.simData;
-                    //$("#IdeClienteProducto").text(simData.ide_cliente_producto);
-                    //$("input:radio[name=rbTipProspecto][value=" + simData.cod_tip_prospecto + "]").prop('checked', true);
-                    //$("#txtNombreCliente").val(simData.nom_cliente);
-                    //$("#ddlMoneda").val(simData.cod_moneda).trigger('change', 'fSeleccionar');
-                    //$("#ddlCanalAtencion").val(simData.cod_canal_atencion).trigger('change', 'fSeleccionar');
-                    //$("#txtMonto").val(simData.monto).trigger('change', 'fSeleccionar');
-                    //$("#txtTasaEfectiva").val(getPorcentajeNum(simData.tea)).trigger('change', 'fSeleccionar');
-                    //$("#txtPlazoMeses").val(simData.plazo).trigger('change', 'fSeleccionar');
-
-                    //$("#ddlPersoneria").val(simData.cod_personeria).trigger('change', [simData]);
-                    //$("#ddlOperacion").val(simData.cod_operacion).trigger('change', [simData]);
-
-                    //$("#txtMontoGarantiaReal").val(simData.monto_garantia_real).trigger('change', 'fSeleccionar');
-                    //$("#txtMontoGarantiaPersonal").val(simData.monto_garantia_personal).trigger('change', 'fSeleccionar');
-                    //$("#ddlMonedaReal").val(simData.cod_moneda_garantia_real).trigger('change', 'fSeleccionar');
-                    //$("#ddlMonedaPersonal").val(simData.cod_moneda_garantia_personal).trigger('change', 'fSeleccionar');
-
-                    //$("#ddlModeloRORAC").val(simData.cod_modelo_rorac).trigger('change', 'fSeleccionar');
-                    //$("#txtAmortizacion").val(data.amortizacion);
-
+                    fnAutonomia();
 
                     construirComision(data.Data.dataComision);
                 }
