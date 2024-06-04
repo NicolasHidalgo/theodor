@@ -176,6 +176,9 @@
         .botonera {
             color: ThreeDDarkShadow;
         }
+        .maskPercent {
+            text-align: right;
+        }
     </style>
 }
 
@@ -350,7 +353,7 @@
 
                             <div class="col-md-5" style=" overflow-y: scroll !important; max-height: 50em;border-right: 1px solid #e8e7e7;">
                                 <fieldset>
-                                    <legend class="tipografia1 text-semibold"><i class="icon-user-tie position-left"></i> Detalle del Cliente o Prospecto</legend>
+                                    <legend class="tipografia1 text-semibold"><i class="icon-user-tie position-left" id="IdeClienteProductoTitle" title="@Model.IdeClienteProducto"></i> Detalle del Cliente o Prospecto</legend>
                                     <form id="FormSim">
                                         <label id="IdeClienteProducto" class="hidden">@Model.IdeClienteProducto</label>
                                         <label id="CodSuscriptor" class="hidden">@Model.CodSuscriptor</label>
@@ -478,7 +481,7 @@
                                                 <div class="form-group">
                                                     <label>Tasa Base (TEA)</label>
                                                     <div class="input-group">
-                                                        <input type="text" id="txtTasaBase" name="txtTasaBase" value="0" class="form-control" readonly>
+                                                        <input type="text" id="txtTasaBase" name="txtTasaBase" value="0" class="form-control" readonly style="text-align: right;">
                                                         <span class="input-group-addon">%</span>
                                                     </div>
                                                 </div>
@@ -487,7 +490,7 @@
                                                 <div class="form-group">
                                                     <label>Tasa Operación (TEA)</label>
                                                     <div class="input-group">
-                                                        <input type="text" id="txtTasaEfectiva" name="txtTasaEfectiva" value="0" class="form-control">
+                                                        <input type="text" id="txtTasaEfectiva" name="txtTasaEfectiva" value="0" class="form-control" style="text-align: right;">
                                                         <span class="input-group-addon">%</span>
                                                     </div>
                                                 </div>
@@ -507,7 +510,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-6" id="divClasificacionExterna">
                                                 <div class="form-group">
                                                     <label>Clasificación Externa</label>
                                                     @Html.DropDownList("ddlClasificacionExterna", Model.ddlClasificacionExterna, new { @class = "select" })
@@ -798,6 +801,7 @@
     var fOnAlertClose;
     var fOnInputBuscar;
     var flgTEA = 0;
+    var flgTEA_Aux = 0;
 
     $(document).ready(function () {
 
@@ -948,9 +952,13 @@
 
         function fnPrecargarValores(data) {
             var simData = data.simData;
+            //debugger;
             $("#IdeClienteProducto").text(simData.ide_cliente_producto);
+            $("#IdeClienteProductoTitle").attr("title", simData.ide_cliente_producto);
             $("input:radio[name=rbTipProspecto][value=" + simData.cod_tip_prospecto + "]").prop('checked', true);
             $("#txtNombreCliente").val(simData.nom_cliente);
+            $("#txtNumDoc").val(simData.num_documento).trigger('change', 'fSeleccionar');
+
             $("#ddlMoneda").val(simData.cod_moneda).trigger('change', 'fSeleccionar');
             $("#ddlCanalAtencion").val(simData.cod_canal_atencion).trigger('change', 'fSeleccionar');
             $("#txtMonto").val(simData.monto).trigger('change', 'fSeleccionar');
@@ -1048,9 +1056,9 @@
                     }));
                 });
             }).done(function () {
+                //debugger;
                 if (info != undefined && info != null) {
                     $("#ddlTipDocumento").val(info.cod_tip_documento).trigger('change', 'fSeleccionar');
-                    $("#txtNumDoc").val(info.num_documento).trigger('change', 'fSeleccionar');
                     $("#ddlTipCliente").val(info.cod_tip_cliente).trigger('change', 'fSeleccionar');
                 }
             });
@@ -1074,9 +1082,25 @@
                         selected: item.Selected
                     }));
                 });
+                $('#ddlClasificacionExterna').empty();
+                if (data.ddlClasificacionExterna.length == 0) {
+                    $("#divClasificacionExterna").addClass("hidden");
+                } else {
+                    $("#divClasificacionExterna").removeClass("hidden");
+                }
+                $.each(data.ddlClasificacionExterna, function (index, item) {
+                    $('#ddlClasificacionExterna').append($('<option/>', {
+                        value: item.Value,
+                        text: item.Text,
+                        selected: item.Selected
+                    }));
+                });
             }).done(function () {
                 if (info != undefined && info != null) {
-                    
+
+                } else {
+                    flgTEA_Aux = 0;
+                    fnGrabar('simular');
                 }
             });
         }
@@ -1112,6 +1136,11 @@
                     }));
                 });
                 $('#ddlClasificacionExterna').empty();
+                if (data.ddlClasificacionExterna.length == 0) {
+                    $("#divClasificacionExterna").addClass("hidden");
+                } else {
+                    $("#divClasificacionExterna").removeClass("hidden");
+                }
                 $.each(data.ddlClasificacionExterna, function (index, item) {
                     $('#ddlClasificacionExterna').append($('<option/>', {
                         value: item.Value,
@@ -1176,6 +1205,7 @@
                     $("#ddlGarantiaPersonal").val(info.cod_garantia_personal).trigger('change', 'fSeleccionar');
                     $("#ddlClasificacionGarantia").val(info.cod_clasificacion_garantia).trigger('change', 'fSeleccionar');
                 } else {
+                    flgTEA_Aux = 0;
                     fnGrabar('simular');
                 }
             });
@@ -1188,17 +1218,8 @@
                 }
                 codProducto = info.cod_producto;
             } else {
+                flgTEA_Aux = 0;
                 fnGrabar('simular');
-                @*$.getJSON('@Url.Action("JSON_ProductoChange")', { ide_cliente_producto: $("#IdeClienteProducto").text(), codProducto: codProducto }, function (data) {
-                    construirComision(data.dataComision);
-                    $("#txtAmortizacion").val(data.amortizacion);
-                }).done(function () {
-                    if (info != undefined && info != null) {
-
-                    } else {
-                        fnGrabar('simular');
-                    }
-                });*@
             }
 
         }
@@ -1647,7 +1668,7 @@
             placeholder: "0",
             min: 0,
             max: 100,
-            numericInput: true
+            numericInput: true,
         });
 
         function fnNuevo() {
@@ -1850,7 +1871,7 @@
             $("input.maskPercent").inputmask({
                 alias: "decimal",
                 radixPoint: ".",
-                digits: "2",
+                digits: "4",
                 rightAlign: false,
                 integerDigits: 5,
                 digitsOptional: true,
@@ -1976,22 +1997,22 @@
                     }
 
                     if (act == 'simular') { 
+                        //debugger;
                         $("#txtTasaBase").val(getPorcentajeNum(data.Data.simData.tea_base)).trigger('change', 'fSeleccionar');
-                        if (flgTEA == 0) {
-                            $("#txtTasaEfectiva").val(getPorcentajeNum(data.Data.simData.tea_base)).trigger('change', 'fSeleccionar');
-                        }
-                        fnAutonomia();
-                        
-                        construirComision(data.Data.dataComision);
-                        $("#txtAmortizacion").val(data.Data.amortizacion);
+                        if (flgTEA == 0 && flgTEA_Aux == 0) {
+                            flgTEA_Aux = 1;
+                            $("#txtTasaEfectiva").val(getPorcentajeNum(data.Data.simData.tea_base)).trigger('change', 'fTrigger');
+                        } else {
+                            fnAutonomia();
 
-                        reconstruirReportePYG(data.Data);
-                        reconstruirReporteResumenEscenario(data.Data);
-                        reconstruirReporteRoracRes(data.Data);
-                        //reconstruirHandsontable(data.Data);
-                        //updateChart1(data.Data.dataComposicion);
-                        //updateChart2(data.Data.dataComposicion);
-                        //updateChart3(data.Data.dataComposicion);
+                            construirComision(data.Data.dataComision);
+                            $("#txtAmortizacion").val(data.Data.amortizacion);
+
+                            reconstruirReportePYG(data.Data);
+                            reconstruirReporteResumenEscenario(data.Data);
+                            reconstruirReporteRoracRes(data.Data);
+                        }
+                        
                     }
                 }
                 else {
@@ -2006,12 +2027,15 @@
             });
         }
         $("#txtTasaEfectiva").change(function (e, data) {
-            debugger;
-            if (data != "fSeleccionar" && data != "clean") {
+            //debugger;
+            if (data != "fSeleccionar" && data != "clean" && data != "fTrigger") {
                 flgTEA = 1;
             }
-            
             let porcent = getPorcentaje($(this).val());
+            if (flgTEA == 1 && porcent == 0) {
+                flgTEA = 0;
+                flgTEA_Aux = 0;
+            }
             let cociente = 0;
             if ((porcent + 0.1) > 1) {
                 porcent = 1;
@@ -2026,6 +2050,11 @@
             myChart.update();
             myChart2.update();
             //myChart2.update();
+
+            if (data != "fSeleccionar" && data != "clean") {
+                fnGrabar('simular');
+            }
+            
         });
 
         function fnMonedaChange() {
@@ -2049,8 +2078,8 @@
             fnMonedaChange();
         });
 
-        //var controlChangeSimularIndependientes = "#ddlPersoneria,#ddlOperacion,#ddlProducto";
-        var controlsChangeSimular = '#ddlTipCliente,#ddlMoneda,#txtMonto,#ddlCanalAtencion,#txtTasaEfectiva,#txtPlazoMeses,#ddlClasificacionInterna,#ddlClasificacionExterna,#ddlGarantiaReal,#ddlMonedaReal,#txtMontoGarantiaReal,#ddlGarantiaPersonal,#ddlMonedaPersonal,#txtMontoGarantiaPersonal,#ddlClasificacionGarantia,#ddlModeloRORAC';
+        //var controlChangeSimularIndependientes = "#ddlPersoneria,#ddlTipCliente,#ddlOperacion,#ddlProducto";
+        var controlsChangeSimular = '#ddlMoneda,#txtMonto,#ddlCanalAtencion,#txtPlazoMeses,#ddlClasificacionInterna,#ddlClasificacionExterna,#ddlGarantiaReal,#ddlMonedaReal,#txtMontoGarantiaReal,#ddlGarantiaPersonal,#ddlMonedaPersonal,#txtMontoGarantiaPersonal,#ddlClasificacionGarantia,#ddlModeloRORAC';
         $(controlsChangeSimular).change(function (e, data) {
             if (data != undefined && data != null) {
                 if (data == "clean") {
@@ -2060,6 +2089,7 @@
                     return;
                 }
             } else {
+                flgTEA_Aux = 0;
                 fnGrabar('simular');
             }
 

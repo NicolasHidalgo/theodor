@@ -149,6 +149,15 @@ namespace webapp.Controllers
                                             Text = x.nom,
                                             Selected = x.selected
                                         });
+            viewModel.ddlClasificacionExterna = dataInfo.lstClasificacionExterna
+                                                .Where(x => x.cod_operacion.Equals(codOperacion) && x.cod_tip_cliente.Equals(codTipCliente))
+                                                .Select(x => new ExtendedSelectListItem
+                                                {
+                                                    Value = x.cod,
+                                                    Text = x.nom,
+                                                    Selected = x.selected
+                                                });
+
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
@@ -182,17 +191,17 @@ namespace webapp.Controllers
                                         Text = x.nom,
                                         Selected = x.selected
                                     });
+                viewModel.ddlClasificacionExterna = dataInfo.lstClasificacionExterna
+                                                .Where(x => x.cod_operacion.Equals(codOperacion) && x.cod_tip_cliente.Equals(codTipCliente))
+                                                .Select(x => new ExtendedSelectListItem
+                                                {
+                                                    Value = x.cod,
+                                                    Text = x.nom,
+                                                    Selected = x.selected
+                                                });
             }
             
             viewModel.ddlClasificacionInterna = dataInfo.lstClasificacionInterna
-                                                .Where(x => x.cod_operacion.Equals(codOperacion))
-                                                .Select(x => new ExtendedSelectListItem
-            {
-                Value = x.cod,
-                Text = x.nom,
-                Selected = x.selected
-            });
-            viewModel.ddlClasificacionExterna = dataInfo.lstClasificacionExterna
                                                 .Where(x => x.cod_operacion.Equals(codOperacion))
                                                 .Select(x => new ExtendedSelectListItem
             {
@@ -367,7 +376,10 @@ namespace webapp.Controllers
                 else
                 {
                     reply = bl.fn_ren_pro_clienteProducto(model);
-                    viewModel.simData.tea_base = reply.DATA == null ? 0 : (double)reply.DATA;
+                    if (model.ACCION.Equals("@GRABAR"))
+                    {
+                        viewModel.simData.tea_base = reply.DATA == null ? 0 : (double)reply.DATA;
+                    }
                 }
                 
                 var res = new Response();
