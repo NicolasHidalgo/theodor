@@ -1061,6 +1061,12 @@
                     $("#ddlTipDocumento").val(info.cod_tip_documento).trigger('change', 'fSeleccionar');
                     $("#ddlTipCliente").val(info.cod_tip_cliente).trigger('change', 'fSeleccionar');
                 }
+            }).always(function () {
+                //debugger;
+                //if (info != undefined && info != null) {
+                //    $("#ddlTipDocumento").val(info.cod_tip_documento).trigger('change', 'fSeleccionar');
+                //    $("#ddlTipCliente").val(info.cod_tip_cliente).trigger('change', 'fSeleccionar');
+                //}
             });
         }
         function ddlTipoClienteChange(info) {

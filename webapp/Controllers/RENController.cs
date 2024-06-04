@@ -67,12 +67,13 @@ namespace webapp.Controllers
 
         public JsonResult JSON_PersoneriaChange(string codPersoneria, string codOperacion)
         {
+            var viewModel = new AuxiliarEdit();
             if (codPersoneria == null || codPersoneria == string.Empty)
             {
-                return Json(null, JsonRequestBehavior.AllowGet);
+                return Json(viewModel, JsonRequestBehavior.AllowGet);
             }
             var user = (SEG_USUARIO_BE)Session["Usuario"];
-            var viewModel = new AuxiliarEdit();
+            
             var dataInfo = new REN_INFO_BE();
             if (Session["dataInfo"] == null)
             {
@@ -123,13 +124,14 @@ namespace webapp.Controllers
         }
         public JsonResult JSON_TipoClienteChange(string codOperacion, string codTipCliente)
         {
+            var viewModel = new AuxiliarEdit();
             if (codTipCliente == null || codTipCliente == string.Empty || 
                 codOperacion == null || codOperacion == string.Empty)
             {
-                return Json(null, JsonRequestBehavior.AllowGet);
+                return Json(viewModel, JsonRequestBehavior.AllowGet);
             }
             var user = (SEG_USUARIO_BE)Session["Usuario"];
-            var viewModel = new AuxiliarEdit();
+            
             var dataInfo = new REN_INFO_BE();
             if (Session["dataInfo"] == null)
             {
@@ -164,12 +166,13 @@ namespace webapp.Controllers
 
         public JsonResult JSON_OperacionChange(long ide_cliente_producto, string codOperacion, string codTipCliente)
         {
+            var viewModel = new AuxiliarEdit();
             if (codOperacion == null || codOperacion == string.Empty)
             {
-                return Json(null, JsonRequestBehavior.AllowGet);
+                return Json(viewModel, JsonRequestBehavior.AllowGet);
             }
             var user = (SEG_USUARIO_BE)Session["Usuario"];
-            var viewModel = new AuxiliarEdit();
+            
             var dataInfo = new REN_INFO_BE();
             if (Session["dataInfo"] == null)
             {
@@ -238,12 +241,12 @@ namespace webapp.Controllers
         }
         public JsonResult JSON_ProductoChange(long ide_cliente_producto, string codProducto)
         {
+            var viewModel = new AuxiliarEdit();
             if (codProducto == null || codProducto == string.Empty)
             {
-                return Json(null, JsonRequestBehavior.AllowGet);
+                return Json(viewModel, JsonRequestBehavior.AllowGet);
             }
             var user = (SEG_USUARIO_BE)Session["Usuario"];
-            var viewModel = new AuxiliarEdit();
             var dataInfo = new REN_INFO_BE();
             if (Session["dataInfo"] == null)
             {
@@ -423,18 +426,6 @@ namespace webapp.Controllers
                     viewModel.dataRoracRes = dataRoracRes;
                 }
                 
-
-                /*
-                var dataRoracTbl = bl.fn_ren_vis_clienteProducto_Tabla(_sim.ide_cliente_producto, _sim.incremento_tasa, _sim.incremento_plazo, 100);
-                viewModel.dataRoracTbl = dataRoracTbl;
-
-                var dataRorac = bl.fn_ren_vis_clienteProducto_Tabla(_sim.ide_cliente_producto, _sim.incremento_tasa, _sim.incremento_plazo, 10);
-                viewModel.dataRorac = dataRorac.FirstOrDefault();
-
-                var dataComposicion = bl.fn_ren_vis_clienteProducto_Composicion(_sim.ide_cliente_producto);
-                viewModel.dataComposicion = dataComposicion;
-                */
-
                 res.Data = viewModel;
 
                 return Json(res);
