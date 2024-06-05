@@ -304,7 +304,7 @@
     <div class="content" style="padding-top:0px;">
 
         <!-- Bordered alerts -->
-        <div id="alertSim" class="alert alert-danger alert-bordered hidden">
+        <div id="alertSim" class="alert alert-bordered hidden">
             <button type="button" class="close" onclick="fOnAlertClose()"><span>&times;</span><span class="sr-only">Close</span></button>
             <span id="alertText" class="text-semibold">Errores</span>
         </div>
@@ -1990,6 +1990,10 @@
                         if (act != 'cancelar') {
                             //fnCleanControles();
                         }
+                        if (act == 'fin' || act == 'fin2') {
+                            $("#alertSim").removeClass('hidden alert-danger').addClass('alert-success');
+                            $("#alertText").text(data.Message);
+                        }
                         //fnCleanReports();
                         //$("#btnSimular,#btnFin,#btnFin2,#btnCancelar,#btnBorrar").addClass("hidden");
                         //$("#btnNuevo,#btnBuscar").removeClass("hidden");
@@ -2022,7 +2026,7 @@
                     }
                 }
                 else {
-                    $("#alertSim").removeClass('hidden');
+                    $("#alertSim").removeClass('hidden alert-success').addClass('alert-danger');
                     $("#alertText").text(data.Message);
                     //toastr.error(data.Message);
                 }
