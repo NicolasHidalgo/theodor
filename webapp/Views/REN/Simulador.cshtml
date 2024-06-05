@@ -304,7 +304,7 @@
     <div class="content" style="padding-top:0px;">
 
         <!-- Bordered alerts -->
-        <div id="alertSim" class="alert alert-bordered hidden">
+        <div id="alertSim" class="alert alert-bordered hidden" style="white-space: pre-line;">
             <button type="button" class="close" onclick="fOnAlertClose()"><span>&times;</span><span class="sr-only">Close</span></button>
             <span id="alertText" class="text-semibold">Errores</span>
         </div>
@@ -967,7 +967,6 @@
             $("#txtPlazoMeses").val(simData.plazo).trigger('change', 'fSeleccionar');
 
             $("#ddlPersoneria").val(simData.cod_personeria).trigger('change', [simData]);
-            $("#ddlOperacion").val(simData.cod_operacion).trigger('change', [simData]);
 
             $("#txtMontoGarantiaReal").val(simData.monto_garantia_real).trigger('change', 'fSeleccionar');
             $("#txtMontoGarantiaPersonal").val(simData.monto_garantia_personal).trigger('change', 'fSeleccionar');
@@ -987,7 +986,7 @@
 
                 flgTEA = 1;
                 fnPrecargarValores(data);
-                fnAutonomia();
+                //fnAutonomia();
 
                 construirComision(data.dataComision);
                 reconstruirReportePYG(data);
@@ -1056,17 +1055,13 @@
                     }));
                 });
             }).done(function () {
-                //debugger;
                 if (info != undefined && info != null) {
                     $("#ddlTipDocumento").val(info.cod_tip_documento).trigger('change', 'fSeleccionar');
-                    $("#ddlTipCliente").val(info.cod_tip_cliente).trigger('change', 'fSeleccionar');
+                    $("#ddlTipCliente").val(info.cod_tip_cliente).trigger('change', [info]);
+                    $("#ddlOperacion").val(info.cod_operacion).trigger('change', [info]);
                 }
             }).always(function () {
-                //debugger;
-                //if (info != undefined && info != null) {
-                //    $("#ddlTipDocumento").val(info.cod_tip_documento).trigger('change', 'fSeleccionar');
-                //    $("#ddlTipCliente").val(info.cod_tip_cliente).trigger('change', 'fSeleccionar');
-                //}
+                
             });
         }
         function ddlTipoClienteChange(info) {
@@ -1223,6 +1218,7 @@
                     return;
                 }
                 codProducto = info.cod_producto;
+                fnAutonomia();
             } else {
                 flgTEA_Aux = 0;
                 fnGrabar('simular');
@@ -1694,7 +1690,7 @@
                     $('input:text,input:radio,input[type=number],select').prop('disabled', false);
 
                     fnPrecargarValores(data.Data);
-                    fnAutonomia();
+                    //fnAutonomia();
 
                     construirComision(data.Data.dataComision);
                 }
@@ -1709,6 +1705,7 @@
         }
 
         function fnAutonomia() {
+            debugger;
             let codOperacion = $("#ddlOperacion option:selected").val();
             let tea = getPorcentaje($("#txtTasaEfectiva").val());
             let tea_base = getPorcentaje($("#txtTasaBase").val());
@@ -1984,21 +1981,12 @@
 
             $.post(_url, _reply).done(function (data) {
                 if (data.Status === 200) {
-                    //toastr.success(data.Message);
                     if (act == 'fin' || act == 'fin2' || act == 'cancelar' || act == 'borrar') {
                         //$("#IdeClienteProducto").text('0');
-                        if (act != 'cancelar') {
-                            //fnCleanControles();
-                        }
                         if (act == 'fin' || act == 'fin2') {
                             $("#alertSim").removeClass('hidden alert-danger').addClass('alert-success');
                             $("#alertText").text(data.Message);
                         }
-                        //fnCleanReports();
-                        //$("#btnSimular,#btnFin,#btnFin2,#btnCancelar,#btnBorrar").addClass("hidden");
-                        //$("#btnNuevo,#btnBuscar").removeClass("hidden");
-
-                        //$('input:text,input:radio,input[type=number],select').prop('disabled', true);
 
                         if (act == 'borrar') {
                             $('input:text,input:radio,input[type=number],select').prop('disabled', false);
@@ -2007,7 +1995,6 @@
                     }
 
                     if (act == 'simular') { 
-                        //debugger;
                         $("#txtTasaBase").val(getPorcentajeNum(data.Data.simData.tea_base)).trigger('change', 'fSeleccionar');
                         if (flgTEA == 0 && flgTEA_Aux == 0) {
                             flgTEA_Aux = 1;
@@ -2028,7 +2015,6 @@
                 else {
                     $("#alertSim").removeClass('hidden alert-success').addClass('alert-danger');
                     $("#alertText").text(data.Message);
-                    //toastr.error(data.Message);
                 }
             }).fail(function (e) {
             }).always(function () {
@@ -2037,7 +2023,6 @@
             });
         }
         $("#txtTasaEfectiva").change(function (e, data) {
-            //debugger;
             if (data != "fSeleccionar" && data != "clean" && data != "fTrigger") {
                 flgTEA = 1;
             }
