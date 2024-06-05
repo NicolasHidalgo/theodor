@@ -455,7 +455,7 @@
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label>Plazo en meses</label>
-                                                    <input type="text" id="txtPlazoMeses" name="txtPlazoMeses" onkeypress="return event.charCode >= 48 && event.charCode <= 57" min="1" max="999" maxlength="3" step="1" class="form-control">
+                                                    <input type="text" id="txtPlazoMeses" name="txtPlazoMeses" onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 13" min="1" max="999" maxlength="3" step="1" class="form-control">
                                                 </div>
                                             </div>
 
