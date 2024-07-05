@@ -240,12 +240,6 @@
     <Content Include="assets\images\ajaxLoader.gif" />
     <Content Include="assets\images\amarillo.png" />
     <Content Include="assets\images\appIcoKOP.png" />
-    <Content Include="assets\images\appLogoBAL.png" />
-    <Content Include="assets\images\appLogoGES.png" />
-    <Content Include="assets\images\appLogoKCS.png" />
-    <Content Include="assets\images\appLogoKOP.png" />
-    <Content Include="assets\images\appLogoMIN.png" />
-    <Content Include="assets\images\appLogoSEG.png" />
     <Content Include="assets\images\backgrounds\boxed_bg.png" />
     <Content Include="assets\images\backgrounds\boxed_bg_retina.png" />
     <Content Include="assets\images\backgrounds\panel_bg.png" />
@@ -2737,7 +2731,6 @@
     <Content Include="Views\SEG\Permisos.cshtml" />
     <Content Include="Views\REN\Simulador.cshtml" />
     <Content Include="Views\DEMO\Demo.cshtml" />
-    <Content Include="Views\REN\Simulador - Copia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

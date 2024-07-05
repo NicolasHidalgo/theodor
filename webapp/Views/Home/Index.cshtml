@@ -22,20 +22,27 @@
 
     #div2 {
         width: 100%;
-        height: 960px;
+        height: 930px;
     }
+
     #logoCentral {
         background-image: url('@Url.Content("~/assets/images/logo_central.png")');
         height: 100px;
-        width: 100%;
+        width: 480px;
         background-repeat: no-repeat;
 
-        position: absolute;
-        top: 40%;
-        left: 58%;
-        transform: translate(-50%, -50%);
-        width: 50%;
+        //position: absolute;
+        //top: 40%;
+        //left: 50%;
+        //transform: translate(-50%, -50%);
+        //width: 50%;
     }
+
+    table.center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     #palabras {
         height: 100px;
         //width: 100%;
@@ -61,20 +68,30 @@
 
 <div class="row" style="height: 100%;">
     <div id="div2" class="imagenContenida">
-        <div id="logoCentral">
-            <div id="palabras">Calcula, decide, rentabiliza</div>
-        </div>
-        
+        <table class="center">
+            <tr style="height: 250px;">
+            </tr>
+            <tr>
+                <td id="logoCentral"></td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;" >
+                    Calcula, decide, rentabiliza</td>
+            </tr>
+
+        </table>
     </div>
 </div>
+
+
 <!-- /main charts -->
 
 @section Scripts {
     <script>
-                //$(document).ready(function () {
-                //    if ($("#txtMensaje").val() != "")
-                //        toastr["warning"]($("#txtMensaje").val()).css("width", "500px");
-                //});
+                                            //$(document).ready(function () {
+                                            //    if ($("#txtMensaje").val() != "")
+                                            //        toastr["warning"]($("#txtMensaje").val()).css("width", "500px");
+                                            //});
 
     </script>
 }
