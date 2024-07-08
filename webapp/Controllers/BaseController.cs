@@ -103,6 +103,12 @@ namespace webapp.Controllers
 
                     Session["Usuario"] = user;
                 }
+                else
+                {
+                    var user = (SEG_USUARIO_BE)Session["Usuario"];
+                    user.NOM_MENU = this.ControllerContext.RouteData.Values["action"].ToString();
+                    Session["Usuario"] = user;
+                }
             }
             
         }

@@ -20,6 +20,8 @@ namespace BEANS
         public long SUSCRIPTOR { get; set; }
         public string IMG_SUSCRIPTOR { get; set; }
 
+        public string NOM_MENU { get; set; }
+
         public DateTime? FEC_CREACION { get; set; }
         public DateTime? FEC_CESE { get; set; }
 
