@@ -537,6 +537,7 @@
     <Content Include="assets\images\logo_light.png" />
     <Content Include="assets\images\logo_login.png" />
     <Content Include="assets\images\placeholder.jpg" />
+    <Content Include="assets\images\i-contruccion.png" />
     <Content Include="assets\images\pnotify\danger.png" />
     <Content Include="assets\images\pnotify\default.png" />
     <Content Include="assets\images\pnotify\info.png" />
@@ -2731,6 +2732,7 @@
     <Content Include="Views\SEG\Permisos.cshtml" />
     <Content Include="Views\REN\Simulador.cshtml" />
     <Content Include="Views\DEMO\Demo.cshtml" />
+    <Content Include="Views\REN\Rentabilidad.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

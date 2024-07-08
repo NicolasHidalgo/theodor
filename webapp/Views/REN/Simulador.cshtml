@@ -754,10 +754,10 @@
                                                         </div>
                                                         <hr />
                                                         @*<div class="row">
-                    <div class="col-md-12">
-                        <canvas id="myChart3"></canvas>
-                    </div>
-                </div*@>
+          <div class="col-md-12">
+              <canvas id="myChart3"></canvas>
+           </div>
+        </div>*@
 
                                                     </fieldset>
                                                 </div>
@@ -2314,10 +2314,19 @@
                             weight: 'bold',
                         },
                         formatter: (value, ctx) => {
-                            //const total = ctx.chart.$totalizer.totals[ctx.dataIndex];
-                            //const _tot = (total * 100).toFixed(2) + '%';
-                            //return _tot; //total.toLocaleString('fr-FR', {});
-                            return (value * 100).toFixed(2) + '%';
+
+                            const datasetIndex = ctx.datasetIndex;
+                            const dataIndex = ctx.dataIndex;
+
+                            // Obtener la etiqueta del conjunto de datos y la etiqueta del dato
+                            const datasetLabel = ctx.chart.data.datasets[datasetIndex].label;
+                            const dataLabel = ctx.chart.data.labels[dataIndex];
+                            if (dataLabel == "") {
+                                return "";
+                            }
+                            else {
+                                return (value * 100).toFixed(2) + '%';
+                            }
                         },
                         display: function (ctx) {
                             return ctx.datasetIndex === ctx.chart.$totalizer.utmost
@@ -2337,6 +2346,7 @@
                         ticks: {
                             stepSize: .050,
                             callback: function (value, ctx) {
+
                                 return (value * 100).toFixed(0) + '%';
                             },
                         },
@@ -2414,10 +2424,18 @@
                             weight: 'bold',
                         },
                         formatter: (value, ctx) => {
-                            //const total = ctx.chart.$totalizer.totals[ctx.dataIndex];
-                            //const _tot = (total * 100).toFixed(2) + '%';
-                            //return _tot; //total.toLocaleString('fr-FR', {});
-                            return (value * 100).toFixed(2) + '%';
+                            const datasetIndex = ctx.datasetIndex;
+                            const dataIndex = ctx.dataIndex;
+
+                            // Obtener la etiqueta del conjunto de datos y la etiqueta del dato
+                            const datasetLabel = ctx.chart.data.datasets[datasetIndex].label;
+                            const dataLabel = ctx.chart.data.labels[dataIndex];
+                            if (dataLabel == "") {
+                                return "";
+                            }
+                            else {
+                                return (value * 100).toFixed(2) + '%';
+                            }
                         },
                         display: function (ctx) {
                             return ctx.datasetIndex === ctx.chart.$totalizer.utmost

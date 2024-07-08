@@ -65,6 +65,55 @@ namespace webapp.Controllers
 
         }
 
+        public ActionResult Rentabilidad()
+        {
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+
+            //string ip = Request.UserHostAddress;
+            viewModel.IdeClienteProducto = 0;
+            viewModel.CodSuscriptor = user.SUSCRIPTOR;
+
+            var dataInfo = new REN_INFO_BE();
+            if (Session["dataInfo"] == null)
+            {
+                dataInfo = bl.fn_ren_sel_info("INFO1", user.SUSCRIPTOR);
+                Session["dataInfo"] = dataInfo;
+            }
+            else
+            {
+                dataInfo = (REN_INFO_BE)Session["dataInfo"];
+            }
+
+            viewModel.ddlMoneda = dataInfo.lstMoneda.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected,
+            });
+            viewModel.ddlCanalAtencion = dataInfo.lstCanal.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected,
+            });
+            viewModel.ddlPersoneria = dataInfo.lstPersoneria.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected,
+            });
+            viewModel.ddlOperacion = dataInfo.lstOperacion.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.cod,
+                Text = x.nom,
+                Selected = x.selected,
+            });
+
+            return View(viewModel);
+
+        }
+
         public JsonResult JSON_PersoneriaChange(string codPersoneria, string codOperacion)
         {
             var viewModel = new AuxiliarEdit();

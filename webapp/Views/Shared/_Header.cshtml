@@ -57,7 +57,7 @@
 
                 <div class="dropdown-menu dropdown-content">
                     <div class="dropdown-content-heading">
-                        Git updates
+                        Actualizar Variables
                         <ul class="icons-list">
                             <li><a href="#"><i class="icon-sync"></i></a></li>
                         </ul>
@@ -68,7 +68,7 @@
                                 <a href="#" class="btn border-primary text-primary btn-flat btn-rounded btn-icon btn-sm"><i class="icon-git-pull-request"></i></a>
                             </div>
                             <div class="media-body">
-                                Drop the IE <a href="#">specific hacks</a> for temporal inputs
+                                Verificar <a href="#">versión</a> de la aplicacion
                                 <div class="media-annotation">4 minutes ago</div>
                             </div>
                         </li>
@@ -78,7 +78,7 @@
                             </div>
 
                             <div class="media-body">
-                                Add full font overrides for popovers and tooltips
+                                Verificar la suscripción
                                 <div class="media-annotation">36 minutes ago</div>
                             </div>
                         </li>
@@ -88,7 +88,7 @@
                             </div>
 
                             <div class="media-body">
-                                <a href="#">Chris Arney</a> created a new <span class="text-semibold">Design</span> branch
+                                <a href="#">Theodor</a> created a new <span class="text-semibold">Design</span> branch
                                 <div class="media-annotation">2 hours ago</div>
                             </div>
                         </li>
@@ -98,7 +98,7 @@
                             </div>
 
                             <div class="media-body">
-                                <a href="#">Eugene Kopyov</a> merged <span class="text-semibold">Master</span> and <span class="text-semibold">Dev</span> branches
+                                <a href="#">Theodor</a> merged <span class="text-semibold">Master</span> and <span class="text-semibold">Dev</span> branches
                                 <div class="media-annotation">Dec 18, 18:36</div>
                             </div>
                         </li>
@@ -130,72 +130,11 @@
 
         <div class="navbar-right">
             <ul class="nav navbar-nav">
-
-
                 <li class="dropdown">
-
-
-                    <!--<a class="dropdown-toggle" data-toggle="dropdown">-->
-                    @*<i class="caret"></i>*@
-                    <!--<a id="logout" href="javascript:document.getElementById('logoutForm').submit()"><i class="icon-switch2"></i> Cerrar Sesi&oacute;n</a>-->
-                    <!--</a>-->
-                    @if (user != null)
+                    if (user != null)
                     {
-                        @*<a class="dropdown-toggle" style="color:black;"><i class="icon-home"></i> BANCO THEODOR</a>*@
                         <img src="@Url.Content(@user.IMG_SUSCRIPTOR)" />
-                    }<q>1</q>
-
-
-
-                    @*@if (user != null)
-        {
-            if (Request.IsAuthenticated)
-            {
-                using (Html.BeginForm("LogOff", "Login", FormMethod.Post, new { id = "logoutForm" }))
-                {
-                    <a class="dropdown-toggle" style="color:black" href="javascript:document.getElementById('logoutForm').submit()"><i class="icon-switch2"></i> Cerrar Sesi&oacute;n</a>
-                }
-            }
-            else
-            {
-                @Html.ActionLink("Iniciar Sesión", "Login", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })
-            }
-        }
-        else
-        {
-            @Html.ActionLink("Iniciar Sesión", "Login", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })
-        }*@
-
-
-                    @*<ul class="dropdown-menu dropdown-menu-right">
-            @if (user.Aplicaciones != null)
-            {
-                foreach (var app in user.Aplicaciones)
-                {
-                    <li><a class="deutsch" data-id="@app.COD_APLICACION"><i class="@app.ICONO_APLICACION"></i> @app.NOM_APLICACION</a></li>
-                }
-
-            }
-            @if (user != null)
-            {
-                if (Request.IsAuthenticated)
-                {
-                    using (Html.BeginForm("LogOff", "Login", FormMethod.Post, new { id = "logoutForm" }))
-                    {
-                        <li class="divider"></li>
-                        <li><a id="logout" href="javascript:document.getElementById('logoutForm').submit()"><i class="icon-switch2"></i> Cerrar Sesi&oacute;n</a></li>
                     }
-                }
-                else
-                {
-                    <li>@Html.ActionLink("Iniciar Sesión", "Login", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-                }
-            }
-            else
-            {
-                <li>@Html.ActionLink("Iniciar Sesión", "Login", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-            }
-        </ul>*@
                 </li>
                 </ul>
         </div>

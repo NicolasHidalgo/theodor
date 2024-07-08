@@ -1,0 +1,103 @@
+﻿@model webapp.ViewModels.AuxiliarEdit
+@{
+    ViewBag.Title = "Rentabilidad";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Theme JS files -->
+<script type="text/javascript" src="~/assets/js/plugins/visualization/d3/d3.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/visualization/d3/d3_tooltip.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/styling/switchery.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/ui/moment/moment.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/pickers/daterangepicker.js"></script>
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+@*<script type="text/javascript" src="~/assets/js/pages/dashboard.js"></script>*@
+<style>
+    .imagenContenida {
+        background-image: url('@Url.Content("~/assets/images/fondo.png")');
+        background-repeat: repeat;
+    }
+
+    #div2 {
+        width: 100%;
+        height: 930px;
+    }
+
+    #logoCentral {
+        background-image: url('@Url.Content("~/assets/images/logo_central.png")');
+        height: 100px;
+        width: 480px;
+        background-repeat: no-repeat;
+
+        //position: absolute;
+        //top: 40%;
+        //left: 50%;
+        //transform: translate(-50%, -50%);
+        //width: 50%;
+    }
+
+    table.center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #palabras {
+        height: 100px;
+        //width: 100%;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 100%;
+        left: 55%;
+        transform: translate(-50%, 0%);
+        width: 100%;
+        font-size: 30px;
+    }
+
+    .carousel-inner > .item > img,
+    .carousel-inner > .item > a > img {
+        width: 100%;
+        margin: auto;
+    }
+</style>
+
+<div class="row" style="height: 100%;">
+    <div id="div2" class="imagenContenida">
+        <table class="center">
+            <tr style="height: 250px;">
+            </tr>
+            <tr>
+                <td><img src="~/assets/images/i-contruccion.png" /></td>
+            </tr>
+            <tr>
+                <td>Pagina en construcción</td>
+            </tr>
+            <tr>
+                <td><hr size="2px" color="black" /></td>
+            </tr>
+            <tr>
+                <td id="logoCentral"></td>
+            </tr>
+            <tr>
+                <td style="text-align: center; vertical-align: middle;">
+                    Calcula, decide, rentabiliza
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+
+<!-- /main charts -->
+
+@section Scripts {
+    <script>
+                                                //$(document).ready(function () {
+                                                //    if ($("#txtMensaje").val() != "")
+                                                //        toastr["warning"]($("#txtMensaje").val()).css("width", "500px");
+                                                //});
+
+    </script>
+}
