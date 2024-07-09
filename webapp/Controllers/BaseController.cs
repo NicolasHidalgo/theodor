@@ -106,7 +106,9 @@ namespace webapp.Controllers
                 else
                 {
                     var user = (SEG_USUARIO_BE)Session["Usuario"];
-                    user.NOM_MENU = this.ControllerContext.RouteData.Values["action"].ToString();
+                    var action = this.ControllerContext.RouteData.Values["action"].ToString();
+                    var controller = this.ControllerContext.RouteData.Values["controller"].ToString();
+                    user.NOM_MENU = user.OpcionesData.Where(x=> x.CONTROLLER.Equals(controller) && x.ACTION.Equals(action)).FirstOrDefault()?.NOM_MENU;
                     Session["Usuario"] = user;
                 }
             }
