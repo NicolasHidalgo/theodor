@@ -12,3 +12,7 @@ comandos git
 	
 -- Para recibir los cambios
 git pull
+
+
+-- Para RESTAURAR todos los archivos
+git restore *

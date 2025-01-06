@@ -126,7 +126,7 @@
                 var nomMenu = user.NOM_MENU;
                 if (nomMenu == null || nomMenu == string.Empty)
                 {
-                    nomMenu = "Modelo Pricing";
+                    nomMenu = "";
                 }
                 <div class="divapp">@nomMenu</div>
                 <input type="text" id="txtCodAplicacion" value="@user.COD_APLICACION" class="hidden" />
@@ -136,7 +136,7 @@
         <div class="navbar-right">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
-                    if (user != null)
+                    @if (user != null)
                     {
                         <img src="@Url.Content(@user.IMG_SUSCRIPTOR)" />
                     }
