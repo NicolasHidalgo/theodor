@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AGENCIA_BE.cs" />
+    <Compile Include="FUNCIONARIO_BE.cs" />
     <Compile Include="GEN_DDL_BE.cs" />
     <Compile Include="GEN_REPLY_BE.cs" />
     <Compile Include="DEMO_BE.cs" />
@@ -50,6 +52,7 @@
     <Compile Include="REN_PLANTILLA_BE.cs" />
     <Compile Include="REN_PYG_BE.cs" />
     <Compile Include="REN_SIM_REQ_BE.cs" />
+    <Compile Include="RORACOBJETIVO_BE.cs" />
     <Compile Include="SEG_APLICACION_BE.cs" />
     <Compile Include="SEG_OPCION_BE.cs" />
     <Compile Include="SEG_PERFIL_BE.cs" />

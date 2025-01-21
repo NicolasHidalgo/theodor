@@ -110,6 +110,13 @@
                                 {
                                     @OpcionHijos(user.Opciones)
                                 }
+                                @if (Request.IsAuthenticated)
+                                {
+                                    using (Html.BeginForm("LogOff", "Login", FormMethod.Post, new { id = "logoutForm2" })){}
+                                    <li>
+                                        <a onclick="javascript:document.getElementById('logoutForm2').submit()"><i class="icon-switch2"></i> <span>Cerrar Sesión</span></a>
+                                    </li>
+                                }
                             </ul>
                         </div>
                     </div>
@@ -162,13 +169,6 @@
             }
         </li>
     }
-    if (Request.IsAuthenticated)
-    {
-        using (Html.BeginForm("LogOff", "Login", FormMethod.Post, new { id = "logoutForm2" })){}
-        <li>
-            <a onclick="javascript:document.getElementById('logoutForm2').submit()" ><i class="icon-switch2" ></i> <span>Cerrar Sesión</span></a>
-        </li>
-    }
 
 }
 
@@ -211,6 +211,11 @@
         RENApi: {
             RoutePrefix: '@Url.Content("~")' + 'api/REN',
             GetDataTable_PopUp: function () { return format('{}/{}', this.RoutePrefix, 'GetDataTable_PopUp') },
+        },
+        MANTApi: {
+            RoutePrefix: '@Url.Content("~")' + 'api/MANT',
+            GetDataTable_Agencia: function () { return format('{}/{}', this.RoutePrefix, 'GetDataTable_Agencia') },
+            GetDataTable_Funcionario: function () { return format('{}/{}', this.RoutePrefix, 'GetDataTable_Funcionario') },
         },
         DEMOApi: {
             RoutePrefix: '@Url.Content("~")' + 'api/DEMO',

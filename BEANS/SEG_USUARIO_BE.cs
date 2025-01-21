@@ -8,7 +8,7 @@ namespace BEANS
 {
     public class SEG_USUARIO_BE
     {
-        public int? IDE_USUARIO { get; set; }
+        public long? IDE_USUARIO { get; set; }
         public string COD_USUARIO { get; set; }
         public string NOM_USUARIO { get; set; }
         public string EST_USUARIO { get; set; }

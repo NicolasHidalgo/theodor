@@ -25,7 +25,7 @@ namespace webapp.Controllers
         private REN_BL bl = new REN_BL();
  
         public void regresionLogarimitca()
-       {
+        {
 
             // Datos de evaluación
             double[] xData = { 0.08000, 0.25000, 0.50000, 1.00000, 1.50000, 2.00000, 3.00000, 10.0000, 15.00000, 20.00000 };
@@ -157,8 +157,7 @@ namespace webapp.Controllers
     
 
 
-    public ActionResult Simulador()
-
+        public ActionResult Simulador()
         {
             regresionLogarimitca();
             var viewModel = new AuxiliarEdit();
@@ -672,12 +671,12 @@ namespace webapp.Controllers
             }
 
             return Json(
-                     new Response
-                     {
-                         Status = HttpStatusCode.BadRequest,
-                         Message = "No se puede continuar por errores en el modelo",
-                         Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
-                     }); ;
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Message = "No se puede continuar por errores en el modelo",
+                            Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        }); ;
         }
 
         [HttpPost]
@@ -713,12 +712,12 @@ namespace webapp.Controllers
             }
 
             return Json(
-                     new Response
-                     {
-                         Status = HttpStatusCode.BadRequest,
-                         Message = "No se puede continuar por errores en el modelo",
-                         Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
-                     }); ;
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Message = "No se puede continuar por errores en el modelo",
+                            Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        }); ;
         }
 
         [HttpPost]
@@ -772,12 +771,12 @@ namespace webapp.Controllers
             }
 
             return Json(
-                     new Response
-                     {
-                         Status = HttpStatusCode.BadRequest,
-                         Message = "No se puede continuar por errores en el modelo",
-                         Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
-                     }); ;
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Message = "No se puede continuar por errores en el modelo",
+                            Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        }); ;
         }
     }
 }

@@ -195,6 +195,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constantes\Constantes.cs" />
     <Compile Include="Controllers\api\DEMOController.cs" />
+    <Compile Include="Controllers\api\MANTController.cs" />
     <Compile Include="Controllers\api\RENController.cs" />
     <Compile Include="Controllers\api\SEGController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MANTController.cs" />
     <Compile Include="Controllers\SEGController.cs" />
     <Compile Include="Controllers\RENController.cs" />
     <Compile Include="Global.asax.cs">
@@ -232,6 +234,7 @@
     <Content Include="assets\css\icons\glyphicons\glyphicons-halflings-regular.svg" />
     <Content Include="assets\css\icons\icomoon\fonts\icomoon.svg" />
     <Content Include="assets\css\icons\icomoon\styles.css" />
+    <Content Include="assets\css\theodor.css" />
     <Content Include="assets\demo_data\jquery_ui\autocomplete.php" />
     <Content Include="assets\demo_data\maps\vector\gdp_demo_data.js" />
     <Content Include="assets\demo_data\wizard\additional.html" />
@@ -2740,6 +2743,9 @@
     <Content Include="Views\DEMO\Demo.cshtml" />
     <Content Include="Views\REN\Historico.cshtml" />
     <Content Include="Views\REN\Rentabilidad1.cshtml" />
+    <Content Include="Views\MANT\Agencias.cshtml" />
+    <Content Include="Views\MANT\Funcionarios.cshtml" />
+    <Content Include="Views\MANT\RoracObjetivo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

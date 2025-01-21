@@ -10,6 +10,9 @@ namespace webapp.ViewModels
 {
     public class AuxiliarEdit
     {
+        public IEnumerable<ExtendedSelectListItem> ddlUsuario { get; set; } = new HashSet<ExtendedSelectListItem>();
+        public IEnumerable<ExtendedSelectListItem> ddlAgencia { get; set; } = new HashSet<ExtendedSelectListItem>();
+        public IEnumerable<ExtendedSelectListItem> ddlBanca { get; set; } = new HashSet<ExtendedSelectListItem>();
         public IEnumerable<ExtendedSelectListItem> ddlPersoneria { get; set; } = new HashSet<ExtendedSelectListItem>();
         public IEnumerable<ExtendedSelectListItem> ddlMoneda { get; set; } = new HashSet<ExtendedSelectListItem>();
         public IEnumerable<ExtendedSelectListItem> ddlTipDocumento { get; set; } = new HashSet<ExtendedSelectListItem>();
@@ -35,6 +38,7 @@ namespace webapp.ViewModels
         public string amortizacion { get; set; }
         public long IdeClienteProducto { get; set; }
         public long CodSuscriptor { get; set; }
+        public string CodUsuario { get; set; }
         public REN_SIM_REQ_BE simData { get; set; }
 
     }

@@ -1,0 +1,186 @@
+﻿@model webapp.ViewModels.AuxiliarEdit
+@{
+    ViewBag.Title = "RoracObjetivo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Theme JS files -->
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+<script type="text/javascript" src="~/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+
+<!-- /theme JS files -->
+
+<link href="~/assets/css/theodor.css" rel="stylesheet" />
+
+<div class="modal" id="confirmBorrarModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Está seguro de eliminar este registro?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmar">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titulo">Nuevo Registro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-group">
+                        <label>Cod Agencia</label>
+                        <input type="text" class="form-control" id="txtCodAgencia" />
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre Agencia</label>
+                        <input type="text" class="form-control" id="txtNomAgencia" />
+                    </div>
+                    <div class="form-group">
+                        <label>Distrito</label>
+                        <input type="text" class="form-control" id="txtDistrito" />
+                    </div>
+                    <div class="form-group">
+                        <label>Provincia</label>
+                        <input type="text" class="form-control" id="txtProvincia" />
+                    </div>
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <input type="text" class="form-control" id="txtDepartamento" />
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>*@
+                <button type="button" id="btnGrabar" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<div class="container-fluid">
+    <!-- Content area -->
+    <div class="content" style="padding-top:0px;">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Basic layout-->
+                <div class="panel panel-flat">
+                    <div class="panel-heading">
+                        <table>
+                            <tr>
+                                <td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>
+                                <td class="center"><i class="icon-floppy-disk icon-custom-style " title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>
+                                <td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a class="botonera classBorrar">Borrar</a></td>
+                                <td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>
+                            </tr>
+                        </table>
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Rorac Objetivos</label>
+
+                                        <div class="table-responsive" style="overflow-y: scroll; max-height:22rem;">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr class="headerTblColorPlomo">
+                                                        <th class="center">Cod Personeria</th>
+                                                        <th class="center">Cod Tipo Cliente</th>
+                                                        <th class="center">Tipo Cliente</th>
+                                                        <th class="center">Cod Producto Base</th>
+                                                        <th class="center">Producto Base</th>
+                                                        <th class="center">RORAC Objetivo</th>
+                                                        <th class="center">Autonomia Comercial</th>
+                                                        <th class="center">Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbodyComision">
+                                                    <tr>
+                                                        <td align='center'>PN</td>
+                                                        <td align='left'>OCHI</td>
+                                                        <td align='left'>Consumo Hipotecario</td>
+                                                        <td align='left'>1090</td>
+                                                        <td align='left'>Hipotecarios</td>
+                                                        <td align='left'>23.00%</td>
+                                                        <td align='left'>1.00%</td>
+                                                        <td align='left'>Editar|Eliminar</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align='center'>PN</td>
+                                                        <td align='left'>OCHI</td>
+                                                        <td align='left'>Consumo Hipotecario</td>
+                                                        <td align='left'>1090</td>
+                                                        <td align='left'>Hipotecarios</td>
+                                                        <td align='left'>23.00%</td>
+                                                        <td align='left'>1.00%</td>
+                                                        <td align='left'>Editar|Eliminar</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align='center'>PN</td>
+                                                        <td align='left'>OCHI</td>
+                                                        <td align='left'>Consumo Hipotecario</td>
+                                                        <td align='left'>1090</td>
+                                                        <td align='left'>Hipotecarios</td>
+                                                        <td align='left'>23.00%</td>
+                                                        <td align='left'>1.00%</td>
+                                                        <td align='left'>Editar|Eliminar</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align='center'>PN</td>
+                                                        <td align='left'>OCHI</td>
+                                                        <td align='left'>Consumo Hipotecario</td>
+                                                        <td align='left'>1090</td>
+                                                        <td align='left'>Hipotecarios</td>
+                                                        <td align='left'>23.00%</td>
+                                                        <td align='left'>1.00%</td>
+                                                        <td align='left'>Editar|Eliminar</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align='center'>PN</td>
+                                                        <td align='left'>OCHI</td>
+                                                        <td align='left'>Consumo Hipotecario</td>
+                                                        <td align='left'>1090</td>
+                                                        <td align='left'>Hipotecarios</td>
+                                                        <td align='left'>23.00%</td>
+                                                        <td align='left'>1.00%</td>
+                                                        <td align='left'>Editar|Eliminar</td>
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- /bordered table -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
