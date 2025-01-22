@@ -138,6 +138,25 @@ namespace webapp.Controllers
             var user = (SEG_USUARIO_BE)Session["Usuario"];
             viewModel.CodSuscriptor = user.SUSCRIPTOR;
             viewModel.CodUsuario = user.COD_USUARIO;
+
+            viewModel.mantRorac = bl.fn_mant_sel_roracObjetivo("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            var dataPersoneria = bl.fn_mant_sel_roracDDL("@PERSONERIA", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlPersoneria = dataPersoneria.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+            var dataProductoBase = bl.fn_mant_sel_roracDDL("@PRODUCTO_BASE", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlProducto = dataProductoBase.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+
+            viewModel.mantRorac = bl.fn_mant_sel_roracObjetivo("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+
             return View(viewModel);
         }
     }

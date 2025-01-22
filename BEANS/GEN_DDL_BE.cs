@@ -13,7 +13,7 @@ namespace BEANS
         public string Aux1 { get; set; }
         public string Aux2 { get; set; }
         public string Aux3 { get; set; }
-        public bool Selected { get; set; }     
+        public bool Selected { get; set; } = false;  
     }
     public class REN_INFO_BE
     {

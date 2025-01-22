@@ -313,5 +313,106 @@ namespace DA
             }
             return model;
         }
+
+        public List<RORACOBJETIVO_BE> fn_mant_sel_roracObjetivo(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<RORACOBJETIVO_BE> lista = new List<RORACOBJETIVO_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_RORACObjetivo]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    RORACOBJETIVO_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new RORACOBJETIVO_BE();
+                        bean.codPersoneria = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_personeria"));
+                        bean.personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("personeria"));
+                        bean.codTipCliente = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
+                        bean.tipCliente = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_cliente"));
+                        bean.codProductoBase = DataReader.GetValueOrNull<Int32>(dr, dr.GetOrdinal("cod_producto_base"));
+                        bean.productoBase = DataReader.SafeGetString(dr, dr.GetOrdinal("producto_base"));
+                        bean.roracObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORACObjetivo"));
+                        bean.autonomiaComercial = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("autonomia_comercial"));
+                        bean.tipReg = DataReader.SafeGetString(dr, dr.GetOrdinal("tipreg"));
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+        public List<GEN_DDL_BE> fn_mant_sel_roracDDL(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<GEN_DDL_BE> lista = new List<GEN_DDL_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_RORACObjetivo]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    GEN_DDL_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new GEN_DDL_BE();
+                        if (accion.Equals("@PERSONERIA"))
+                        {
+                            bean.Value = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_personeria"));
+                            bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("personeria"));
+                        }
+                        if (accion.Equals("@PRODUCTO_BASE"))
+                        {
+                            bean.Value = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto_base")).ToString();
+                            bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("producto_base"));
+                        }
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
     }
 }

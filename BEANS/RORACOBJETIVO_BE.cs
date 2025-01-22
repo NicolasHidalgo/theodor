@@ -9,12 +9,14 @@ namespace BEANS
     public class RORACOBJETIVO_BE
     {
         public string codPersoneria { get; set; }
-        public string codTipoCliente { get; set; }
-        public string tipoCliente { get; set; }
-        public string codProductoBase { get; set; }
+        public string personeria { get; set; }
+        public string codTipCliente { get; set; }
+        public string tipCliente { get; set; }
+        public int? codProductoBase { get; set; }
         public string productoBase { get; set; }
-        public string roracObjetivo { get; set; }
-        public string autonomiaComercial { get; set; }
+        public double? roracObjetivo { get; set; }
+        public double? autonomiaComercial { get; set; }
+        public string tipReg { get; set; }
 
     }
 }

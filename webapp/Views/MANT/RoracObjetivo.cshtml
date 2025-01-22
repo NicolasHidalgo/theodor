@@ -16,6 +16,18 @@
 
 <link href="~/assets/css/theodor.css" rel="stylesheet" />
 
+<style>
+    table thead tr {
+        background-color: #3f444e;
+        color: white;
+    }
+    .tit {
+        background-color: #156082;
+        color: white;
+        
+    }
+</style>
+
 <div class="modal" id="confirmBorrarModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -94,88 +106,65 @@
                                 <td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>
                                 <td class="center"><i class="icon-floppy-disk icon-custom-style " title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>
                                 <td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a class="botonera classBorrar">Borrar</a></td>
-                                <td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>
+                                @*<td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>*@
                             </tr>
                         </table>
 
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Rorac Objetivos</label>
 
-                                        <div class="table-responsive" style="overflow-y: scroll; max-height:22rem;">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr class="headerTblColorPlomo">
-                                                        <th class="center">Cod Personeria</th>
-                                                        <th class="center">Cod Tipo Cliente</th>
-                                                        <th class="center">Tipo Cliente</th>
-                                                        <th class="center">Cod Producto Base</th>
-                                                        <th class="center">Producto Base</th>
-                                                        <th class="center">RORAC Objetivo</th>
-                                                        <th class="center">Autonomia Comercial</th>
-                                                        <th class="center">Acciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="tbodyComision">
-                                                    <tr>
-                                                        <td align='center'>PN</td>
-                                                        <td align='left'>OCHI</td>
-                                                        <td align='left'>Consumo Hipotecario</td>
-                                                        <td align='left'>1090</td>
-                                                        <td align='left'>Hipotecarios</td>
-                                                        <td align='left'>23.00%</td>
-                                                        <td align='left'>1.00%</td>
-                                                        <td align='left'>Editar|Eliminar</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align='center'>PN</td>
-                                                        <td align='left'>OCHI</td>
-                                                        <td align='left'>Consumo Hipotecario</td>
-                                                        <td align='left'>1090</td>
-                                                        <td align='left'>Hipotecarios</td>
-                                                        <td align='left'>23.00%</td>
-                                                        <td align='left'>1.00%</td>
-                                                        <td align='left'>Editar|Eliminar</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align='center'>PN</td>
-                                                        <td align='left'>OCHI</td>
-                                                        <td align='left'>Consumo Hipotecario</td>
-                                                        <td align='left'>1090</td>
-                                                        <td align='left'>Hipotecarios</td>
-                                                        <td align='left'>23.00%</td>
-                                                        <td align='left'>1.00%</td>
-                                                        <td align='left'>Editar|Eliminar</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align='center'>PN</td>
-                                                        <td align='left'>OCHI</td>
-                                                        <td align='left'>Consumo Hipotecario</td>
-                                                        <td align='left'>1090</td>
-                                                        <td align='left'>Hipotecarios</td>
-                                                        <td align='left'>23.00%</td>
-                                                        <td align='left'>1.00%</td>
-                                                        <td align='left'>Editar|Eliminar</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align='center'>PN</td>
-                                                        <td align='left'>OCHI</td>
-                                                        <td align='left'>Consumo Hipotecario</td>
-                                                        <td align='left'>1090</td>
-                                                        <td align='left'>Hipotecarios</td>
-                                                        <td align='left'>23.00%</td>
-                                                        <td align='left'>1.00%</td>
-                                                        <td align='left'>Editar|Eliminar</td>
-                                                    </tr>
+                    </div>
 
-                                                </tbody>
-                                            </table>
-                                        </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cod. Personeria</th>
+                                                    <th>Cod. Tipo Cliente</th>
+                                                    <th>Tipo Cliente</th>
+                                                    <th>Cod. Producto Base</th>
+                                                    <th>Producto Base</th>
+                                                    <th>RORAC Objetivo</th>
+                                                    <th>Autonomia Comercial</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                 @{ var odd = 0; var estilo = string.Empty;}
+                                                @foreach (var item in Model.mantRorac)
+                                                {
+                                                    estilo = string.Empty;
+                                                    if (item.tipReg.Equals("tit"))
+                                                    {
+                                                        odd = 0;
+                                                        <tr class="tit">
+                                                            <td colspan="7">@item.personeria</td>
+                                                        </tr>
+                                                    }
+                                                    if (item.tipReg.Equals("EDT"))
+                                                    {
+                                                        odd = odd + 1;
+                                                        if ((odd % 2) == 0) { estilo = "colorGray"; }
+
+                                                        <tr class="@estilo">
+                                                            <td>@item.codPersoneria</td>
+                                                            <td>@item.codTipCliente</td>
+                                                            <td>@item.tipCliente</td>
+                                                            <td>@item.codProductoBase</td>
+                                                            <td>@item.productoBase</td>
+                                                            <td>@item.roracObjetivo</td>
+                                                            <td>@item.autonomiaComercial</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                            
+                                        </table>
                                     </div>
-                                    <!-- /bordered table -->
                                 </div>
+                                <!-- /bordered table -->
                             </div>
                         </div>
                     </div>
