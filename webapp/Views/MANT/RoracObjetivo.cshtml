@@ -126,9 +126,10 @@
                                                     <th>Producto Base</th>
                                                     <th>RORAC Objetivo</th>
                                                     <th>Autonomia Comercial</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="tbodyRORAC">
                                                 @{ var odd = 0; var estilo = string.Empty;}
                                                 @foreach (var item in Model.mantRorac)
                                                 {
@@ -137,7 +138,7 @@
                                                     {
                                                         odd = 0;
                                                         <tr class="tit">
-                                                            <td colspan="7">@item.tipCliente</td>
+                                                            <td colspan="8">@item.tipCliente</td>
                                                         </tr>
                                                     }
                                                     if (item.tipReg.Equals("EDT"))
@@ -157,6 +158,9 @@
                                                             <td>
                                                                 <input type="text" class="form-control" value="@item.autonomiaComercial" />
                                                             </td>
+                                                            <td><a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item, 
+Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item, 
+Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>
                                                         </tr>
                                                     }
                                                 }
@@ -184,7 +188,8 @@
 
     $(document).ready(function () {
         var gAccion = "";
-        var gCod = "";
+        var gCodTipCliente = "";
+        var gCodProducto = 0;
 
         $("#txtRORACObjetivo,#txtAutonomiaComercial").inputmask({
             alias: "decimal",
@@ -203,26 +208,27 @@
 
         fSelEditar = function (data) {
             $('#editModal').modal('show');
-            $("#txtCodFuncionario").val(data.cod_funcionario);
-            $("#txtNomFuncionario").val(data.nom_funcionario);
-            $("#ddlUsuario").val(data.ide_usuario).change();
-            $("#ddlAgencia").val(data.cod_agencia).change();
-            $("#ddlBanca").val(data.cod_personeria).change();
+            $("#ddlTipCliente").val(data.codTipCliente).change();
+            $("#ddlProducto").val(data.codProductoBase).change();
+            $("#txtRORACObjetivo").val(data.roracObjetivo).change();
+            $("#txtAutonomiaComercial").val(data.autonomiaComercial).change();
 
-            $('#txtCodFuncionario').prop('disabled', true);
+            $('#ddlTipCliente,#ddlProducto').prop('disabled', true);
             $("#titulo").text('Editar Registro');
             gAccion = "UPDATE";
         }
-        fSelEliminar = function (cod) {
+        fSelEliminar = function (data) {
             $('#confirmBorrarModal').modal('show');
             gAccion = "DELETE";
-            gCod = cod;
+            console.log(data)
+            gCodTipCliente = data.codTipCliente;
+            gCodProducto = data.codProductoBase;
         }
 
         $("#btnNuevo,.classNuevo").on("click", function () {
             $("#titulo").text('Nuevo Registro');
             gAccion = "INSERT";
-            //$('#txtCodFuncionario').prop('disabled', false);
+            $('#ddlTipCliente,#ddlProducto').prop('disabled', false);
             $("#txtRoracObjetivo, #txtAutonomiaComercial").val('');
             $("#ddlTipCliente, #ddlProducto").val('').change();
             $('#editModal').modal('show');
@@ -234,15 +240,47 @@
             fnGrabar();
         });
 
+        function fnCargarLista() {
+            $.getJSON('@Url.Action("JSON_RORACObjectivo_Refresh")', function (data) {
+                $("#tbodyRORAC").empty();
+                var odd = 0;
+                var estilo = "";
+                var cadena = "";
+                $.each(data, function (index, item) {
+                    estilo = "";
+                    if (item.tipReg == "TIT") {
+                        odd = 0;
+                        cadena += "<tr class='tit'><td colspan='8'>" + item.tipCliente +"</td></tr>";
+                    }
+                    if (item.tipReg == "EDT") {
+                        odd = odd + 1;
+                        if ((odd % 2) == 0) { estilo = "colorGray"; }
+                        cadena += "<tr class=" + estilo + ">";
+                        cadena += "<td>" + item.codPersoneria + "</td>";
+                        cadena += "<td>" + item.codTipCliente + "</td>";
+                        cadena += "<td>" + item.tipCliente + "</td>";
+                        cadena += "<td>" + item.codProductoBase + "</td>";
+                        cadena += "<td>" + item.productoBase + "</td>";
+                        cadena += "<td><input type='text' class='form-control' value='" + item.roracObjetivo + "'' /></td>";
+                        cadena += "<td><input type='text' class='form-control' value='" + item.autonomiaComercial + "'' /></td>";
+                        cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
+                        cadena += "</tr>";
+                    }
+                });
+                $("#tbodyRORAC").append(cadena);
+            }).done(function () {
+
+            });
+        }
 
         function fnGrabar() {
             $("#overlay").show();
 
             var _obj = {
-                cod_tip_cliente: $("#ddlTipCliente option:selected").val(),
-                cod_producto_base: $("#ddlProducto option:selected").val(),
+                codTipCliente: gAccion == "DELETE" ? gCodTipCliente : $("#ddlTipCliente option:selected").val(),
+                codProductoBase: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
                 RORACObjetivo: $("#txtRORACObjetivo").val(),
-                autonomia_comercial: $("#txtAutonomiaComercial").val(),
+                autonomiaComercial: $("#txtAutonomiaComercial").val(),
             };
 
             var _reply = {
@@ -251,11 +289,12 @@
                 DATA: JSON.stringify(_obj),
             };
 
-            var _url = '@Url.Action("EditRORAC", "MANT")';
+            var _url = '@Url.Action("EditRORACObjetivo", "MANT")';
             $.post(_url, _reply).done(function (data) {
                 if (data.Status === 200) {
                     toastr.success(data.Message);
-                    PlantillaDataTable.draw();
+                    fnCargarLista();
+                    //PlantillaDataTable.draw();
                 }
                 else {
                     toastr.error(data.Message);
