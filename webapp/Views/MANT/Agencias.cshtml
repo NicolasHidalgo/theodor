@@ -49,24 +49,24 @@
             <div class="modal-body">
                 <div class="form">
                     <div class="form-group">
-                        <label>Cod Funcionario</label>
-                        <input type="text" class="form-control" id="txtCodFuncionario" />
-                    </div>
-                    <div class="form-group">
-                        <label>Nombre Funcionario</label>
-                        <input type="text" class="form-control" id="txtNomFuncionario" />
-                    </div>
-                    <div class="form-group">
-                        <label>Usuario</label>
-                        <input type="text" class="form-control" id="txtCodUsuario" />
-                    </div>
-                    <div class="form-group">
-                        <label>Agencia</label>
+                        <label>Cod Agencia</label>
                         <input type="text" class="form-control" id="txtCodAgencia" />
                     </div>
                     <div class="form-group">
-                        <label>Tipo Cliente</label>
-                        <input type="text" class="form-control" id="txtCodTipCliente" />
+                        <label>Nombre Agencia</label>
+                        <input type="text" class="form-control" id="txtNomAgencia" />
+                    </div>
+                    <div class="form-group">
+                        <label>Distrito</label>
+                        <input type="text" class="form-control" id="txtDistrito" />
+                    </div>
+                    <div class="form-group">
+                        <label>Provincia</label>
+                        <input type="text" class="form-control" id="txtProvincia" />
+                    </div>
+                    <div class="form-group">
+                        <label>Departamento</label>
+                        <input type="text" class="form-control" id="txtDepartamento" />
                     </div>
 
                 </div>
@@ -133,11 +133,11 @@
 
         fSelEditar = function (data) {
             $('#editModal').modal('show');
-            $("#txtCodFuncionario").val(data.cod_funcionario);
-            $("#txtNomFuncionario").val(data.nom_funcionario);
-            $("#ddlUsuario").val(data.distrito);
-            $("#ddlAgencia").val(data.provincia);
-            $("#ddlCodTipCliente").val(data.departamento);
+            $("#txtCodAgencia").val(data.cod_agencia);
+            $("#txtNomAgencia").val(data.nom_agencia);
+            $("#txtDistrito").val(data.distrito);
+            $("#txtProvincia").val(data.provincia);
+            $("#txtDepartamento").val(data.departamento);
 
             $('#txtCodAgencia').prop('disabled', true);
             $("#titulo").text('Editar Registro');

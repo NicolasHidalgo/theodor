@@ -11,6 +11,7 @@
 <script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
 <script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
 <script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+<script src="~/assets/otros/inputmask/inputmask.js"></script>
 
 <!-- /theme JS files -->
 
@@ -21,10 +22,10 @@
         background-color: #3f444e;
         color: white;
     }
+
     .tit {
         background-color: #156082;
         color: white;
-        
     }
 </style>
 
@@ -61,24 +62,20 @@
             <div class="modal-body">
                 <div class="form">
                     <div class="form-group">
-                        <label>Cod Agencia</label>
-                        <input type="text" class="form-control" id="txtCodAgencia" />
+                        <label>Tipo Cliente</label>
+                        @Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @class = "select" })
                     </div>
                     <div class="form-group">
-                        <label>Nombre Agencia</label>
-                        <input type="text" class="form-control" id="txtNomAgencia" />
+                        <label>Producto Base</label>
+                        @Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })
                     </div>
                     <div class="form-group">
-                        <label>Distrito</label>
-                        <input type="text" class="form-control" id="txtDistrito" />
+                        <label>Rorac Objetivo</label>
+                        <input type="text" class="form-control" id="txtRORACObjetivo" />
                     </div>
                     <div class="form-group">
-                        <label>Provincia</label>
-                        <input type="text" class="form-control" id="txtProvincia" />
-                    </div>
-                    <div class="form-group">
-                        <label>Departamento</label>
-                        <input type="text" class="form-control" id="txtDepartamento" />
+                        <label>Autonomia Comercial</label>
+                        <input type="text" class="form-control" id="txtAutonomiaComercial" />
                     </div>
 
                 </div>
@@ -132,15 +129,15 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                 @{ var odd = 0; var estilo = string.Empty;}
+                                                @{ var odd = 0; var estilo = string.Empty;}
                                                 @foreach (var item in Model.mantRorac)
                                                 {
                                                     estilo = string.Empty;
-                                                    if (item.tipReg.Equals("tit"))
+                                                    if (item.tipReg.Equals("TIT"))
                                                     {
                                                         odd = 0;
                                                         <tr class="tit">
-                                                            <td colspan="7">@item.personeria</td>
+                                                            <td colspan="7">@item.tipCliente</td>
                                                         </tr>
                                                     }
                                                     if (item.tipReg.Equals("EDT"))
@@ -154,13 +151,17 @@
                                                             <td>@item.tipCliente</td>
                                                             <td>@item.codProductoBase</td>
                                                             <td>@item.productoBase</td>
-                                                            <td>@item.roracObjetivo</td>
-                                                            <td>@item.autonomiaComercial</td>
+                                                            <td>
+                                                                <input type="text" class="form-control" value="@item.roracObjetivo" />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" value="@item.autonomiaComercial" />
+                                                            </td>
                                                         </tr>
                                                     }
                                                 }
                                             </tbody>
-                                            
+
                                         </table>
                                     </div>
                                 </div>
@@ -173,3 +174,103 @@
         </div>
     </div>
 </div>
+
+
+<script type="text/javascript">
+
+    var fSelEditar;
+    var fSelEliminar;
+
+
+    $(document).ready(function () {
+        var gAccion = "";
+        var gCod = "";
+
+        $("#txtRORACObjetivo,#txtAutonomiaComercial").inputmask({
+            alias: "decimal",
+            radixPoint: ".",
+            digits: "2",
+            rightAlign: false,
+            integerDigits: 5,
+            digitsOptional: true,
+            allowPlus: true,
+            allowMinus: true,
+            placeholder: "0",
+            min: 0,
+            max: 100,
+            numericInput: true,
+        });
+
+        fSelEditar = function (data) {
+            $('#editModal').modal('show');
+            $("#txtCodFuncionario").val(data.cod_funcionario);
+            $("#txtNomFuncionario").val(data.nom_funcionario);
+            $("#ddlUsuario").val(data.ide_usuario).change();
+            $("#ddlAgencia").val(data.cod_agencia).change();
+            $("#ddlBanca").val(data.cod_personeria).change();
+
+            $('#txtCodFuncionario').prop('disabled', true);
+            $("#titulo").text('Editar Registro');
+            gAccion = "UPDATE";
+        }
+        fSelEliminar = function (cod) {
+            $('#confirmBorrarModal').modal('show');
+            gAccion = "DELETE";
+            gCod = cod;
+        }
+
+        $("#btnNuevo,.classNuevo").on("click", function () {
+            $("#titulo").text('Nuevo Registro');
+            gAccion = "INSERT";
+            //$('#txtCodFuncionario').prop('disabled', false);
+            $("#txtRoracObjetivo, #txtAutonomiaComercial").val('');
+            $("#ddlTipCliente, #ddlProducto").val('').change();
+            $('#editModal').modal('show');
+        });
+        $("#btnGrabar").on("click", function () {
+            fnGrabar();
+        });
+        $("#btnConfirmar").on("click", function () {
+            fnGrabar();
+        });
+
+
+        function fnGrabar() {
+            $("#overlay").show();
+
+            var _obj = {
+                cod_tip_cliente: $("#ddlTipCliente option:selected").val(),
+                cod_producto_base: $("#ddlProducto option:selected").val(),
+                RORACObjetivo: $("#txtRORACObjetivo").val(),
+                autonomia_comercial: $("#txtAutonomiaComercial").val(),
+            };
+
+            var _reply = {
+                ACCION: gAccion,
+                MENSAJE: '',
+                DATA: JSON.stringify(_obj),
+            };
+
+            var _url = '@Url.Action("EditRORAC", "MANT")';
+            $.post(_url, _reply).done(function (data) {
+                if (data.Status === 200) {
+                    toastr.success(data.Message);
+                    PlantillaDataTable.draw();
+                }
+                else {
+                    toastr.error(data.Message);
+                }
+            }).fail(function (e) {
+            }).always(function () {
+                $("#overlay").hide();
+                if (gAccion == "DELETE") {
+                    $('#confirmBorrarModal').modal('hide');
+                } else {
+                    $('#editModal').modal('hide');
+                }
+
+            });
+        }
+    });
+
+</script>

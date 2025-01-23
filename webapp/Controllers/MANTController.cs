@@ -147,6 +147,13 @@ namespace webapp.Controllers
                 Text = x.Text,
                 Selected = x.Selected,
             });
+            var dataTipCliente = bl.fn_mant_sel_roracDDL("@TIP_CLIENTE", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlTipCliente = dataPersoneria.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
             var dataProductoBase = bl.fn_mant_sel_roracDDL("@PRODUCTO_BASE", user.SUSCRIPTOR, user.COD_USUARIO);
             viewModel.ddlProducto = dataProductoBase.Select(x => new ExtendedSelectListItem
             {
@@ -155,9 +162,54 @@ namespace webapp.Controllers
                 Selected = x.Selected,
             });
 
-            viewModel.mantRorac = bl.fn_mant_sel_roracObjetivo("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
-
             return View(viewModel);
         }
+
+        public JsonResult JSON_RORACObjectivo_Refresh()
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var data = bl.fn_mant_sel_roracObjetivo("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult EditRORACObjetivo(GEN_REPLY_BE model)
+        {
+            if (ModelState.IsValid)
+            {
+                var _dat = (string[])model.DATA;
+                var _obj = JsonConvert.DeserializeObject<RORACOBJETIVO_BE>(_dat[0]);
+                var user = (SEG_USUARIO_BE)Session["Usuario"];
+                //var viewModel = new AuxiliarEdit();
+                var ideUsuario = long.Parse(user.IDE_USUARIO.ToString());
+                var codSuscriptor = user.SUSCRIPTOR;
+                model.DATA = _obj;
+
+                var reply = new GEN_REPLY_BE();
+                reply = bl.fn_mant_pro_roracObjetivo(model.ACCION, codSuscriptor, user.COD_USUARIO, _obj);
+
+                var res = new Response();
+                res.Message = reply.MENSAJE;
+
+                res.Status = HttpStatusCode.BadRequest;
+
+                if (reply.MENSAJE.Equals("") || reply.MENSAJE.Contains(Constantes.SUCCESS))
+                    res.Status = HttpStatusCode.OK;
+
+                //res.Data = viewModel;
+
+                return Json(res);
+            }
+
+            return Json(
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Message = "No se puede continuar por errores en el modelo",
+                            Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        }); ;
+        }
+
+
     }
 }

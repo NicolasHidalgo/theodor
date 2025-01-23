@@ -338,7 +338,7 @@ namespace DA
                     {
                         bean = new RORACOBJETIVO_BE();
                         bean.codPersoneria = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_personeria"));
-                        bean.personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("personeria"));
+                        //bean.personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("personeria"));
                         bean.codTipCliente = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
                         bean.tipCliente = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_cliente"));
                         bean.codProductoBase = DataReader.GetValueOrNull<Int32>(dr, dr.GetOrdinal("cod_producto_base"));
@@ -396,6 +396,11 @@ namespace DA
                             bean.Value = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto_base")).ToString();
                             bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("producto_base"));
                         }
+                        if (accion.Equals("@TIP_CLIENTE"))
+                        {
+                            bean.Value = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
+                            bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_cliente"));
+                        }
 
                         lista.Add(bean);
                     }
@@ -412,6 +417,45 @@ namespace DA
                     con.Close();
             }
             return lista;
+        }
+
+        public GEN_REPLY_BE fn_mant_pro_roracObjetivo(string accion, long codSuscriptor, string codUsuario, RORACOBJETIVO_BE param)
+        {
+            Mensaje = string.Empty;
+            GEN_REPLY_BE model = new GEN_REPLY_BE();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_RORACObjetivo]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+            cmd.Parameters.Add("@cod_personeria", System.Data.SqlDbType.VarChar, 5).Value = param.codPersoneria;
+            cmd.Parameters.Add("@cod_tip_cliente", System.Data.SqlDbType.VarChar, 5).Value = param.codTipCliente;
+            cmd.Parameters.Add("@cod_producto_base", System.Data.SqlDbType.Int).Value = param.codProductoBase;
+            cmd.Parameters.Add("@RORACObjetivo", System.Data.SqlDbType.Float).Value = param.roracObjetivo;
+            cmd.Parameters.Add("@autonomia_comercial", System.Data.SqlDbType.Float).Value = param.autonomiaComercial;
+
+            try
+            {
+                con.InfoMessage += new SqlInfoMessageEventHandler(InfoMessageHandler);
+                con.FireInfoMessageEventOnUserErrors = true;
+                con.Open();
+                var iFilasAfectadas = cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                model.MENSAJE += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                model.MENSAJE += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return model;
         }
 
     }

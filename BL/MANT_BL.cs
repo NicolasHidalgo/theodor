@@ -51,6 +51,10 @@ namespace BL
         {
             return dat.fn_mant_sel_roracDDL(accion, codSuscriptor, codUsuario);
         }
+        public GEN_REPLY_BE fn_mant_pro_roracObjetivo(string accion, long codSuscriptor, string codUsuario, RORACOBJETIVO_BE param)
+        {
+            return dat.fn_mant_pro_roracObjetivo(accion, codSuscriptor, codUsuario, param);
+        }
 
     }
 }
