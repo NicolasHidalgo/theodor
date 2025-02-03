@@ -15,6 +15,10 @@ namespace BL
         {
             return dat.fn_mant_sel_agencia(accion, codSuscriptor, codUsuario);
         }
+        public List<UBIGEO_BE> fn_mant_sel_ubigeo(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_mant_sel_ubigeo(accion, codSuscriptor, codUsuario)
+;        }
         public GEN_REPLY_BE fn_mant_pro_agencia(string accion, long codSuscriptor, string codUsuario, AGENCIA_BE param)
         {
             return dat.fn_mant_pro_agencia(accion, codSuscriptor, codUsuario, param);
@@ -55,6 +59,25 @@ namespace BL
         {
             return dat.fn_mant_pro_roracObjetivo(accion, codSuscriptor, codUsuario, param);
         }
-
+        public List<PRODUCTO_BE> fn_mant_sel_producto(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_mant_sel_producto(accion, codSuscriptor, codUsuario);
+        }
+        public List<GEN_DDL_BE> fn_mant_sel_productoDDL(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_mant_sel_productoDDL(accion, codSuscriptor, codUsuario);
+        }
+        public GEN_REPLY_BE fn_mant_pro_producto(string accion, long codSuscriptor, string codUsuario, PRODUCTO_BE param)
+        {
+            return dat.fn_mant_pro_producto(accion, codSuscriptor, codUsuario, param);
+        }
+        public List<COSTOOPERATIVO_BE> fn_mant_sel_costoOperativo(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_mant_sel_costoOperativo(accion, codSuscriptor, codUsuario);
+        }
+        public GEN_REPLY_BE fn_mant_pro_costoOperativo(string accion, long codSuscriptor, string codUsuario, COSTOOPERATIVO_BE param)
+        {
+            return dat.fn_mant_pro_costoOperativo(accion, codSuscriptor, codUsuario, param);
+        }
     }
 }

@@ -2746,6 +2746,8 @@
     <Content Include="Views\MANT\Agencias.cshtml" />
     <Content Include="Views\MANT\Funcionarios.cshtml" />
     <Content Include="Views\MANT\RoracObjetivo.cshtml" />
+    <Content Include="Views\MANT\Productos.cshtml" />
+    <Content Include="Views\MANT\CostosOperativo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

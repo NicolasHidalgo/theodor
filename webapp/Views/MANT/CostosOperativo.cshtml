@@ -1,6 +1,6 @@
 ﻿@model webapp.ViewModels.AuxiliarEdit
 @{
-    ViewBag.Title = "RoracObjetivo";
+    ViewBag.Title = "CostoOperativo";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -131,14 +131,14 @@
                                             </thead>
                                             <tbody id="tbodyRORAC">
                                                 @{ var odd = 0; var estilo = string.Empty;}
-                                                @foreach (var item in Model.mantRorac)
+                                                @foreach (var item in Model.costoOperativo)
                                                 {
                                                     estilo = string.Empty;
                                                     if (item.tipReg.ToUpper().Equals("TIT"))
                                                     {
                                                         odd = 0;
                                                         <tr class="tit">
-                                                            <td colspan="8">@item.tipCliente</td>
+                                                            <td colspan="8">@item.codOperacion</td>
                                                         </tr>
                                                     }
                                                     if (item.tipReg.ToUpper().Equals("EDT"))
@@ -147,23 +147,18 @@
                                                         if ((odd % 2) == 0) { estilo = "colorGray"; }
 
                                                         <tr class="@estilo">
-                                                            <td>@item.codPersoneria</td>
-                                                            <td>@item.codTipCliente</td>
-                                                            <td>@item.tipCliente</td>
-                                                            <td>@item.codProductoBase</td>
-                                                            <td>@item.productoBase</td>
-                                                            <td>@item.roracObjetivo
-                                                                @*<input type="text" class="form-control" value="@item.roracObjetivo" />*@
-                                                            </td>
-                                                            <td>@item.autonomiaComercial
-                                                                @*<input type="text" class="form-control" value="@item.autonomiaComercial" />*@
-                                                            </td>
-                                                            <td><a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item, 
-Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item, 
-Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>
-                                                        </tr>
-                                                    }
-                                                }
+                                                            <td>@item.codOperacion</td>
+                                                            <td>@item.codCanalAtencion</td>
+                                                            <td>@item.canalAtencion</td>
+                                                            <td>@item.costoOperativo</td>
+                                                    <td>
+                                                        <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
                                             </tbody>
 
                                         </table>

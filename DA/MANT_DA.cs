@@ -62,6 +62,51 @@ namespace DA
             return lista;
         }
 
+        public List<UBIGEO_BE> fn_mant_sel_ubigeo(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<UBIGEO_BE> lista = new List<UBIGEO_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_agencia]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    UBIGEO_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new UBIGEO_BE();
+                        bean.departamento = DataReader.SafeGetString(dr, dr.GetOrdinal("departamento"));
+                        bean.provincia = DataReader.SafeGetString(dr, dr.GetOrdinal("provincia"));
+                        bean.distrito = DataReader.SafeGetString(dr, dr.GetOrdinal("distrito"));
+                        bean.codUbigeo = DataReader.SafeGetString(dr, dr.GetOrdinal("ubigeo_reniec"));
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
         public GEN_REPLY_BE fn_mant_pro_agencia(string accion, long codSuscriptor, string codUsuario, AGENCIA_BE param)
         {
             Mensaje = string.Empty;
@@ -436,6 +481,248 @@ namespace DA
             cmd.Parameters.Add("@cod_producto_base", System.Data.SqlDbType.Int).Value = param.codProductoBase;
             cmd.Parameters.Add("@RORACObjetivo", System.Data.SqlDbType.Float).Value = param.roracObjetivo;
             cmd.Parameters.Add("@autonomia_comercial", System.Data.SqlDbType.Float).Value = param.autonomiaComercial;
+
+            try
+            {
+                con.InfoMessage += new SqlInfoMessageEventHandler(InfoMessageHandler);
+                con.FireInfoMessageEventOnUserErrors = true;
+                con.Open();
+                var iFilasAfectadas = cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                model.MENSAJE += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                model.MENSAJE += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return model;
+        }
+
+        public List<PRODUCTO_BE> fn_mant_sel_producto(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<PRODUCTO_BE> lista = new List<PRODUCTO_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_producto]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    PRODUCTO_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new PRODUCTO_BE();
+
+                        
+                        bean.productoBase = DataReader.SafeGetString(dr, dr.GetOrdinal("producto_base"));
+                        bean.codOperacion = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_operacion"));
+                        bean.codTipAmortizacion = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_tip_amortizacion"));
+                        bean.tipAmortizacion = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_amortizacion"));
+
+                        if (accion.Equals("@PRODUCTO_BASE"))
+                        {
+                            bean.intCodProductoBase = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto_base"));
+                            bean.operacion = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_operacion"));
+                        }
+                        else
+                        {
+                            bean.strCodProductoBase = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_producto_base"));
+                            bean.codProducto = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto"));
+                            bean.producto = DataReader.SafeGetString(dr, dr.GetOrdinal("producto"));
+                            bean.codTipClientes = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_clientes"));
+                            bean.plazo = DataReader.SafeGetInt32(dr, dr.GetOrdinal("Plazo"));
+                            bean.tea = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("TEA"));
+                            bean.factorUsoLinea = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("FactorUsoLinea"));
+                            bean.factorConversionIndirectos = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("FactorConversionIndirectos"));
+                            bean.aplicaPricing = DataReader.SafeGetBoolean(dr, dr.GetOrdinal("aplicaPricing"));
+                            bean.tipReg = DataReader.SafeGetString(dr, dr.GetOrdinal("tipreg"));
+                            bean.orden = DataReader.SafeGetInt32(dr, dr.GetOrdinal("orden"));
+                        }
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
+        public List<GEN_DDL_BE> fn_mant_sel_productoDDL(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<GEN_DDL_BE> lista = new List<GEN_DDL_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_producto]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    GEN_DDL_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new GEN_DDL_BE();
+                        if (accion.Equals("@TIP_CLIENTE"))
+                        {
+                            bean.Value = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
+                            bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_cliente"));
+                        }
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
+        public GEN_REPLY_BE fn_mant_pro_producto(string accion, long codSuscriptor, string codUsuario, PRODUCTO_BE param)
+        {
+            Mensaje = string.Empty;
+            GEN_REPLY_BE model = new GEN_REPLY_BE();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_producto]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+            cmd.Parameters.Add("@cod_producto", System.Data.SqlDbType.Int).Value = param.codProducto;
+            cmd.Parameters.Add("@cod_producto_base", System.Data.SqlDbType.VarChar, 10).Value = param.strCodProductoBase;
+            cmd.Parameters.Add("@producto", System.Data.SqlDbType.VarChar, 100).Value = param.producto;
+            cmd.Parameters.Add("@cod_tip_clientes", System.Data.SqlDbType.VarChar, 512).Value = param.codTipClientes;
+            cmd.Parameters.Add("@cod_tip_amortizacion", System.Data.SqlDbType.Int).Value = param.codTipAmortizacion;
+            cmd.Parameters.Add("@Plazo", System.Data.SqlDbType.Float).Value = param.plazo;
+            cmd.Parameters.Add("@TEA", System.Data.SqlDbType.Float).Value = param.tea;
+            cmd.Parameters.Add("@FactorUsoLinea", System.Data.SqlDbType.Float).Value = param.factorUsoLinea;
+            cmd.Parameters.Add("@FactorConversionIndirectos", System.Data.SqlDbType.Float).Value = param.factorConversionIndirectos;
+            cmd.Parameters.Add("@aplicaPricing", System.Data.SqlDbType.Bit).Value = param.aplicaPricing;
+
+            try
+            {
+                con.InfoMessage += new SqlInfoMessageEventHandler(InfoMessageHandler);
+                con.FireInfoMessageEventOnUserErrors = true;
+                con.Open();
+                var iFilasAfectadas = cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                model.MENSAJE += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                model.MENSAJE += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return model;
+        }
+
+
+        public List<COSTOOPERATIVO_BE> fn_mant_sel_costoOperativo(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<COSTOOPERATIVO_BE> lista = new List<COSTOOPERATIVO_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_costoOperativo]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    COSTOOPERATIVO_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new COSTOOPERATIVO_BE();
+                        bean.codOperacion = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_operacion"));
+                        bean.operacion = DataReader.SafeGetString(dr, dr.GetOrdinal("operacion"));
+                        bean.codCanalAtencion = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_canal_atencion"));
+                        bean.canalAtencion = DataReader.SafeGetString(dr, dr.GetOrdinal("canal_atencion"));
+                        bean.costoOperativo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("costoOperativo"));
+                        bean.tipReg = DataReader.SafeGetString(dr, dr.GetOrdinal("tipReg"));
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
+        public GEN_REPLY_BE fn_mant_pro_costoOperativo(string accion, long codSuscriptor, string codUsuario, COSTOOPERATIVO_BE param)
+        {
+            Mensaje = string.Empty;
+            GEN_REPLY_BE model = new GEN_REPLY_BE();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_costoOperativo]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+            cmd.Parameters.Add("@cod_operacion", System.Data.SqlDbType.VarChar, 20).Value = param.codOperacion;
+            cmd.Parameters.Add("@cod_canal_atencion", System.Data.SqlDbType.Int).Value = param.codCanalAtencion;
+            cmd.Parameters.Add("@costoOperativo", System.Data.SqlDbType.Float).Value = param.costoOperativo;
 
             try
             {

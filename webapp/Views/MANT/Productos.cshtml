@@ -1,6 +1,6 @@
 ﻿@model webapp.ViewModels.AuxiliarEdit
 @{
-    ViewBag.Title = "RoracObjetivo";
+    ViewBag.Title = "Productos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -61,21 +61,59 @@
             </div>
             <div class="modal-body">
                 <div class="form">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Cod. Producto</label>
+                                <input type="text" class="form-control" id="txtCodProducto" />
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label>Nom. Producto</label>
+                                <input type="text" class="form-control" id="txtNomProducto" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Producto Base</label>
+                        @Html.DropDownList("ddlProductoBase", Model.ddlProducto, new { @class = "select" })
+                    </div>
                     <div class="form-group">
                         <label>Tipo Cliente</label>
                         @Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @class = "select" })
                     </div>
                     <div class="form-group">
-                        <label>Producto Base</label>
-                        @Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })
+                        <label>Cod. Tip. Amortizacion</label>
+                        <input type="text" class="form-control" id="txtCodTipAmortizacion" />
                     </div>
-                    <div class="form-group">
-                        <label>Rorac Objetivo</label>
-                        <input type="text" class="form-control" id="txtRORACObjetivo" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Plazo</label>
+                                <input type="text" class="form-control" id="txtPlazo" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>TEA</label>
+                                <input type="text" class="form-control" id="txtTEA" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Autonomia Comercial</label>
-                        <input type="text" class="form-control" id="txtAutonomiaComercial" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Factor Uso Linea</label>
+                                <input type="text" class="form-control" id="txtFactorUso" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Factor Conversion Indirectos</label>
+                                <input type="text" class="form-control" id="txtFactorConversion" />
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -101,9 +139,9 @@
                         <table>
                             <tr>
                                 <td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>
-                                <!--<td class="center"><i class="icon-floppy-disk icon-custom-style " title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>-->
-                                <!--<td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a class="botonera classBorrar">Borrar</a></td>-->
-                                @*<td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>*@
+                                @*<td class="center"><i class="icon-floppy-disk icon-custom-style " title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>
+                                <td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a class="botonera classBorrar">Borrar</a></td>
+                                <td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>*@
                             </tr>
                         </table>
 
@@ -119,26 +157,30 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th>Cod. Personeria</th>
-                                                    <th>Cod. Tipo Cliente</th>
-                                                    <th>Tipo Cliente</th>
+                                                    <th>Cod. Producto</th>
+                                                    <th>Producto</th>
                                                     <th>Cod. Producto Base</th>
                                                     <th>Producto Base</th>
-                                                    <th>RORAC Objetivo</th>
-                                                    <th>Autonomia Comercial</th>
+                                                    <th>Cod. Tipo Clientes</th>
+                                                    <th>Cod. Tipo Amortizacion</th>
+                                                    <th>Tipo Amortizacion</th>
+                                                    <th>Plazo</th>
+                                                    <th>TEA</th>
+                                                    <th>Factor Uso Linea</th>
+                                                    <th>Factor Conversion Indirectos</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbodyRORAC">
                                                 @{ var odd = 0; var estilo = string.Empty;}
-                                                @foreach (var item in Model.mantRorac)
+                                                @foreach (var item in Model.producto)
                                                 {
                                                     estilo = string.Empty;
                                                     if (item.tipReg.ToUpper().Equals("TIT"))
                                                     {
                                                         odd = 0;
                                                         <tr class="tit">
-                                                            <td colspan="8">@item.tipCliente</td>
+                                                            <td colspan="12">@item.producto</td>
                                                         </tr>
                                                     }
                                                     if (item.tipReg.ToUpper().Equals("EDT"))
@@ -147,20 +189,22 @@
                                                         if ((odd % 2) == 0) { estilo = "colorGray"; }
 
                                                         <tr class="@estilo">
-                                                            <td>@item.codPersoneria</td>
-                                                            <td>@item.codTipCliente</td>
-                                                            <td>@item.tipCliente</td>
-                                                            <td>@item.codProductoBase</td>
+                                                            <td>@item.codProducto</td>
+                                                            <td>@item.producto</td>
+                                                            <td>@item.strCodProductoBase</td>
                                                             <td>@item.productoBase</td>
-                                                            <td>@item.roracObjetivo
-                                                                @*<input type="text" class="form-control" value="@item.roracObjetivo" />*@
+                                                            <td>@item.codTipClientes</td>
+                                                            <td>@item.codTipAmortizacion</td>
+                                                            <td>@item.tipAmortizacion</td>
+                                                            <td>@item.plazo</td>
+                                                            <td>@item.tea</td>
+                                                            <td>@item.factorUsoLinea</td>
+                                                            <td>@item.factorConversionIndirectos</td>
+                                                            <td>
+                                                                <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
                                                             </td>
-                                                            <td>@item.autonomiaComercial
-                                                                @*<input type="text" class="form-control" value="@item.autonomiaComercial" />*@
-                                                            </td>
-                                                            <td><a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item, 
-Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item, 
-Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>
                                                         </tr>
                                                     }
                                                 }
@@ -191,7 +235,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>
         var gCodTipCliente = "";
         var gCodProducto = 0;
 
-        $("#txtRORACObjetivo,#txtAutonomiaComercial").inputmask({
+        $("#txtTEA,#txtFactorUso,#txtFactorConversion").inputmask({
             alias: "decimal",
             radixPoint: ".",
             digits: "2",
@@ -205,15 +249,29 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>
             max: 100,
             numericInput: true,
         });
+        $('#txtPlazo').inputmask({
+            'alias': 'decimal',
+            'groupSeparator': ',',
+            'autoGroup': true,
+            'digits': 2,
+            'digitsOptional': false,
+            'placeholder': '0.00'
+        });
 
         fSelEditar = function (data) {
+            console.log(data);
             $('#editModal').modal('show');
+            $("#txtCodProducto").val(data.codProducto).change();
+            $("#txtNomProducto").val(data.producto).change();
+            $("#ddlProductoBase").val(data.strCodProductoBase).change();
             $("#ddlTipCliente").val(data.codTipCliente).change();
-            $("#ddlProducto").val(data.codProductoBase).change();
-            $("#txtRORACObjetivo").val(data.roracObjetivo).change();
-            $("#txtAutonomiaComercial").val(data.autonomiaComercial).change();
+            $("#txtCodTipAmortizacion").val(data.codTipAmortizacion).change();
+            $("#txtPlazo").val(data.plazo).change();
+            $("#txtTEA").val(data.tea).change();
+            $("#txtFactorUso").val(data.factorUsoLinea).change();
+            $("#txtFactorConversion").val(data.factorConversionIndirectos).change();
 
-            $('#ddlTipCliente,#ddlProducto').prop('disabled', true);
+            //$('#ddlTipCliente,#ddlProducto').prop('disabled', true);
             $("#titulo").text('Editar Registro');
             gAccion = "UPDATE";
         }
@@ -261,10 +319,8 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>
                         cadena += "<td>" + item.tipCliente + "</td>";
                         cadena += "<td>" + item.codProductoBase + "</td>";
                         cadena += "<td>" + item.productoBase + "</td>";
-                        cadena += "<td>" + item.roracObjetivo + "</td>";
-                        cadena += "<td>" + item.autonomiaComercial + "</td>";
-                        //cadena += "<td><input type='text' class='form-control' value='" + item.roracObjetivo + "'' /></td>";
-                        //cadena += "<td><input type='text' class='form-control' value='" + item.autonomiaComercial + "'' /></td>";
+                        cadena += "<td><input type='text' class='form-control' value='" + item.roracObjetivo + "'' /></td>";
+                        cadena += "<td><input type='text' class='form-control' value='" + item.autonomiaComercial + "'' /></td>";
                         cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
                         cadena += "</tr>";
                     }

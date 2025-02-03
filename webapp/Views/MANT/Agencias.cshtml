@@ -57,18 +57,17 @@
                         <input type="text" class="form-control" id="txtNomAgencia" />
                     </div>
                     <div class="form-group">
-                        <label>Distrito</label>
-                        <input type="text" class="form-control" id="txtDistrito" />
+                        <label>Departamento</label>
+                        @Html.DropDownList("ddlDepartamento", Model.ddlDepartamento, new { @class = "select" })
                     </div>
                     <div class="form-group">
                         <label>Provincia</label>
-                        <input type="text" class="form-control" id="txtProvincia" />
+                        @Html.DropDownList("ddlProvincia", Model.ddlProvincia, new { @class = "select" })
                     </div>
                     <div class="form-group">
-                        <label>Departamento</label>
-                        <input type="text" class="form-control" id="txtDepartamento" />
+                        <label>Distrito</label>
+                        @Html.DropDownList("ddlDistrito", Model.ddlDistrito, new { @class = "select" })
                     </div>
-
                 </div>
 
             </div>
@@ -125,19 +124,19 @@
 
     var fSelEditar;
     var fSelEliminar;
-    
-    
+
+
     $(document).ready(function () {
-        var gAccion = ""; 
+        var gAccion = "";
         var gCodAgencia = "";
 
         fSelEditar = function (data) {
             $('#editModal').modal('show');
             $("#txtCodAgencia").val(data.cod_agencia);
             $("#txtNomAgencia").val(data.nom_agencia);
-            $("#txtDistrito").val(data.distrito);
-            $("#txtProvincia").val(data.provincia);
-            $("#txtDepartamento").val(data.departamento);
+            $("#ddlDepartamento").val('');
+            $("#ddlProvincia").val('');
+            $("#ddlDistrito").val('');
 
             $('#txtCodAgencia').prop('disabled', true);
             $("#titulo").text('Editar Registro');
@@ -153,7 +152,9 @@
             $("#titulo").text('Nuevo Registro');
             gAccion = "INSERT";
             $('#txtCodAgencia').prop('disabled', false);
-            $("#txtCodAgencia, #txtNomAgencia, #txtDistrito, #txtProvincia, #txtDepartamento").val('');
+            $("#txtCodAgencia, #txtNomAgencia").val('');
+            $("#ddlDepartamento").val('').change();
+            $("#ddlProvincia,#ddlDistrito").empty();
             $('#editModal').modal('show');
         });
         $("#btnGrabar").on("click", function () {
@@ -162,7 +163,64 @@
         $("#btnConfirmar").on("click", function () {
             fnGrabar();
         });
-        
+
+        $("#ddlDepartamento").change(function (e, data) {
+            ddlDepartamentoChange(data);
+        });
+        $("#ddlProvincia").change(function (e, data) {
+            ddlProvinciaChange(data);
+        });
+        function ddlDepartamentoChange(info) {
+            let codDepartamento = $("#ddlDepartamento option:selected").val();
+            if (codDepartamento == undefined || codDepartamento == null || codDepartamento == "") {
+                return;
+            }
+            $.getJSON('@Url.Action("JSON_DepartamentoChange")', { codDepartamento: codDepartamento }, function (data) {
+                $('#ddlProvincia, #ddlDistrito').empty();
+                $('#ddlProvincia').append($('<option/>', {
+                    value: '',
+                    text: '--Selecciona--',
+                    selected: true //item.Selected
+                }));
+                $.each(data, function (index, item) {
+                    $('#ddlProvincia').append($('<option/>', {
+                        value: item.codUbigeo,
+                        text: item.provincia,
+                        selected: false //item.Selected
+                    }));
+                });
+
+            }).done(function () {
+
+            }).always(function () {
+            });
+        }
+        function ddlProvinciaChange(info) {
+            let codProvincia = $("#ddlProvincia option:selected").val();
+            if (codProvincia == undefined || codProvincia == null || codProvincia == "") {
+                return;
+            }
+            $.getJSON('@Url.Action("JSON_ProvinciaChange")', { codProvincia: codProvincia }, function (data) {
+                $('#ddlDistrito').empty();
+                $('#ddlDistrito').append($('<option/>', {
+                    value: '',
+                    text: '--Selecciona--',
+                    selected: true //item.Selected
+                }));
+                $.each(data, function (index, item) {
+                    $('#ddlDistrito').append($('<option/>', {
+                        value: item.codUbigeo,
+                        text: item.distrito,
+                        selected: false //item.Selected
+                    }));
+                });
+
+            }).done(function () {
+
+            }).always(function () {
+            });
+        }
+
 
         function fnGrabar() {
             $("#overlay").show();
@@ -170,9 +228,9 @@
             var _obj = {
                 cod_agencia: gAccion == "DELETE" ? gCodAgencia : $("#txtCodAgencia").val(),
                 nom_agencia: $("#txtNomAgencia").val(),
-                distrito: $("#txtDistrito").val(),
-                provincia: $("#txtProvincia").val(),
-                departamento: $("#txtDepartamento").val(),
+                departamento: $("#ddlDepartamento").val("option:selected"),
+                provincia: $("#ddlProvincia").val("option:selected"),
+                distrito: $("#ddlDistrito").val("option:selected"),
             };
 
             var _reply = {
@@ -198,7 +256,7 @@
                 } else {
                     $('#editModal').modal('hide');
                 }
-                
+
             });
         }
 

@@ -22,7 +22,79 @@ namespace webapp.Controllers
             viewModel.CodSuscriptor = user.SUSCRIPTOR;
             viewModel.CodUsuario = user.COD_USUARIO;
 
+            var ubigeo = Session["ubigeo"] as List<UBIGEO_BE>;
+            if (Session["ubigeo"] == null)
+            {
+                ubigeo = bl.fn_mant_sel_ubigeo("@UBIGEO", user.SUSCRIPTOR, user.COD_USUARIO);
+                Session["ubigeo"] = ubigeo;
+            }
+
+            var data = ubigeo
+                .Select(x => new {
+                    departamento = x.departamento,
+                    codUbigeo = x.codUbigeo.Substring(0, 2),
+                    selected = false
+                })
+                .Distinct()
+                .OrderBy(x => x.departamento)
+                .ToList();
+            data = data.Prepend(new { departamento = "--Selecciona--", codUbigeo = "", selected = true }).ToList();
+
+            viewModel.ddlDepartamento = data.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.codUbigeo,
+                Text = x.departamento,
+                Selected = x.selected,
+            });
+
             return View(viewModel);
+        }
+
+        public JsonResult JSON_DepartamentoChange(string codDepartamento)
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var ubigeo = Session["ubigeo"] as List<UBIGEO_BE>;
+            if (Session["ubigeo"] == null)
+            {
+                ubigeo = bl.fn_mant_sel_ubigeo("@UBIGEO", user.SUSCRIPTOR, user.COD_USUARIO);
+                Session["ubigeo"] = ubigeo;
+            }
+            var data = ubigeo
+                .Where(x => x.codUbigeo.StartsWith(codDepartamento)) 
+                .Select(x => new {
+                    provincia = x.provincia,
+                    codUbigeo = x.codUbigeo.Substring(0, 4),
+                    //selected = false
+                })
+                .Distinct()
+                .OrderBy(x => x.provincia)
+                .ToList();
+            //data = data.Append(new { provincia = "", codUbigeo = "", selected = true }).ToList();
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult JSON_ProvinciaChange(string codProvincia)
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var ubigeo = Session["ubigeo"] as List<UBIGEO_BE>;
+            if (Session["ubigeo"] == null)
+            {
+                ubigeo = bl.fn_mant_sel_ubigeo("@UBIGEO", user.SUSCRIPTOR, user.COD_USUARIO);
+                Session["ubigeo"] = ubigeo;
+            }
+            var data = ubigeo
+                .Where(x => x.codUbigeo.StartsWith(codProvincia)) // Filtra por departamento
+                .Select(x => new {
+                    distrito = x.distrito,
+                    codUbigeo = x.codUbigeo.Substring(0, 6),
+                    //selected = false
+                })
+                .Distinct()
+                .OrderBy(x => x.distrito)
+                .ToList();
+            //data = data.Append(new { distrito = "", codUbigeo = "", selected = true }).ToList();
+
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -212,5 +284,48 @@ namespace webapp.Controllers
         }
 
 
+        public ActionResult Productos()
+        {
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            viewModel.CodSuscriptor = user.SUSCRIPTOR;
+            viewModel.CodUsuario = user.COD_USUARIO;
+
+            viewModel.producto = bl.fn_mant_sel_producto("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            var dataProducto = bl.fn_mant_sel_producto("@PRODUCTO_BASE", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlProducto = dataProducto.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.intCodProductoBase.ToString(),
+                Text = x.productoBase,
+                Selected = false, //x.Selected,
+            });
+            var dataTipCliente = bl.fn_mant_sel_productoDDL("@TIP_CLIENTE", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlTipCliente = dataTipCliente.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+
+            return View(viewModel);
+        }
+
+        public JsonResult JSON_Producto_Refresh()
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var data = bl.fn_mant_sel_productoDDL("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CostosOperativo()
+        {
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            viewModel.CodSuscriptor = user.SUSCRIPTOR;
+            viewModel.CodUsuario = user.COD_USUARIO;
+            viewModel.costoOperativo = bl.fn_mant_sel_costoOperativo("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+
+            return View(viewModel);
+        }
     }
 }
