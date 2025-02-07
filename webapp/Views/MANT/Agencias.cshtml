@@ -134,9 +134,27 @@
             $('#editModal').modal('show');
             $("#txtCodAgencia").val(data.cod_agencia);
             $("#txtNomAgencia").val(data.nom_agencia);
+
             $("#ddlDepartamento").val('');
             $("#ddlProvincia").val('');
             $("#ddlDistrito").val('');
+            //debugger;
+            var ubigeoReniec = data.ubigeo_reniec;
+            if (ubigeoReniec != null && ubigeoReniec != undefined && ubigeoReniec != "") {
+                if (ubigeoReniec.length >= 2) {
+                    $("#ddlDepartamento").val(ubigeoReniec.substring(0, 2)).trigger('change', ubigeoReniec);
+                }
+                /*
+                if (digitos >= 4) {
+                    $("#ddlProvincia").val(ubigeoReniec.substring(0, 4)).change();
+                }
+                if (digitos >= 6) {
+                    $("#ddlDistrito").val(ubigeoReniec).change();
+                }
+                */
+            }
+
+            
 
             $('#txtCodAgencia').prop('disabled', true);
             $("#titulo").text('Editar Registro');
@@ -175,6 +193,7 @@
             if (codDepartamento == undefined || codDepartamento == null || codDepartamento == "") {
                 return;
             }
+
             $.getJSON('@Url.Action("JSON_DepartamentoChange")', { codDepartamento: codDepartamento }, function (data) {
                 $('#ddlProvincia, #ddlDistrito').empty();
                 $('#ddlProvincia').append($('<option/>', {
@@ -191,7 +210,11 @@
                 });
 
             }).done(function () {
-
+                if (info != undefined && info != null) {
+                    if (info.length >= 4) {
+                        $("#ddlProvincia").val(info.substring(0, 4)).trigger('change', info);
+                    } 
+                }
             }).always(function () {
             });
         }
@@ -216,7 +239,11 @@
                 });
 
             }).done(function () {
-
+                if (info != undefined && info != null) {
+                    if (info.length >= 6) {
+                        $("#ddlDistrito").val(info.substring(0, 6)).trigger('change', info);
+                    }
+                }
             }).always(function () {
             });
         }
@@ -225,12 +252,25 @@
         function fnGrabar() {
             $("#overlay").show();
 
+            var departamento = $("#ddlDepartamento option:selected").val();
+            var provincia = $("#ddlProvincia option:selected").val();
+            var distrito = $("#ddlDistrito option:selected").val();
+            var ubigeo_reniec = "";
+
+            if (departamento != null && departamento != undefined && departamento != "") {
+                ubigeo_reniec = departamento;
+            }
+            if (provincia != null && provincia != undefined && provincia != "") {
+                ubigeo_reniec = provincia;
+            }
+            if (distrito != null && distrito != undefined && distrito != "") {
+                ubigeo_reniec = distrito;
+            }
+
             var _obj = {
                 cod_agencia: gAccion == "DELETE" ? gCodAgencia : $("#txtCodAgencia").val(),
                 nom_agencia: $("#txtNomAgencia").val(),
-                departamento: $("#ddlDepartamento").val("option:selected"),
-                provincia: $("#ddlProvincia").val("option:selected"),
-                distrito: $("#ddlDistrito").val("option:selected"),
+                ubigeo_reniec: ubigeo_reniec
             };
 
             var _reply = {

@@ -162,7 +162,7 @@
                                                     <th>Cod. Producto Base</th>
                                                     <th>Producto Base</th>
                                                     <th>Cod. Tipo Clientes</th>
-                                                    <th>Cod. Tipo Amortizacion</th>
+                                                    @*<th>Cod. Tipo Amortizacion</th>*@
                                                     <th>Tipo Amortizacion</th>
                                                     <th>Plazo</th>
                                                     <th>TEA</th>
@@ -180,7 +180,7 @@
                                                     {
                                                         odd = 0;
                                                         <tr class="tit">
-                                                            <td colspan="12">@item.producto</td>
+                                                            <td colspan="11">@item.producto</td>
                                                         </tr>
                                                     }
                                                     if (item.tipReg.ToUpper().Equals("EDT"))
@@ -194,7 +194,7 @@
                                                             <td>@item.strCodProductoBase</td>
                                                             <td>@item.productoBase</td>
                                                             <td>@item.codTipClientes</td>
-                                                            <td>@item.codTipAmortizacion</td>
+                                                            @*<td>@item.codTipAmortizacion</td>*@
                                                             <td>@item.tipAmortizacion</td>
                                                             <td>@item.plazo</td>
                                                             <td>@item.tea</td>

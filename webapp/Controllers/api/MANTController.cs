@@ -73,6 +73,7 @@ namespace webapp.Controllers.api
                     departamento = x.departamento,
                     provincia = x.provincia,
                     distrito = x.distrito,
+                    ubigeo_reniec = x.ubigeo_reniec
                 });
 
             var dataTable = new DataTable<AGENCIA_BE>()

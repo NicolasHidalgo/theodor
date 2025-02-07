@@ -15,6 +15,7 @@ namespace BEANS
         public string distrito { get; set; }
         public string provincia { get; set; }
         public string departamento { get; set; }
+        public string ubigeo_reniec { get; set; }
 
     }
     public class BANCA_BE

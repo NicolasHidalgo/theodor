@@ -44,6 +44,7 @@ namespace DA
                         bean.distrito = DataReader.SafeGetString(dr, dr.GetOrdinal("distrito"));
                         bean.provincia = DataReader.SafeGetString(dr, dr.GetOrdinal("provincia"));
                         bean.departamento = DataReader.SafeGetString(dr, dr.GetOrdinal("departamento"));
+                        bean.ubigeo_reniec = DataReader.SafeGetString(dr, dr.GetOrdinal("ubigeo_reniec"));
 
                         lista.Add(bean);
                     }
@@ -121,10 +122,7 @@ namespace DA
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
             cmd.Parameters.Add("@cod_agencia", System.Data.SqlDbType.VarChar,10).Value = param.cod_agencia;
             cmd.Parameters.Add("@nom_agencia", System.Data.SqlDbType.VarChar,50).Value = param.nom_agencia;
-            cmd.Parameters.Add("@distrito", System.Data.SqlDbType.VarChar, 50).Value = param.distrito;
-            cmd.Parameters.Add("@provincia", System.Data.SqlDbType.VarChar, 50).Value = param.provincia;
-            cmd.Parameters.Add("@departamento", System.Data.SqlDbType.VarChar, 50).Value = param.departamento;
-
+            cmd.Parameters.Add("@ubigeo_reniec", System.Data.SqlDbType.VarChar, 50).Value = param.ubigeo_reniec;
 
             try
             {

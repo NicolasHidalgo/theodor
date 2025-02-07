@@ -186,6 +186,36 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
         var gCodTipCliente = "";
         var gCodProducto = 0;
 
+        function getPorcentaje(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa / 100.0;
+        }
+        function getPorcentajeNum(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa * 100.0;
+        }
+        function getImporte(valor) {
+            let _valor = valor.replace(/,/g, '');
+            if (isNaN(_valor)) {
+                return 0;
+            }
+            let monto = Number(_valor);
+
+            return monto;
+        }
+
         $("#txtRORACObjetivo,#txtAutonomiaComercial").inputmask({
             alias: "decimal",
             radixPoint: ".",
@@ -205,8 +235,8 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             $('#editModal').modal('show');
             $("#ddlTipCliente").val(data.codTipCliente).change();
             $("#ddlProducto").val(data.codProductoBase).change();
-            $("#txtRORACObjetivo").val(data.roracObjetivo).change();
-            $("#txtAutonomiaComercial").val(data.autonomiaComercial).change();
+            $("#txtRORACObjetivo").val(getPorcentajeNum(data.roracObjetivo)).change();
+            $("#txtAutonomiaComercial").val(getPorcentajeNum(data.autonomiaComercial)).change();
 
             $('#ddlTipCliente,#ddlProducto').prop('disabled', true);
             $("#titulo").text('Editar Registro');
@@ -224,7 +254,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             $("#titulo").text('Nuevo Registro');
             gAccion = "INSERT";
             $('#ddlTipCliente,#ddlProducto').prop('disabled', false);
-            $("#txtRoracObjetivo, #txtAutonomiaComercial").val('');
+            $("#txtRoracObjetivo, #txtAutonomiaComercial").val('0');
             $("#ddlTipCliente, #ddlProducto").val('').change();
             $('#editModal').modal('show');
         });
@@ -276,10 +306,9 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             var _obj = {
                 codTipCliente: gAccion == "DELETE" ? gCodTipCliente : $("#ddlTipCliente option:selected").val(),
                 codProductoBase: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
-                RORACObjetivo: $("#txtRORACObjetivo").val(),
-                autonomiaComercial: $("#txtAutonomiaComercial").val(),
+                RORACObjetivo: getPorcentaje($("#txtRORACObjetivo").val()),
+                autonomiaComercial: getPorcentaje($("#txtAutonomiaComercial").val()),
             };
-
             var _reply = {
                 ACCION: gAccion,
                 MENSAJE: '',

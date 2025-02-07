@@ -69,14 +69,28 @@
                         <label>Producto Base</label>
                         @Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })
                     </div>
-                    <div class="form-group">
-                        <label>Rorac Objetivo</label>
-                        <input type="text" class="form-control" id="txtRORACObjetivo" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Rorac Objetivo</label>
+                                <div class="input-group">
+                                    <input type="text" id="txtRORACObjetivo" name="txtRORACObjetivo" value="0" class="form-control" style="text-align: right;">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Autonomia Comercial</label>
+                                <div class="input-group">
+                                    <input type="text" id="txtAutonomiaComercial" name="txtAutonomiaComercial" value="0" class="form-control" style="text-align: right;">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Autonomia Comercial</label>
-                        <input type="text" class="form-control" id="txtAutonomiaComercial" />
-                    </div>
+                    
+                    
 
                 </div>
 
@@ -152,10 +166,11 @@
                                                             <td>@item.tipCliente</td>
                                                             <td>@item.codProductoBase</td>
                                                             <td>@item.productoBase</td>
-                                                            <td>@item.roracObjetivo
+                                                            <td>@(item.roracObjetivo?.ToString("P2"))
                                                                 @*<input type="text" class="form-control" value="@item.roracObjetivo" />*@
                                                             </td>
-                                                            <td>@item.autonomiaComercial
+                                                            <td>
+                                                                @(item.autonomiaComercial?.ToString("P2"))
                                                                 @*<input type="text" class="form-control" value="@item.autonomiaComercial" />*@
                                                             </td>
                                                             <td><a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item, 
@@ -191,6 +206,42 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>
         var gCodTipCliente = "";
         var gCodProducto = 0;
 
+        function getPorcentaje(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa / 100.0;
+        }
+        function getPorcentajeNum(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa * 100.0;
+        }
+        function getImporte(valor) {
+            let _valor = valor.replace(/,/g, '');
+            if (isNaN(_valor)) {
+                return 0;
+            }
+            let monto = Number(_valor);
+
+            return monto;
+        }
+        function replaceNullEmpty(valor) {
+            if (valor == "null" || valor == null || valor == undefined) {
+                return "";
+            }
+            return valor;
+        }
+
         $("#txtRORACObjetivo,#txtAutonomiaComercial").inputmask({
             alias: "decimal",
             radixPoint: ".",
@@ -210,10 +261,10 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>
             $('#editModal').modal('show');
             $("#ddlTipCliente").val(data.codTipCliente).change();
             $("#ddlProducto").val(data.codProductoBase).change();
-            $("#txtRORACObjetivo").val(data.roracObjetivo).change();
-            $("#txtAutonomiaComercial").val(data.autonomiaComercial).change();
+            $("#txtRORACObjetivo").val(getPorcentajeNum(data.roracObjetivo)).change();
+            $("#txtAutonomiaComercial").val(getPorcentajeNum(data.autonomiaComercial)).change();
 
-            $('#ddlTipCliente,#ddlProducto').prop('disabled', true);
+            //$('#ddlTipCliente,#ddlProducto').prop('disabled', true);
             $("#titulo").text('Editar Registro');
             gAccion = "UPDATE";
         }
@@ -229,7 +280,8 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>
             $("#titulo").text('Nuevo Registro');
             gAccion = "INSERT";
             $('#ddlTipCliente,#ddlProducto').prop('disabled', false);
-            $("#txtRoracObjetivo, #txtAutonomiaComercial").val('');
+            $("#txtRoracObjetivo").val('0');
+            $("#txtAutonomiaComercial").val('0');
             $("#ddlTipCliente, #ddlProducto").val('').change();
             $('#editModal').modal('show');
         });
@@ -259,10 +311,10 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>
                         cadena += "<td>" + item.codPersoneria + "</td>";
                         cadena += "<td>" + item.codTipCliente + "</td>";
                         cadena += "<td>" + item.tipCliente + "</td>";
-                        cadena += "<td>" + item.codProductoBase + "</td>";
+                        cadena += "<td>" + replaceNullEmpty(item.codProductoBase) + "</td>";
                         cadena += "<td>" + item.productoBase + "</td>";
-                        cadena += "<td>" + item.roracObjetivo + "</td>";
-                        cadena += "<td>" + item.autonomiaComercial + "</td>";
+                        cadena += "<td>" + numeral(item.roracObjetivo).format('0.00%') + "</td>";
+                        cadena += "<td>" + numeral(item.autonomiaComercial).format('0.00%') + "</td>";
                         //cadena += "<td><input type='text' class='form-control' value='" + item.roracObjetivo + "'' /></td>";
                         //cadena += "<td><input type='text' class='form-control' value='" + item.autonomiaComercial + "'' /></td>";
                         cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
@@ -281,8 +333,8 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>
             var _obj = {
                 codTipCliente: gAccion == "DELETE" ? gCodTipCliente : $("#ddlTipCliente option:selected").val(),
                 codProductoBase: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
-                RORACObjetivo: $("#txtRORACObjetivo").val(),
-                autonomiaComercial: $("#txtAutonomiaComercial").val(),
+                RORACObjetivo: getPorcentaje($("#txtRORACObjetivo").val()),
+                autonomiaComercial: getPorcentaje($("#txtAutonomiaComercial").val()),
             };
 
             var _reply = {

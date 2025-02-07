@@ -63,7 +63,7 @@ namespace webapp.Controllers
                 .Where(x => x.codUbigeo.StartsWith(codDepartamento)) 
                 .Select(x => new {
                     provincia = x.provincia,
-                    codUbigeo = x.codUbigeo.Substring(0, 4),
+                    codUbigeo = x.codUbigeo.Length >= 4 ? x.codUbigeo.Substring(0, 4) : x.codUbigeo, //x.codUbigeo.Substring(0, 4),
                     //selected = false
                 })
                 .Distinct()
@@ -86,7 +86,7 @@ namespace webapp.Controllers
                 .Where(x => x.codUbigeo.StartsWith(codProvincia)) // Filtra por departamento
                 .Select(x => new {
                     distrito = x.distrito,
-                    codUbigeo = x.codUbigeo.Substring(0, 6),
+                    codUbigeo = x.codUbigeo.Length >= 6 ? x.codUbigeo.Substring(0, 6) : x.codUbigeo, //x.codUbigeo.Substring(0, 6),
                     //selected = false
                 })
                 .Distinct()
@@ -145,7 +145,7 @@ namespace webapp.Controllers
             viewModel.ddlUsuario = dataUsuario.Select(x => new ExtendedSelectListItem
             {
                 Value = x.IDE_USUARIO.ToString(),
-                Text = x.NOM_USUARIO,
+                Text = x.COD_USUARIO,
                 Selected = false, //x.selected,
             });
             var dataAgencia = bl.fn_mant_sel_funAgencia("@AGENCIA", user.SUSCRIPTOR, user.COD_USUARIO);
