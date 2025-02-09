@@ -591,7 +591,7 @@ namespace DA
                     while (dr.Read())
                     {
                         bean = new GEN_DDL_BE();
-                        if (accion.Equals("@TIP_CLIENTE"))
+                        if (accion.Equals("@BANCA"))
                         {
                             bean.Value = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
                             bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_cliente"));
@@ -741,6 +741,57 @@ namespace DA
                     con.Close();
             }
             return model;
+        }
+
+        public List<GEN_DDL_BE> fn_mant_sel_costoOpeDDL(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<GEN_DDL_BE> lista = new List<GEN_DDL_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_costoOperativo]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    GEN_DDL_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new GEN_DDL_BE();
+                        if (accion.Equals("@OPERACION"))
+                        {
+                            bean.Value = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_operacion"));
+                            bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("operacion"));
+                        }
+                        if (accion.Equals("@CANAL_ATENCION"))
+                        {
+                            bean.Value = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_canal_atencion")).ToString();
+                            bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("canal_atencion"));
+                        }
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
         }
 
     }

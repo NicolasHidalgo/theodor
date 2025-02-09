@@ -79,5 +79,9 @@ namespace BL
         {
             return dat.fn_mant_pro_costoOperativo(accion, codSuscriptor, codUsuario, param);
         }
+        public List<GEN_DDL_BE> fn_mant_sel_costoOpeDDL(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_mant_sel_costoOpeDDL(accion, codSuscriptor, codUsuario);
+        }
     }
 }

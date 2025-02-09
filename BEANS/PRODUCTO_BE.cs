@@ -16,9 +16,9 @@ namespace BEANS
         public string strCodProductoBase { get; set; }
         public string productoBase { get; set; }
         public string codTipClientes { get; set; }
-        public int codTipAmortizacion { get; set; }
+        public int? codTipAmortizacion { get; set; }
         public string tipAmortizacion { get; set; }
-        public int plazo { get; set; }
+        public double? plazo { get; set; }
         public double? tea { get; set; }
         public double? factorUsoLinea { get; set; }
         public double? factorConversionIndirectos { get; set; }

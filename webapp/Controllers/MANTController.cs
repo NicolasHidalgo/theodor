@@ -299,7 +299,7 @@ namespace webapp.Controllers
                 Text = x.productoBase,
                 Selected = false, //x.Selected,
             });
-            var dataTipCliente = bl.fn_mant_sel_productoDDL("@TIP_CLIENTE", user.SUSCRIPTOR, user.COD_USUARIO);
+            var dataTipCliente = bl.fn_mant_sel_productoDDL("@BANCA", user.SUSCRIPTOR, user.COD_USUARIO);
             viewModel.ddlTipCliente = dataTipCliente.Select(x => new ExtendedSelectListItem
             {
                 Value = x.Value,
@@ -310,14 +310,53 @@ namespace webapp.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        public ActionResult EditProducto(GEN_REPLY_BE model)
+        {
+            if (ModelState.IsValid)
+            {
+                var _dat = (string[])model.DATA;
+                var _obj = JsonConvert.DeserializeObject<PRODUCTO_BE>(_dat[0]);
+                var user = (SEG_USUARIO_BE)Session["Usuario"];
+                //var viewModel = new AuxiliarEdit();
+                var ideUsuario = long.Parse(user.IDE_USUARIO.ToString());
+                var codSuscriptor = user.SUSCRIPTOR;
+                model.DATA = _obj;
+
+                var reply = new GEN_REPLY_BE();
+                reply = bl.fn_mant_pro_producto(model.ACCION, codSuscriptor, user.COD_USUARIO, _obj);
+
+                var res = new Response();
+                res.Message = reply.MENSAJE;
+
+                res.Status = HttpStatusCode.BadRequest;
+
+                if (reply.MENSAJE.Equals("") || reply.MENSAJE.Contains(Constantes.SUCCESS))
+                    res.Status = HttpStatusCode.OK;
+
+                //res.Data = viewModel;
+
+                return Json(res);
+            }
+
+            return Json(
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Message = "No se puede continuar por errores en el modelo",
+                            Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        }); ;
+        }
+
+
         public JsonResult JSON_Producto_Refresh()
         {
             var user = (SEG_USUARIO_BE)Session["Usuario"];
-            var data = bl.fn_mant_sel_productoDDL("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            var data = bl.fn_mant_sel_producto("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult CostosOperativo()
+        public ActionResult CostosOperativos()
         {
             var viewModel = new AuxiliarEdit();
             var user = (SEG_USUARIO_BE)Session["Usuario"];
@@ -325,7 +364,68 @@ namespace webapp.Controllers
             viewModel.CodUsuario = user.COD_USUARIO;
             viewModel.costoOperativo = bl.fn_mant_sel_costoOperativo("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
 
+            var dataOperacion = bl.fn_mant_sel_costoOpeDDL("@OPERACION", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlOperacion = dataOperacion.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+            var dataCanalAtencion = bl.fn_mant_sel_costoOpeDDL("@CANAL_ATENCION", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlCanalAtencion = dataCanalAtencion.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+
             return View(viewModel);
         }
+
+        [HttpPost]
+        public ActionResult EditCostoOperativo(GEN_REPLY_BE model)
+        {
+            if (ModelState.IsValid)
+            {
+                var _dat = (string[])model.DATA;
+                var _obj = JsonConvert.DeserializeObject<COSTOOPERATIVO_BE>(_dat[0]);
+                var user = (SEG_USUARIO_BE)Session["Usuario"];
+                //var viewModel = new AuxiliarEdit();
+                var ideUsuario = long.Parse(user.IDE_USUARIO.ToString());
+                var codSuscriptor = user.SUSCRIPTOR;
+                model.DATA = _obj;
+
+                var reply = new GEN_REPLY_BE();
+                reply = bl.fn_mant_pro_costoOperativo(model.ACCION, codSuscriptor, user.COD_USUARIO, _obj);
+
+                var res = new Response();
+                res.Message = reply.MENSAJE;
+
+                res.Status = HttpStatusCode.BadRequest;
+
+                if (reply.MENSAJE.Equals("") || reply.MENSAJE.Contains(Constantes.SUCCESS))
+                    res.Status = HttpStatusCode.OK;
+
+                //res.Data = viewModel;
+
+                return Json(res);
+            }
+
+            return Json(
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Message = "No se puede continuar por errores en el modelo",
+                            Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        }); ;
+        }
+
+        public JsonResult JSON_CostoOperativo_Refresh()
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var data = bl.fn_mant_sel_costoOperativo("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

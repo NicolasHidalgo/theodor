@@ -1,6 +1,6 @@
 ﻿@model webapp.ViewModels.AuxiliarEdit
 @{
-    ViewBag.Title = "CostoOperativo";
+    ViewBag.Title = "CostoOperativos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -62,20 +62,16 @@
             <div class="modal-body">
                 <div class="form">
                     <div class="form-group">
-                        <label>Tipo Cliente</label>
-                        @Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @class = "select" })
+                        <label>Operación</label>
+                        @Html.DropDownList("ddlOperacion", Model.ddlOperacion, new { @class = "select" })
                     </div>
                     <div class="form-group">
-                        <label>Producto Base</label>
-                        @Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })
+                        <label>Canal Atención</label>
+                        @Html.DropDownList("ddlCanalAtencion", Model.ddlCanalAtencion, new { @class = "select" })
                     </div>
                     <div class="form-group">
-                        <label>Rorac Objetivo</label>
-                        <input type="text" class="form-control" id="txtRORACObjetivo" />
-                    </div>
-                    <div class="form-group">
-                        <label>Autonomia Comercial</label>
-                        <input type="text" class="form-control" id="txtAutonomiaComercial" />
+                        <label>Costo Operativo</label>
+                        <input type="text" class="form-control" id="txtCostoOperativo" />
                     </div>
 
                 </div>
@@ -119,17 +115,14 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th>Cod. Personeria</th>
-                                                    <th>Cod. Tipo Cliente</th>
-                                                    <th>Tipo Cliente</th>
-                                                    <th>Cod. Producto Base</th>
-                                                    <th>Producto Base</th>
-                                                    <th>RORAC Objetivo</th>
-                                                    <th>Autonomia Comercial</th>
+                                                    <th>Cod. Operación</th>
+                                                    <th>Cod. Canal Atención</th>
+                                                    <th>Canal Atención</th>
+                                                    <th>Costo Operativo</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tbodyRORAC">
+                                            <tbody id="tbodyMain">
                                                 @{ var odd = 0; var estilo = string.Empty;}
                                                 @foreach (var item in Model.costoOperativo)
                                                 {
@@ -150,7 +143,7 @@
                                                             <td>@item.codOperacion</td>
                                                             <td>@item.codCanalAtencion</td>
                                                             <td>@item.canalAtencion</td>
-                                                            <td>@item.costoOperativo</td>
+                                                            <td>@(item.costoOperativo?.ToString("P2"))</td>
                                                     <td>
                                                         <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
 Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
@@ -216,7 +209,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             return monto;
         }
 
-        $("#txtRORACObjetivo,#txtAutonomiaComercial").inputmask({
+        $("#txtCostoOperativo").inputmask({
             alias: "decimal",
             radixPoint: ".",
             digits: "2",
@@ -233,29 +226,26 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
 
         fSelEditar = function (data) {
             $('#editModal').modal('show');
-            $("#ddlTipCliente").val(data.codTipCliente).change();
-            $("#ddlProducto").val(data.codProductoBase).change();
-            $("#txtRORACObjetivo").val(getPorcentajeNum(data.roracObjetivo)).change();
-            $("#txtAutonomiaComercial").val(getPorcentajeNum(data.autonomiaComercial)).change();
+            $("#ddlOperacion").val(data.codOperacion).change();
+            $("#ddlCanalAtencion").val(data.codCanalAtencion).change();
+            $("#txtCostoOperativo").val(getPorcentajeNum(data.costoOperativo)).change();
 
-            $('#ddlTipCliente,#ddlProducto').prop('disabled', true);
+            $('#ddlOperacion, #ddlCanalAtencion').prop('disabled', true);
             $("#titulo").text('Editar Registro');
             gAccion = "UPDATE";
         }
         fSelEliminar = function (data) {
             $('#confirmBorrarModal').modal('show');
             gAccion = "DELETE";
-            console.log(data)
-            gCodTipCliente = data.codTipCliente;
-            gCodProducto = data.codProductoBase;
+            gCodOperacion = data.codOperacion;
+            gCodCanal = data.codCanalAtencion;
         }
 
         $("#btnNuevo,.classNuevo").on("click", function () {
             $("#titulo").text('Nuevo Registro');
             gAccion = "INSERT";
-            $('#ddlTipCliente,#ddlProducto').prop('disabled', false);
-            $("#txtRoracObjetivo, #txtAutonomiaComercial").val('0');
-            $("#ddlTipCliente, #ddlProducto").val('').change();
+            $('#ddlOperacion, #ddlCanalAtencion').prop('disabled', false);
+            $("#txtCostoOperativo").val('0');
             $('#editModal').modal('show');
         });
         $("#btnGrabar").on("click", function () {
@@ -266,8 +256,8 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
         });
 
         function fnCargarLista() {
-            $.getJSON('@Url.Action("JSON_RORACObjectivo_Refresh")', function (data) {
-                $("#tbodyRORAC").empty();
+            $.getJSON('@Url.Action("JSON_CostoOperativo_Refresh")', function (data) {
+                $("#tbodyMain").empty();
                 var odd = 0;
                 var estilo = "";
                 var cadena = "";
@@ -281,20 +271,15 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
                         odd = odd + 1;
                         if ((odd % 2) == 0) { estilo = "colorGray"; }
                         cadena += "<tr class=" + estilo + ">";
-                        cadena += "<td>" + item.codPersoneria + "</td>";
-                        cadena += "<td>" + item.codTipCliente + "</td>";
-                        cadena += "<td>" + item.tipCliente + "</td>";
-                        cadena += "<td>" + item.codProductoBase + "</td>";
-                        cadena += "<td>" + item.productoBase + "</td>";
-                        cadena += "<td>" + item.roracObjetivo + "</td>";
-                        cadena += "<td>" + item.autonomiaComercial + "</td>";
-                        //cadena += "<td><input type='text' class='form-control' value='" + item.roracObjetivo + "'' /></td>";
-                        //cadena += "<td><input type='text' class='form-control' value='" + item.autonomiaComercial + "'' /></td>";
+                        cadena += "<td>" + item.codOperacion + "</td>";
+                        cadena += "<td>" + item.codCanalAtencion + "</td>";
+                        cadena += "<td>" + item.canalAtencion + "</td>";
+                        cadena += "<td>" + numeral(item.costoOperativo).format('0.00%') + "</td>";
                         cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
                         cadena += "</tr>";
                     }
                 });
-                $("#tbodyRORAC").append(cadena);
+                $("#tbodyMain").append(cadena);
             }).done(function () {
 
             });
@@ -304,18 +289,17 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             $("#overlay").show();
 
             var _obj = {
-                codTipCliente: gAccion == "DELETE" ? gCodTipCliente : $("#ddlTipCliente option:selected").val(),
-                codProductoBase: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
-                RORACObjetivo: getPorcentaje($("#txtRORACObjetivo").val()),
-                autonomiaComercial: getPorcentaje($("#txtAutonomiaComercial").val()),
+                //codOperacion: gAccion == "DELETE" ? gCodTipCliente : $("#ddlTipCliente option:selected").val(),
+                codOperacion: $("#ddlOperacion option:selected").val(),
+                codCanalAtencion: $("#ddlCanalAtencion option:selected").val(),
+                costoOperativo: getPorcentaje($("#txtCostoOperativo").val()),
             };
             var _reply = {
                 ACCION: gAccion,
                 MENSAJE: '',
                 DATA: JSON.stringify(_obj),
             };
-
-            var _url = '@Url.Action("EditRORACObjetivo", "MANT")';
+            var _url = '@Url.Action("EditCostoOperativo", "MANT")';
             $.post(_url, _reply).done(function (data) {
                 if (data.Status === 200) {
                     toastr.success(data.Message);

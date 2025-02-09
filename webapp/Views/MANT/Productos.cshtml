@@ -65,7 +65,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Cod. Producto</label>
-                                <input type="text" class="form-control" id="txtCodProducto" />
+                                <input type="number" class="form-control" id="txtCodProducto" />
                             </div>
                         </div>
                         <div class="col-md-9">
@@ -81,23 +81,26 @@
                     </div>
                     <div class="form-group">
                         <label>Tipo Cliente</label>
-                        @Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @class = "select" })
+                        @Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @multiple = "multiple", @class = "select" })
                     </div>
                     <div class="form-group">
                         <label>Cod. Tip. Amortizacion</label>
-                        <input type="text" class="form-control" id="txtCodTipAmortizacion" />
+                        <input type="number" class="form-control" id="txtCodTipAmortizacion" />
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Plazo</label>
-                                <input type="text" class="form-control" id="txtPlazo" />
+                                <input type="number" class="form-control" id="txtPlazo" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>TEA</label>
-                                <input type="text" class="form-control" id="txtTEA" />
+                                <div class="input-group">
+                                    <input type="text" id="txtTea" name="txtTea" value="0" class="form-control" style="text-align: right;">
+                                    <span class="input-group-addon">%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -105,15 +108,27 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Factor Uso Linea</label>
-                                <input type="text" class="form-control" id="txtFactorUso" />
+                                <div class="input-group">
+                                    <input type="text" id="txtFactorUso" name="txtFactorUso" value="0" class="form-control" style="text-align: right;">
+                                    <span class="input-group-addon">%</span>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Factor Conversion Indirectos</label>
-                                <input type="text" class="form-control" id="txtFactorConversion" />
+                                <div class="input-group">
+                                    <input type="text" id="txtFactorConversion" name="txtFactorConversion" value="0" class="form-control" style="text-align: right;">
+                                    <span class="input-group-addon">%</span>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-check-input" type="checkbox" value="" id="chkAplicaPricing">
+                        <label class="form-check-label" for="flexCheckChecked">
+                            Aplica Pricing
+                        </label>
                     </div>
 
                 </div>
@@ -171,7 +186,7 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tbodyRORAC">
+                                            <tbody id="tbodyMain">
                                                 @{ var odd = 0; var estilo = string.Empty;}
                                                 @foreach (var item in Model.producto)
                                                 {
@@ -197,9 +212,9 @@
                                                             @*<td>@item.codTipAmortizacion</td>*@
                                                             <td>@item.tipAmortizacion</td>
                                                             <td>@item.plazo</td>
-                                                            <td>@item.tea</td>
-                                                            <td>@item.factorUsoLinea</td>
-                                                            <td>@item.factorConversionIndirectos</td>
+                                                            <td>@(item.tea?.ToString("P2"))</td>
+                                                            <td>@(item.factorUsoLinea?.ToString("P2"))</td>
+                                                            <td>@(item.factorConversionIndirectos?.ToString("P2"))</td>
                                                             <td>
                                                                 <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
 Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
@@ -232,10 +247,45 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
 
     $(document).ready(function () {
         var gAccion = "";
-        var gCodTipCliente = "";
-        var gCodProducto = 0;
+        var gCod = 0;
 
-        $("#txtTEA,#txtFactorUso,#txtFactorConversion").inputmask({
+        function getPorcentaje(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa / 100.0;
+        }
+        function getPorcentajeNum(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa * 100.0;
+        }
+        function getImporte(valor) {
+            let _valor = valor.replace(/,/g, '');
+            if (isNaN(_valor)) {
+                return 0;
+            }
+            let monto = Number(_valor);
+
+            return monto;
+        }
+        function replaceNullEmpty(valor) {
+            if (valor == "null" || valor == null || valor == undefined) {
+                return "";
+            }
+            return valor;
+        }
+
+        $("#txtTea,#txtFactorUso,#txtFactorConversion").inputmask({
             alias: "decimal",
             radixPoint: ".",
             digits: "2",
@@ -249,45 +299,54 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             max: 100,
             numericInput: true,
         });
-        $('#txtPlazo').inputmask({
-            'alias': 'decimal',
-            'groupSeparator': ',',
-            'autoGroup': true,
-            'digits': 2,
-            'digitsOptional': false,
-            'placeholder': '0.00'
-        });
+        //$('#txtPlazo').inputmask({
+        //    'alias': 'decimal',
+        //    'groupSeparator': ',',
+        //    'autoGroup': true,
+        //    'digits': 2,
+        //    'digitsOptional': false,
+        //    'placeholder': '0.00'
+        //});
 
         fSelEditar = function (data) {
-            console.log(data);
+            //console.log(data);
             $('#editModal').modal('show');
             $("#txtCodProducto").val(data.codProducto).change();
             $("#txtNomProducto").val(data.producto).change();
             $("#ddlProductoBase").val(data.strCodProductoBase).change();
-            $("#ddlTipCliente").val(data.codTipCliente).change();
+
+            let valores = data.codTipClientes.split(",");
+            $.each(valores, function (index, item) {
+                $("#ddlTipCliente option[value='" + item + "']").prop('selected', true);
+            });
+            $("#ddlTipCliente").trigger('change');
+
             $("#txtCodTipAmortizacion").val(data.codTipAmortizacion).change();
             $("#txtPlazo").val(data.plazo).change();
-            $("#txtTEA").val(data.tea).change();
-            $("#txtFactorUso").val(data.factorUsoLinea).change();
-            $("#txtFactorConversion").val(data.factorConversionIndirectos).change();
+            $("#txtTea").val(getPorcentajeNum(data.tea)).change();
+            $("#txtFactorUso").val(getPorcentajeNum(data.factorUsoLinea)).change();
+            $("#txtFactorConversion").val(getPorcentajeNum(data.factorConversionIndirectos)).change();
+            if (data.factorUsoLinea == true) {
+                $('#chkAplicaPricing').prop('checked', true);
+            } else {
+                $('#chkAplicaPricing').prop('checked', false);
+            }       
 
-            //$('#ddlTipCliente,#ddlProducto').prop('disabled', true);
+            $('#txtCodProducto').prop('disabled', true);
             $("#titulo").text('Editar Registro');
             gAccion = "UPDATE";
         }
         fSelEliminar = function (data) {
             $('#confirmBorrarModal').modal('show');
             gAccion = "DELETE";
-            console.log(data)
-            gCodTipCliente = data.codTipCliente;
-            gCodProducto = data.codProductoBase;
+            gCod = data.codProducto;
         }
 
         $("#btnNuevo,.classNuevo").on("click", function () {
             $("#titulo").text('Nuevo Registro');
             gAccion = "INSERT";
-            $('#ddlTipCliente,#ddlProducto').prop('disabled', false);
-            $("#txtRoracObjetivo, #txtAutonomiaComercial").val('');
+            $("#txtCodProducto, #txtNomProducto, #txtCodTipAmortizacion, #txtPlazo, #txtTea, #txtFactorUso, #txtFactorConversion").val('');
+            $('#txtCodProducto').prop('disabled', false);
             $("#ddlTipCliente, #ddlProducto").val('').change();
             $('#editModal').modal('show');
         });
@@ -299,8 +358,8 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
         });
 
         function fnCargarLista() {
-            $.getJSON('@Url.Action("JSON_RORACObjectivo_Refresh")', function (data) {
-                $("#tbodyRORAC").empty();
+            $.getJSON('@Url.Action("JSON_Producto_Refresh")', function (data) {
+                $("#tbodyMain").empty();
                 var odd = 0;
                 var estilo = "";
                 var cadena = "";
@@ -308,24 +367,27 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
                     estilo = "";
                     if (item.tipReg == "TIT") {
                         odd = 0;
-                        cadena += "<tr class='tit'><td colspan='8'>" + item.tipCliente +"</td></tr>";
+                        cadena += "<tr class='tit'><td colspan='11'>" + item.producto +"</td></tr>";
                     }
                     if (item.tipReg == "EDT") {
                         odd = odd + 1;
                         if ((odd % 2) == 0) { estilo = "colorGray"; }
                         cadena += "<tr class=" + estilo + ">";
-                        cadena += "<td>" + item.codPersoneria + "</td>";
-                        cadena += "<td>" + item.codTipCliente + "</td>";
-                        cadena += "<td>" + item.tipCliente + "</td>";
-                        cadena += "<td>" + item.codProductoBase + "</td>";
+                        cadena += "<td>" + item.codProducto + "</td>";
+                        cadena += "<td>" + item.producto + "</td>";
+                        cadena += "<td>" + item.strCodProductoBase + "</td>";
                         cadena += "<td>" + item.productoBase + "</td>";
-                        cadena += "<td><input type='text' class='form-control' value='" + item.roracObjetivo + "'' /></td>";
-                        cadena += "<td><input type='text' class='form-control' value='" + item.autonomiaComercial + "'' /></td>";
+                        cadena += "<td>" + item.codTipClientes + "</td>";
+                        cadena += "<td>" + item.tipAmortizacion + "</td>";
+                        cadena += "<td>" + item.plazo + "</td>";
+                        cadena += "<td>" + numeral(item.tea).format('0.00%') + "</td>";
+                        cadena += "<td>" + numeral(item.factorUsoLinea).format('0.00%') + "</td>";
+                        cadena += "<td>" + numeral(item.factorConversionIndirectos).format('0.00%') + "</td>";
                         cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
                         cadena += "</tr>";
                     }
                 });
-                $("#tbodyRORAC").append(cadena);
+                $("#tbodyMain").append(cadena);
             }).done(function () {
 
             });
@@ -333,12 +395,32 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
 
         function fnGrabar() {
             $("#overlay").show();
+            var arrTipoCliente = [];
+            var _tipCli = $('#ddlTipCliente').val();
+            if (_tipCli != null) {
+                $.map(_tipCli, function (item) {
+                    arrTipoCliente.push(item);
+                    
+                    //arrTipoCliente.push({ ID_PERFIL: Number(item) });
+                    //if (item) {
+                    //    return {
+                    //        Value: Number(item)
+                    //    }
+                    //}
+                });
+            }
 
             var _obj = {
-                codTipCliente: gAccion == "DELETE" ? gCodTipCliente : $("#ddlTipCliente option:selected").val(),
-                codProductoBase: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
-                RORACObjetivo: $("#txtRORACObjetivo").val(),
-                autonomiaComercial: $("#txtAutonomiaComercial").val(),
+                codProducto: gAccion == "DELETE" ? gCod : $("#txtCodProducto").val(),
+                producto: $("#txtNomProducto").val(),
+                strCodProductoBase: $("#ddlProductoBase option:selected").val(),
+                codTipClientes: arrTipoCliente.join(','),
+                codTipAmortizacion: $("#txtCodTipAmortizacion").val(),
+                plazo: $("#txtPlazo").val(),
+                tea: getPorcentaje($("#txtTea").val()),
+                factorUsoLinea: getPorcentaje($("#txtFactorUso").val()),
+                factorConversionIndirectos: getPorcentaje($("#txtFactorConversion").val()),
+                aplicaPricing: $('#chkAplicaPricing').prop('checked'),
             };
 
             var _reply = {
@@ -347,7 +429,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
                 DATA: JSON.stringify(_obj),
             };
 
-            var _url = '@Url.Action("EditRORACObjetivo", "MANT")';
+            var _url = '@Url.Action("EditProducto", "MANT")';
             $.post(_url, _reply).done(function (data) {
                 if (data.Status === 200) {
                     toastr.success(data.Message);
