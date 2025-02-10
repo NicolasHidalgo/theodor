@@ -95,5 +95,17 @@ namespace BL
         {
             return dat.fn_mant_pro_probabilidadDefault(accion, codSuscriptor, codUsuario, param);
         }
+        public List<CLASIFICACION_INTERNA_BE> fn_mant_sel_clasificacionInterna(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_mant_sel_clasificacionInterna(accion, codSuscriptor, codUsuario);
+        }
+        public List<GEN_DDL_BE> fn_mant_sel_clasificacionInternaDDL(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_mant_sel_clasificacionInternaDDL(accion, codSuscriptor, codUsuario);
+        }
+        public GEN_REPLY_BE fn_mant_pro_clasificacionInterna(string accion, long codSuscriptor, string codUsuario, CLASIFICACION_INTERNA_BE param)
+        {
+            return dat.fn_mant_pro_clasificacionInterna(accion, codSuscriptor, codUsuario, param);
+        }
     }
 }

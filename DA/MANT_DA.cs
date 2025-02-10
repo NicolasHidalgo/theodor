@@ -935,6 +935,134 @@ namespace DA
             return model;
         }
 
+        public List<CLASIFICACION_INTERNA_BE> fn_mant_sel_clasificacionInterna(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<CLASIFICACION_INTERNA_BE> lista = new List<CLASIFICACION_INTERNA_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_clasificacionInterna]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    CLASIFICACION_INTERNA_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new CLASIFICACION_INTERNA_BE();
+                        bean.codClasificacionInterna = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_clasificacion_interna"));
+                        bean.clasificacionInterna = DataReader.SafeGetString(dr, dr.GetOrdinal("clasificacion_interna"));
+                        bean.operaciones = DataReader.SafeGetString(dr, dr.GetOrdinal("operaciones"));
+                        bean.tipReg = DataReader.SafeGetString(dr, dr.GetOrdinal("tipreg"));
+  
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
+        public List<GEN_DDL_BE> fn_mant_sel_clasificacionInternaDDL(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<GEN_DDL_BE> lista = new List<GEN_DDL_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_clasificacionInterna]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 30).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    GEN_DDL_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new GEN_DDL_BE();
+                        if (accion.Equals("@OPERACION"))
+                        {
+                            bean.Value = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_operacion"));
+                            bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("operacion"));
+                        }
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
+        public GEN_REPLY_BE fn_mant_pro_clasificacionInterna(string accion, long codSuscriptor, string codUsuario, CLASIFICACION_INTERNA_BE param)
+        {
+            Mensaje = string.Empty;
+            GEN_REPLY_BE model = new GEN_REPLY_BE();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_clasificacionInterna]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 30).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+            cmd.Parameters.Add("@cod_clasificacion_interna", System.Data.SqlDbType.VarChar, 5).Value = param.codClasificacionInterna;
+            cmd.Parameters.Add("@clasificacion_interna", System.Data.SqlDbType.VarChar, 50).Value = param.clasificacionInterna;
+            cmd.Parameters.Add("@operaciones", System.Data.SqlDbType.VarChar, 512).Value = param.operaciones;
+
+            try
+            {
+                con.InfoMessage += new SqlInfoMessageEventHandler(InfoMessageHandler);
+                con.FireInfoMessageEventOnUserErrors = true;
+                con.Open();
+                var iFilasAfectadas = cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            {
+                model.MENSAJE += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                model.MENSAJE += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return model;
+        }
+
     }
 
 }

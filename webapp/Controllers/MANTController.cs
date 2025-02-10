@@ -496,5 +496,68 @@ namespace webapp.Controllers
                             Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
                         }); ;
         }
+
+        public ActionResult ClasificacionInterna()
+        {
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            viewModel.CodSuscriptor = user.SUSCRIPTOR;
+            viewModel.CodUsuario = user.COD_USUARIO;
+            viewModel.dataCI = bl.fn_mant_sel_clasificacionInterna("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+
+            var dataOpe = bl.fn_mant_sel_clasificacionInternaDDL("@OPERACION", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlOperacion = dataOpe.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+
+            return View(viewModel);
+        }
+        public JsonResult JSON_ClasificacionInterna_Refresh()
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var data = bl.fn_mant_sel_clasificacionInterna("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult EditClasificacionInterna(GEN_REPLY_BE model)
+        {
+            if (ModelState.IsValid)
+            {
+                var _dat = (string[])model.DATA;
+                var _obj = JsonConvert.DeserializeObject<CLASIFICACION_INTERNA_BE>(_dat[0]);
+                var user = (SEG_USUARIO_BE)Session["Usuario"];
+                //var viewModel = new AuxiliarEdit();
+                var ideUsuario = long.Parse(user.IDE_USUARIO.ToString());
+                var codSuscriptor = user.SUSCRIPTOR;
+                model.DATA = _obj;
+
+                var reply = new GEN_REPLY_BE();
+                reply = bl.fn_mant_pro_clasificacionInterna(model.ACCION, codSuscriptor, user.COD_USUARIO, _obj);
+
+                var res = new Response();
+                res.Message = reply.MENSAJE;
+
+                res.Status = HttpStatusCode.BadRequest;
+
+                if (reply.MENSAJE.Equals("") || reply.MENSAJE.Contains(Constantes.SUCCESS))
+                    res.Status = HttpStatusCode.OK;
+
+                //res.Data = viewModel;
+
+                return Json(res);
+            }
+
+            return Json(
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Message = "No se puede continuar por errores en el modelo",
+                            Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        }); ;
+        }
+
     }
 }

@@ -1,0 +1,289 @@
+﻿@model webapp.ViewModels.AuxiliarEdit
+@{
+    ViewBag.Title = "ClasificacionInterna";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Theme JS files -->
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+<script type="text/javascript" src="~/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+<!-- /theme JS files -->
+
+<link href="~/assets/css/theodor.css" rel="stylesheet" />
+
+<style>
+    table thead tr {
+        background-color: #3f444e;
+        color: white;
+    }
+
+    .tit {
+        background-color: #156082;
+        color: white;
+    }
+</style>
+
+<div class="modal" id="confirmBorrarModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Está seguro de eliminar este registro?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmar">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titulo">Nuevo Registro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-group">
+                        <label>Cod. Clasificación Interna</label>
+                        <input type="text" class="form-control" id="txtCodClasificacion" />
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre Clasificación Interna</label>
+                        <input type="text" class="form-control" id="txtNomClasificacion" />
+                    </div>
+                    <div class="form-group">
+                        <label>Operacion</label>
+                        @Html.DropDownList("ddlOperacion", Model.ddlOperacion, new { @multiple = "multiple", @class = "select" })
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>*@
+                <button type="button" id="btnGrabar" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<div class="container-fluid">
+    <!-- Content area -->
+    <div class="content" style="padding-top:0px;">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Basic layout-->
+                <div class="panel panel-flat">
+                    <div class="panel-heading">
+                        <table>
+                            <tr>
+                                <td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>
+                                @*<td class="center"><i class="icon-floppy-disk icon-custom-style " title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>
+                                    <td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a class="botonera classBorrar">Borrar</a></td>
+                                    <td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>*@
+                            </tr>
+                        </table>
+
+
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cod. Clasificación Interna</th>
+                                                    <th>Clasificación Interna</th>
+                                                    <th>Operaciones</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbodyMain">
+                                                @{ var odd = 0; var estilo = string.Empty;}
+                                                @foreach (var item in Model.dataCI)
+                                                {
+                                                    estilo = string.Empty;
+                                                    if (item.tipReg.ToUpper().Equals("TIT"))
+                                                    {
+                                                        odd = 0;
+                                                        <tr class="tit">
+                                                            <td colspan="11">@item.clasificacionInterna</td>
+                                                        </tr>
+                                                    }
+                                                    if (item.tipReg.ToUpper().Equals("EDT"))
+                                                    {
+                                                        odd = odd + 1;
+                                                        if ((odd % 2) == 0) { estilo = "colorGray"; }
+
+                                                        <tr class="@estilo">
+                                                            <td>@item.codClasificacionInterna</td>
+                                                            <td>@item.clasificacionInterna</td>
+                                                            <td>@item.operaciones</td>
+                                                            <td>
+                                                                <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- /bordered table -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var fSelEditar;
+    var fSelEliminar;
+
+
+    $(document).ready(function () {
+        var gAccion = "";
+        var gCod = 0;
+
+
+        fSelEditar = function (data) {
+            //console.log(data);
+            $('#editModal').modal('show');
+            $("#txtCodClasificacion").val(data.codClasificacionInterna).change();
+            $("#txtNomClasificacion").val(data.clasificacionInterna).change();
+
+            let valores = data.operaciones.split(",");
+            $.each(valores, function (index, item) {
+                $("#ddlOperacion option[value='" + item + "']").prop('selected', true);
+            });
+            $("#ddlOperacion").trigger('change');
+
+            $('#txtCodClasificacion').prop('disabled', true);
+            $("#titulo").text('Editar Registro');
+            gAccion = "UPDATE";
+        }
+        fSelEliminar = function (data) {
+            $('#confirmBorrarModal').modal('show');
+            gAccion = "DELETE";
+            gCod = data.codClasificacionInterna;
+        }
+
+        $("#btnNuevo,.classNuevo").on("click", function () {
+            $("#titulo").text('Nuevo Registro');
+            gAccion = "INSERT";
+            $("#txtCodClasificacion,#txtNomClasificacion").val('');
+            $('#txtCodClasificacion').prop('disabled', false);
+            $("#ddlOperacion").val('').change();
+            $('#editModal').modal('show');
+        });
+        $("#btnGrabar").on("click", function () {
+            fnGrabar();
+        });
+        $("#btnConfirmar").on("click", function () {
+            fnGrabar();
+        });
+
+        function fnCargarLista() {
+            $.getJSON('@Url.Action("JSON_ClasificacionInterna_Refresh")', function (data) {
+                $("#tbodyMain").empty();
+                var odd = 0;
+                var estilo = "";
+                var cadena = "";
+                $.each(data, function (index, item) {
+                    estilo = "";
+                    if (item.tipReg == "TIT") {
+                        odd = 0;
+                        cadena += "<tr class='tit'><td colspan='11'>" + item.producto +"</td></tr>";
+                    }
+                    if (item.tipReg == "EDT") {
+                        odd = odd + 1;
+                        if ((odd % 2) == 0) { estilo = "colorGray"; }
+                        cadena += "<tr class=" + estilo + ">";
+                        cadena += "<td>" + item.codClasificacionInterna + "</td>";
+                        cadena += "<td>" + item.clasificacionInterna + "</td>";
+                        cadena += "<td>" + item.operaciones + "</td>";
+                        cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
+                        cadena += "</tr>";
+                    }
+                });
+                $("#tbodyMain").append(cadena);
+            }).done(function () {
+
+            });
+        }
+
+        function fnGrabar() {
+            $("#overlay").show();
+            var arrT = [];
+            var _opes = $('#ddlOperacion').val();
+            if (_opes != null) {
+                $.map(_opes, function (item) {
+                    arrT.push(item);
+                });
+            }
+
+            var _obj = {
+                codClasificacionInterna: gAccion == "DELETE" ? gCod : $("#txtCodClasificacion").val(),
+                clasificacionInterna: $("#txtNomClasificacion").val(),
+                operaciones: arrT.join(','),
+            };
+
+            var _reply = {
+                ACCION: gAccion,
+                MENSAJE: '',
+                DATA: JSON.stringify(_obj),
+            };
+
+            var _url = '@Url.Action("EditClasificacionInterna", "MANT")';
+            $.post(_url, _reply).done(function (data) {
+                if (data.Status === 200) {
+                    toastr.success(data.Message);
+                    fnCargarLista();
+                    //PlantillaDataTable.draw();
+                }
+                else {
+                    toastr.error(data.Message);
+                }
+            }).fail(function (e) {
+            }).always(function () {
+                $("#overlay").hide();
+                if (gAccion == "DELETE") {
+                    $('#confirmBorrarModal').modal('hide');
+                } else {
+                    $('#editModal').modal('hide');
+                }
+
+            });
+        }
+    });
+
+</script>

@@ -1,6 +1,7 @@
 ﻿using BEANS;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,7 @@ namespace webapp.ViewModels
         public IEnumerable<ExtendedSelectListItem> ddlPeriocidad { get; set; } = new HashSet<ExtendedSelectListItem>();
 
         public List<REN_PYG_BE> dataPYG { get; set; }
+        public List<CLASIFICACION_INTERNA_BE> dataCI { get; set; }
         public List<REN_RESUMEN_ESC_BE> dataResEsc { get; set; }
         public List<REN_RORAC_COBERTURA_BE> dataRoracRes { get; set; }
         public List<REN_RORAC_MODELO_BE> dataRoracTbl { get; set; }
