@@ -427,5 +427,74 @@ namespace webapp.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult ProbabilidadDefault()
+        {
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            viewModel.CodSuscriptor = user.SUSCRIPTOR;
+            viewModel.CodUsuario = user.COD_USUARIO;
+
+            var dataTipCliente = bl.fn_mant_sel_probabilidadDDL("@TIP_CLIENTE", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlTipCliente = dataTipCliente.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+            var dataProductoBase = bl.fn_mant_sel_probabilidadDDL("@PRODUCTO_BASE", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlProducto = dataProductoBase.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+            var dataClasificacion = bl.fn_mant_sel_probabilidadDDL("@CLASIFICACION_INTERNA", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlClasificacionInterna = dataClasificacion.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult EditProbabilidadDefault(GEN_REPLY_BE model)
+        {
+            if (ModelState.IsValid)
+            {
+                var _dat = (string[])model.DATA;
+                var _obj = JsonConvert.DeserializeObject<PROBABILIDAD_DEFAULT_BE>(_dat[0]);
+                var user = (SEG_USUARIO_BE)Session["Usuario"];
+                //var viewModel = new AuxiliarEdit();
+                var ideUsuario = long.Parse(user.IDE_USUARIO.ToString());
+                var codSuscriptor = user.SUSCRIPTOR;
+                model.DATA = _obj;
+
+                var reply = new GEN_REPLY_BE();
+                reply = bl.fn_mant_pro_probabilidadDefault(model.ACCION, codSuscriptor, user.COD_USUARIO, _obj);
+
+                var res = new Response();
+                res.Message = reply.MENSAJE;
+
+                res.Status = HttpStatusCode.BadRequest;
+
+                if (reply.MENSAJE.Equals("") || reply.MENSAJE.Contains(Constantes.SUCCESS))
+                    res.Status = HttpStatusCode.OK;
+
+                //res.Data = viewModel;
+
+                return Json(res);
+            }
+
+            return Json(
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Message = "No se puede continuar por errores en el modelo",
+                            Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        }); ;
+        }
     }
 }

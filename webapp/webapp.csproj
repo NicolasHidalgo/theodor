@@ -2748,6 +2748,7 @@
     <Content Include="Views\MANT\RoracObjetivo.cshtml" />
     <Content Include="Views\MANT\Productos.cshtml" />
     <Content Include="Views\MANT\CostosOperativos.cshtml" />
+    <Content Include="Views\MANT\ProbabilidadDefault.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -48,6 +48,7 @@
     <Compile Include="GEN_DDL_BE.cs" />
     <Compile Include="GEN_REPLY_BE.cs" />
     <Compile Include="DEMO_BE.cs" />
+    <Compile Include="PROBABILIDAD_DEFAULT_BE.cs" />
     <Compile Include="PRODUCTO_BE.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="REN_COMISION_BE.cs" />

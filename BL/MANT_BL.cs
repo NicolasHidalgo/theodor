@@ -83,5 +83,17 @@ namespace BL
         {
             return dat.fn_mant_sel_costoOpeDDL(accion, codSuscriptor, codUsuario);
         }
+        public List<PROBABILIDAD_DEFAULT_BE> fn_mant_sel_probabilidadDefault(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_mant_sel_probabilidadDefault(accion, codSuscriptor, codUsuario);
+        }
+        public List<GEN_DDL_BE> fn_mant_sel_probabilidadDDL(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_mant_sel_probabilidadDDL(accion, codSuscriptor, codUsuario);
+        }
+        public GEN_REPLY_BE fn_mant_pro_probabilidadDefault(string accion, long codSuscriptor, string codUsuario, PROBABILIDAD_DEFAULT_BE param)
+        {
+            return dat.fn_mant_pro_probabilidadDefault(accion, codSuscriptor, codUsuario, param);
+        }
     }
 }

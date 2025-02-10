@@ -1,0 +1,333 @@
+﻿@model webapp.ViewModels.AuxiliarEdit
+@{
+    ViewBag.Title = "ProbabilidadDefault";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Theme JS files -->
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+<script type="text/javascript" src="~/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+<script src="~/assets/otros/inputmask/inputmask.js"></script>
+
+<!-- /theme JS files -->
+
+<link href="~/assets/css/theodor.css" rel="stylesheet" />
+
+<div class="modal" id="confirmBorrarModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Está seguro de eliminar este registro?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmar">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titulo">Nuevo Registro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-group">
+                        <label>Tipo Cliente</label>
+                        @Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @class = "select" })
+                    </div>
+                    <div class="form-group">
+                        <label>Clasificación Interna</label>
+                        @Html.DropDownList("ddlClasificacionInterna", Model.ddlClasificacionInterna, new { @class = "select" })
+                    </div>
+                    <div class="form-group">
+                        <label>Producto Base</label>
+                        @Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" id="txtProbabilidad" name="txtProbabilidad" value="0" class="form-control" style="text-align: right;">
+                            <span class="input-group-addon">%</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>*@
+                <button type="button" id="btnGrabar" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<div class="container-fluid">
+    <!-- Content area -->
+    <div class="content" style="padding-top:0px;">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Basic layout-->
+                <div class="panel panel-flat">
+                    <div class="panel-heading">
+                        <table>
+                            <tr>
+                                <td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>
+                                @*<td class="center"><i class="icon-floppy-disk icon-custom-style " title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>*@
+                                @*<td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a class="botonera classBorrar">Borrar</a></td>*@
+                                @*<td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>*@
+                            </tr>
+                        </table>
+
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label id="CodUsuario" class="hidden">@Model.CodUsuario</label>
+                                    <label id="CodSuscriptor" class="hidden">@Model.CodSuscriptor</label>
+                                    @*<label>Agencias</label>*@
+
+                                    <div class="table-responsive">
+                                        <table id="tblMain" class="table table-bordered"></table>
+                                    </div>
+                                </div>
+                                <!-- /bordered table -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var fSelEditar;
+    var fSelEliminar;
+
+
+    $(document).ready(function () {
+        var gAccion = "";
+        var gCodTipCliente = "";
+        var gCodClasificacion = "";
+        var gCodProducto = 0;
+
+        function getPorcentaje(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa / 100.0;
+        }
+        function getPorcentajeNum(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa * 100.0;
+        }
+
+        $("#txtProbabilidad").inputmask({
+            alias: "decimal",
+            radixPoint: ".",
+            digits: "2",
+            rightAlign: false,
+            integerDigits: 5,
+            digitsOptional: true,
+            allowPlus: true,
+            allowMinus: true,
+            placeholder: "0",
+            min: 0,
+            max: 100,
+            numericInput: true,
+        });
+
+        fSelEditar = function (data) {
+            $('#editModal').modal('show');
+            $("#txtProbabilidad").val(getPorcentajeNum(data.probabilidadDefault));
+ 
+            $('#ddlTipCliente,#ddlClasificacionInterna,#ddlProducto').prop('disabled', true);
+            $("#titulo").text('Editar Registro');
+            gAccion = "UPDATE";
+        }
+        fSelEliminar = function (item) {
+            $('#confirmBorrarModal').modal('show');
+            gAccion = "DELETE";
+            gCodTipCliente = item.codTipCliente;
+            gCodClasificacion = item.codClasificacionInterna;
+            gCodProducto = item.codProductoBase;
+        }
+
+        $("#btnNuevo,.classNuevo").on("click", function () {
+            $("#titulo").text('Nuevo Registro');
+            gAccion = "INSERT";
+            $('#ddlTipCliente,#ddlClasificacionInterna,#ddlProducto').prop('disabled', false);
+            $("#txtProbabilidad").val('');
+            //$("#ddlDepartamento").val('').change();
+            $('#editModal').modal('show');
+        });
+        $("#btnGrabar").on("click", function () {
+            fnGrabar();
+        });
+        $("#btnConfirmar").on("click", function () {
+            fnGrabar();
+        });
+
+
+        function fnGrabar() {
+            $("#overlay").show();
+
+            var _obj = {
+                codTipCliente: gAccion == "DELETE" ? gCodTipCliente : $("#ddlTipCliente option:selected").val(),
+                codClasificacionInterna: gAccion == "DELETE" ? gCodClasificacion : $("#ddlClasificacionInterna option:selected").val(),
+                codProductoBase: gAccion == "DELETE" ? gCodProducto : $("#ddlProductoBase option:selected").val(),
+                probabilidadDefault: getPorcentaje($("#txtProbabilidad").val()),
+            };
+
+            var _reply = {
+                ACCION: gAccion,
+                MENSAJE: '',
+                DATA: JSON.stringify(_obj),
+            };
+
+            var _url = '@Url.Action("EditProbabilidadDefault", "MANT")';
+            $.post(_url, _reply).done(function (data) {
+                if (data.Status === 200) {
+                    toastr.success(data.Message);
+                    PlantillaDataTable.draw();
+                }
+                else {
+                    toastr.error(data.Message);
+                }
+            }).fail(function (e) {
+            }).always(function () {
+                $("#overlay").hide();
+                if (gAccion == "DELETE") {
+                    $('#confirmBorrarModal').modal('hide');
+                } else {
+                    $('#editModal').modal('hide');
+                }
+
+            });
+        }
+
+
+        var PlantillaDataTable = $('#tblMain').DataTable({
+            autoWidth: false,
+            responsive: true,
+            searching: false,
+            ordering: false,
+            processing: true,
+            serverSide: true,
+            stateSave: false,
+            lengthChange: false,
+            info: false,
+            //firstAjax: false,
+
+            language: {
+                url: '//cdn.datatables.net/plug-ins/2.0.5/i18n/es-ES.json',
+            },
+
+            ajax: {
+                url: urls.MANTApi.GetDataTable_ProbabilidadDefault(),
+                type: 'GET',
+                data: function (data) {
+                    var _filter = {
+                        accion: 'SELECT',
+                        codUsuario: $("#CodUsuario").text(),
+                        codSuscriptor: $("#CodSuscriptor").text(),
+                        //buscar: $("#txtBuscar").val(),
+                    };
+
+                    var _order = $.map(data.order, function (item) {
+                        return {
+                            Property: data.columns[item.column].name,
+                            Direction: item.dir
+                        };
+                    });
+
+                    delete data.columns;
+                    delete data.order;
+                    delete data.search;
+
+                    data.filter = _filter;
+                    data.orderby = _order;
+                }
+            },
+            columns: [
+                {
+                    title: 'Cód. Tipo Cliente',
+                    data: 'codTipCliente',
+                    name: 'codTipCliente',
+                    className: 'dt-center',
+                },
+                {
+                    title: 'Cód. Clasificacion Interna',
+                    data: 'codClasificacionInterna',
+                    name: 'codClasificacionInterna',
+                    className: 'dt-left',
+                },
+                {
+                    title: 'Cód. Producto Base',
+                    data: 'codProductoBase',
+                    name: 'codProductoBase',
+                    className: 'dt-left',
+                },
+                {
+                    title: 'Producto Base',
+                    data: 'productoBase',
+                    name: 'productoBase',
+                    className: 'dt-left',
+                },
+                {
+                    title: 'Probabilidad Default',
+                    data: 'probabilidadDefault',
+                    name: 'probabilidadDefault',
+                    className: 'dt-left',
+                    render: function (data, type, full, meta) {
+                        let str = numeral(full.probabilidadDefault).format('0.00%');
+                        return str;
+                    },
+                },
+                {
+                    title: '&nbsp;',
+                    className: 'dt-center',
+                    render: function (data, type, full, meta) {
+                        let str = "<a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(full) + ")'>Editar</a>&nbsp;"
+                            + "<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(full) + ")'>Eliminar</a> ";
+                        return str;
+                    },
+                    responsivePriority: 0
+                },
+            ],
+
+        });
+
+    });
+
+</script>

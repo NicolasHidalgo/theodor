@@ -231,5 +231,75 @@ namespace webapp.Controllers.api
 
             return dataTable;
         }
+
+        [HttpGet]
+        [Route("GetDataTable_ProbabilidadDefault")]
+        public DataTable<PROBABILIDAD_DEFAULT_BE> GetDataTable_ProbabilidadDefault([FromUri] DataTableRequest_<PROBABILIDAD_DEFAULT_BE> model)
+        {
+            var reply = model.Filter;
+            //reply.accion = "@POPUP";
+            //reply.cod_suscriptor = user.SUSCRIPTOR;
+            IQueryable<PROBABILIDAD_DEFAULT_BE> query = db.fn_mant_sel_probabilidadDefault("SELECT", reply.codSuscriptor, reply.codUsuario).AsQueryable();
+
+            var recordsTotal = query.Count();
+
+            if (model.Filter != null)
+            {
+                /*
+                if (model.Filter.buscar != null)
+                {
+                    var _search = model.Filter.buscar.ToLower();
+                    query = query.Where(
+                                       x => x.tip_documento.ToLower().Contains(_search)
+                                        || x.num_documento.ToLower().Contains(_search)
+                                        || x.Cliente.ToLower().Contains(_search)
+                                        || x.Producto.ToLower().Contains(_search)
+                                    );
+                }
+                */
+            }
+
+            if (model.OrderBy.Count() > 0)
+            {
+                //por implementar
+            }
+            //else
+            //{
+            //    query = query.OrderBy(x => x.cod_tajo_estructura);
+            //}
+
+            var recordsFiltered = query.Count();
+
+            if (model.Start != null)
+            {
+                query = query.Skip(model.Start.GetValueOrDefault());
+            }
+
+            if (model.Length != null)
+            {
+                query = query.Take(model.Length.GetValueOrDefault());
+            }
+
+            var data = query
+                .AsEnumerable()
+                .Select(x => new PROBABILIDAD_DEFAULT_BE
+                {
+                    codTipCliente = x.codTipCliente,
+                    codClasificacionInterna = x.codClasificacionInterna,
+                    codProductoBase = x.codProductoBase,
+                    productoBase = x.productoBase,
+                    probabilidadDefault = x.probabilidadDefault,
+                });
+
+            var dataTable = new DataTable<PROBABILIDAD_DEFAULT_BE>()
+            {
+                data = data,
+                draw = model.Draw.GetValueOrDefault(),
+                recordsTotal = recordsTotal,
+                recordsFiltered = recordsFiltered
+            };
+
+            return dataTable;
+        }
     }
 }

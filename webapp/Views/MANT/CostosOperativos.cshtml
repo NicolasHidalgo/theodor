@@ -146,8 +146,8 @@
                                                             <td>@(item.costoOperativo?.ToString("P2"))</td>
                                                     <td>
                                                         <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
-Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
-Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
+Newtonsoft.Json.Formatting.Indented)))'>Editar</a>@*&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>*@
                                                     </td>
                                                 </tr>
                                             }
@@ -275,7 +275,8 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
                         cadena += "<td>" + item.codCanalAtencion + "</td>";
                         cadena += "<td>" + item.canalAtencion + "</td>";
                         cadena += "<td>" + numeral(item.costoOperativo).format('0.00%') + "</td>";
-                        cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
+                        cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;</td>";
+                        //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
                         cadena += "</tr>";
                     }
                 });
