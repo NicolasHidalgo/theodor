@@ -69,9 +69,13 @@
                         <label>Canal Atención</label>
                         @Html.DropDownList("ddlCanalAtencion", Model.ddlCanalAtencion, new { @class = "select" })
                     </div>
+                    
                     <div class="form-group">
                         <label>Costo Operativo</label>
-                        <input type="text" class="form-control" id="txtCostoOperativo" />
+                        <div class="input-group">
+                            <input type="text" id="txtCostoOperativo" name="txtCostoOperativo" value="0" class="form-control" style="text-align: right;">
+                            <span class="input-group-addon">%</span>
+                        </div>
                     </div>
 
                 </div>
@@ -115,8 +119,8 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th>Cod. Operación</th>
-                                                    <th>Cod. Canal Atención</th>
+                                                    <th>Operación</th>
+                                                    <th>Cód.</th>
                                                     <th>Canal Atención</th>
                                                     <th>Costo Operativo</th>
                                                     <th></th>
@@ -212,7 +216,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>*@
         $("#txtCostoOperativo").inputmask({
             alias: "decimal",
             radixPoint: ".",
-            digits: "2",
+            digits: "6",
             rightAlign: false,
             integerDigits: 5,
             digitsOptional: true,

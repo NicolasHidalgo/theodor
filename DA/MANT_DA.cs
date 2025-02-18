@@ -596,6 +596,13 @@ namespace DA
                             bean.Value = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
                             bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_cliente"));
                         }
+                        if (accion.Equals("@PRODUCTO_BASE"))
+                        {
+                            bean.Value = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto_base")).ToString();
+                            bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("producto_base"));
+                            bean.Aux1 = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_tip_amortizacion")).ToString();
+                            bean.Aux2 = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_amortizacion"));
+                        }
 
                         lista.Add(bean);
                     }

@@ -77,15 +77,22 @@
                     </div>
                     <div class="form-group">
                         <label>Producto Base</label>
-                        @Html.DropDownList("ddlProductoBase", Model.ddlProducto, new { @class = "select" })
+                        @*@Html.DropDownList("ddlProductoBase", Model.ddlProducto, new { @class = "select" })*@
+                        <select name="ddlProductoBase" id="ddlProductoBase" class="select">
+                            @foreach (var item in Model.ddlProducto)
+                            {
+                                <option value="@item.Value" data-aux1="@item.Aux1" data-aux2="@item.Aux2">@item.Text</option>
+                            }
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Tipo Cliente</label>
                         @Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @multiple = "multiple", @class = "select" })
                     </div>
                     <div class="form-group">
-                        <label>Cod. Tip. Amortizacion</label>
-                        <input type="number" class="form-control" id="txtCodTipAmortizacion" />
+                        <label>Tip. Amortizacion</label>
+                        <input type="number" class="form-control hidden" id="txtCodTipAmortizacion" disabled="disabled" />
+                        <input type="text" class="form-control" id="txtTipAmortizacion" disabled="disabled" />
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -172,11 +179,11 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th>Cod. Producto</th>
+                                                    <th>Cód</th>
                                                     <th>Producto</th>
-                                                    <th>Cod. Producto Base</th>
+                                                    @*<th>Cod. Producto Base</th>*@
                                                     <th>Producto Base</th>
-                                                    <th>Cod. Tipo Clientes</th>
+                                                    <th>Tipo Clientes</th>
                                                     @*<th>Cod. Tipo Amortizacion</th>*@
                                                     <th>Tipo Amortizacion</th>
                                                     <th>Plazo</th>
@@ -206,7 +213,7 @@
                                                         <tr class="@estilo">
                                                             <td>@item.codProducto</td>
                                                             <td>@item.producto</td>
-                                                            <td>@item.strCodProductoBase</td>
+                                                            @*<td>@item.strCodProductoBase</td>*@
                                                             <td>@item.productoBase</td>
                                                             <td>@item.codTipClientes</td>
                                                             @*<td>@item.codTipAmortizacion</td>*@
@@ -215,7 +222,7 @@
                                                             <td>@(item.tea?.ToString("P2"))</td>
                                                             <td>@(item.factorUsoLinea?.ToString("P2"))</td>
                                                             <td>@(item.factorConversionIndirectos?.ToString("P2"))</td>
-                                                            <td>
+                                                            <td width="15%">
                                                                 <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
 Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
 Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
@@ -308,6 +315,14 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
         //    'placeholder': '0.00'
         //});
 
+        $("#ddlProductoBase").change(function (e, data) {
+            var _codTipAmor = $("#ddlProductoBase option:selected").data('aux1');
+            var _tipAmor = $("#ddlProductoBase option:selected").data('aux2');
+
+            $("#txtCodTipAmortizacion").val(_codTipAmor);
+            $("#txtTipAmortizacion").val(_tipAmor);
+        });
+
         fSelEditar = function (data) {
             //console.log(data);
             $('#editModal').modal('show');
@@ -321,11 +336,16 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             });
             $("#ddlTipCliente").trigger('change');
 
-            $("#txtCodTipAmortizacion").val(data.codTipAmortizacion).change();
+            var _codTipAmor = $("#ddlProductoBase option:selected").data('aux1');
+            var _tipAmor = $("#ddlProductoBase option:selected").data('aux2');
+
+            $("#txtCodTipAmortizacion").val(_codTipAmor);
+            $("#txtTipAmortizacion").val(_tipAmor);
+
             $("#txtPlazo").val(data.plazo).change();
             $("#txtTea").val(getPorcentajeNum(data.tea)).change();
             $("#txtFactorUso").val(getPorcentajeNum(data.factorUsoLinea)).change();
-            $("#txtFactorConversion").val(cdata.factorConversionIndirectos)).change();
+            $("#txtFactorConversion").val(getPorcentajeNum(data.factorConversionIndirectos)).change();
             if (data.factorUsoLinea == true) {
                 $('#chkAplicaPricing').prop('checked', true);
             } else {
@@ -349,6 +369,12 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             $('#txtCodProducto').prop('disabled', false);
             $("#ddlTipCliente, #ddlProducto").val('').change();
             $('#editModal').modal('show');
+
+            var _codTipAmor = $("#ddlProductoBase option:selected").data('aux1');
+            var _tipAmor = $("#ddlProductoBase option:selected").data('aux2');
+
+            $("#txtCodTipAmortizacion").val(_codTipAmor);
+            $("#txtTipAmortizacion").val(_tipAmor);
         });
         $("#btnGrabar").on("click", function () {
             fnGrabar();
@@ -375,7 +401,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
                         cadena += "<tr class=" + estilo + ">";
                         cadena += "<td>" + item.codProducto + "</td>";
                         cadena += "<td>" + item.producto + "</td>";
-                        cadena += "<td>" + item.strCodProductoBase + "</td>";
+                        /*cadena += "<td>" + item.strCodProductoBase + "</td>";*/
                         cadena += "<td>" + item.productoBase + "</td>";
                         cadena += "<td>" + item.codTipClientes + "</td>";
                         cadena += "<td>" + item.tipAmortizacion + "</td>";
@@ -383,7 +409,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
                         cadena += "<td>" + numeral(item.tea).format('0.00%') + "</td>";
                         cadena += "<td>" + numeral(item.factorUsoLinea).format('0.00%') + "</td>";
                         cadena += "<td>" + numeral(item.factorConversionIndirectos).format('0.00%') + "</td>";
-                        cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
+                        cadena += "<td width='15%'><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
                         cadena += "</tr>";
                     }
                 });

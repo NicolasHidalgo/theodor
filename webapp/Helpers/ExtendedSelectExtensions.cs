@@ -15,6 +15,8 @@ namespace webapp
     public class ExtendedSelectListItem : SelectListItem
     {
         public object HtmlAttributes { get; set; }
+        public string Aux1 { get; set; }
+        public string Aux2 { get; set; }
     }
 
     public static class ExtendedSelectExtensions

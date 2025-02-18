@@ -292,11 +292,13 @@ namespace webapp.Controllers
             viewModel.CodUsuario = user.COD_USUARIO;
 
             viewModel.producto = bl.fn_mant_sel_producto("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
-            var dataProducto = bl.fn_mant_sel_producto("@PRODUCTO_BASE", user.SUSCRIPTOR, user.COD_USUARIO);
+            var dataProducto = bl.fn_mant_sel_productoDDL("@PRODUCTO_BASE", user.SUSCRIPTOR, user.COD_USUARIO);
             viewModel.ddlProducto = dataProducto.Select(x => new ExtendedSelectListItem
             {
-                Value = x.intCodProductoBase.ToString(),
-                Text = x.productoBase,
+                Value = x.Value,
+                Text = x.Text,
+                Aux1 = x.Aux1,
+                Aux2 = x.Aux2,
                 Selected = false, //x.Selected,
             });
             var dataTipCliente = bl.fn_mant_sel_productoDDL("@BANCA", user.SUSCRIPTOR, user.COD_USUARIO);
