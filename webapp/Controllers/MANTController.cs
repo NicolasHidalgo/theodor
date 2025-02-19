@@ -561,5 +561,96 @@ namespace webapp.Controllers
                         }); ;
         }
 
+        public ActionResult ComisionServicio()
+        {
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            viewModel.CodSuscriptor = user.SUSCRIPTOR;
+            viewModel.CodUsuario = user.COD_USUARIO;
+
+            var dataProducto = bl.fn_mant_sel_comisionProducto("SELECT_PRODUCTO", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.producto = dataProducto;
+
+            var dataComision = bl.fn_mant_sel_comisionServicio("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.comisionServicio = dataComision;
+
+            var ddlProducto = bl.fn_mant_sel_comisionDDL("@PRODUCTO", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlProducto = ddlProducto.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+            var ddlComision = bl.fn_mant_sel_comisionDDL("@COMISION_SERVICIO", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlComisionServicio = ddlComision.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+            var ddlPeriodicidad = bl.fn_mant_sel_comisionDDL("@PERIODICIDAD", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlPeriocidad = ddlPeriodicidad.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+            var ddlTipValor = bl.fn_mant_sel_comisionDDL("@TIP_VALOR", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlTipValor = ddlTipValor.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+
+            return View(viewModel);
+        }
+
+        public JsonResult JSON_ComisionServicio_Refresh()
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var data = bl.fn_mant_sel_comisionServicio("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public ActionResult EditComisionServicio(GEN_REPLY_BE model)
+        {
+            if (ModelState.IsValid)
+            {
+                var _dat = (string[])model.DATA;
+                var _obj = JsonConvert.DeserializeObject<COMISIONSERVICIO_BE>(_dat[0]);
+                var user = (SEG_USUARIO_BE)Session["Usuario"];
+                //var viewModel = new AuxiliarEdit();
+                var ideUsuario = long.Parse(user.IDE_USUARIO.ToString());
+                var codSuscriptor = user.SUSCRIPTOR;
+                model.DATA = _obj;
+
+                var reply = new GEN_REPLY_BE();
+                reply = bl.fn_mant_pro_comisionServicio(model.ACCION, codSuscriptor, user.COD_USUARIO, _obj);
+
+                var res = new Response();
+                res.Message = reply.MENSAJE;
+
+                res.Status = HttpStatusCode.BadRequest;
+
+                if (reply.MENSAJE.Equals("") || reply.MENSAJE.Contains(Constantes.SUCCESS))
+                    res.Status = HttpStatusCode.OK;
+
+                //res.Data = viewModel;
+
+                return Json(res);
+            }
+
+            return Json(
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Message = "No se puede continuar por errores en el modelo",
+                            Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        }); ;
+        }
+
     }
-}
+}   

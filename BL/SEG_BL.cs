@@ -98,5 +98,6 @@ namespace BL
         {
             return dat.fn_seg_upd_session(model);
         }
+        
     }
 }

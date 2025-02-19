@@ -1,0 +1,494 @@
+﻿@model webapp.ViewModels.AuxiliarEdit
+@{
+    ViewBag.Title = "ComisionServicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Theme JS files -->
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+<script type="text/javascript" src="~/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+<script src="~/assets/otros/inputmask/inputmask.js"></script>
+
+<!-- /theme JS files -->
+
+<link href="~/assets/css/theodor.css" rel="stylesheet" />
+
+<style>
+    table thead tr {
+        background-color: #3f444e;
+        color: white;
+    }
+
+    .tit {
+        background-color: #156082;
+        color: white;
+    }
+</style>
+
+<div class="modal" id="confirmBorrarModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Está seguro de eliminar este registro?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmar">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titulo">Nuevo Registro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-group">
+                        <label>Producto</label>
+                        @Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })
+                    </div>
+                    <div class="form-group">
+                        <label>Comision Servicio</label>
+                        @Html.DropDownList("ddlComisionServicio", Model.ddlComisionServicio, new { @class = "select" })
+                    </div>
+                    <div class="form-group">
+                        <label>Periodicidad</label>
+                        @Html.DropDownList("ddlPeriodicidad", Model.ddlPeriocidad, new { @class = "select" })
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Tipo Valor</label>
+                                @Html.DropDownList("ddlTipValor", Model.ddlTipValor, new { @class = "select" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Veces</label>
+                                <input type="number" id="txtVeces" name="txtVeces" value="0" class="form-control" style="text-align: right;">
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Valor S/.</label>
+                                <input type="text" id="txtValor1" name="txtValor1" value="0" class="form-control" style="text-align: right;">
+                                <!--<div class="input-group">
+        <input type="text" id="txtValor1" name="txtValor1" value="0" class="form-control" style="text-align: right;">-->
+                                @*<span class="input-group-addon">%</span>*@
+                                <!--</div>-->
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Valor USD</label>
+                                <input type="text" id="txtValor2" name="txtValor2" value="0" class="form-control" style="text-align: right;">
+                                <!--<div class="input-group">
+        <input type="text" id="txtValor2" name="txtValor2" value="0" class="form-control" style="text-align: right;">-->
+                                @*<span class="input-group-addon">%</span>*@
+                                <!--</div>-->
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>*@
+                <button type="button" id="btnGrabar" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<div class="container-fluid">
+    <!-- Content area -->
+    <div class="content" style="padding-top:0px;">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Basic layout-->
+                <div class="panel panel-flat">
+                    <div class="panel-heading">
+                        <table>
+                            <tr>
+                                <td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>
+                                <!--<td class="center"><i class="icon-floppy-disk icon-custom-style " title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>-->
+                                <!--<td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a class="botonera classBorrar">Borrar</a></td>-->
+                                @*<td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>*@
+                            </tr>
+                        </table>
+
+
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cod. Oper.</th>
+                                                    <th>Cod. Prod.</th>
+                                                    <th>Producto</th>
+                                                    <th>Tipo Amortización</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbodyMain1">
+                                                @{ var odd = 0; var estilo = string.Empty;}
+                                                @foreach (var item in Model.producto)
+                                                {
+                                                    estilo = string.Empty;
+                                                    odd = odd + 1;
+                                                    if ((odd % 2) == 0) { estilo = "colorGray"; }
+
+                                                    <tr class="@estilo">
+                                                        <td>@item.codOperacion</td>
+                                                        <td>@item.codProducto</td>
+                                                        <td>@item.producto</td>
+                                                        <td>@item.tipAmortizacion</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- /bordered table -->
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="form-group">
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cód. Comisión</th>
+                                                    <th>Comisión Servicio</th>
+                                                    <th>Periodicidad</th>
+                                                    <th>Tipo Valor</th>
+                                                    <th>Veces</th>
+                                                    <th>Valor S/.</th>
+                                                    <th>Valor USD</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbodyMain2">
+                                                @{ var odd2 = 0; var estilo2 = string.Empty;}
+                                                @foreach (var item in Model.comisionServicio)
+                                                {
+                                                    estilo2 = string.Empty;
+                                                    odd2 = odd2 + 1;
+                                                    if ((odd2 % 2) == 0) { estilo2 = "colorGray"; }
+
+                                                    var _valor1 = "";
+                                                    var _valor2 = "";
+                                                    if (item.tipValor.Equals("%"))
+                                                    {
+                                                        _valor1 = (item.valorMn1?.ToString("P2"));
+                                                        _valor2 = (item.valorMn2?.ToString("P2"));
+                                                    }
+                                                    else
+                                                    {
+                                                        _valor1 = (item.valorMn1?.ToString("#0.00"));
+                                                        _valor2 = (item.valorMn2?.ToString("#0.00"));
+                                                    }
+
+                                                    <tr class="@estilo2">
+                                                        <td>@item.codComisionServicio</td>
+                                                        <td>@item.comisionServicio</td>
+                                                        <td>@item.periodicidad</td>
+                                                        <td>@item.tipValor</td>
+                                                        <td>@item.veces</td>
+                                                        <td>@_valor1</td>
+                                                        <td>@_valor2</td>
+                                                        <td width="15%">
+                                                            <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- /bordered table -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var fSelEditar;
+    var fSelEliminar;
+
+
+    $(document).ready(function () {
+        var gAccion = "";
+        var gCodTipCliente = "";
+        var gCodProducto = 0;
+
+        var _tipValor = $("#ddlTipValor option:selected").val();
+        if (_tipValor == "%") {
+            $("#txtValor1,#txtValor2").inputmask({
+                alias: "decimal",
+                radixPoint: ".",
+                digits: "6",
+                rightAlign: false,
+                integerDigits: 5,
+                digitsOptional: true,
+                allowPlus: true,
+                allowMinus: true,
+                placeholder: "0",
+                min: 0,
+                max: 100,
+                numericInput: true,
+            });
+        } else {
+            $('#txtValor1,#txtValor2').inputmask({
+                'alias': 'decimal',
+                'groupSeparator': ',',
+                'autoGroup': true,
+                'digits': 2,
+                'digitsOptional': false,
+                'placeholder': '0.00'
+            });
+        }
+
+        $("#ddlTipValor").change(function (e, data) {
+            var _tipValor = $("#ddlTipValor option:selected").val();
+            if (_tipValor == "%") {
+                $("#txtValor1,#txtValor2").inputmask({
+                    alias: "decimal",
+                    radixPoint: ".",
+                    digits: "6",
+                    rightAlign: false,
+                    integerDigits: 5,
+                    digitsOptional: true,
+                    allowPlus: true,
+                    allowMinus: true,
+                    placeholder: "0",
+                    min: 0,
+                    max: 100,
+                    numericInput: true,
+                });
+            } else {
+                $('#txtValor1,#txtValor2').inputmask({
+                    'alias': 'decimal',
+                    'groupSeparator': ',',
+                    'autoGroup': true,
+                    'digits': 2,
+                    'digitsOptional': false,
+                    'placeholder': '0.00'
+                });
+            }
+
+        });
+
+        function getPorcentaje(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa / 100.0;
+        }
+        function getPorcentajeNum(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa * 100.0;
+        }
+        function getImporte(valor) {
+            let _valor = valor.replace(/,/g, '');
+            if (isNaN(_valor)) {
+                return 0;
+            }
+            let monto = Number(_valor);
+
+            return monto;
+        }
+        function replaceNullEmpty(valor) {
+            if (valor == "null" || valor == null || valor == undefined) {
+                return "";
+            }
+            return valor;
+        }
+
+        fSelEditar = function (data) {
+            $('#editModal').modal('show');
+            $("#ddlProducto").val(data.codProducto).change();
+            $("#ddlComisionServicio").val(data.codComisionServicio).change();
+            $("#ddlPeriodicidad").val(data.codPeriodicidad).change();
+            $("#ddlTipValor").val(data.tipValor).change();
+            $("#txtVeces").val(data.veces);
+
+            if (data.tipValor == "%") {
+                $("#txtValor1").val(getPorcentajeNum(data.valorMn1)).change();
+                $("#txtValor2").val(getPorcentajeNum(data.valorMn2)).change();
+            } else {
+                $("#txtValor1").val(data.valorMn1).change();
+                $("#txtValor2").val(data.valorMn2).change();
+            }
+
+            $('#ddlProducto,#ddlComisionServicio').prop('disabled', true);
+            $("#titulo").text('Editar Registro');
+            gAccion = "UPDATE";
+        }
+        fSelEliminar = function (data) {
+            $('#confirmBorrarModal').modal('show');
+            gAccion = "DELETE";
+            gCodProducto = data.codProducto;
+            gCodComision = data.codComisionServicio;
+        }
+
+        $("#btnNuevo,.classNuevo").on("click", function () {
+            $("#titulo").text('Nuevo Registro');
+            gAccion = "INSERT";
+            $('#ddlProducto,#ddlComisionServicio').prop('disabled', false);
+            $("#txtValor1,#txtValor2").val('0').change();
+            //$("#ddlTipCliente, #ddlProducto").val('').change();
+            $('#editModal').modal('show');
+        });
+        $("#btnGrabar").on("click", function () {
+            fnGrabar();
+        });
+        $("#btnConfirmar").on("click", function () {
+            fnGrabar();
+        });
+
+        function fnCargarLista() {
+            $.getJSON('@Url.Action("JSON_ComisionServicio_Refresh")', function (data) {
+                $("#tbodyMain2").empty();
+                var odd = 0;
+                var estilo = "";
+                var cadena = "";
+                $.each(data, function (index, item) {
+                    estilo = "";
+                    odd = odd + 1;
+                    if ((odd % 2) == 0) { estilo = "colorGray"; }
+
+                    var _valor1 = "";
+                    var _valor2 = "";
+                    if (item.tipValor == "%") {
+                        _valor1 = numeral(item.valorMn1).format('0.00%');
+                        _valor2 = numeral(item.valorMn2).format('0.00%');
+                    }
+                    else {
+                        _valor1 = numeral(item.valorMn1).format('#0.00');
+                        _valor2 = numeral(item.valorMn2).format('#0.00');
+                    }
+
+                    cadena += "<tr class=" + estilo + ">";
+                    cadena += "<td>" + item.codComisionServicio + "</td>";
+                    cadena += "<td>" + item.comisionServicio + "</td>";
+                    cadena += "<td>" + item.periodicidad + "</td>";
+                    cadena += "<td>" + item.tipValor + "</td>";
+                    cadena += "<td>" + item.veces + "</td>";
+                    cadena += "<td>" + _valor1 + "</td>";
+                    cadena += "<td>" + _valor2 + "</td>";
+                    cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
+                    cadena += "</tr>";
+                });
+                $("#tbodyMain2").append(cadena);
+            }).done(function () {
+
+            });
+        }
+
+        function fnGrabar() {
+            $("#overlay").show();
+
+            var _tipValor = $("#ddlTipValor option:selected").val();
+            var _valor1 = 0.0;
+            var _valor2 = 0.0;
+            if (_tipValor == "%") {
+                _valor1 = getPorcentaje($("#txtValor1").val());
+                _valor2 = getPorcentaje($("#txtValor1").val());
+            } else {
+                _valor1 = $("#txtValor1").val();
+                _valor2 = $("#txtValor1").val();
+            }
+
+            var _obj = {
+                codProducto: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
+                codComisionServicio: gAccion == "DELETE" ? gCodComision : $("#ddlComisionServicio option:selected").val(),
+                codPeriodicidad: $("#ddlPeriodicidad option:selected").val(),
+                tipValor: _tipValor,
+                veces: $("#txtVeces").val(),
+                valorMn1: _valor1,
+                valorMn2: _valor2
+            };
+
+            var _reply = {
+                ACCION: gAccion,
+                MENSAJE: '',
+                DATA: JSON.stringify(_obj),
+            };
+
+            var _url = '@Url.Action("EditComisionServicio", "MANT")';
+            $.post(_url, _reply).done(function (data) {
+                if (data.Status === 200) {
+                    toastr.success(data.Message);
+                    fnCargarLista();
+                    //PlantillaDataTable.draw();
+                }
+                else {
+                    toastr.error(data.Message);
+                }
+            }).fail(function (e) {
+            }).always(function () {
+                $("#overlay").hide();
+                if (gAccion == "DELETE") {
+                    $('#confirmBorrarModal').modal('hide');
+                } else {
+                    $('#editModal').modal('hide');
+                }
+
+            });
+        }
+    });
+
+</script>

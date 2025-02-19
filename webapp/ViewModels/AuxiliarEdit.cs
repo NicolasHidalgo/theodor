@@ -31,6 +31,7 @@ namespace webapp.ViewModels
         public IEnumerable<ExtendedSelectListItem> ddlClasificacionGarantia { get; set; } = new HashSet<ExtendedSelectListItem>();
         public IEnumerable<ExtendedSelectListItem> ddlComisionServicio { get; set; } = new HashSet<ExtendedSelectListItem>();
         public IEnumerable<ExtendedSelectListItem> ddlPeriocidad { get; set; } = new HashSet<ExtendedSelectListItem>();
+        public IEnumerable<ExtendedSelectListItem> ddlTipValor { get; set; } = new HashSet<ExtendedSelectListItem>();
 
         public List<REN_PYG_BE> dataPYG { get; set; }
         public List<CLASIFICACION_INTERNA_BE> dataCI { get; set; }
@@ -43,6 +44,7 @@ namespace webapp.ViewModels
         public List<RORACOBJETIVO_BE> mantRorac { get; set; }
         public List<COSTOOPERATIVO_BE> costoOperativo { get; set; }
         public List<PRODUCTO_BE> producto { get; set; }
+        public List<COMISIONSERVICIO_BE> comisionServicio { get; set; }
         public string amortizacion { get; set; }
         public long IdeClienteProducto { get; set; }
         public long CodSuscriptor { get; set; }

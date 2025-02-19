@@ -2750,6 +2750,7 @@
     <Content Include="Views\MANT\CostosOperativos.cshtml" />
     <Content Include="Views\MANT\ProbabilidadDefault.cshtml" />
     <Content Include="Views\MANT\ClasificacionInterna.cshtml" />
+    <Content Include="Views\MANT\ComisionServicio.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

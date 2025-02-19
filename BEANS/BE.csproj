@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="AGENCIA_BE.cs" />
     <Compile Include="CLASIFICACION_INTERNA_BE.cs" />
+    <Compile Include="COMISIONSERVICIO_BE.cs" />
     <Compile Include="COSTOOPERATIVO_BE.cs" />
     <Compile Include="FUNCIONARIO_BE.cs" />
     <Compile Include="GEN_DDL_BE.cs" />
