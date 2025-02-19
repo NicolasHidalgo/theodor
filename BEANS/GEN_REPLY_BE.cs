@@ -9,6 +9,7 @@ namespace BEANS
 {
     public class GEN_REPLY_BE
     {
+        public long codSuscriptor { get; set; }
         public string COD_MENU { get; set; }
         public string CONTROLLER { get; set; }
         public string HOSTNAME { get; set; }

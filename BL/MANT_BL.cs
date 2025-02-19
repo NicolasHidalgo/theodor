@@ -27,9 +27,9 @@ namespace BL
         {
             return dat.fn_mant_sel_funcionario(accion, codSuscriptor, codUsuario);
         }
-        public List<SEG_USUARIO_BE> fn_mant_sel_usuario(string accion, long codSuscriptor, string codUsuario)
+        public List<SEG_USUARIO_BE> fn_mant_sel_funcionarioUsuario(string accion, long codSuscriptor, string codUsuario)
         {
-            return dat.fn_mant_sel_usuario(accion, codSuscriptor, codUsuario);
+            return dat.fn_mant_sel_funcionarioUsuario(accion, codSuscriptor, codUsuario);
         }
         public List<AGENCIA_BE> fn_mant_sel_funAgencia(string accion, long codSuscriptor, string codUsuario)
         {
@@ -123,5 +123,6 @@ namespace BL
         {
             return dat.fn_mant_pro_comisionServicio(accion, codSuscriptor, codUsuario, param);
         }
+
     }
 }

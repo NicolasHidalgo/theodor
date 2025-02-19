@@ -893,5 +893,54 @@ namespace DA
         }
         */
 
+        public List<SEG_USUARIO_BE> fn_seg_sel_usuario(string accion, long codSuscriptor, string codUsuario)
+        {
+            List<SEG_USUARIO_BE> lista = new List<SEG_USUARIO_BE>();
+            String mensaje = "";
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_seg_cud_usuario]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 32).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.VarChar, 32).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario_login", System.Data.SqlDbType.VarChar, 32).Value = codUsuario;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    SEG_USUARIO_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new SEG_USUARIO_BE();
+                        bean.IDE_USUARIO = DataReader.SafeGetInt64(dr, dr.GetOrdinal("IDE_USUARIO"));
+                        bean.COD_USUARIO = DataReader.SafeGetString(dr, dr.GetOrdinal("COD_USUARIO"));
+                        bean.NOM_USUARIO = DataReader.SafeGetString(dr, dr.GetOrdinal("NOM_USUARIO"));
+                        bean.CORREO_ELECTRONICO = DataReader.SafeGetString(dr, dr.GetOrdinal("CORREO"));
+                        bean.diaExpiracionClave = DataReader.SafeGetInt32(dr, dr.GetOrdinal("dia_expiracion_clave"));
+                        bean.fecProximoExpiracion = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("fec_proximo_expiracion"));
+                        bean.FEC_CREACION = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("FEC_CREACION"));
+                        bean.fecActualizacion = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("fec_actualizacion"));
+                        bean.estUsuario = DataReader.SafeGetInt32(dr, dr.GetOrdinal("est_usuario"));
+                        bean.codPerfilRol = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_perfil_rol"));
+                        bean.nomPerfilRol = DataReader.SafeGetString(dr, dr.GetOrdinal("nom_perfil_rol"));
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                mensaje = ex.Message;
+            }
+            finally
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
     }
 }

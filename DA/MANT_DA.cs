@@ -194,7 +194,7 @@ namespace DA
             }
             return lista;
         }
-        public List<SEG_USUARIO_BE> fn_mant_sel_usuario(string accion, long cod_suscriptor, string cod_usuario)
+        public List<SEG_USUARIO_BE> fn_mant_sel_funcionarioUsuario(string accion, long cod_suscriptor, string cod_usuario)
         {
             Mensaje = string.Empty;
             List<SEG_USUARIO_BE> lista = new List<SEG_USUARIO_BE>();

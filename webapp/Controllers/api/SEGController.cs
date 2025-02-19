@@ -21,7 +21,7 @@ namespace webapp.Controllers.api
         public DataTable<SEG_USUARIO_BE> GetDataTable_Usuario([FromUri] DataTableRequest_<GEN_REPLY_BE> model)
         {
             var reply = model.Filter;
-            IQueryable<SEG_USUARIO_BE> query = db.fn_seg_sel_usuario(reply).AsQueryable();
+            IQueryable<SEG_USUARIO_BE> query = db.fn_seg_sel_usuario(reply.ACCION, reply.codSuscriptor, reply.COD_USUARIO).AsQueryable();
 
             var recordsTotal = query.Count();
 
@@ -64,10 +64,14 @@ namespace webapp.Controllers.api
                     IDE_USUARIO = x.IDE_USUARIO,
                     COD_USUARIO = x.COD_USUARIO,
                     NOM_USUARIO = x.NOM_USUARIO,
-                    EST_USUARIO = x.EST_USUARIO,
                     CORREO_ELECTRONICO = x.CORREO_ELECTRONICO,
-                    PASSWORD = x.PASSWORD,
-                    FEC_CESE = x.FEC_CESE,
+                    diaExpiracionClave = x.diaExpiracionClave,
+                    fecProximoExpiracion = x.fecProximoExpiracion,
+                    FEC_CREACION = x.FEC_CREACION,
+                    fecActualizacion = x.fecActualizacion,
+                    estUsuario = x.estUsuario,
+                    codPerfilRol = x.codPerfilRol,
+                    nomPerfilRol = x.nomPerfilRol,
                 });
 
             var dataTable = new DataTable<SEG_USUARIO_BE>()

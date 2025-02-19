@@ -19,7 +19,11 @@ namespace webapp.Controllers
 
         public ActionResult Usuario()
         {
-            return View();
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            viewModel.CodSuscriptor = user.SUSCRIPTOR;
+            viewModel.CodUsuario = user.COD_USUARIO;
+            return View(viewModel);
         }
         
         [HttpPost]

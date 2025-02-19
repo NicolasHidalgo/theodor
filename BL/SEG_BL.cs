@@ -98,6 +98,9 @@ namespace BL
         {
             return dat.fn_seg_upd_session(model);
         }
-        
+        public List<SEG_USUARIO_BE> fn_seg_sel_usuario(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_seg_sel_usuario(accion, codSuscriptor, codUsuario);
+        }
     }
 }

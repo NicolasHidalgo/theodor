@@ -30,6 +30,14 @@ namespace BEANS
         public IEnumerable<SEG_OPCION_BE> Opciones { get; set; } = new HashSet<SEG_OPCION_BE>();
 
         public IEnumerable<SEG_OPCION_BE> OpcionesData { get; set; } = new HashSet<SEG_OPCION_BE>();
+
+
+        public int diaExpiracionClave { get; set; }
+        public DateTime? fecProximoExpiracion { get; set; }
+        public DateTime? fecActualizacion { get; set; }
+        public string codPerfilRol { get; set; }
+        public string nomPerfilRol { get; set; }
+        public int estUsuario { get; set; }
     }
 
     public class SEG_USUARIO_PERFIL_BE 

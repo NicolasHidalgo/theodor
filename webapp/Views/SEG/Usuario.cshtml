@@ -1,4 +1,4 @@
-﻿
+﻿@model webapp.ViewModels.AuxiliarEdit
 @{
     ViewBag.Title = "Usuario";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -120,6 +120,8 @@
     <div class="content">
         <!-- Page length options -->
         <div class="panel panel-flat">
+            <label id="CodUsuario" class="hidden">@Model.CodUsuario</label>
+            <label id="CodSuscriptor" class="hidden">@Model.CodSuscriptor</label>
             <table id="UsuarioDatatable" class="table table-responsive table-bordered table-striped"></table>
         </div>
         <!-- /page length options -->
@@ -183,7 +185,9 @@ $(function () {
             data: function (data) {
                 var _filter = {
                     ACCION: 'SELECT',
-                    SEARCH: $('#txtFiltro').val(),
+                    COD_USUARIO: $("#CodUsuario").text(),
+                    codSuscriptor: $("#CodSuscriptor").text(),
+                    //SEARCH: $('#txtFiltro').val(),
                 };
 
                 var _order = $.map(data.order, function (item) {
@@ -213,7 +217,7 @@ $(function () {
             width: "25%",
         },
         {
-            title: 'Nombres',
+            title: 'Nombre',
             data: 'NOM_USUARIO',
             width: "25%",
         },
@@ -223,8 +227,51 @@ $(function () {
             width: "25%",
         },
         {
+            title: 'Dias Exp.',
+            data: 'diaExpiracionClave',
+            width: "25%",
+        },
+        {
+            title: 'Fecha Vencimiento Clave',
+            data: 'fecProximoExpiracion',
+            width: "25%",
+            render: function (data, type, full, meta) {
+                if (data == null) {
+                    return "";
+                }
+                return moment(data).format("DD-MM-YYYY");
+            },
+        },
+        {
+            title: 'Fec. Creación',
+            data: 'FEC_CREACION',
+            width: "25%",
+            render: function (data, type, full, meta) {
+                if (data == null) {
+                    return "";
+                }
+                return moment(data).format("DD-MM-YYYY");
+            },
+        },
+        {
+            title: 'Fec. Actualización',
+            data: 'fecActualizacion',
+            width: "25%",
+            render: function (data, type, full, meta) {
+                if (data == null) {
+                    return "";
+                }
+                return moment(data).format("DD-MM-YYYY");
+            },
+        },
+        {
             title: 'Estado',
-            data: 'EST_USUARIO',
+            data: 'estUsuario',
+            width: "25%",
+        },
+        {
+            title: 'Perfiles / Roles',
+            data: 'nomPerfilRol',
             width: "25%",
         },
         {

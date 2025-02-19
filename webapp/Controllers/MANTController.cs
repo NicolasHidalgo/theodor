@@ -141,7 +141,7 @@ namespace webapp.Controllers
             viewModel.CodSuscriptor = user.SUSCRIPTOR;
             viewModel.CodUsuario = user.COD_USUARIO;
 
-            var dataUsuario = bl.fn_mant_sel_usuario("@USUARIO", user.SUSCRIPTOR, user.COD_USUARIO);
+            var dataUsuario = bl.fn_mant_sel_funcionarioUsuario("@USUARIO", user.SUSCRIPTOR, user.COD_USUARIO);
             viewModel.ddlUsuario = dataUsuario.Select(x => new ExtendedSelectListItem
             {
                 Value = x.IDE_USUARIO.ToString(),
