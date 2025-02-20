@@ -1070,7 +1070,7 @@ namespace DA
             return model;
         }
 
-        public List<COMISIONSERVICIO_BE> fn_mant_sel_comisionServicio(string accion, long codSuscriptor, string codUsuario)
+        public List<COMISIONSERVICIO_BE> fn_mant_sel_comisionServicio(string accion, long codSuscriptor, string codUsuario, int codProducto)
         {
             Mensaje = string.Empty;
             List<COMISIONSERVICIO_BE> lista = new List<COMISIONSERVICIO_BE>();
@@ -1082,6 +1082,7 @@ namespace DA
             cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
             cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+            cmd.Parameters.Add("@cod_producto", System.Data.SqlDbType.Int).Value = codProducto;
 
             try
             {

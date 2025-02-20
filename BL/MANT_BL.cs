@@ -107,9 +107,9 @@ namespace BL
         {
             return dat.fn_mant_pro_clasificacionInterna(accion, codSuscriptor, codUsuario, param);
         }
-        public List<COMISIONSERVICIO_BE> fn_mant_sel_comisionServicio(string accion, long codSuscriptor, string codUsuario)
+        public List<COMISIONSERVICIO_BE> fn_mant_sel_comisionServicio(string accion, long codSuscriptor, string codUsuario, int codProducto)
         {
-            return dat.fn_mant_sel_comisionServicio(accion, codSuscriptor, codUsuario);
+            return dat.fn_mant_sel_comisionServicio(accion, codSuscriptor, codUsuario, codProducto);
         }
         public List<PRODUCTO_BE> fn_mant_sel_comisionProducto(string accion, long codSuscriptor, string codUsuario)
         {

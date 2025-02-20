@@ -27,6 +27,10 @@
         background-color: #156082;
         color: white;
     }
+    table.table-hover tbody tr:hover {
+        background-color: #88ccff;
+        cursor: pointer;
+    }
 </style>
 
 <div class="modal" id="confirmBorrarModal" tabindex="-1" role="dialog">
@@ -152,13 +156,13 @@
                                 <div class="form-group">
 
                                     <div class="table-responsive">
-                                        <table class="table table-bordered">
+                                        <table id="tblProducto" class="table table-bordered table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>Cod. Oper.</th>
                                                     <th>Cod. Prod.</th>
                                                     <th>Producto</th>
-                                                    <th>Tipo Amortización</th>
+                                                    @*<th>Tipo Amortización</th>*@
                                                 </tr>
                                             </thead>
                                             <tbody id="tbodyMain1">
@@ -173,7 +177,7 @@
                                                         <td>@item.codOperacion</td>
                                                         <td>@item.codProducto</td>
                                                         <td>@item.producto</td>
-                                                        <td>@item.tipAmortizacion</td>
+                                                        @*<td>@item.tipAmortizacion</td>*@
                                                     </tr>
                                                 }
                                             </tbody>
@@ -188,13 +192,14 @@
                                 <div class="form-group">
 
                                     <div class="table-responsive">
+                                        <h6 id="lblProductoSeleccionado"></h6>
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th>Cód. Comisión</th>
+                                                    <th>Cód.</th>
                                                     <th>Comisión Servicio</th>
                                                     <th>Periodicidad</th>
-                                                    <th>Tipo Valor</th>
+                                                    <th>Tipo</th>
                                                     <th>Veces</th>
                                                     <th>Valor S/.</th>
                                                     <th>Valor USD</th>
@@ -202,41 +207,45 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tbodyMain2">
-                                                @{ var odd2 = 0; var estilo2 = string.Empty;}
-                                                @foreach (var item in Model.comisionServicio)
+                                                @*@{ var odd2 = 0; var estilo2 = string.Empty;}
+                                                @if (Model.comisionServicio != null)
                                                 {
-                                                    estilo2 = string.Empty;
-                                                    odd2 = odd2 + 1;
-                                                    if ((odd2 % 2) == 0) { estilo2 = "colorGray"; }
-
-                                                    var _valor1 = "";
-                                                    var _valor2 = "";
-                                                    if (item.tipValor.Equals("%"))
+                                                    foreach (var item in Model.comisionServicio)
                                                     {
-                                                        _valor1 = (item.valorMn1?.ToString("P2"));
-                                                        _valor2 = (item.valorMn2?.ToString("P2"));
-                                                    }
-                                                    else
-                                                    {
-                                                        _valor1 = (item.valorMn1?.ToString("#0.00"));
-                                                        _valor2 = (item.valorMn2?.ToString("#0.00"));
-                                                    }
+                                                        estilo2 = string.Empty;
+                                                        odd2 = odd2 + 1;
+                                                        if ((odd2 % 2) == 0) { estilo2 = "colorGray"; }
 
-                                                    <tr class="@estilo2">
-                                                        <td>@item.codComisionServicio</td>
-                                                        <td>@item.comisionServicio</td>
-                                                        <td>@item.periodicidad</td>
-                                                        <td>@item.tipValor</td>
-                                                        <td>@item.veces</td>
-                                                        <td>@_valor1</td>
-                                                        <td>@_valor2</td>
-                                                        <td width="15%">
-                                                            <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+                                                        var _valor1 = "";
+                                                        var _valor2 = "";
+                                                        if (item.tipValor.Equals("%"))
+                                                        {
+                                                            _valor1 = (item.valorMn1?.ToString("P2"));
+                                                            _valor2 = (item.valorMn2?.ToString("P2"));
+                                                        }
+                                                        else
+                                                        {
+                                                            _valor1 = (item.valorMn1?.ToString("#0.00"));
+                                                            _valor2 = (item.valorMn2?.ToString("#0.00"));
+                                                        }
+
+                                                        <tr class="@estilo2">
+                                                            <td>@item.codComisionServicio</td>
+                                                            <td>@item.comisionServicio</td>
+                                                            <td>@item.periodicidad</td>
+                                                            <td>@item.nomTipValor</td>
+                                                            <td>@item.veces</td>
+                                                            <td>@_valor1</td>
+                                                            <td>@_valor2</td>
+                                                            <td width="15%">
+                                                                <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
 Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
 Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
-                                                        </td>
-                                                    </tr>
-                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }*@
+
                                             </tbody>
 
                                         </table>
@@ -357,6 +366,14 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             return valor;
         }
 
+        $('#tblProducto tr').on('click', function () {
+            let fila = $(this).find('td'); 
+            gCodProducto = fila.eq(1).text();
+            $("#ddlProducto").val(gCodProducto).change();
+            $("#lblProductoSeleccionado").text("Producto: " + fila.eq(2).text());
+            fnCargarLista(gCodProducto);
+        });
+
         fSelEditar = function (data) {
             $('#editModal').modal('show');
             $("#ddlProducto").val(data.codProducto).change();
@@ -399,8 +416,8 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             fnGrabar();
         });
 
-        function fnCargarLista() {
-            $.getJSON('@Url.Action("JSON_ComisionServicio_Refresh")', function (data) {
+        function fnCargarLista(codProducto) {
+            $.getJSON('@Url.Action("JSON_ComisionServicio_Refresh")', { codProducto: codProducto }, function (data) {
                 $("#tbodyMain2").empty();
                 var odd = 0;
                 var estilo = "";
@@ -425,11 +442,18 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
                     cadena += "<td>" + item.codComisionServicio + "</td>";
                     cadena += "<td>" + item.comisionServicio + "</td>";
                     cadena += "<td>" + item.periodicidad + "</td>";
-                    cadena += "<td>" + item.tipValor + "</td>";
+                    cadena += "<td>" + item.nomTipValor + "</td>";
                     cadena += "<td>" + item.veces + "</td>";
                     cadena += "<td>" + _valor1 + "</td>";
                     cadena += "<td>" + _valor2 + "</td>";
-                    cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
+
+                    cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
+                    cadena += '<ul class="dropdown-menu dropdown-menu-right">';
+                    cadena += "<li><a onclick='fSelEditar(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
+                    cadena += "<li><a onclick='fSelEliminar(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
+                    cadena += '</ul></li></ul></td>';
+
+                    //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
                     cadena += "</tr>";
                 });
                 $("#tbodyMain2").append(cadena);
@@ -472,7 +496,8 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             $.post(_url, _reply).done(function (data) {
                 if (data.Status === 200) {
                     toastr.success(data.Message);
-                    fnCargarLista();
+                    $("#lblProductoSeleccionado").text("Producto: " + gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val());
+                    fnCargarLista(gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val());
                     //PlantillaDataTable.draw();
                 }
                 else {

@@ -53,11 +53,11 @@
 </div>
 <!-- /modal de confirmacion -->
 
-<div id="UsuarioModal" class="modal fade" role="dialog" aria-labelledby="UsuarioModalLabel" aria-hidden="true">
+<div id="editModal" class="modal fade" role="dialog" aria-labelledby="titulo" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="UsuarioModalLabel"></h5>
+                <h5 class="modal-title" id="titulo">Nuevo Registro</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -103,15 +103,17 @@
     <!-- Page header -->
     <div class="page-header">
         <div class="page-header-content">
+
         </div>
         <div class="breadcrumb-line breadcrumb-line-component">
             <ul class="breadcrumb">
-                <li><a href="@Url.Action("Index","Home")"><i class="icon-home2 position-left"></i> Usuarios</a></li>
+                <li><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i>&nbsp;<a class="botonera classNuevo">Nuevo</a></li>
+                @*<li><a href="@Url.Action("Index","Home")"><i class="icon-home2 position-left"></i> Usuarios</a></li>*@
             </ul>
             <ul class="breadcrumb-elements">
                 <li><a id="btnRefrescar"><i class="icon-database-refresh"></i> Refrescar</a></li>
                 <li><a data-toggle="modal" data-target="#BuscarModal"><i class="icon-search4 position-left"></i> Buscar</a></li>
-                @*<li><a data-toggle="modal" data-target="#UsuarioModal" data-operacion="INSERT"><i class="icon-plus3"></i> Agregar</a></li>*@
+                @*<li><a data-toggle="modal" data-target="#editModal" data-operacion="INSERT"><i class="icon-plus3"></i> Agregar</a></li>*@
             </ul>
         </div>
     </div>
@@ -120,6 +122,8 @@
     <div class="content">
         <!-- Page length options -->
         <div class="panel panel-flat">
+            
+
             <label id="CodUsuario" class="hidden">@Model.CodUsuario</label>
             <label id="CodSuscriptor" class="hidden">@Model.CodSuscriptor</label>
             <table id="UsuarioDatatable" class="table table-responsive table-bordered table-striped"></table>
@@ -187,7 +191,7 @@ $(function () {
                     ACCION: 'SELECT',
                     COD_USUARIO: $("#CodUsuario").text(),
                     codSuscriptor: $("#CodSuscriptor").text(),
-                    //SEARCH: $('#txtFiltro').val(),
+                    SEARCH: $('#txtFiltro').val(),
                 };
 
                 var _order = $.map(data.order, function (item) {
@@ -206,15 +210,15 @@ $(function () {
             }
         },
         columns: [
-        {
-            title: '#',
-            data: 'IDE_USUARIO',
-            width: "5%",
-        },
+        //{
+        //    title: '#',
+        //    data: 'IDE_USUARIO',
+        //    width: "5%",
+        //},
         {
             title: 'Usuario',
             data: 'COD_USUARIO',
-            width: "25%",
+            width: "15%",
         },
         {
             title: 'Nombre',
@@ -224,39 +228,39 @@ $(function () {
         {
             title: 'Correo',
             data: 'CORREO_ELECTRONICO',
-            width: "25%",
+            width: "15%",
         },
         {
             title: 'Dias Exp.',
             data: 'diaExpiracionClave',
-            width: "25%",
+            width: "5%",
         },
-        {
-            title: 'Fecha Vencimiento Clave',
-            data: 'fecProximoExpiracion',
-            width: "25%",
-            render: function (data, type, full, meta) {
-                if (data == null) {
-                    return "";
-                }
-                return moment(data).format("DD-MM-YYYY");
-            },
-        },
-        {
-            title: 'Fec. Creación',
-            data: 'FEC_CREACION',
-            width: "25%",
-            render: function (data, type, full, meta) {
-                if (data == null) {
-                    return "";
-                }
-                return moment(data).format("DD-MM-YYYY");
-            },
-        },
+        //{
+        //    title: 'Fecha Vencimiento Clave',
+        //    data: 'fecProximoExpiracion',
+        //    width: "25%",
+        //    render: function (data, type, full, meta) {
+        //        if (data == null) {
+        //            return "";
+        //        }
+        //        return moment(data).format("DD-MM-YYYY");
+        //    },
+        //},
+        //{
+        //    title: 'Fec. Creación',
+        //    data: 'FEC_CREACION',
+        //    width: "25%",
+        //    render: function (data, type, full, meta) {
+        //        if (data == null) {
+        //            return "";
+        //        }
+        //        return moment(data).format("DD-MM-YYYY");
+        //    },
+        //},
         {
             title: 'Fec. Actualización',
             data: 'fecActualizacion',
-            width: "25%",
+            width: "15%",
             render: function (data, type, full, meta) {
                 if (data == null) {
                     return "";
@@ -266,8 +270,8 @@ $(function () {
         },
         {
             title: 'Estado',
-            data: 'estUsuario',
-            width: "25%",
+            data: 'estado',
+            width: "10%",
         },
         {
             title: 'Perfiles / Roles',
@@ -283,7 +287,7 @@ $(function () {
 
                 var dropdown = '<ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
                 dropdown += '<ul class="dropdown-menu dropdown-menu-right">'
-                dropdown += '<li><a data-toggle="modal" data-target="#UsuarioModal" data-row='+ meta.row +' data-operacion="UPDATE"><i class="icon-pencil4"></i> Editar</a></li>';
+                dropdown += '<li><a data-toggle="modal" data-target="#editModal" data-row='+ meta.row +' data-operacion="UPDATE"><i class="icon-pencil4"></i> Editar</a></li>';
                 //dropdown += '<li><a data-toggle="modal" data-target="#ConfirmarModal" data-row=' + meta.row +' data-operacion="DELETE"><i class="icon-bin"></i> Eliminar</a></li>';
                 dropdown += '</ul></li></ul>';
                 return dropdown;
@@ -294,6 +298,17 @@ $(function () {
 
     });
 
+    var gAccion = "";
+
+    $("#btnNuevo,.classNuevo").on("click", function () {
+        $("#titulo").text('Nuevo Registro');
+        gAccion = "INSERT";
+        //$('#txtCodAgencia').prop('disabled', false);
+        //$("#txtCodAgencia, #txtNomAgencia").val('');
+        //$("#ddlDepartamento").val('').change();
+        //$("#ddlProvincia,#ddlDistrito").empty();
+        $('#editModal').modal('show');
+    });
 
     $('#btnRefrescar').on('click', function () {
         $("#txtFiltro").val('');
@@ -346,7 +361,7 @@ $(function () {
 
             $.post(_url, _reply).done(function (data) {
                 if (data.Status === 200) {
-                    $('#UsuarioModal').modal('toggle');
+                    $('#editModal').modal('toggle');
                     toastr.success(data.Message);
                     UsuarioDatatable.draw();
                 }
@@ -376,7 +391,7 @@ $(function () {
         return _reply;
     }
 
-    $('#UsuarioModal,#ConfirmarModal').on('show.bs.modal', function (event) {
+    $('#editModal,#ConfirmarModal').on('show.bs.modal', function (event) {
         var modal = $(this);
         var button = $(event.relatedTarget) // Button that triggered the modal
         var operacion = button.data('operacion');
@@ -394,7 +409,7 @@ $(function () {
             titulo = "Confirmar";
         }
 
-        modal.find('.modal-title').text(titulo)
+        //modal.find('.modal-title').text(titulo)
 
         if (operacion == 'UPDATE') {
             $('#txtId').val(data.IDE_USUARIO);

@@ -378,9 +378,15 @@
                     title: '&nbsp;',
                     className: 'dt-center',
                     render: function (data, type, full, meta) {
-                        let str = "<a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(full) + ")'>Editar</a>&nbsp;"
-                            + "<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(full.cod_agencia) + ")'>Eliminar</a> ";
-                        return str;
+                        var dropdown = '<ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
+                        dropdown += '<ul class="dropdown-menu dropdown-menu-right">';
+                        dropdown += "<li><a onclick='fSelEditar(" + JSON.stringify(full) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
+                        dropdown += "<li><a onclick='fSelEliminar(" + JSON.stringify(full) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
+                        dropdown += '</ul></li></ul>';
+                        return dropdown;
+                        //let str = "<a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(full) + ")'>Editar</a>&nbsp;"
+                        //    + "<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(full.cod_agencia) + ")'>Eliminar</a> ";
+                        //return str;
                     },
                     responsivePriority: 0
                 },

@@ -136,16 +136,33 @@
                                                         odd = odd + 1;
                                                         if ((odd % 2) == 0) { estilo = "colorGray"; }
 
-                                                        <tr class="@estilo">
-                                                            <td>@item.codClasificacionInterna</td>
-                                                            <td>@item.clasificacionInterna</td>
-                                                            <td>@item.operaciones</td>
-                                                            <td>
-                                                                <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
-Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
-Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
-                                                            </td>
-                                                        </tr>
+                                            <tr class="@estilo">
+                                                <td>@item.codClasificacionInterna</td>
+                                                <td>@item.clasificacionInterna</td>
+                                                <td>@item.operaciones</td>
+                                                <td>
+                                                    <ul class="icons-list">
+                                                        <li class="dropdown">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>
+                                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                                <li>
+                                                                    <a onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'><i class='icon-pencil4'></i> Editar</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                @*<td>
+                                                                        <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+        Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+        Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
+                                                                    </td>*@
+                                            </tr>
                                                     }
                                                 }
                                             </tbody>
@@ -231,7 +248,14 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
                         cadena += "<td>" + item.codClasificacionInterna + "</td>";
                         cadena += "<td>" + item.clasificacionInterna + "</td>";
                         cadena += "<td>" + item.operaciones + "</td>";
-                        cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
+
+                        cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
+                        cadena += '<ul class="dropdown-menu dropdown-menu-right">';
+                        cadena += "<li><a onclick='fSelEditar(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
+                        cadena += "<li><a onclick='fSelEliminar(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
+                        cadena += '</ul></li></ul></td>';
+
+                        //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
                         cadena += "</tr>";
                     }
                 });

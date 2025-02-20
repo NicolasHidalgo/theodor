@@ -70,6 +70,7 @@ namespace webapp.Controllers.api
                     FEC_CREACION = x.FEC_CREACION,
                     fecActualizacion = x.fecActualizacion,
                     estUsuario = x.estUsuario,
+                    estado = x.estado,
                     codPerfilRol = x.codPerfilRol,
                     nomPerfilRol = x.nomPerfilRol,
                 });

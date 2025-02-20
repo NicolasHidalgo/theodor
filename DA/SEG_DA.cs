@@ -925,6 +925,7 @@ namespace DA
                         bean.FEC_CREACION = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("FEC_CREACION"));
                         bean.fecActualizacion = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("fec_actualizacion"));
                         bean.estUsuario = DataReader.SafeGetInt32(dr, dr.GetOrdinal("est_usuario"));
+                        bean.estado = DataReader.SafeGetString(dr, dr.GetOrdinal("estado"));
                         bean.codPerfilRol = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_perfil_rol"));
                         bean.nomPerfilRol = DataReader.SafeGetString(dr, dr.GetOrdinal("nom_perfil_rol"));
                         lista.Add(bean);

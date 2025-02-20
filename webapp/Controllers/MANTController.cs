@@ -571,8 +571,8 @@ namespace webapp.Controllers
             var dataProducto = bl.fn_mant_sel_comisionProducto("SELECT_PRODUCTO", user.SUSCRIPTOR, user.COD_USUARIO);
             viewModel.producto = dataProducto;
 
-            var dataComision = bl.fn_mant_sel_comisionServicio("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
-            viewModel.comisionServicio = dataComision;
+            //var dataComision = bl.fn_mant_sel_comisionServicio("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            //viewModel.comisionServicio = dataComision;
 
             var ddlProducto = bl.fn_mant_sel_comisionDDL("@PRODUCTO", user.SUSCRIPTOR, user.COD_USUARIO);
             viewModel.ddlProducto = ddlProducto.Select(x => new ExtendedSelectListItem
@@ -606,10 +606,10 @@ namespace webapp.Controllers
             return View(viewModel);
         }
 
-        public JsonResult JSON_ComisionServicio_Refresh()
+        public JsonResult JSON_ComisionServicio_Refresh(int codProducto)
         {
             var user = (SEG_USUARIO_BE)Session["Usuario"];
-            var data = bl.fn_mant_sel_comisionServicio("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            var data = bl.fn_mant_sel_comisionServicio("SELECT", user.SUSCRIPTOR, user.COD_USUARIO, codProducto);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
