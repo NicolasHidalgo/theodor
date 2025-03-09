@@ -15,6 +15,9 @@ namespace BEANS
         public int codProductoBase { get; set; }
         public string productoBase { get; set; }
         public decimal? probabilidadDefault { get; set; }
+        public decimal? tasaRecuperacion { get; set; }
+        public decimal? LGD { get; set; }
+        public decimal? perdidaEsperada { get; set; }
 
     }
 }

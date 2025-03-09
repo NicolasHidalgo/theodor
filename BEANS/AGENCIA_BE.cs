@@ -26,4 +26,12 @@ namespace BEANS
         public string personeria { get; set; }
 
     }
+    public class TIPO_CLIENTE_BE
+    {
+        public long codSuscriptor { get; set; }
+        public string codUsuario { get; set; }
+        public string codTipCliente { get; set; }
+        public string tipCliente { get; set; }
+
+    }
 }

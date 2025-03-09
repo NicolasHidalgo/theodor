@@ -347,6 +347,7 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
             $("#txtNomProducto").val(data.producto).change();
             $("#ddlProductoBase").val(data.strCodProductoBase).change();
 
+            $("#ddlTipCliente option").prop("selected", false);
             let valores = data.codTipClientes.split(",");
             $.each(valores, function (index, item) {
                 $("#ddlTipCliente option[value='" + item + "']").prop('selected', true);
@@ -460,6 +461,11 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
                 });
             }
 
+            isAplica = false;
+            if ($('#chkAplicaPricing').prop('checked')) {
+                isAplica = true;
+            }
+
             var _obj = {
                 codProducto: gAccion == "DELETE" ? gCod : $("#txtCodProducto").val(),
                 producto: $("#txtNomProducto").val(),
@@ -470,7 +476,7 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
                 tea: getPorcentaje($("#txtTea").val()),
                 factorUsoLinea: getPorcentaje($("#txtFactorUso").val()),
                 factorConversionIndirectos: getPorcentaje($("#txtFactorConversion").val()),
-                aplicaPricing: $('#chkAplicaPricing').prop('checked'),
+                aplicaPricing: isAplica,
             };
 
             var _reply = {

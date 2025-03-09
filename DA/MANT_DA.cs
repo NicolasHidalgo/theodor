@@ -175,8 +175,8 @@ namespace DA
                         bean.nom_usuario = DataReader.SafeGetString(dr, dr.GetOrdinal("nom_usuario"));
                         bean.cod_agencia = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_agencia"));
                         bean.nom_agencia = DataReader.SafeGetString(dr, dr.GetOrdinal("nom_agencia"));
-                        bean.cod_personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_personeria"));
-                        bean.personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("personeria"));
+                        bean.cod_tip_cliente = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
+                        bean.tip_cliente = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_cliente"));
                         
                         lista.Add(bean);
                     }
@@ -277,10 +277,10 @@ namespace DA
             }
             return lista;
         }
-        public List<BANCA_BE> fn_mant_sel_banca(string accion, long cod_suscriptor, string cod_usuario)
+        public List<TIPO_CLIENTE_BE> fn_mant_sel_banca(string accion, long cod_suscriptor, string cod_usuario)
         {
             Mensaje = string.Empty;
-            List<BANCA_BE> lista = new List<BANCA_BE>();
+            List<TIPO_CLIENTE_BE> lista = new List<TIPO_CLIENTE_BE>();
             SqlConnection con = cn.getConexion();
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
@@ -296,12 +296,12 @@ namespace DA
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.HasRows == true)
                 {
-                    BANCA_BE bean = null;
+                    TIPO_CLIENTE_BE bean = null;
                     while (dr.Read())
                     {
-                        bean = new BANCA_BE();
-                        bean.cod_personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_personeria"));
-                        bean.personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("personeria"));
+                        bean = new TIPO_CLIENTE_BE();
+                        bean.codTipCliente = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
+                        bean.tipCliente = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_cliente"));
                         lista.Add(bean);
                     }
                 }
@@ -334,7 +334,7 @@ namespace DA
             cmd.Parameters.Add("@nom_funcionario", System.Data.SqlDbType.VarChar, 50).Value = param.nom_funcionario;
             cmd.Parameters.Add("@ide_usuario_funcionario", System.Data.SqlDbType.BigInt).Value = param.ide_usuario_funcionario;
             cmd.Parameters.Add("@cod_agencia", System.Data.SqlDbType.VarChar, 100).Value = param.cod_agencia;
-            cmd.Parameters.Add("@cod_personeria", System.Data.SqlDbType.VarChar, 5).Value = param.cod_personeria;
+            cmd.Parameters.Add("@cod_tip_cliente", System.Data.SqlDbType.VarChar, 5).Value = param.cod_tip_cliente;
 
             try
             {
@@ -829,6 +829,9 @@ namespace DA
                         bean.codProductoBase = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto_base"));
                         bean.productoBase = DataReader.SafeGetString(dr, dr.GetOrdinal("producto_base"));
                         bean.probabilidadDefault = DataReader.GetValueOrNull<decimal>(dr, dr.GetOrdinal("probabilidadDefault"));
+                        bean.tasaRecuperacion = DataReader.GetValueOrNull<decimal>(dr, dr.GetOrdinal("Tasa_Recuperacion"));
+                        bean.LGD = DataReader.GetValueOrNull<decimal>(dr, dr.GetOrdinal("LGD"));
+                        bean.perdidaEsperada = DataReader.GetValueOrNull<decimal>(dr, dr.GetOrdinal("Perdida_Esperada"));
 
                         lista.Add(bean);
                     }
@@ -920,6 +923,7 @@ namespace DA
             cmd.Parameters.Add("@cod_clasificacion_interna", System.Data.SqlDbType.VarChar, 5).Value = param.codClasificacionInterna;
             cmd.Parameters.Add("@cod_producto_base", System.Data.SqlDbType.Int).Value = param.codProductoBase;
             cmd.Parameters.Add("@probabilidadDefault", System.Data.SqlDbType.Float).Value = param.probabilidadDefault;
+            cmd.Parameters.Add("@tasa_recuperacion", System.Data.SqlDbType.Float).Value = param.tasaRecuperacion;
 
             try
             {

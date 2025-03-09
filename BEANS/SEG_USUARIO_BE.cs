@@ -39,6 +39,13 @@ namespace BEANS
         public string nomPerfilRol { get; set; }
         public int estUsuario { get; set; }
         public string estado { get; set; }
+        public int resetPassword { get; set; }
+    }
+
+    public class PERFIL_ROL_BE
+    {
+        public string codRolPerfil { get; set; }
+        public string nomRolPefil { get; set; }
     }
 
     public class SEG_USUARIO_PERFIL_BE 

@@ -35,7 +35,7 @@ namespace BL
         {
             return dat.fn_mant_sel_funAgencia(accion, codSuscriptor, codUsuario);
         }
-        public List<BANCA_BE> fn_mant_sel_banca(string accion, long codSuscriptor, string codUsuario)
+        public List<TIPO_CLIENTE_BE> fn_mant_sel_banca(string accion, long codSuscriptor, string codUsuario)
         {
             return dat.fn_mant_sel_banca(accion, codSuscriptor, codUsuario);
         }
@@ -123,6 +123,7 @@ namespace BL
         {
             return dat.fn_mant_pro_comisionServicio(accion, codSuscriptor, codUsuario, param);
         }
+
 
     }
 }

@@ -15,8 +15,8 @@ namespace BEANS
         public string nom_usuario { get; set; }
         public string cod_agencia { get; set; }
         public string nom_agencia { get; set; }
-        public string cod_personeria { get; set; }
-        public string personeria { get; set; }
+        public string cod_tip_cliente { get; set; }
+        public string tip_cliente { get; set; }
         public long ide_usuario_funcionario { get; set; }
         public long ide_usuario { get; set; }
     }

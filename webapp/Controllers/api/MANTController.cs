@@ -146,8 +146,8 @@ namespace webapp.Controllers.api
                     nom_usuario = x.nom_usuario,
                     cod_agencia = x.cod_agencia,
                     nom_agencia = x.nom_agencia,
-                    cod_personeria = x.cod_personeria,
-                    personeria = x.personeria,
+                    cod_tip_cliente = x.cod_tip_cliente,
+                    tip_cliente = x.tip_cliente,
                 });
 
             var dataTable = new DataTable<FUNCIONARIO_BE>()
@@ -289,6 +289,9 @@ namespace webapp.Controllers.api
                     codProductoBase = x.codProductoBase,
                     productoBase = x.productoBase,
                     probabilidadDefault = x.probabilidadDefault,
+                    tasaRecuperacion = x.tasaRecuperacion,
+                    LGD = x.LGD,
+                    perdidaEsperada = x.perdidaEsperada
                 });
 
             var dataTable = new DataTable<PROBABILIDAD_DEFAULT_BE>()

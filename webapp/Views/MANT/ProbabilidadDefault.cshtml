@@ -59,14 +59,31 @@
                     </div>
                     <div class="form-group">
                         <label>Producto Base</label>
-                        @Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })
+                        @Html.DropDownList("ddlProductoBase", Model.ddlProducto, new { @class = "select" })
                     </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" id="txtProbabilidad" name="txtProbabilidad" value="0" class="form-control" style="text-align: right;">
-                            <span class="input-group-addon">%</span>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Probabilidad</label>
+                                <div class="input-group">
+                                    <input type="text" id="txtProbabilidad" name="txtProbabilidad" value="0" class="form-control" style="text-align: right;">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Tasa Recuperación</label>
+                                <div class="input-group">
+                                    <input type="text" id="txtTasaRecuperacion" name="txtTasaRecuperacion" value="0" class="form-control" style="text-align: right;">
+                                    <span class="input-group-addon">%</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+
                 </div>
 
             </div>
@@ -152,7 +169,7 @@
             return tasa * 100.0;
         }
 
-        $("#txtProbabilidad").inputmask({
+        $("#txtProbabilidad,#txtTasaRecuperacion").inputmask({
             alias: "decimal",
             radixPoint: ".",
             digits: "6",
@@ -170,8 +187,9 @@
         fSelEditar = function (data) {
             $('#editModal').modal('show');
             $("#txtProbabilidad").val(getPorcentajeNum(data.probabilidadDefault));
+            $("#txtTasaRecuperacion").val(getPorcentajeNum(data.tasaRecuperacion));
  
-            $('#ddlTipCliente,#ddlClasificacionInterna,#ddlProducto').prop('disabled', true);
+            $('#ddlTipCliente,#ddlClasificacionInterna,#ddlProductoBase').prop('disabled', true);
             $("#titulo").text('Editar Registro');
             gAccion = "UPDATE";
         }
@@ -186,8 +204,9 @@
         $("#btnNuevo,.classNuevo").on("click", function () {
             $("#titulo").text('Nuevo Registro');
             gAccion = "INSERT";
-            $('#ddlTipCliente,#ddlClasificacionInterna,#ddlProducto').prop('disabled', false);
+            $('#ddlTipCliente,#ddlClasificacionInterna,#ddlProductoBase').prop('disabled', false);
             $("#txtProbabilidad").val('');
+            $("#txtTasaRecuperacion").val('');
             //$("#ddlDepartamento").val('').change();
             $('#editModal').modal('show');
         });
@@ -207,6 +226,7 @@
                 codClasificacionInterna: gAccion == "DELETE" ? gCodClasificacion : $("#ddlClasificacionInterna option:selected").val(),
                 codProductoBase: gAccion == "DELETE" ? gCodProducto : $("#ddlProductoBase option:selected").val(),
                 probabilidadDefault: getPorcentaje($("#txtProbabilidad").val()),
+                tasaRecuperacion: getPorcentaje($("#txtTasaRecuperacion").val()),
             };
 
             var _reply = {
@@ -311,6 +331,36 @@
                     className: 'dt-left',
                     render: function (data, type, full, meta) {
                         let str = numeral(full.probabilidadDefault).format('0.00%');
+                        return str;
+                    },
+                },
+                {
+                    title: 'Tasa Recuperación',
+                    data: 'tasaRecuperacion',
+                    name: 'tasaRecuperacion',
+                    className: 'dt-left',
+                    render: function (data, type, full, meta) {
+                        let str = numeral(full.tasaRecuperacion).format('0.00%');
+                        return str;
+                    },
+                },
+                {
+                    title: 'LGD',
+                    data: 'LGD',
+                    name: 'LGD',
+                    className: 'dt-left',
+                    render: function (data, type, full, meta) {
+                        let str = numeral(full.LGD).format('0.00%');
+                        return str;
+                    },
+                },
+                {
+                    title: 'Perdida Esperada',
+                    data: 'perdidaEsperada',
+                    name: 'perdidaEsperada',
+                    className: 'dt-left',
+                    render: function (data, type, full, meta) {
+                        let str = numeral(full.perdidaEsperada).format('0.00%');
                         return str;
                     },
                 },

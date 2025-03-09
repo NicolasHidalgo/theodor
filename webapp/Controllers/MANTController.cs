@@ -158,8 +158,8 @@ namespace webapp.Controllers
             var dataBanca = bl.fn_mant_sel_banca("@BANCA", user.SUSCRIPTOR, user.COD_USUARIO);
             viewModel.ddlBanca = dataBanca.Select(x => new ExtendedSelectListItem
             {
-                Value = x.cod_personeria,
-                Text = x.personeria,
+                Value = x.codTipCliente,
+                Text = x.tipCliente,
                 Selected = false, //x.selected,
             });
 

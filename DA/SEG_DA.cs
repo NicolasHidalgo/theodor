@@ -903,8 +903,8 @@ namespace DA
             cmd.CommandText = "[up_seg_cud_usuario]";
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 32).Value = accion;
-            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.VarChar, 32).Value = codSuscriptor;
-            cmd.Parameters.Add("@cod_usuario_login", System.Data.SqlDbType.VarChar, 32).Value = codUsuario;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario_login", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
 
             try
             {
@@ -943,5 +943,94 @@ namespace DA
             }
             return lista;
         }
+
+        public GEN_REPLY_BE fn_seg_pro_usuario(string accion, long codSuscriptor, string codUsuario, int codAplicacion ,SEG_USUARIO_BE param)
+        {
+            Mensaje = string.Empty;
+            GEN_REPLY_BE model = new GEN_REPLY_BE();
+            //var user = (SEG_USUARIO_BE)model.DATA;
+
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_seg_cud_usuario]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 32).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario_login", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+
+            cmd.Parameters.Add("@cod_aplicacion", System.Data.SqlDbType.Int).Value = codAplicacion;
+            cmd.Parameters.Add("@ide_usuario", System.Data.SqlDbType.Int).Value = param.IDE_USUARIO;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = param.COD_USUARIO;
+            cmd.Parameters.Add("@nom_usuario", System.Data.SqlDbType.VarChar, 50).Value = param.NOM_MENU;
+            cmd.Parameters.Add("@est_usuario", System.Data.SqlDbType.Int).Value = param.estUsuario;
+            cmd.Parameters.Add("@correo", System.Data.SqlDbType.VarChar, 50).Value = param.CORREO_ELECTRONICO;
+            cmd.Parameters.Add("@dia_expiracion_clave", System.Data.SqlDbType.Int).Value = param.diaExpiracionClave;
+            cmd.Parameters.Add("@cod_perfil_rol", System.Data.SqlDbType.VarChar, 512).Value = param.codPerfilRol;
+            cmd.Parameters.Add("@reset_password", System.Data.SqlDbType.Int).Value = param.resetPassword;
+
+            try
+            {
+                con.InfoMessage += new SqlInfoMessageEventHandler(InfoMessageHandler);
+                con.FireInfoMessageEventOnUserErrors = true;
+                con.Open();
+                var iFilasAfectadas = cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                model.MENSAJE += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                model.MENSAJE += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+
+            return model;
+        }
+
+        public List<PERFIL_ROL_BE> fn_seg_sel_perfilRol(string accion, long codSuscriptor, string codUsuario)
+        {
+            List<PERFIL_ROL_BE> lista = new List<PERFIL_ROL_BE>();
+            String mensaje = "";
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_seg_cud_usuario]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 32).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario_login", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    PERFIL_ROL_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new PERFIL_ROL_BE();
+                        bean.codRolPerfil = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_rol_perfil"));
+                        bean.nomRolPefil = DataReader.SafeGetString(dr, dr.GetOrdinal("nom_rol_perfil"));
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                mensaje = ex.Message;
+            }
+            finally
+            {
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
+
     }
 }

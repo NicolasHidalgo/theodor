@@ -23,37 +23,54 @@ namespace webapp.Controllers
             var user = (SEG_USUARIO_BE)Session["Usuario"];
             viewModel.CodSuscriptor = user.SUSCRIPTOR;
             viewModel.CodUsuario = user.COD_USUARIO;
+
+            var dataPerfilRol = bl.fn_seg_sel_perfilRol("@PERFIL_ROL", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlPerfil = dataPerfilRol.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.codRolPerfil,
+                Text = x.nomRolPefil,
+                Selected = false,
+            });
+
             return View(viewModel);
         }
-        
+
         [HttpPost]
-        public ActionResult Edit_Usuario(GEN_REPLY_BE model)
+        public ActionResult EditUsuario(GEN_REPLY_BE model)
         {
             if (ModelState.IsValid)
             {
-                var _obj = (string[])model.DATA;
-                var _user = JsonConvert.DeserializeObject<SEG_USUARIO_BE>(_obj[0]);
-                model.DATA = _user;
+                var _dat = (string[])model.DATA;
+                var _obj = JsonConvert.DeserializeObject<SEG_USUARIO_BE>(_dat[0]);
+                var user = (SEG_USUARIO_BE)Session["Usuario"];
+                //var viewModel = new AuxiliarEdit();
+                var ideUsuario = long.Parse(user.IDE_USUARIO.ToString());
+                var codSuscriptor = user.SUSCRIPTOR;
+                model.DATA = _obj;
 
-                var reply = bl.fn_seg_upd_usuario(model);
+                var reply = new GEN_REPLY_BE();
+                reply = bl.fn_seg_pro_usuario(model.ACCION, codSuscriptor, user.COD_USUARIO, int.Parse(user.COD_APLICACION), _obj);
+
                 var res = new Response();
                 res.Message = reply.MENSAJE;
 
                 res.Status = HttpStatusCode.BadRequest;
 
-                if (reply.MENSAJE.Contains("SUCCESS"))
+                if (reply.MENSAJE.Equals(string.Empty) || reply.MENSAJE.Contains(Constantes.SUCCESS))
                     res.Status = HttpStatusCode.OK;
+
+                //res.Data = viewModel;
 
                 return Json(res);
             }
 
             return Json(
-                     new Response
-                     {
-                         Status = HttpStatusCode.BadRequest,
-                         Message = "No se puede continuar por errores en el modelo",
-                         Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
-                     });
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Message = "No se puede continuar por errores en el modelo",
+                            Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        }); ;
         }
         
 
@@ -153,5 +170,7 @@ namespace webapp.Controllers
                          Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
                      });
         }
+
+
     }
 }

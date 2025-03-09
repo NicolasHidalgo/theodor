@@ -102,5 +102,13 @@ namespace BL
         {
             return dat.fn_seg_sel_usuario(accion, codSuscriptor, codUsuario);
         }
+        public GEN_REPLY_BE fn_seg_pro_usuario(string accion, long codSuscriptor, string codUsuario, int codAplicacion, SEG_USUARIO_BE model)
+        {
+            return dat.fn_seg_pro_usuario(accion, codSuscriptor, codUsuario, codAplicacion, model);
+        }
+        public List<PERFIL_ROL_BE> fn_seg_sel_perfilRol(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_seg_sel_perfilRol(accion, codSuscriptor, codUsuario);
+        }
     }
 }

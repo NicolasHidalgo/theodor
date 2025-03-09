@@ -171,7 +171,7 @@ namespace webapp.Controllers
             if (Session["dataInfo"] == null)
             {
                 dataInfo = bl.fn_ren_sel_info("INFO1", user.SUSCRIPTOR);
-                Session["dataInfo"] = dataInfo;
+                //Session["dataInfo"] = dataInfo;
             }
             else
             {
