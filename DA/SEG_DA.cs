@@ -962,7 +962,7 @@ namespace DA
             cmd.Parameters.Add("@cod_aplicacion", System.Data.SqlDbType.Int).Value = codAplicacion;
             cmd.Parameters.Add("@ide_usuario", System.Data.SqlDbType.Int).Value = param.IDE_USUARIO;
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = param.COD_USUARIO;
-            cmd.Parameters.Add("@nom_usuario", System.Data.SqlDbType.VarChar, 50).Value = param.NOM_MENU;
+            cmd.Parameters.Add("@nom_usuario", System.Data.SqlDbType.VarChar, 50).Value = param.NOM_USUARIO;
             cmd.Parameters.Add("@est_usuario", System.Data.SqlDbType.Int).Value = param.estUsuario;
             cmd.Parameters.Add("@correo", System.Data.SqlDbType.VarChar, 50).Value = param.CORREO_ELECTRONICO;
             cmd.Parameters.Add("@dia_expiracion_clave", System.Data.SqlDbType.Int).Value = param.diaExpiracionClave;
