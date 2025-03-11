@@ -21,4 +21,11 @@ namespace BEANS
         public double? valorMn2 { get; set; }
 
     }
+
+    public class COMISION_BE
+    {
+        public int codComisionServicio { get; set; }
+        public string comisionServicio { get; set; }
+
+    }
 }

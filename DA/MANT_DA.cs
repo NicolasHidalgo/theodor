@@ -1074,7 +1074,7 @@ namespace DA
             return model;
         }
 
-        public List<COMISIONSERVICIO_BE> fn_mant_sel_comisionServicio(string accion, long codSuscriptor, string codUsuario, int codProducto)
+        public List<COMISIONSERVICIO_BE> fn_mant_sel_comisionServicio(string accion, long codSuscriptor, string codUsuario, int codProducto, int codComision)
         {
             Mensaje = string.Empty;
             List<COMISIONSERVICIO_BE> lista = new List<COMISIONSERVICIO_BE>();
@@ -1083,10 +1083,11 @@ namespace DA
             cmd.Connection = con;
             cmd.CommandText = "[up_ren_cud_comisionServicio]";
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 50).Value = accion;
             cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
             cmd.Parameters.Add("@cod_producto", System.Data.SqlDbType.Int).Value = codProducto;
+            cmd.Parameters.Add("@cod_comision_servicio", System.Data.SqlDbType.Int).Value = codComision;
 
             try
             {
@@ -1252,6 +1253,7 @@ namespace DA
             cmd.Parameters.Add("@veces", System.Data.SqlDbType.Float).Value = param.veces;
             cmd.Parameters.Add("@valor_MN1", System.Data.SqlDbType.Float).Value = param.valorMn1;
             cmd.Parameters.Add("@valor_MN2", System.Data.SqlDbType.Float).Value = param.valorMn2;
+            cmd.Parameters.Add("@comision_servicio", System.Data.SqlDbType.VarChar, 100).Value = param.comisionServicio;
 
             try
             {
@@ -1272,6 +1274,49 @@ namespace DA
                     con.Close();
             }
             return model;
+        }
+
+        public List<COMISION_BE> fn_mant_sel_comision(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<COMISION_BE> lista = new List<COMISION_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_comisionServicio]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    COMISION_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new COMISION_BE();
+                        bean.codComisionServicio = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_comision_servicio"));
+                        bean.comisionServicio = DataReader.SafeGetString(dr, dr.GetOrdinal("comision_servicio"));
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
         }
 
     }

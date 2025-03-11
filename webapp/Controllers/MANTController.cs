@@ -571,6 +571,9 @@ namespace webapp.Controllers
             var dataProducto = bl.fn_mant_sel_comisionProducto("SELECT_PRODUCTO", user.SUSCRIPTOR, user.COD_USUARIO);
             viewModel.producto = dataProducto;
 
+            var dataComision = bl.fn_mant_sel_comision("SELECT_COMISION", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.comision = dataComision;
+
             //var dataComision = bl.fn_mant_sel_comisionServicio("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
             //viewModel.comisionServicio = dataComision;
 
@@ -606,13 +609,24 @@ namespace webapp.Controllers
             return View(viewModel);
         }
 
+        public JsonResult JSON_Comision_Refresh()
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var data = bl.fn_mant_sel_comision("SELECT_COMISION", user.SUSCRIPTOR, user.COD_USUARIO);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult JSON_ComisionServicio_Refresh(int codProducto)
         {
             var user = (SEG_USUARIO_BE)Session["Usuario"];
-            var data = bl.fn_mant_sel_comisionServicio("SELECT", user.SUSCRIPTOR, user.COD_USUARIO, codProducto);
+            var data = bl.fn_mant_sel_comisionServicio("SELECT", user.SUSCRIPTOR, user.COD_USUARIO, codProducto, 0);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-
+        public JsonResult JSON_ComisionProducto_Refresh(int codComision)
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var data = bl.fn_mant_sel_comisionServicio("SELECT_COMISION_PRODUCTO", user.SUSCRIPTOR, user.COD_USUARIO, 0, codComision);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost]
         public ActionResult EditComisionServicio(GEN_REPLY_BE model)

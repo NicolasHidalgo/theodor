@@ -107,9 +107,9 @@ namespace BL
         {
             return dat.fn_mant_pro_clasificacionInterna(accion, codSuscriptor, codUsuario, param);
         }
-        public List<COMISIONSERVICIO_BE> fn_mant_sel_comisionServicio(string accion, long codSuscriptor, string codUsuario, int codProducto)
+        public List<COMISIONSERVICIO_BE> fn_mant_sel_comisionServicio(string accion, long codSuscriptor, string codUsuario, int codProducto, int codComision)
         {
-            return dat.fn_mant_sel_comisionServicio(accion, codSuscriptor, codUsuario, codProducto);
+            return dat.fn_mant_sel_comisionServicio(accion, codSuscriptor, codUsuario, codProducto, codComision);
         }
         public List<PRODUCTO_BE> fn_mant_sel_comisionProducto(string accion, long codSuscriptor, string codUsuario)
         {
@@ -124,6 +124,9 @@ namespace BL
             return dat.fn_mant_pro_comisionServicio(accion, codSuscriptor, codUsuario, param);
         }
 
-
+        public List<COMISION_BE> fn_mant_sel_comision(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_mant_sel_comision(accion, codSuscriptor, codUsuario);
+        }
     }
 }

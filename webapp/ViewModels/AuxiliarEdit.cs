@@ -45,6 +45,7 @@ namespace webapp.ViewModels
         public List<RORACOBJETIVO_BE> mantRorac { get; set; }
         public List<COSTOOPERATIVO_BE> costoOperativo { get; set; }
         public List<PRODUCTO_BE> producto { get; set; }
+        public List<COMISION_BE> comision { get; set; }
         public List<COMISIONSERVICIO_BE> comisionServicio { get; set; }
         public string amortizacion { get; set; }
         public long IdeClienteProducto { get; set; }

@@ -27,6 +27,7 @@
         background-color: #156082;
         color: white;
     }
+
     table.table-hover tbody tr:hover {
         background-color: #88ccff;
         cursor: pointer;
@@ -92,14 +93,14 @@
 
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Valor S/.</label>
                                 <input type="text" id="txtValor1" name="txtValor1" value="0" class="form-control" style="text-align: right;">
                                 <!--<div class="input-group">
-        <input type="text" id="txtValor1" name="txtValor1" value="0" class="form-control" style="text-align: right;">-->
+                                <input type="text" id="txtValor1" name="txtValor1" value="0" class="form-control" style="text-align: right;">-->
                                 @*<span class="input-group-addon">%</span>*@
                                 <!--</div>-->
                             </div>
@@ -109,7 +110,7 @@
                                 <label>Valor USD</label>
                                 <input type="text" id="txtValor2" name="txtValor2" value="0" class="form-control" style="text-align: right;">
                                 <!--<div class="input-group">
-        <input type="text" id="txtValor2" name="txtValor2" value="0" class="form-control" style="text-align: right;">-->
+                                <input type="text" id="txtValor2" name="txtValor2" value="0" class="form-control" style="text-align: right;">-->
                                 @*<span class="input-group-addon">%</span>*@
                                 <!--</div>-->
                             </div>
@@ -124,6 +125,38 @@
             <div class="modal-footer">
                 @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>*@
                 <button type="button" id="btnGrabar" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="editComisionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titulo">Nuevo Registro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-group">
+                        <label>Cód. Comisión</label>
+                        <input type="number" id="txtCodComision" name="txtCodComision" value="0" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Comisión Servicio</label>
+                        <input type="text" id="txtComisionServicio" name="txtComisionServicio" value="" class="form-control">
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>*@
+                <button type="button" id="btnGrabarComision" class="btn btn-primary">Aceptar</button>
             </div>
         </div>
     </div>
@@ -151,109 +184,201 @@
                     </div>
 
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs nav-tabs-highlight nav-justified" style="width:25%">
+                                <li id="liTab1" class="active"><a href="#tab1" data-toggle="tab">X Producto</a></li>
+                                <li id="liTab2"><a href="#tab2" data-toggle="tab">X Comision</a></li>
+                            </ul>
 
-                                    <div class="table-responsive">
-                                        <table id="tblProducto" class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Cod. Oper.</th>
-                                                    <th>Cod. Prod.</th>
-                                                    <th>Producto</th>
-                                                    @*<th>Tipo Amortización</th>*@
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbodyMain1">
-                                                @{ var odd = 0; var estilo = string.Empty;}
-                                                @foreach (var item in Model.producto)
-                                                {
-                                                    estilo = string.Empty;
-                                                    odd = odd + 1;
-                                                    if ((odd % 2) == 0) { estilo = "colorGray"; }
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab1">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
 
-                                                    <tr class="@estilo">
-                                                        <td>@item.codOperacion</td>
-                                                        <td>@item.codProducto</td>
-                                                        <td>@item.producto</td>
-                                                        @*<td>@item.tipAmortizacion</td>*@
-                                                    </tr>
-                                                }
-                                            </tbody>
+                                                <div class="table-responsive">
+                                                    <table id="tblProducto" class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Cod. Oper.</th>
+                                                                <th>Cod. Prod.</th>
+                                                                <th>Producto</th>
+                                                                @*<th>Tipo Amortización</th>*@
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @{ var odd = 0; var estilo = string.Empty;}
+                                                            @foreach (var item in Model.producto)
+                                                            {
+                                                                estilo = string.Empty;
+                                                                odd = odd + 1;
+                                                                if ((odd % 2) == 0) { estilo = "colorGray"; }
 
-                                        </table>
+                                                                <tr class="@estilo">
+                                                                    <td>@item.codOperacion</td>
+                                                                    <td>@item.codProducto</td>
+                                                                    <td>@item.producto</td>
+                                                                    @*<td>@item.tipAmortizacion</td>*@
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- /bordered table -->
+                                        </div>
+
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+
+                                                <div class="table-responsive">
+                                                    <h6 id="lblProductoSeleccionado"></h6>
+                                                    <table id="tblProductoComision" class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Cód.</th>
+                                                                <th>Comisión Servicio</th>
+                                                                <th>Periodicidad</th>
+                                                                <th>Tipo</th>
+                                                                <th>Veces</th>
+                                                                <th>Valor S/.</th>
+                                                                <th>Valor USD</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @*@{ var odd2 = 0; var estilo2 = string.Empty;}
+                                                                                                                @if (Model.comisionServicio != null)
+                                                                                                                {
+                                                                                                                    foreach (var item in Model.comisionServicio)
+                                                                                                                    {
+                                                                                                                        estilo2 = string.Empty;
+                                                                                                                        odd2 = odd2 + 1;
+                                                                                                                        if ((odd2 % 2) == 0) { estilo2 = "colorGray"; }
+
+                                                                                                                        var _valor1 = "";
+                                                                                                                        var _valor2 = "";
+                                                                                                                        if (item.tipValor.Equals("%"))
+                                                                                                                        {
+                                                                                                                            _valor1 = (item.valorMn1?.ToString("P2"));
+                                                                                                                            _valor2 = (item.valorMn2?.ToString("P2"));
+                                                                                                                        }
+                                                                                                                        else
+                                                                                                                        {
+                                                                                                                            _valor1 = (item.valorMn1?.ToString("#0.00"));
+                                                                                                                            _valor2 = (item.valorMn2?.ToString("#0.00"));
+                                                                                                                        }
+
+                                                                                                                        <tr class="@estilo2">
+                                                                                                                            <td>@item.codComisionServicio</td>
+                                                                                                                            <td>@item.comisionServicio</td>
+                                                                                                                            <td>@item.periodicidad</td>
+                                                                                                                            <td>@item.nomTipValor</td>
+                                                                                                                            <td>@item.veces</td>
+                                                                                                                            <td>@_valor1</td>
+                                                                                                                            <td>@_valor2</td>
+                                                                                                                            <td width="15%">
+                                                                                                                                <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+                                                                Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+                                                                Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
+                                                                                                                            </td>
+                                                                                                                        </tr>
+                                                                                                                    }
+                                                                                                                }*@
+
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- /bordered table -->
+                                        </div>
                                     </div>
                                 </div>
-                                <!-- /bordered table -->
-                            </div>
 
-                            <div class="col-md-8">
-                                <div class="form-group">
+                                <div class="tab-pane" id="tab2">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
 
-                                    <div class="table-responsive">
-                                        <h6 id="lblProductoSeleccionado"></h6>
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Cód.</th>
-                                                    <th>Comisión Servicio</th>
-                                                    <th>Periodicidad</th>
-                                                    <th>Tipo</th>
-                                                    <th>Veces</th>
-                                                    <th>Valor S/.</th>
-                                                    <th>Valor USD</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbodyMain2">
-                                                @*@{ var odd2 = 0; var estilo2 = string.Empty;}
-                                                @if (Model.comisionServicio != null)
-                                                {
-                                                    foreach (var item in Model.comisionServicio)
-                                                    {
-                                                        estilo2 = string.Empty;
-                                                        odd2 = odd2 + 1;
-                                                        if ((odd2 % 2) == 0) { estilo2 = "colorGray"; }
+                                                <div class="table-responsive">
+                                                    <table id="tblComision" class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Cod.</th>
+                                                                <th>Comisión Servicio</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @{ var odd2 = 0; var estilo2 = string.Empty;}
+                                                            @foreach (var item in Model.comision)
+                                                            {
+                                                                estilo2 = string.Empty;
+                                                                odd2 = odd2 + 1;
+                                                                if ((odd2 % 2) == 0) { estilo2 = "colorGray"; }
 
-                                                        var _valor1 = "";
-                                                        var _valor2 = "";
-                                                        if (item.tipValor.Equals("%"))
-                                                        {
-                                                            _valor1 = (item.valorMn1?.ToString("P2"));
-                                                            _valor2 = (item.valorMn2?.ToString("P2"));
-                                                        }
-                                                        else
-                                                        {
-                                                            _valor1 = (item.valorMn1?.ToString("#0.00"));
-                                                            _valor2 = (item.valorMn2?.ToString("#0.00"));
-                                                        }
+                                                                <tr class="@estilo2">
+                                                                    <td>@item.codComisionServicio</td>
+                                                                    <td>@item.comisionServicio</td>
+                                                                    <td>
+                                                                        <ul class="icons-list">
+                                                                            <li class="dropdown">
+                                                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>
+                                                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                                                    <li>
+                                                                                        <a onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'><i class='icon-pencil4'></i> Editar</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
 
-                                                        <tr class="@estilo2">
-                                                            <td>@item.codComisionServicio</td>
-                                                            <td>@item.comisionServicio</td>
-                                                            <td>@item.periodicidad</td>
-                                                            <td>@item.nomTipValor</td>
-                                                            <td>@item.veces</td>
-                                                            <td>@_valor1</td>
-                                                            <td>@_valor2</td>
-                                                            <td width="15%">
-                                                                <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
-Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
-Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
-                                                            </td>
-                                                        </tr>
-                                                    }
-                                                }*@
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- /bordered table -->
+                                        </div>
 
-                                            </tbody>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
 
-                                        </table>
+                                                <div class="table-responsive">
+                                                    <h6 id="lblComisionSeleccionado"></h6>
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Cód.</th>
+                                                                <th>Producto</th>
+                                                                <th>Periodicidad</th>
+                                                                <th>Tipo</th>
+                                                                <th>Veces</th>
+                                                                <th>Valor S/.</th>
+                                                                <th>Valor USD</th>
+                                                                @*<th></th>*@
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbodyMainS2"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- /bordered table -->
+                                        </div>
                                     </div>
                                 </div>
-                                <!-- /bordered table -->
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>
@@ -270,8 +395,8 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
 
     $(document).ready(function () {
         var gAccion = "";
-        var gCodTipCliente = "";
         var gCodProducto = 0;
+        var gCodComision = 0;
 
         var _tipValor = $("#ddlTipValor option:selected").val();
         if (_tipValor == "%") {
@@ -366,16 +491,23 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             return valor;
         }
 
-        $('#tblProducto tr').on('click', function () {
-            let fila = $(this).find('td'); 
+        $('#tblProducto tbody').on('click','tr',function () {
+            let fila = $(this).find('td');
             gCodProducto = fila.eq(1).text();
             $("#ddlProducto").val(gCodProducto).change();
             $("#lblProductoSeleccionado").text("Producto: " + fila.eq(2).text());
             fnCargarLista(gCodProducto);
         });
 
+        $('#tblComision tbody').on('click','tr', function () {
+            let fila = $(this).find('td');
+            gCodComision = fila.eq(0).text();
+            //$("#ddlProducto").val(gCodProducto).change();
+            $("#lblComisionSeleccionado").text("Comisión: " + fila.eq(1).text());
+            fnCargarLista2(gCodComision);
+        });
+
         fSelEditar = function (data) {
-            $('#editModal').modal('show');
             $("#ddlProducto").val(data.codProducto).change();
             $("#ddlComisionServicio").val(data.codComisionServicio).change();
             $("#ddlPeriodicidad").val(data.codPeriodicidad).change();
@@ -392,24 +524,50 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
 
             $('#ddlProducto,#ddlComisionServicio').prop('disabled', true);
             $("#titulo").text('Editar Registro');
-            gAccion = "UPDATE";
+            
+            if ($("#liTab1").hasClass("active")) {
+                gAccion = "UPDATE";
+                $('#editModal').modal('show');
+            }
+            if ($("#liTab2").hasClass("active")) {
+                gAccion = "UPDATE_COMISION";
+                $('#txtCodComision').prop('disabled', true);
+                $("#txtCodComision").val(data.codComisionServicio);
+                $("#txtComisionServicio").val(data.comisionServicio);
+                $('#editComisionModal').modal('show');
+            }
         }
         fSelEliminar = function (data) {
             $('#confirmBorrarModal').modal('show');
-            gAccion = "DELETE";
+
+            if ($("#liTab1").hasClass("active")) {
+                gAccion = "DELETE";
+            }
+            if ($("#liTab2").hasClass("active")) {
+                gAccion = "DELETE_COMISION";
+            }
+
             gCodProducto = data.codProducto;
             gCodComision = data.codComisionServicio;
         }
 
         $("#btnNuevo,.classNuevo").on("click", function () {
             $("#titulo").text('Nuevo Registro');
-            gAccion = "INSERT";
             $('#ddlProducto,#ddlComisionServicio').prop('disabled', false);
             $("#txtValor1,#txtValor2").val('0').change();
             //$("#ddlTipCliente, #ddlProducto").val('').change();
-            $('#editModal').modal('show');
+            if ($("#liTab1").hasClass("active")) {
+                gAccion = "INSERT";
+                $('#editModal').modal('show');
+            }
+            if ($("#liTab2").hasClass("active")) {
+                gAccion = "INSERT_COMISION";
+                $('#txtCodComision').prop('disabled', false);
+                $("#txtCodComision, #txtComisionServicio").val('');
+                $('#editComisionModal').modal('show');
+            }
         });
-        $("#btnGrabar").on("click", function () {
+        $("#btnGrabar, #btnGrabarComision").on("click", function () {
             fnGrabar();
         });
         $("#btnConfirmar").on("click", function () {
@@ -418,7 +576,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
 
         function fnCargarLista(codProducto) {
             $.getJSON('@Url.Action("JSON_ComisionServicio_Refresh")', { codProducto: codProducto }, function (data) {
-                $("#tbodyMain2").empty();
+                $("#tblProductoComision tbody").empty();
                 var odd = 0;
                 var estilo = "";
                 var cadena = "";
@@ -456,11 +614,88 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
                     //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
                     cadena += "</tr>";
                 });
-                $("#tbodyMain2").append(cadena);
+                $("#tblProductoComision tbody").append(cadena);
             }).done(function () {
 
             });
         }
+
+        function fnCargarLista2(codComision) {
+            $.getJSON('@Url.Action("JSON_ComisionProducto_Refresh")', { codComision: codComision }, function (data) {
+                $("#tbodyMainS2").empty();
+                var odd = 0;
+                var estilo = "";
+                var cadena = "";
+                $.each(data, function (index, item) {
+                    estilo = "";
+                    odd = odd + 1;
+                    if ((odd % 2) == 0) { estilo = "colorGray"; }
+
+                    var _valor1 = "";
+                    var _valor2 = "";
+                    if (item.tipValor == "%") {
+                        _valor1 = numeral(item.valorMn1).format('0.00%');
+                        _valor2 = numeral(item.valorMn2).format('0.00%');
+                    }
+                    else {
+                        _valor1 = numeral(item.valorMn1).format('#0.00');
+                        _valor2 = numeral(item.valorMn2).format('#0.00');
+                    }
+
+                    cadena += "<tr class=" + estilo + ">";
+                    cadena += "<td>" + item.codProducto + "</td>";
+                    cadena += "<td>" + item.producto + "</td>";
+                    cadena += "<td>" + item.periodicidad + "</td>";
+                    cadena += "<td>" + item.nomTipValor + "</td>";
+                    cadena += "<td>" + item.veces + "</td>";
+                    cadena += "<td>" + _valor1 + "</td>";
+                    cadena += "<td>" + _valor2 + "</td>";
+
+                    //cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
+                    //cadena += '<ul class="dropdown-menu dropdown-menu-right">';
+                    //cadena += "<li><a onclick='fSelEditar(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
+                    //cadena += "<li><a onclick='fSelEliminar(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
+                    //cadena += '</ul></li></ul></td>';
+
+                    //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
+                    cadena += "</tr>";
+                });
+                $("#tbodyMainS2").append(cadena);
+            }).done(function () {
+
+            });
+        }
+
+        function fnCargarListaComision() {
+            $.getJSON('@Url.Action("JSON_Comision_Refresh")', function (data) {
+                $("#tblComision tbody").empty();
+                var odd = 0;
+                var estilo = "";
+                var cadena = "";
+                $.each(data, function (index, item) {
+                    estilo = "";
+                    odd = odd + 1;
+                    if ((odd % 2) == 0) { estilo = "colorGray"; }
+
+                    cadena += "<tr class=" + estilo + ">";
+                    cadena += "<td>" + item.codComisionServicio + "</td>";
+                    cadena += "<td>" + item.comisionServicio + "</td>";
+
+                    cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
+                    cadena += '<ul class="dropdown-menu dropdown-menu-right">';
+                    cadena += "<li><a onclick='fSelEditar(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
+                    cadena += "<li><a onclick='fSelEliminar(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
+                    cadena += '</ul></li></ul></td>';
+
+                    //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
+                    cadena += "</tr>";
+                });
+                $("#tblComision tbody").append(cadena);
+            }).done(function () {
+
+            });
+        }
+
 
         function fnGrabar() {
             $("#overlay").show();
@@ -476,9 +711,23 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
                 _valor2 = $("#txtValor1").val();
             }
 
+            let _codComision = 0;
+            let _codProducto = 0;
+            if (gAccion == "DELETE" || gAccion == "DELETE_COMISION") {
+                _codComision = gCodComision;
+                _codProducto = gCodProducto;
+            }
+            else if (gAccion == "INSERT_COMISION" || gAccion == "UPDATE_COMISION") {
+                _codComision = $("#txtCodComision").val();
+            } else {
+                _codComision = $("#ddlComisionServicio option:selected").val();
+                _codProducto = $("#ddlProducto option:selected").val();
+            }
+
             var _obj = {
-                codProducto: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
-                codComisionServicio: gAccion == "DELETE" ? gCodComision : $("#ddlComisionServicio option:selected").val(),
+                codProducto: _codProducto,
+                codComisionServicio: _codComision,
+                comisionServicio: $("#txtComisionServicio").val(),
                 codPeriodicidad: $("#ddlPeriodicidad option:selected").val(),
                 tipValor: _tipValor,
                 veces: $("#txtVeces").val(),
@@ -496,9 +745,14 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             $.post(_url, _reply).done(function (data) {
                 if (data.Status === 200) {
                     toastr.success(data.Message);
-                    $("#lblProductoSeleccionado").text("Producto: " + gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val());
-                    fnCargarLista(gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val());
-                    //PlantillaDataTable.draw();
+                    if (gAccion == "INSERT_COMISION" || gAccion == "UPDATE_COMISION" || gAccion == "DELETE_COMISION") {
+                        $("#lblComisionSeleccionado").text("Comision: " + $("#txtComisionServicio").val());
+                        fnCargarListaComision(_codComision);
+                    } else {
+                        $("#lblProductoSeleccionado").text("Producto: " + $("#ddlProducto option:selected").text());
+                        fnCargarLista(_codProducto);
+                    }
+                    
                 }
                 else {
                     toastr.error(data.Message);
@@ -506,10 +760,11 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
             }).fail(function (e) {
             }).always(function () {
                 $("#overlay").hide();
-                if (gAccion == "DELETE") {
+                if (gAccion == "DELETE" || gAccion == "DELETE_COMISION") {
                     $('#confirmBorrarModal').modal('hide');
                 } else {
                     $('#editModal').modal('hide');
+                    $('#editComisionModal').modal('hide');
                 }
 
             });
