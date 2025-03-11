@@ -328,11 +328,11 @@
                                                                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>
                                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                                     <li>
-                                                                                        <a onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+                                                                                        <a onclick='fSelEditarComi(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
 Newtonsoft.Json.Formatting.Indented)))'><i class='icon-pencil4'></i> Editar</a>
                                                                                     </li>
                                                                                     <li>
-                                                                                        <a onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+                                                                                        <a onclick='fSelEliminarComi(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
 Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
                                                                                     </li>
                                                                                 </ul>
@@ -364,7 +364,7 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
                                                                 <th>Veces</th>
                                                                 <th>Valor S/.</th>
                                                                 <th>Valor USD</th>
-                                                                @*<th></th>*@
+                                                                <th></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="tbodyMainS2"></tbody>
@@ -390,8 +390,9 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
 <script type="text/javascript">
 
     var fSelEditar;
+    var fSelEditarComi;
     var fSelEliminar;
-
+    var fSelEliminarComi;
 
     $(document).ready(function () {
         var gAccion = "";
@@ -507,6 +508,15 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
             fnCargarLista2(gCodComision);
         });
 
+        fSelEditarComi = function (data) {
+            $("#titulo").text('Editar Registro');
+            gAccion = "UPDATE_COMISION";
+            $('#txtCodComision').prop('disabled', true);
+            $("#txtCodComision").val(data.codComisionServicio);
+            $("#txtComisionServicio").val(data.comisionServicio);
+            $('#editComisionModal').modal('show');
+        }
+
         fSelEditar = function (data) {
             $("#ddlProducto").val(data.codProducto).change();
             $("#ddlComisionServicio").val(data.codComisionServicio).change();
@@ -525,17 +535,8 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
             $('#ddlProducto,#ddlComisionServicio').prop('disabled', true);
             $("#titulo").text('Editar Registro');
             
-            if ($("#liTab1").hasClass("active")) {
-                gAccion = "UPDATE";
-                $('#editModal').modal('show');
-            }
-            if ($("#liTab2").hasClass("active")) {
-                gAccion = "UPDATE_COMISION";
-                $('#txtCodComision').prop('disabled', true);
-                $("#txtCodComision").val(data.codComisionServicio);
-                $("#txtComisionServicio").val(data.comisionServicio);
-                $('#editComisionModal').modal('show');
-            }
+            gAccion = "UPDATE";
+            $('#editModal').modal('show');
         }
         fSelEliminar = function (data) {
             $('#confirmBorrarModal').modal('show');
@@ -651,13 +652,12 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
                     cadena += "<td>" + _valor1 + "</td>";
                     cadena += "<td>" + _valor2 + "</td>";
 
-                    //cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
-                    //cadena += '<ul class="dropdown-menu dropdown-menu-right">';
-                    //cadena += "<li><a onclick='fSelEditar(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
-                    //cadena += "<li><a onclick='fSelEliminar(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
-                    //cadena += '</ul></li></ul></td>';
+                    cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
+                    cadena += '<ul class="dropdown-menu dropdown-menu-right">';
+                    cadena += "<li><a onclick='fSelEditar(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
+                    cadena += "<li><a onclick='fSelEliminar(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
+                    cadena += '</ul></li></ul></td>';
 
-                    //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
                     cadena += "</tr>";
                 });
                 $("#tbodyMainS2").append(cadena);
@@ -683,8 +683,8 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
 
                     cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
                     cadena += '<ul class="dropdown-menu dropdown-menu-right">';
-                    cadena += "<li><a onclick='fSelEditar(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
-                    cadena += "<li><a onclick='fSelEliminar(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
+                    cadena += "<li><a onclick='fSelEditarComi(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
+                    cadena += "<li><a onclick='fSelEliminarComi(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
                     cadena += '</ul></li></ul></td>';
 
                     //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
@@ -749,8 +749,15 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
                         $("#lblComisionSeleccionado").text("Comision: " + $("#txtComisionServicio").val());
                         fnCargarListaComision(_codComision);
                     } else {
-                        $("#lblProductoSeleccionado").text("Producto: " + $("#ddlProducto option:selected").text());
-                        fnCargarLista(_codProducto);
+                        if ($("#liTab1").hasClass("active")) {
+                            $("#lblProductoSeleccionado").text("Producto: " + $("#ddlProducto option:selected").text());
+                            fnCargarLista(_codProducto);
+                        }
+                        if ($("#liTab2").hasClass("active")) { 
+                            $("#lblComisionSeleccionado").text("Comision: " + $("#txtComisionServicio").val());
+                            fnCargarLista2(_codComision);
+                        }
+                        
                     }
                     
                 }
