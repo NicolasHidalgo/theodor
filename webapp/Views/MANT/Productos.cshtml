@@ -81,7 +81,11 @@
                         <select name="ddlProductoBase" id="ddlProductoBase" class="select">
                             @foreach (var item in Model.ddlProducto)
                             {
-                                <option value="@item.Value" data-aux1="@item.Aux1" data-aux2="@item.Aux2">@item.Text</option>
+                                <option value="@item.Value" 
+                                        data-aux1="@item.Aux1" 
+                                        data-aux2="@item.Aux2" 
+                                        data-aux3="@item.Aux3"
+                                        data-aux4="@item.Aux4">@item.Text</option>
                             }
                         </select>
                     </div>
@@ -113,7 +117,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div id="fgFactorUso" class="form-group">
                                 <label>Factor Uso Linea</label>
                                 <div class="input-group">
                                     <input type="text" id="txtFactorUso" name="txtFactorUso" value="0" class="form-control" style="text-align: right;">
@@ -122,7 +126,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div id="fgFactorConv" class="form-group">
                                 <label>Factor Conversion Indirectos</label>
                                 <div class="input-group">
                                     <input type="text" id="txtFactorConversion" name="txtFactorConversion" value="0" class="form-control" style="text-align: right;">
@@ -309,6 +313,27 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
             return valor;
         }
 
+        function productoBaseChange() {
+            var _codTipAmor = $("#ddlProductoBase option:selected").data('aux1');
+            var _tipAmor = $("#ddlProductoBase option:selected").data('aux2');
+            var _isFactorUso = $("#ddlProductoBase option:selected").data('aux3');
+            var _isFactorConv = $("#ddlProductoBase option:selected").data('aux4');
+
+            if (_isFactorUso == "1") {
+                $("#fgFactorUso").removeClass('hidden');
+            } else {
+                $("#fgFactorUso").addClass('hidden');
+            }
+            if (_isFactorConv == "1") {
+                $("#fgFactorConv").removeClass('hidden');
+            } else {
+                $("#fgFactorConv").addClass('hidden');
+            }
+
+            $("#txtCodTipAmortizacion").val(_codTipAmor);
+            $("#txtTipAmortizacion").val(_tipAmor);
+        }
+
         $("#txtTea,#txtFactorUso,#txtFactorConversion").inputmask({
             alias: "decimal",
             radixPoint: ".",
@@ -332,12 +357,9 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
         //    'placeholder': '0.00'
         //});
 
+        productoBaseChange();
         $("#ddlProductoBase").change(function (e, data) {
-            var _codTipAmor = $("#ddlProductoBase option:selected").data('aux1');
-            var _tipAmor = $("#ddlProductoBase option:selected").data('aux2');
-
-            $("#txtCodTipAmortizacion").val(_codTipAmor);
-            $("#txtTipAmortizacion").val(_tipAmor);
+            productoBaseChange();
         });
 
         fSelEditar = function (data) {

@@ -2751,6 +2751,7 @@
     <Content Include="Views\MANT\ProbabilidadDefault.cshtml" />
     <Content Include="Views\MANT\ClasificacionInterna.cshtml" />
     <Content Include="Views\MANT\ComisionServicio.cshtml" />
+    <Content Include="Views\REN\TasaTransferencia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

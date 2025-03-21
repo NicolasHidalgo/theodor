@@ -49,6 +49,8 @@ namespace DA
                             bean.cod_personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_personeria"));
                             bean.cod_operacion = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_operacion"));
                             bean.cod_tip_cliente = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
+                            bean.tea = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("tea"));
+                            bean.plazo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("plazo"));
                         }
 
                         lista.Add(bean);
@@ -995,5 +997,109 @@ namespace DA
             }
             return bean;
         }
+
+
+
+        public List<TASA_TRANFERENCIA_BE> fn_ren_sel_tasaTranferencia(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<TASA_TRANFERENCIA_BE> lista = new List<TASA_TRANFERENCIA_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_tasaTransferencia]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+            //cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = 0;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    TASA_TRANFERENCIA_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new TASA_TRANFERENCIA_BE();
+                        bean.fecVigencia = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("fec_vigencia"));
+                        bean.periodo = DataReader.SafeGetInt32(dr, dr.GetOrdinal("periodo"));
+                        bean.anio = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("anio"));
+                        bean.tasaSol = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("tasa_sol"));
+                        bean.poolFondoSol = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("poolFondo_sol"));
+                        bean.tasaUsd = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("tasa_usd"));
+                        bean.poolFondoUsd = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("poolFondo_usd"));
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
+        public List<TASA_TRANF_VALOR_BE> fn_ren_sel_tasaTranfValor(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<TASA_TRANF_VALOR_BE> lista = new List<TASA_TRANF_VALOR_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_tasaTransferencia]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+            //cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = 0;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    TASA_TRANF_VALOR_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new TASA_TRANF_VALOR_BE();
+                        bean.fecVigencia = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("fec_vigencia"));
+                        bean.codMoneda = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_moneda"));
+                        bean.moneda = DataReader.SafeGetString(dr, dr.GetOrdinal("moneda"));
+                        bean.encaje = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("encaje"));
+                        bean.beta0 = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("beta0"));
+                        bean.beta1 = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("beta1"));
+                        bean.beta2 = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("beta2"));
+                        bean.beta3 = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("beta3"));
+                        bean.lambda1 = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("lambda1"));
+                        bean.lambda2 = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("lambda2"));
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
     }
 }

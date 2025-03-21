@@ -602,6 +602,8 @@ namespace DA
                             bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("producto_base"));
                             bean.Aux1 = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_tip_amortizacion")).ToString();
                             bean.Aux2 = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_amortizacion"));
+                            bean.Aux3 = DataReader.SafeGetInt32(dr, dr.GetOrdinal("FactorUsoLinea")).ToString();
+                            bean.Aux4 = DataReader.SafeGetInt32(dr, dr.GetOrdinal("FactorConversionIndirectos")).ToString();
                         }
 
                         lista.Add(bean);

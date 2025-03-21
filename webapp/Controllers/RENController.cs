@@ -353,6 +353,8 @@ namespace webapp.Controllers
                                             {
                                                 Value = x.cod,
                                                 Text = x.nom,
+                                                Aux1 = x.plazo.ToString(),
+                                                Aux2 = x.tea.ToString(),
                                                 Selected = x.selected
                                             });
                 }
@@ -388,6 +390,8 @@ namespace webapp.Controllers
                                         {
                                             Value = x.cod,
                                             Text = x.nom,
+                                            Aux1 = x.plazo.ToString(),
+                                            Aux2 = x.tea.ToString(),
                                             Selected = x.selected
                                         });
             viewModel.ddlClasificacionExterna = dataInfo.lstClasificacionExterna
@@ -431,6 +435,8 @@ namespace webapp.Controllers
                                     {
                                         Value = x.cod,
                                         Text = x.nom,
+                                        Aux1 = x.plazo.ToString(),
+                                        Aux2 = x.tea.ToString(),
                                         Selected = x.selected
                                     });
                 viewModel.ddlClasificacionExterna = dataInfo.lstClasificacionExterna
@@ -777,6 +783,23 @@ namespace webapp.Controllers
                             Message = "No se puede continuar por errores en el modelo",
                             Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
                         }); ;
+        }
+
+
+
+        public ActionResult TasaTransferencia()
+        {
+            regresionLogarimitca();
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+
+            var tasaTranferencia = bl.fn_ren_sel_tasaTranferencia("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            var tasaTrans = bl.fn_ren_sel_tasaTranferencia("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+
+
+
+            return View(viewModel);
+
         }
     }
 }

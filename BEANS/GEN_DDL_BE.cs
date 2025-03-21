@@ -13,6 +13,7 @@ namespace BEANS
         public string Aux1 { get; set; }
         public string Aux2 { get; set; }
         public string Aux3 { get; set; }
+        public string Aux4 { get; set; }
         public bool Selected { get; set; } = false;  
     }
     public class REN_INFO_BE
@@ -42,5 +43,8 @@ namespace BEANS
         public string cod_operacion { get; set; }
         public string cod_tip_cliente { get; set; }
         public bool selected { get; set; }
+
+        public double? tea { get; set; }
+        public double? plazo { get; set; }
     }
 }

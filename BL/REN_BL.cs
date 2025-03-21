@@ -110,5 +110,14 @@ namespace BL
         {
             return dat.fn_ren_pro_clienteProducto_nuevo(codSuscriptor, ideUsuario);
         }
+
+        public List<TASA_TRANFERENCIA_BE> fn_ren_sel_tasaTransferencia(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_ren_sel_tasaTransferencia(accion, codSuscriptor, codUsuario);
+        }
+        public List<TASA_TRANF_VALOR_BE> fn_ren_sel_tasaTranfValor(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_ren_sel_tasaTranfValor(accion, codSuscriptor, codUsuario);
+        }
     }
 }

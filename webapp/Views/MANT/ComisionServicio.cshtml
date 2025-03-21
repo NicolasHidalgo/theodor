@@ -551,6 +551,12 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
             gCodProducto = data.codProducto;
             gCodComision = data.codComisionServicio;
         }
+        fSelEliminarComi = function (data) {
+            $('#confirmBorrarModal').modal('show');
+            gAccion = "DELETE_COMISION";
+            gCodProducto = data.codProducto;
+            gCodComision = data.codComisionServicio;
+        }
 
         $("#btnNuevo,.classNuevo").on("click", function () {
             $("#titulo").text('Nuevo Registro');
@@ -759,6 +765,23 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
                         }
                         
                     }
+
+                    $('#ddlProducto').empty();
+                    $.each(data.Data.ddlProducto, function (index, item) {
+                        $('#ddlProducto').append($('<option/>', {
+                            value: item.Value,
+                            text: item.Text,
+                            selected: item.Selected
+                        }));
+                    });
+                    $('#ddlComisionServicio').empty();
+                    $.each(data.Data.ddlComisionServicio, function (index, item) {
+                        $('#ddlComisionServicio').append($('<option/>', {
+                            value: item.Value,
+                            text: item.Text,
+                            selected: item.Selected
+                        }));
+                    });
                     
                 }
                 else {

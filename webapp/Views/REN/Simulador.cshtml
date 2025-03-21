@@ -269,7 +269,17 @@
                                             <div class="col-md-9">
                                                 <div class="form-group">
                                                     <label>Producto:</label>
-                                                    @Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })
+                                                    @*@Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })*@
+                                                    <select name="ddlProducto" id="ddlProducto" class="select">
+                                                        @foreach (var item in Model.ddlProducto)
+                                                        {
+                                                            <option value="@item.Value"
+                                                                    data-aux1="@item.Aux1"
+                                                                    data-aux2="@item.Aux2">
+                                                                @item.Text
+                                                                </option>
+                                                            }
+                                                    </select>
                                                 </div>
                                             </div>
 
@@ -284,15 +294,15 @@
                                                         <input type="text" id="txtMonto" name="txtMonto" min="0" value="0" class="form-control">
                                                         <!--<span class="input-group-addon currency"></span>-->
                                                     </div>
-        </div>
-    </div>
+                                                </div>
+                                            </div>
 
-    <div class="col-md-3">
-        <div class="form-group">
-            <label>Moneda:</label>
-            @Html.DropDownList("ddlMoneda", Model.ddlMoneda, new { @class = "select" })
-        </div>
-    </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>Moneda:</label>
+                                                    @Html.DropDownList("ddlMoneda", Model.ddlMoneda, new { @class = "select" })
+                                                </div>
+                                            </div>
 
     <div class="col-md-3">
         <div class="form-group">
@@ -794,7 +804,6 @@
 
         function fnPrecargarValores(data) {
             var simData = data.simData;
-            //debugger;
             $("#IdeClienteProducto").text(simData.ide_cliente_producto);
             $("#IdeClienteProductoTitle").attr("title", simData.ide_cliente_producto);
             $("input:radio[name=rbTipProspecto][value=" + simData.cod_tip_prospecto + "]").prop('checked', true);
@@ -894,7 +903,8 @@
                         value: item.Value,
                         text: item.Text,
                         selected: item.Selected
-                    }));
+                    }).attr('data-aux1', item.Aux1)
+                        .attr('data-aux2', item.Aux2));
                 });
             }).done(function () {
                 if (info != undefined && info != null) {
@@ -926,7 +936,8 @@
                         value: item.Value,
                         text: item.Text,
                         selected: item.Selected
-                    }));
+                    }).attr('data-aux1', item.Aux1)
+                        .attr('data-aux2', item.Aux2));
                 });
                 $('#ddlClasificacionExterna').empty();
                 if (data.ddlClasificacionExterna.length == 0) {
@@ -970,7 +981,8 @@
                         value: item.Value,
                         text: item.Text,
                         selected: item.Selected
-                    }));
+                    }).attr('data-aux1', item.Aux1)
+                        .attr('data-aux2', item.Aux2));
                 });
 
                 $('#ddlClasificacionInterna').empty();
@@ -1063,6 +1075,12 @@
         }
         function ddlProductoChange(info) {
             let codProducto = $("#ddlProducto option:selected").val();
+            var _plazo = $("#ddlProducto option:selected").data('aux1');
+            var _tea = $("#ddlProducto option:selected").data('aux2');
+            //debugger;
+            $("#txtPlazoMeses").val(_plazo);
+            $("#txtTasaEfectiva").val(getPorcentajeNum(_tea)).trigger('change', 'fTrigger');
+
             if (info != undefined && info != null) {
                 if (info == "clean") {
                     return;
@@ -1593,7 +1611,6 @@
         }
 
         function fnAutonomia() {
-            debugger;
             let codOperacion = $("#ddlOperacion option:selected").val();
             let tea = getPorcentaje($("#txtTasaEfectiva").val());
             let tea_base = getPorcentaje($("#txtTasaBase").val());
@@ -1886,7 +1903,10 @@
                         $("#txtTasaBase").val(getPorcentajeNum(data.Data.simData.tea_base)).trigger('change', 'fSeleccionar');
                         if (flgTEA == 0 && flgTEA_Aux == 0) {
                             flgTEA_Aux = 1;
-                            $("#txtTasaEfectiva").val(getPorcentajeNum(data.Data.simData.tea_base)).trigger('change', 'fTrigger');
+                            debugger; //--cuidado aqui
+                            if (tea == 0) {
+                                $("#txtTasaEfectiva").val(getPorcentajeNum(data.Data.simData.tea_base)).trigger('change', 'fTrigger');
+                            }
                         } else {
                             fnAutonomia();
 

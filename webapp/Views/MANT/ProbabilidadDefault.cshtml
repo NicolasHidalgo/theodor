@@ -185,7 +185,12 @@
         });
 
         fSelEditar = function (data) {
+            //console.log(data);
             $('#editModal').modal('show');
+            $('#ddlTipCliente').val(data.codTipCliente).change();
+            $('#ddlClasificacionInterna').val(data.codClasificacionInterna).change();
+            $('#ddlProductoBase').val(data.codProductoBase).change();
+
             $("#txtProbabilidad").val(getPorcentajeNum(data.probabilidadDefault));
             $("#txtTasaRecuperacion").val(getPorcentajeNum(data.tasaRecuperacion));
  

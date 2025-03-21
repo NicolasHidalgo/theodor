@@ -299,6 +299,8 @@ namespace webapp.Controllers
                 Text = x.Text,
                 Aux1 = x.Aux1,
                 Aux2 = x.Aux2,
+                Aux3 = x.Aux3,
+                Aux4 = x.Aux4,
                 Selected = false, //x.Selected,
             });
             var dataTipCliente = bl.fn_mant_sel_productoDDL("@BANCA", user.SUSCRIPTOR, user.COD_USUARIO);
@@ -652,7 +654,23 @@ namespace webapp.Controllers
                 if (reply.MENSAJE.Equals("") || reply.MENSAJE.Contains(Constantes.SUCCESS))
                     res.Status = HttpStatusCode.OK;
 
-                //res.Data = viewModel;
+                
+                var viewModel = new AuxiliarEdit();
+                var ddlProducto = bl.fn_mant_sel_comisionDDL("@PRODUCTO", user.SUSCRIPTOR, user.COD_USUARIO);
+                viewModel.ddlProducto = ddlProducto.Select(x => new ExtendedSelectListItem
+                {
+                    Value = x.Value,
+                    Text = x.Text,
+                    Selected = x.Selected,
+                });
+                var ddlComision = bl.fn_mant_sel_comisionDDL("@COMISION_SERVICIO", user.SUSCRIPTOR, user.COD_USUARIO);
+                viewModel.ddlComisionServicio = ddlComision.Select(x => new ExtendedSelectListItem
+                {
+                    Value = x.Value,
+                    Text = x.Text,
+                    Selected = x.Selected,
+                });
+                res.Data = viewModel;
 
                 return Json(res);
             }

@@ -17,6 +17,8 @@ namespace webapp
         public object HtmlAttributes { get; set; }
         public string Aux1 { get; set; }
         public string Aux2 { get; set; }
+        public string Aux3 { get; set; }
+        public string Aux4 { get; set; }
     }
 
     public static class ExtendedSelectExtensions
