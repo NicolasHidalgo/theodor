@@ -53,5 +53,8 @@ namespace webapp.ViewModels
         public string CodUsuario { get; set; }
         public REN_SIM_REQ_BE simData { get; set; }
 
+        public List<TASA_TRANFERENCIA_BE> lstTasaTranf { get; set; }
+        public List<TASA_TRANF_VALOR_BE> lstTasaTranfValor { get; set; }
+
     }
 }

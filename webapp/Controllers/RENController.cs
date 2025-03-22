@@ -793,10 +793,11 @@ namespace webapp.Controllers
             var viewModel = new AuxiliarEdit();
             var user = (SEG_USUARIO_BE)Session["Usuario"];
 
-            var tasaTranferencia = bl.fn_ren_sel_tasaTranferencia("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
-            var tasaTrans = bl.fn_ren_sel_tasaTranferencia("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            var tasaTranf = bl.fn_ren_sel_tasaTranferencia("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
+            var tasaTranfValor = bl.fn_ren_sel_tasaTranfValor("SELECT_VALOR", user.SUSCRIPTOR, user.COD_USUARIO);
 
-
+            viewModel.lstTasaTranf = tasaTranf;
+            viewModel.lstTasaTranfValor = tasaTranfValor;
 
             return View(viewModel);
 

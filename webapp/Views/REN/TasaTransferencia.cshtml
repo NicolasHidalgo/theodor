@@ -3,5 +3,340 @@
     ViewBag.Title = "TasaTransferencia";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>TasaTransferencia</h2>
 
+<!-- Theme JS files -->
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+<script type="text/javascript" src="~/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+<script src="~/assets/otros/inputmask/inputmask.js"></script>
+
+<!-- /theme JS files -->
+
+<link href="~/assets/css/theodor.css" rel="stylesheet" />
+
+<style>
+    table thead tr {
+        background-color: #3f444e;
+        color: white;
+    }
+
+    .tit {
+        background-color: #156082;
+        color: white;
+    }
+</style>
+
+<div class="modal" id="confirmBorrarModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Está seguro de eliminar este registro?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmar">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<div class="container-fluid">
+    <!-- Content area -->
+    <div class="content" style="padding-top:0px;">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Basic layout-->
+                <div class="panel panel-flat">
+                    <div class="panel-heading">
+                        <table>
+                            <tr>
+                                <td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>
+                                <!--<td class="center"><i class="icon-floppy-disk icon-custom-style " title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>-->
+                                <!--<td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a class="botonera classBorrar">Borrar</a></td>-->
+                                @*<td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>*@
+                            </tr>
+                        </table>
+
+
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Meses</th>
+                                                    <th>Años</th>
+                                                    <th>Tasa S/.</th>
+                                                    <th>Pool Fondo S/.</th>
+                                                    <th>Tasa US$</th>
+                                                    <th>Pool Fondo US$</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbodyRORAC">
+                                                @{ var odd = 0; var estilo = string.Empty;}
+                                                @foreach (var item in Model.lstTasaTranf)
+                                                {
+                                                    estilo = string.Empty;
+                                                    odd = odd + 1;
+                                                    if ((odd % 2) == 0) { estilo = "colorGray"; }
+
+                                                    <tr class="@estilo">
+                                                        <td align="center">@item.periodo</td>
+                                                        <td align="center">@(item.anio?.ToString("N2"))</td>
+                                                        <td align="center">@(item.tasaSol?.ToString("P4"))</td>
+                                                        <td align="center">@(item.poolFondoSol?.ToString("P4"))</td>
+                                                        <td align="center">@(item.tasaUsd?.ToString("P4"))</td>
+                                                        <td align="center">@(item.poolFondoUsd?.ToString("P4"))</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- /bordered table -->
+                            </div>
+                            <div class="col-md-7">
+                                <div class="form-group">
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    @*<th>Constantes de Nelson & Siege</th>*@
+                                                    <th>Moneda</th>
+                                                    <th>beta0</th>
+                                                    <th>beta1</th>
+                                                    <th>beta2</th>
+                                                    <th>beta3</th>
+                                                    <th>lambda1</th>
+                                                    <th>lambda2</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbodyRORAC">
+                                                @{ var odd2 = 0; var estilo2 = string.Empty;}
+                                                @foreach (var item in Model.lstTasaTranfValor)
+                                                {
+                                                    estilo2 = string.Empty;
+                                                    odd2 = odd2 + 1;
+                                                    if ((odd2 % 2) == 0) { estilo2 = "colorGray"; }
+
+                                                    <tr class="@estilo2">
+                                                        <td align="left">@item.moneda</td>
+                                                        @*<td align="center">@(item.encaje?.ToString("P2"))</td>*@
+                                                        <td align="center">@(item.beta0?.ToString("N6"))</td>
+                                                        <td align="center">@(item.beta1?.ToString("N6"))</td>
+                                                        <td align="center">@(item.beta2?.ToString("N6"))</td>
+                                                        <td align="center">@(item.beta3?.ToString("N6"))</td>
+                                                        <td align="center">@(item.lambda1?.ToString("N6"))</td>
+                                                        <td align="center">@(item.lambda2?.ToString("N6"))</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- /bordered table -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var fSelEditar;
+    var fSelEliminar;
+
+
+    $(document).ready(function () {
+        var gAccion = "";
+        var gCodTipCliente = "";
+        var gCodProducto = 0;
+
+        function getPorcentaje(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa / 100.0;
+        }
+        function getPorcentajeNum(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa * 100.0;
+        }
+        function getImporte(valor) {
+            let _valor = valor.replace(/,/g, '');
+            if (isNaN(_valor)) {
+                return 0;
+            }
+            let monto = Number(_valor);
+
+            return monto;
+        }
+        function replaceNullEmpty(valor) {
+            if (valor == "null" || valor == null || valor == undefined) {
+                return "";
+            }
+            return valor;
+        }
+
+        $("#txtRORACObjetivo,#txtAutonomiaComercial").inputmask({
+            alias: "decimal",
+            radixPoint: ".",
+            digits: "6",
+            rightAlign: false,
+            integerDigits: 5,
+            digitsOptional: true,
+            allowPlus: true,
+            allowMinus: true,
+            placeholder: "0",
+            min: 0,
+            max: 100,
+            numericInput: true,
+        });
+
+        fSelEditar = function (data) {
+            $('#editModal').modal('show');
+            $("#ddlTipCliente").val(data.codTipCliente).change();
+            $("#ddlProducto").val(data.codProductoBase).change();
+            $("#txtRORACObjetivo").val(getPorcentajeNum(data.roracObjetivo)).change();
+            $("#txtAutonomiaComercial").val(getPorcentajeNum(data.autonomiaComercial)).change();
+
+            $('#ddlTipCliente,#ddlProducto').prop('disabled', true);
+            $("#titulo").text('Editar Registro');
+            gAccion = "UPDATE";
+        }
+        fSelEliminar = function (data) {
+            $('#confirmBorrarModal').modal('show');
+            gAccion = "DELETE";
+            console.log(data)
+            gCodTipCliente = data.codTipCliente;
+            gCodProducto = data.codProductoBase;
+        }
+
+        $("#btnNuevo,.classNuevo").on("click", function () {
+            $("#titulo").text('Nuevo Registro');
+            gAccion = "INSERT";
+            $('#ddlTipCliente,#ddlProducto').prop('disabled', false);
+            $("#txtRoracObjetivo").val('0');
+            $("#txtAutonomiaComercial").val('0');
+            $("#ddlTipCliente, #ddlProducto").val('').change();
+            $('#editModal').modal('show');
+        });
+        $("#btnGrabar").on("click", function () {
+            fnGrabar();
+        });
+        $("#btnConfirmar").on("click", function () {
+            fnGrabar();
+        });
+
+        function fnCargarLista() {
+            $.getJSON('@Url.Action("JSON_RORACObjectivo_Refresh")', function (data) {
+                $("#tbodyRORAC").empty();
+                var odd = 0;
+                var estilo = "";
+                var cadena = "";
+                $.each(data, function (index, item) {
+                    estilo = "";
+                    if (item.tipReg == "TIT") {
+                        odd = 0;
+                        cadena += "<tr class='tit'><td colspan='8'>" + item.tipCliente +"</td></tr>";
+                    }
+                    if (item.tipReg == "EDT") {
+                        odd = odd + 1;
+                        if ((odd % 2) == 0) { estilo = "colorGray"; }
+                        cadena += "<tr class=" + estilo + ">";
+                        cadena += "<td>" + item.codPersoneria + "</td>";
+                        cadena += "<td>" + item.codTipCliente + "</td>";
+                        cadena += "<td>" + item.tipCliente + "</td>";
+                        cadena += "<td>" + replaceNullEmpty(item.codProductoBase) + "</td>";
+                        cadena += "<td>" + item.productoBase + "</td>";
+                        cadena += "<td>" + numeral(item.roracObjetivo).format('0.00%') + "</td>";
+                        cadena += "<td>" + numeral(item.autonomiaComercial).format('0.00%') + "</td>";
+
+                        cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
+                        cadena += '<ul class="dropdown-menu dropdown-menu-right">';
+                        cadena += "<li><a onclick='fSelEditar(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
+                        cadena += "<li><a onclick='fSelEliminar(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
+                        cadena += '</ul></li></ul></td>';
+
+                        //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
+                        cadena += "</tr>";
+                    }
+                });
+                $("#tbodyRORAC").append(cadena);
+            }).done(function () {
+
+            });
+        }
+
+        function fnGrabar() {
+            $("#overlay").show();
+
+            var _obj = {
+                codTipCliente: gAccion == "DELETE" ? gCodTipCliente : $("#ddlTipCliente option:selected").val(),
+                codProductoBase: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
+                RORACObjetivo: getPorcentaje($("#txtRORACObjetivo").val()),
+                autonomiaComercial: getPorcentaje($("#txtAutonomiaComercial").val()),
+            };
+
+            var _reply = {
+                ACCION: gAccion,
+                MENSAJE: '',
+                DATA: JSON.stringify(_obj),
+            };
+
+            var _url = '@Url.Action("EditRORACObjetivo", "MANT")';
+            $.post(_url, _reply).done(function (data) {
+                if (data.Status === 200) {
+                    toastr.success(data.Message);
+                    fnCargarLista();
+                    //PlantillaDataTable.draw();
+                }
+                else {
+                    toastr.error(data.Message);
+                }
+            }).fail(function (e) {
+            }).always(function () {
+                $("#overlay").hide();
+                if (gAccion == "DELETE") {
+                    $('#confirmBorrarModal').modal('hide');
+                } else {
+                    $('#editModal').modal('hide');
+                }
+
+            });
+        }
+    });
+
+</script>

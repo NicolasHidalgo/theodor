@@ -63,6 +63,7 @@
     <Compile Include="SEG_PERFIL_BE.cs" />
     <Compile Include="SEG_SESSION_BE.cs" />
     <Compile Include="SEG_USUARIO_BE.cs" />
+    <Compile Include="TASA_TRANFERENCIA_BE.cs" />
     <Compile Include="UBIGEO_BE.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
