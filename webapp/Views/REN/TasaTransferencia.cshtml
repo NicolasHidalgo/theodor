@@ -14,7 +14,8 @@
 <script src="~/assets/otros/inputmask/inputmask.js"></script>
 
 <!-- /theme JS files -->
-
+<script src="~/assets/otros/chart/chart.js"></script>
+<script src="~/assets/otros/chart/chartjs-plugin-datalabels.js"></script>
 <link href="~/assets/css/theodor.css" rel="stylesheet" />
 
 <style>
@@ -87,7 +88,7 @@
                                                     <th>Pool Fondo US$</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tbodyRORAC">
+                                            <tbody id="tbody1">
                                                 @{ var odd = 0; var estilo = string.Empty;}
                                                 @foreach (var item in Model.lstTasaTranf)
                                                 {
@@ -128,7 +129,7 @@
                                                     <th>lambda2</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tbodyRORAC">
+                                            <tbody id="tbody2">
                                                 @{ var odd2 = 0; var estilo2 = string.Empty;}
                                                 @foreach (var item in Model.lstTasaTranfValor)
                                                 {
@@ -153,6 +154,8 @@
                                     </div>
                                 </div>
                                 <!-- /bordered table -->
+                            
+                                <canvas id="myChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -170,173 +173,99 @@
 
 
     $(document).ready(function () {
-        var gAccion = "";
-        var gCodTipCliente = "";
-        var gCodProducto = 0;
 
-        function getPorcentaje(valor) {
-            if (isNaN(valor)) {
-                return 0;
-            }
-            let tasa = Number(valor);
-            if (tasa == 0) {
-                return 0;
-            }
-            return tasa / 100.0;
-        }
-        function getPorcentajeNum(valor) {
-            if (isNaN(valor)) {
-                return 0;
-            }
-            let tasa = Number(valor);
-            if (tasa == 0) {
-                return 0;
-            }
-            return tasa * 100.0;
-        }
-        function getImporte(valor) {
-            let _valor = valor.replace(/,/g, '');
-            if (isNaN(_valor)) {
-                return 0;
-            }
-            let monto = Number(_valor);
+        var jsModel = @Html.Raw(Json.Encode(Model));
+        var dataModel = jsModel.lstTasaTranf;
+        var periodo = dataModel.map(x => x.periodo);
+        var poolFondoUsd = dataModel.map(x => x.poolFondoUsd);
+        var poolFondoSol = dataModel.map(x => x.poolFondoSol);
+        var tasaSol = dataModel.map(x => x.tasaSol);
+        var tasaUsd = dataModel.map(x => x.tasaUsd);
+        var maximoMes = Math.max(...periodo);
 
-            return monto;
-        }
-        function replaceNullEmpty(valor) {
-            if (valor == "null" || valor == null || valor == undefined) {
-                return "";
-            }
-            return valor;
-        }
+        const labels = periodo;
+        const data = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Pool US$',
+                    data: poolFondoUsd,
+                    borderColor: "blue",
+                    backgroundColor: "blue",
+                },
+                {
+                    label: 'Pool S/.',
+                    data: poolFondoSol,
+                    borderColor: "green",
+                    backgroundColor: "green",
+                },
+                //{
+                //    label: 'TEA S/.',
+                //    data: tasaSol,
+                //    borderColor: "red",
+                //    backgroundColor: "red",
+                //},
+                //{
+                //    label: 'TEA US$',
+                //    data: tasaUsd,
+                //    borderColor: "yellow",
+                //    backgroundColor: "yellow",
+                //}
+            ]
+        };
 
-        $("#txtRORACObjetivo,#txtAutonomiaComercial").inputmask({
-            alias: "decimal",
-            radixPoint: ".",
-            digits: "6",
-            rightAlign: false,
-            integerDigits: 5,
-            digitsOptional: true,
-            allowPlus: true,
-            allowMinus: true,
-            placeholder: "0",
-            min: 0,
-            max: 100,
-            numericInput: true,
-        });
 
-        fSelEditar = function (data) {
-            $('#editModal').modal('show');
-            $("#ddlTipCliente").val(data.codTipCliente).change();
-            $("#ddlProducto").val(data.codProductoBase).change();
-            $("#txtRORACObjetivo").val(getPorcentajeNum(data.roracObjetivo)).change();
-            $("#txtAutonomiaComercial").val(getPorcentajeNum(data.autonomiaComercial)).change();
-
-            $('#ddlTipCliente,#ddlProducto').prop('disabled', true);
-            $("#titulo").text('Editar Registro');
-            gAccion = "UPDATE";
-        }
-        fSelEliminar = function (data) {
-            $('#confirmBorrarModal').modal('show');
-            gAccion = "DELETE";
-            console.log(data)
-            gCodTipCliente = data.codTipCliente;
-            gCodProducto = data.codProductoBase;
-        }
-
-        $("#btnNuevo,.classNuevo").on("click", function () {
-            $("#titulo").text('Nuevo Registro');
-            gAccion = "INSERT";
-            $('#ddlTipCliente,#ddlProducto').prop('disabled', false);
-            $("#txtRoracObjetivo").val('0');
-            $("#txtAutonomiaComercial").val('0');
-            $("#ddlTipCliente, #ddlProducto").val('').change();
-            $('#editModal').modal('show');
-        });
-        $("#btnGrabar").on("click", function () {
-            fnGrabar();
-        });
-        $("#btnConfirmar").on("click", function () {
-            fnGrabar();
-        });
-
-        function fnCargarLista() {
-            $.getJSON('@Url.Action("JSON_RORACObjectivo_Refresh")', function (data) {
-                $("#tbodyRORAC").empty();
-                var odd = 0;
-                var estilo = "";
-                var cadena = "";
-                $.each(data, function (index, item) {
-                    estilo = "";
-                    if (item.tipReg == "TIT") {
-                        odd = 0;
-                        cadena += "<tr class='tit'><td colspan='8'>" + item.tipCliente +"</td></tr>";
+        const ctx = document.getElementById('myChart');
+        ctx.height = 200;
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Tasa Transferencia',
+                        font: {
+                            size: 14,
+                        }
+                    },
+                    legend: {
+                        position: 'bottom' // Mueve la leyenda debajo del gráfico
                     }
-                    if (item.tipReg == "EDT") {
-                        odd = odd + 1;
-                        if ((odd % 2) == 0) { estilo = "colorGray"; }
-                        cadena += "<tr class=" + estilo + ">";
-                        cadena += "<td>" + item.codPersoneria + "</td>";
-                        cadena += "<td>" + item.codTipCliente + "</td>";
-                        cadena += "<td>" + item.tipCliente + "</td>";
-                        cadena += "<td>" + replaceNullEmpty(item.codProductoBase) + "</td>";
-                        cadena += "<td>" + item.productoBase + "</td>";
-                        cadena += "<td>" + numeral(item.roracObjetivo).format('0.00%') + "</td>";
-                        cadena += "<td>" + numeral(item.autonomiaComercial).format('0.00%') + "</td>";
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        //stacked: true,
+                        //beginAtZero: true,
+                        min: 0,
+                        max: maximoMes,
+                        ticks: {
+                            stepSize: maximoMes/5,
+                        },
+                    },
+                    y: {
+                        //stacked: true,
+                        //beginAtZero: true,
+                        max: .14,
+                        min: .0,
+                        ticks: {
+                            stepSize: .02,
+                            callback: function (value) {
+                                return (value * 100).toFixed(0) + '%';
+                            },
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Porcentaje (%)',
+                        },
+                    },
+                },
+                
+            },
+        });
 
-                        cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
-                        cadena += '<ul class="dropdown-menu dropdown-menu-right">';
-                        cadena += "<li><a onclick='fSelEditar(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
-                        cadena += "<li><a onclick='fSelEliminar(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
-                        cadena += '</ul></li></ul></td>';
 
-                        //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
-                        cadena += "</tr>";
-                    }
-                });
-                $("#tbodyRORAC").append(cadena);
-            }).done(function () {
-
-            });
-        }
-
-        function fnGrabar() {
-            $("#overlay").show();
-
-            var _obj = {
-                codTipCliente: gAccion == "DELETE" ? gCodTipCliente : $("#ddlTipCliente option:selected").val(),
-                codProductoBase: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
-                RORACObjetivo: getPorcentaje($("#txtRORACObjetivo").val()),
-                autonomiaComercial: getPorcentaje($("#txtAutonomiaComercial").val()),
-            };
-
-            var _reply = {
-                ACCION: gAccion,
-                MENSAJE: '',
-                DATA: JSON.stringify(_obj),
-            };
-
-            var _url = '@Url.Action("EditRORACObjetivo", "MANT")';
-            $.post(_url, _reply).done(function (data) {
-                if (data.Status === 200) {
-                    toastr.success(data.Message);
-                    fnCargarLista();
-                    //PlantillaDataTable.draw();
-                }
-                else {
-                    toastr.error(data.Message);
-                }
-            }).fail(function (e) {
-            }).always(function () {
-                $("#overlay").hide();
-                if (gAccion == "DELETE") {
-                    $('#confirmBorrarModal').modal('hide');
-                } else {
-                    $('#editModal').modal('hide');
-                }
-
-            });
-        }
     });
 
 </script>
