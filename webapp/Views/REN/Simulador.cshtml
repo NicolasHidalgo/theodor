@@ -1893,10 +1893,19 @@
                         $("#txtTasaBase").val(getPorcentajeNum(data.Data.simData.tea_base)).trigger('change', 'fSeleccionar');
                         if (flgTEA == 0 && flgTEA_Aux == 0) {
                             flgTEA_Aux = 1;
-                            debugger; //--cuidado aqui
-                            if (tea == 0) {
-                                $("#txtTasaEfectiva").val(getPorcentajeNum(data.Data.simData.tea_base)).trigger('change', 'fTrigger');
+                            var teaBase = data.Data.simData.tea_base;
+                            debugger;
+                            //@@--cuidado aqui
+                            if (teaBase == null || teaBase == undefined || teaBase == "" || teaBase == 0) {
+                                if (tea == 0) {
+                                    $("#txtTasaEfectiva").val(getPorcentajeNum(teaBase)).trigger('change', 'fTrigger');
+                                } else {
+                                    //$("#txtTasaEfectiva").val(getPorcentajeNum(tea)).trigger('change', 'fTrigger');
+                                }
+                            } else {
+                                $("#txtTasaEfectiva").val(getPorcentajeNum(teaBase)).trigger('change', 'fTrigger');
                             }
+                            
                         } else {
                             fnAutonomia();
 

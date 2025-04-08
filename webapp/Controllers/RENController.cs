@@ -793,8 +793,16 @@ namespace webapp.Controllers
             var viewModel = new AuxiliarEdit();
             var user = (SEG_USUARIO_BE)Session["Usuario"];
 
-            var tasaTranf = bl.fn_ren_sel_tasaTranferencia("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
-            var tasaTranfValor = bl.fn_ren_sel_tasaTranfValor("SELECT_VALOR", user.SUSCRIPTOR, user.COD_USUARIO);
+            var dataVigencia = bl.fn_ren_sel_transferenciaDDL("@fec_vigencia", user.SUSCRIPTOR, user.COD_USUARIO, 1);
+            viewModel.ddlVigencia = dataVigencia.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                Selected = x.Selected,
+            });
+
+            var tasaTranf = bl.fn_ren_sel_tasaTranferencia("SELECT", user.SUSCRIPTOR, user.COD_USUARIO, 1);
+            var tasaTranfValor = bl.fn_ren_sel_tasaTranfValor("SELECT_VALOR", user.SUSCRIPTOR, user.COD_USUARIO, 1);
 
             viewModel.lstTasaTranf = tasaTranf;
             viewModel.lstTasaTranfValor = tasaTranfValor;

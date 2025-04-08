@@ -70,8 +70,8 @@
                                 <td>
                                     <div class="form-group">
                                         <label>Vigencia</label>
-                                        <input type="text" class="form-control" id="txtVigencia"  style="text-align: right;"/>
-                                        @*<input type="date" class="form-control" id="txtVigencia2" />*@
+                                        @*<input type="text" class="form-control" id="txtVigencia" style="text-align: right;" />*@
+                                        @Html.DropDownList("ddlVigencia", Model.ddlVigencia, new { @class = "select" })
                                     </div>
                                 </td>
                                 <td style="width:160px;">
@@ -107,12 +107,12 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th>Meses</th>
-                                                    <th>Años</th>
-                                                    <th>Tasa S/.</th>
-                                                    <th>Pool Fondo S/.</th>
-                                                    <th>Tasa US$</th>
-                                                    <th>Pool Fondo US$</th>
+                                                    <th width="10%">Meses</th>
+                                                    <th width="10%">Años</th>
+                                                    <th width="40%">Tasa S/.</th>
+                                                    @*<th>Pool Fondo S/.</th>*@
+                                                    <th width="40%">Tasa US$</th>
+                                                    @*<th>Pool Fondo US$</th>*@
                                                 </tr>
                                             </thead>
                                             <tbody id="tbody1">
@@ -124,12 +124,26 @@
                                                     if ((odd % 2) == 0) { estilo = "colorGray"; }
 
                                                     <tr class="@estilo">
-                                                        <td align="center">@item.periodo</td>
-                                                        <td align="center">@(item.anio?.ToString("N2"))</td>
-                                                        <td align="center">@(item.tasaSol?.ToString("P4"))</td>
-                                                        <td align="center">@(item.poolFondoSol?.ToString("P4"))</td>
-                                                        <td align="center">@(item.tasaUsd?.ToString("P4"))</td>
-                                                        <td align="center">@(item.poolFondoUsd?.ToString("P4"))</td>
+                                                        <td align="center">
+                                                            <input type="number" min="1" max="999" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control edtPeriodo" data-id="@odd" style="text-align: center;" value="@item.periodo" />
+                                                        </td>
+                                                        <td align="center">
+                                                            <label id="lblAnio_@odd" class="no-margin">@(item.anio?.ToString("N2"))</label>
+                                                        </td>
+                                                        <td align="center">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" style="text-align: center;" value="@(item.tasaSol?.ToString("P4"))" />
+                                                                <span class="input-group-addon">%</span>
+                                                            </div>
+                                                        </td>
+                                                        @*<td align="center">@(item.poolFondoSol?.ToString("P4"))</td>*@
+                                                        <td align="center">
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control" style="text-align: center;" value="@(item.tasaUsd?.ToString("P4"))" />
+                                                                <span class="input-group-addon">%</span>
+                                                            </div>
+                                                        </td>
+                                                        @*<td align="center">@(item.poolFondoUsd?.ToString("P4"))</td>*@
                                                     </tr>
                                                 }
                                             </tbody>
@@ -200,6 +214,14 @@
 
 
     $(document).ready(function () {
+
+        $('.edtPeriodo').on('input', function () {
+            var id = $(this).data('id');
+            var periodo = parseFloat($(this).val());
+
+            var nuevoAnio = isNaN(periodo) ? '' : calcularAnios(periodo).toFixed(2); // reemplaza con tu lógica
+            $('#lblAnio_' + id).text(nuevoAnio);
+        });
 
         function validarTasa(valor) {
             if (valor == "" || valor == 0 || valor == undefined || valor == null) {
@@ -318,7 +340,6 @@
             var data1 = arrBase.map(x => x.tasa);
             var data2 = arrBase.map(x => x.poolPasivo);
             var data3 = arrBase.map(x => x.poolActivo);
-            debugger;
             construirGrafico(labels, data1, data2, data3);
         }
 
@@ -388,12 +409,12 @@
 
         var encajePEN = dataPEN.map(x => x.encaje);
         var encajeUSD = dataUSD.map(x => x.encaje);
-        var vigencia = dataUSD.map(x => x.fecVigencia);
-        const timestamp = parseInt(String(vigencia).match(/\d+/)[0]);
-        const fecha = new Date(timestamp);
 
-        $("#txtVigencia").val(fecha.toISOString().split('T')[0]);
-        /*$("#txtVigencia2").val(vigencia);*/
+        //var vigencia = dataUSD.map(x => x.fecVigencia);
+        //const timestamp = parseInt(String(vigencia).match(/\d+/)[0]);
+        //const fecha = new Date(timestamp);
+        //$("#txtVigencia").val(fecha.toISOString().split('T')[0]);
+
         $("#txtEncajePEN").val(getPorcentajeNum(encajePEN)).change();
         $("#txtEncajeUSD").val(getPorcentajeNum(encajeUSD)).change();
 

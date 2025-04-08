@@ -11,6 +11,7 @@ namespace webapp.ViewModels
 {
     public class AuxiliarEdit
     {
+        public IEnumerable<ExtendedSelectListItem> ddlVigencia { get; set; } = new HashSet<ExtendedSelectListItem>();
         public IEnumerable<ExtendedSelectListItem> ddlPerfil { get; set; } = new HashSet<ExtendedSelectListItem>();
         public IEnumerable<ExtendedSelectListItem> ddlDepartamento { get; set; } = new HashSet<ExtendedSelectListItem>();
         public IEnumerable<ExtendedSelectListItem> ddlProvincia { get; set; } = new HashSet<ExtendedSelectListItem>();

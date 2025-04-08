@@ -1000,7 +1000,7 @@ namespace DA
 
 
 
-        public List<TASA_TRANFERENCIA_BE> fn_ren_sel_tasaTranferencia(string accion, long codSuscriptor, string codUsuario)
+        public List<TASA_TRANFERENCIA_BE> fn_ren_sel_tasaTranferencia(string accion, long codSuscriptor, string codUsuario, int tipo)
         {
             Mensaje = string.Empty;
             List<TASA_TRANFERENCIA_BE> lista = new List<TASA_TRANFERENCIA_BE>();
@@ -1012,7 +1012,8 @@ namespace DA
             cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
             cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
-            //cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = 0;
+            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = null;
+            cmd.Parameters.Add("@tipo", System.Data.SqlDbType.Int).Value = tipo;
 
             try
             {
@@ -1050,7 +1051,7 @@ namespace DA
             return lista;
         }
 
-        public List<TASA_TRANF_VALOR_BE> fn_ren_sel_tasaTranfValor(string accion, long codSuscriptor, string codUsuario)
+        public List<TASA_TRANF_VALOR_BE> fn_ren_sel_tasaTranfValor(string accion, long codSuscriptor, string codUsuario, int tipo)
         {
             Mensaje = string.Empty;
             List<TASA_TRANF_VALOR_BE> lista = new List<TASA_TRANF_VALOR_BE>();
@@ -1062,7 +1063,8 @@ namespace DA
             cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
             cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
-            //cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = 0;
+            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = null;
+            cmd.Parameters.Add("@tipo", System.Data.SqlDbType.Int).Value = tipo;
 
             try
             {
@@ -1084,6 +1086,54 @@ namespace DA
                         bean.beta3 = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("beta3"));
                         bean.lambda1 = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("lambda1"));
                         bean.lambda2 = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("lambda2"));
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
+        public List<GEN_DDL_BE> fn_ren_sel_transferenciaDDL(string accion, long codSuscriptor, string codUsuario, int tipo)
+        {
+            Mensaje = string.Empty;
+            List<GEN_DDL_BE> lista = new List<GEN_DDL_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_tasaTransferencia]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 30).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = null;
+            cmd.Parameters.Add("@tipo", System.Data.SqlDbType.Int).Value = tipo;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    GEN_DDL_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new GEN_DDL_BE();
+                        if (accion.Equals("@fec_vigencia"))
+                        {
+                            bean.Value = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("fec_vigencia")).ToString();
+                            bean.Text = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("fec_vigencia")).ToString();
+                        }
 
                         lista.Add(bean);
                     }
