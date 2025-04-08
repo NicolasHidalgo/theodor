@@ -11,6 +11,7 @@ namespace BEANS
     {
         public DateTime? fecVigencia { get; set; }
         public int periodo { get; set; }
+        public string ori { get; set; }
         public double? anio { get; set; }
         public double? tasaSol { get; set; }
         public double? poolFondoSol { get; set; }

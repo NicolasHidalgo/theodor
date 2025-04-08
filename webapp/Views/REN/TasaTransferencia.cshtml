@@ -58,13 +58,40 @@
             <div class="col-md-12">
                 <!-- Basic layout-->
                 <div class="panel panel-flat">
-                    <div class="panel-heading">
+                    <div class="panel-heading" style="padding-bottom:0;">
                         <table>
                             <tr>
-                                <td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>
-                                <!--<td class="center"><i class="icon-floppy-disk icon-custom-style " title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>-->
+                                @*<td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>*@
+                                <td class="center"><i class="icon-floppy-disk icon-custom-style" title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>
                                 <!--<td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a class="botonera classBorrar">Borrar</a></td>-->
                                 @*<td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>*@
+
+                                <td class="center"><i class="icon-database-refresh icon-custom-style" title="Procesar" id="btnProcesar"></i><br /><a class="botonera classGrabar">Procesar</a></td>
+                                <td>
+                                    <div class="form-group">
+                                        <label>Vigencia</label>
+                                        <input type="text" class="form-control" id="txtVigencia"  style="text-align: right;"/>
+                                        @*<input type="date" class="form-control" id="txtVigencia2" />*@
+                                    </div>
+                                </td>
+                                <td style="width:160px;">
+                                    <div class="form-group">
+                                        <label>Encaje S/.:</label>
+                                        <div class="input-group">
+                                            <input type="text" id="txtEncajePEN" name="txtEncajePEN" value="0" class="form-control" style="text-align: right;">
+                                            <span class="input-group-addon">%</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width:160px;">
+                                    <div class="form-group">
+                                        <label>Encaje US$:</label>
+                                        <div class="input-group">
+                                            <input type="text" id="txtEncajeUSD" name="txtEncajeUSD" value="0" class="form-control" style="text-align: right;">
+                                            <span class="input-group-addon">%</span>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
 
@@ -174,96 +201,284 @@
 
     $(document).ready(function () {
 
+        function validarTasa(valor) {
+            if (valor == "" || valor == 0 || valor == undefined || valor == null) {
+                return null;
+            }
+            return valor;
+        }
+
+        function calcularAnios(meses) {
+            var res = 0.0;
+            if (meses == "" || meses == 0 || meses == undefined || meses == null) {
+                return "";
+            }
+            res = meses / 12;
+            return res;
+        }
+        function calcularPoolPasivo(anios,beta0,beta1,beta2,beta3,lambda1,lambda2) {
+            var res = 0.0;
+            // Convertir a números explícitamente, en caso de que sean cadenas
+            anios = Number(anios);
+            beta0 = Number(beta0);
+            beta1 = Number(beta1);
+            beta2 = Number(beta2);
+            beta3 = Number(beta3);
+            lambda1 = Number(lambda1);
+            lambda2 = Number(lambda2);
+            if (lambda1 == "" || lambda1 == 0 || lambda1 == undefined || lambda1 == null) {
+                return null;
+            }
+            if (lambda2 == "" || lambda2 == 0 || lambda2 == undefined || lambda2 == null) {
+                return null;
+            }
+
+            res = beta0
+                + (beta1 * ((1 - Math.exp(-anios / lambda1)) / (anios / lambda1)))
+                + (beta2 * (((1 - Math.exp(-anios / lambda1)) / (anios / lambda1)) - Math.exp(-anios / lambda1)))
+                + (beta3 * (((1 - Math.exp(-anios / lambda2)) / (anios / lambda2)) - Math.exp(-anios / lambda2)));
+
+            res = (isNaN(res) || !isFinite(res)) ? "" : res;
+
+            return res;
+        }
+        function calcularPoolActivo(poolPasivo,encaje) {
+            var res = 0.0;
+            poolPasivo = Number(poolPasivo);
+            encaje = Number(encaje);
+            res = (poolPasivo / (1 - encaje));
+            return res;
+        }
+
+        function generarDataGrafico(data, dataValor) {
+            /*
+            1. 30 items para lograr la curva perfecta
+            2. Para el primer ejemplo tenemos 11 datos reales, de los cuales restan 19 y estos tengo que inventar el dato.
+            3. Tomar el periodo máximo de los datos reales, para el ejemplo serían 240.
+            4. Hacer la formula 240/30 serían 8 meses, entonces los registros tendrían que llenar en 8 en 8 (meses) por ejemplo 8,16,32,...
+                ...q pasa sí... el período máximo es 245.. redondear y tomar el entero. Otro caso 267/30 sería 8.9 entonces considerarlo 9.
+            5. Para llenar los datos "ficticios" por ejemplo el primero Meses: 8, Año: Calculado (8/12),
+                ...Tasa se queda en blanco, Pool Pasivo: formula, Pool Activo Formula.
+            */
+            var numRegistros = 30;
+            var maxPeriodo = 240;
+            var intervalo = Math.round(maxPeriodo / numRegistros);
+            var colMeses = 0.0;
+            var colAnios = 0.0;
+            var colTasa = 0.0;
+            var colPoolPasivo = 0.0;
+            var colPoolActivo = 0.0;
+            var arrBase = [];
+            const dataBeta = dataValor.filter(x => x.codMoneda == "0");
+            var beta0 = dataBeta.map(x => x.beta0);
+            var beta1 = dataBeta.map(x => x.beta1);
+            var beta2 = dataBeta.map(x => x.beta2);
+            var beta3 = dataBeta.map(x => x.beta3);
+            var lambda1 = dataBeta.map(x => x.lambda1);
+            var lambda2 = dataBeta.map(x => x.lambda1);
+            var encaje = dataBeta.map(x => x.encaje);
+            //const dataUSD = dataBeta.filter(x => x.codMoneda == "1");
+
+            
+
+            var intervaloAcm = intervalo;
+            for (let i = 0; i < numRegistros; i++) {
+                colMeses = intervaloAcm;
+                colAnios = calcularAnios(intervaloAcm);
+                colTasa = validarTasa(null);
+                colPoolPasivo = calcularPoolPasivo(colAnios, beta0, beta1, beta2, beta3, lambda1, lambda2);
+                colPoolActivo = calcularPoolActivo(colPoolPasivo,encaje);
+
+                arrBase.push({ mes: colMeses, tasa: colTasa, poolPasivo: colPoolPasivo, poolActivo: colPoolActivo });
+
+                intervaloAcm += intervalo;
+            }
+
+            data.forEach(function (item) {
+                // Encuentra el índice
+                let indice = arrBase.findIndex(x => x.mes === item.periodo);
+                // Si lo encontramos, eliminamos el elemento
+                if (indice !== -1) {
+                    arrBase.splice(indice, 1);
+                }
+                colMeses = item.periodo;
+                colAnios = calcularAnios(colMeses);
+                colTasa = validarTasa(item.tasaSol);
+                colPoolPasivo = calcularPoolPasivo(colAnios, beta0, beta1, beta2, beta3, lambda1, lambda2);
+                colPoolActivo = calcularPoolActivo(colPoolPasivo, encaje);
+
+                arrBase.push({ mes: colMeses, tasa: colTasa, poolPasivo: colPoolPasivo, poolActivo: colPoolActivo });
+            });
+
+            arrBase.sort(function (a, b) {
+                return a.mes - b.mes;
+            });
+
+            var labels = arrBase.map(x => x.mes);
+            var data1 = arrBase.map(x => x.tasa);
+            var data2 = arrBase.map(x => x.poolPasivo);
+            var data3 = arrBase.map(x => x.poolActivo);
+            debugger;
+            construirGrafico(labels, data1, data2, data3);
+        }
+
+        function getPorcentaje(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa / 100.0;
+        }
+        function getPorcentajeNum(valor) {
+            if (isNaN(valor)) {
+                return 0;
+            }
+            let tasa = Number(valor);
+            if (tasa == 0) {
+                return 0;
+            }
+            return tasa * 100.0;
+        }
+        function getImporte(valor) {
+            let _valor = valor.replace(/,/g, '');
+            if (isNaN(_valor)) {
+                return 0;
+            }
+            let monto = Number(_valor);
+
+            return monto;
+        }
+        function replaceNullEmpty(valor) {
+            if (valor == "null" || valor == null || valor == undefined) {
+                return "";
+            }
+            return valor;
+        }
+
+        $("#txtEncajePEN,#txtEncajeUSD").inputmask({
+            alias: "decimal",
+            radixPoint: ".",
+            digits: "2",
+            rightAlign: false,
+            integerDigits: 5,
+            digitsOptional: true,
+            allowPlus: true,
+            allowMinus: true,
+            placeholder: "0",
+            min: 0,
+            max: 100,
+            numericInput: true,
+        });
+
         var jsModel = @Html.Raw(Json.Encode(Model));
-        var dataModel = jsModel.lstTasaTranf;
+        var dataModel = jsModel.lstTasaTranf.filter(x => x.periodo != "0");
         var periodo = dataModel.map(x => x.periodo);
         var poolFondoUsd = dataModel.map(x => x.poolFondoUsd);
         var poolFondoSol = dataModel.map(x => x.poolFondoSol);
         var tasaSol = dataModel.map(x => x.tasaSol);
         var tasaUsd = dataModel.map(x => x.tasaUsd);
-        var maximoMes = Math.max(...periodo);
+        //var maximoMes = Math.max(...periodo) + 60;
 
-        const labels = periodo;
-        const data = {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Pool US$',
-                    data: poolFondoUsd,
-                    borderColor: "blue",
-                    backgroundColor: "blue",
-                },
-                {
-                    label: 'Pool S/.',
-                    data: poolFondoSol,
-                    borderColor: "green",
-                    backgroundColor: "green",
-                },
-                //{
-                //    label: 'TEA S/.',
-                //    data: tasaSol,
-                //    borderColor: "red",
-                //    backgroundColor: "red",
-                //},
-                //{
-                //    label: 'TEA US$',
-                //    data: tasaUsd,
-                //    borderColor: "yellow",
-                //    backgroundColor: "yellow",
-                //}
-            ]
-        };
+        var dataValor = jsModel.lstTasaTranfValor;
+        const dataPEN = dataValor.filter(x => x.codMoneda == "0");
+        const dataUSD = dataValor.filter(x => x.codMoneda == "1");
+
+        var encajePEN = dataPEN.map(x => x.encaje);
+        var encajeUSD = dataUSD.map(x => x.encaje);
+        var vigencia = dataUSD.map(x => x.fecVigencia);
+        const timestamp = parseInt(String(vigencia).match(/\d+/)[0]);
+        const fecha = new Date(timestamp);
+
+        $("#txtVigencia").val(fecha.toISOString().split('T')[0]);
+        /*$("#txtVigencia2").val(vigencia);*/
+        $("#txtEncajePEN").val(getPorcentajeNum(encajePEN)).change();
+        $("#txtEncajeUSD").val(getPorcentajeNum(encajeUSD)).change();
+
+        generarDataGrafico(dataModel, dataValor);
+        //construirGrafico(periodo, poolFondoUsd, poolFondoSol);
+
+        function construirGrafico(labels, data1, data2, data3){
+            const data = {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Tasa',
+                        data: data1,
+                        borderColor: "yellow",
+                        backgroundColor: "yellow",
+                        spanGaps: true, // Conectar puntos con valores nulos
+                    },
+                    {
+                        label: 'Pool Pasivo',
+                        data: data2,
+                        borderColor: "red",
+                        backgroundColor: "red",
+                    },
+                    {
+                        label: 'Pool Activo',
+                        data: data3,
+                        borderColor: "green",
+                        backgroundColor: "green",
+                    },
+                ]
+            };
 
 
-        const ctx = document.getElementById('myChart');
-        ctx.height = 200;
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: data,
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Tasa Transferencia',
-                        font: {
-                            size: 14,
+            const ctx = document.getElementById('myChart');
+            ctx.height = 200;
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Tasa Transferencia',
+                            font: {
+                                size: 14,
+                            }
+                        },
+                        legend: {
+                            position: 'bottom' // Mueve la leyenda debajo del gráfico
                         }
                     },
-                    legend: {
-                        position: 'bottom' // Mueve la leyenda debajo del gráfico
-                    }
-                },
-                scales: {
-                    x: {
-                        type: 'linear',
-                        //stacked: true,
-                        //beginAtZero: true,
-                        min: 0,
-                        max: maximoMes,
-                        ticks: {
-                            stepSize: maximoMes/5,
-                        },
-                    },
-                    y: {
-                        //stacked: true,
-                        //beginAtZero: true,
-                        max: .14,
-                        min: .0,
-                        ticks: {
-                            stepSize: .02,
-                            callback: function (value) {
-                                return (value * 100).toFixed(0) + '%';
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            //stacked: true,
+                            //beginAtZero: true,
+                            min: 0,
+                            max: 300, //maximoMes,
+                            ticks: {
+                                stepSize: 50, //maximoMes / 6,
                             },
                         },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Porcentaje (%)',
+                        y: {
+                            //stacked: true,
+                            //beginAtZero: true,
+                            max: .14,
+                            min: .0,
+                            ticks: {
+                                stepSize: .02,
+                                callback: function (value) {
+                                    return (value * 100).toFixed(0) + '%';
+                                },
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Porcentaje (%)',
+                            },
                         },
                     },
+
                 },
-                
-            },
-        });
+            });
+        }
+
+        
 
 
     });

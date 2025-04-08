@@ -1026,6 +1026,7 @@ namespace DA
                         bean = new TASA_TRANFERENCIA_BE();
                         bean.fecVigencia = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("fec_vigencia"));
                         bean.periodo = DataReader.SafeGetInt32(dr, dr.GetOrdinal("periodo"));
+                        bean.ori = DataReader.SafeGetString(dr, dr.GetOrdinal("ori"));
                         bean.anio = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("anio"));
                         bean.tasaSol = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("tasa_sol"));
                         bean.poolFondoSol = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("poolFondo_sol"));
