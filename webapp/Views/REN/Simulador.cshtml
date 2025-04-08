@@ -1067,10 +1067,7 @@
             let codProducto = $("#ddlProducto option:selected").val();
             var _plazo = $("#ddlProducto option:selected").data('aux1');
             var _tea = $("#ddlProducto option:selected").data('aux2');
-            //debugger;
-            $("#txtPlazoMeses").val(_plazo);
-            $("#txtTasaEfectiva").val(getPorcentajeNum(_tea)).trigger('change', 'fTrigger');
-
+            debugger;
             if (info != undefined && info != null) {
                 if (info == "clean") {
                     return;
@@ -1079,6 +1076,8 @@
                 fnAutonomia();
             } else {
                 flgTEA_Aux = 0;
+                $("#txtPlazoMeses").val(_plazo);
+                $("#txtTasaEfectiva").val(getPorcentajeNum(_tea)).trigger('change', 'fTrigger');
                 fnGrabar('simular');
             }
 

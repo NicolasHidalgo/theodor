@@ -23,38 +23,16 @@ namespace webapp.Controllers
     {
        
         private REN_BL bl = new REN_BL();
- 
-        public void regresionLogarimitca()
+
+        public double[] RegresionLogaritmica(double[] xData, double[] yData)
         {
+            // Ajustar parámetros
+            FitExtendedNelsonSiegelParameters(xData, yData,
+                out double beta0, out double beta1, out double beta2,
+                out double beta3, out double lambda1, out double lambda2);
 
-            // Datos de evaluación
-            double[] xData = { 0.08000, 0.25000, 0.50000, 1.00000, 1.50000, 2.00000, 3.00000, 10.0000, 15.00000, 20.00000 };
-            double[] yData = { 0.07480, 0.07500, 0.07610, 0.07840, 0.08120, 0.08620, 0.09030, 0.09975, 0.10531, 0.11256 };
-
-            // Llamar al método para ajustar los parámetros
-            FitExtendedNelsonSiegelParameters(xData, yData, out double beta0, out double beta1, out double beta2, out double beta3, out double lambda1, out double lambda2);
-
-            // Mostrar los resultados
-            Console.WriteLine($"beta0: {beta0}");
-            Console.WriteLine($"beta1: {beta1}");
-            Console.WriteLine($"beta2: {beta2}");
-            Console.WriteLine($"beta3: {beta3}");
-            Console.WriteLine($"lambda1: {lambda1}");
-            Console.WriteLine($"lambda2: {lambda2}");
-
-
-            // Calcular y mostrar los valores ajustados y residuales
-            Console.WriteLine("\nValores ajustados y residuales:");
-            for (int i = 0; i < xData.Length; i++)
-            {
-                //double logX = logXData[i];
-                double logX = Math.Log(xData[i]);
-                double fittedValue = beta0 + beta1 * logX + beta3 * Math.Pow(logX, 2) + beta3 * Math.Pow(logX, 3);
-                double residual = yData[i] - fittedValue;
-                Console.WriteLine($"x: {xData[i]}, y: {yData[i]}, y ajustado: {fittedValue}, residual: {residual}");
-            }
-
-
+            // Retornar los parámetros como arreglo
+            return new double[] { beta0, beta1, beta2, beta3, lambda1, lambda2 };
         }
 
         static void FitExtendedNelsonSiegelParameters(double[] xData, double[] yData, out double beta0, out double beta1, out double beta2, out double beta3, out double lambda1, out double lambda2)
@@ -159,7 +137,6 @@ namespace webapp.Controllers
 
         public ActionResult Simulador()
         {
-            regresionLogarimitca();
             var viewModel = new AuxiliarEdit();
             var user = (SEG_USUARIO_BE)Session["Usuario"];
 
@@ -789,7 +766,7 @@ namespace webapp.Controllers
 
         public ActionResult TasaTransferencia()
         {
-            regresionLogarimitca();
+
             var viewModel = new AuxiliarEdit();
             var user = (SEG_USUARIO_BE)Session["Usuario"];
 
