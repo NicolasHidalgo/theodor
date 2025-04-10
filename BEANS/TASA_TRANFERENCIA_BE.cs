@@ -10,7 +10,7 @@ namespace BEANS
     public class TASA_TRANFERENCIA_BE
     {
         public DateTime? fecVigencia { get; set; }
-        public int periodo { get; set; }
+        public int? periodo { get; set; }
         public string ori { get; set; }
         public double? anio { get; set; }
         public double? tasaSol { get; set; }

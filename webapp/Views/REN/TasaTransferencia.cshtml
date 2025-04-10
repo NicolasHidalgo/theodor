@@ -61,37 +61,47 @@
                     <div class="panel-heading" style="padding-bottom:0;">
                         <table>
                             <tr>
-                                @*<td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>*@
+                                <td>
+                                    <div class="form-inline">
+                                        <label>Vigencia</label>
+                                        <select id="ddlVigencia" name="ddlVigencia" class="form-control">
+                                            @foreach (var item in Model.ddlVigencia)
+                                            {
+                                                <option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Text</option>
+                                            }
+                                        </select>
+                                        @*@Html.DropDownList("ddlVigencia", Model.ddlVigencia, new { @class = "select form-control" })*@
+                                    </div>
+                                </td>
                                 <td class="center"><i class="icon-floppy-disk icon-custom-style" title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>
+                                <td class="center"><i class="icon-database-refresh icon-custom-style" title="Procesar" id="btnProcesar"></i><br /><a class="botonera classGrabar">Procesar</a></td>
+
+
+                                @*<td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>*@
+                                @*<td class="center"><i class="icon-floppy-disk icon-custom-style" title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>*@
                                 <!--<td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a class="botonera classBorrar">Borrar</a></td>-->
                                 @*<td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>*@
 
-                                <td class="center"><i class="icon-database-refresh icon-custom-style" title="Procesar" id="btnProcesar"></i><br /><a class="botonera classGrabar">Procesar</a></td>
-                                <td>
-                                    <div class="form-group">
-                                        <label>Vigencia</label>
-                                        @*<input type="text" class="form-control" id="txtVigencia" style="text-align: right;" />*@
-                                        @Html.DropDownList("ddlVigencia", Model.ddlVigencia, new { @class = "select" })
-                                    </div>
-                                </td>
-                                <td style="width:160px;">
-                                    <div class="form-group">
-                                        <label>Encaje S/.:</label>
-                                        <div class="input-group">
-                                            <input type="text" id="txtEncajePEN" name="txtEncajePEN" value="0" class="form-control" style="text-align: right;">
-                                            <span class="input-group-addon">%</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td style="width:160px;">
-                                    <div class="form-group">
-                                        <label>Encaje US$:</label>
-                                        <div class="input-group">
-                                            <input type="text" id="txtEncajeUSD" name="txtEncajeUSD" value="0" class="form-control" style="text-align: right;">
-                                            <span class="input-group-addon">%</span>
-                                        </div>
-                                    </div>
-                                </td>
+
+
+                                @*<td style="width:160px;">
+            <div class="form-group">
+                <label>Encaje S/.:</label>
+                <div class="input-group">
+                    <input type="text" id="txtEncajePEN" name="txtEncajePEN" value="0" class="form-control" style="text-align: right;">
+                    <span class="input-group-addon">%</span>
+                </div>
+            </div>
+        </td>
+        <td style="width:160px;">
+            <div class="form-group">
+                <label>Encaje US$:</label>
+                <div class="input-group">
+                    <input type="text" id="txtEncajeUSD" name="txtEncajeUSD" value="0" class="form-control" style="text-align: right;">
+                    <span class="input-group-addon">%</span>
+                </div>
+            </div>
+        </td>*@
                             </tr>
                         </table>
 
@@ -99,106 +109,388 @@
                     </div>
 
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="form-group">
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs nav-tabs-highlight nav-justified" style="width:50%">
+                                <li id="liTab1" class="active"><a href="#tab1" data-toggle="tab">Registro</a></li>
+                                <li id="liTab2"><a href="#tab2" data-toggle="tab">Curva Transferencia S/.</a></li>
+                                <li id="liTab3"><a href="#tab3" data-toggle="tab">Curva Transferencia US$</a></li>
+                            </ul>
 
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th width="10%">Meses</th>
-                                                    <th width="10%">Años</th>
-                                                    <th width="40%">Tasa S/.</th>
-                                                    @*<th>Pool Fondo S/.</th>*@
-                                                    <th width="40%">Tasa US$</th>
-                                                    @*<th>Pool Fondo US$</th>*@
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbody1">
-                                                @{ var odd = 0; var estilo = string.Empty;}
-                                                @foreach (var item in Model.lstTasaTranf)
-                                                {
-                                                    estilo = string.Empty;
-                                                    odd = odd + 1;
-                                                    if ((odd % 2) == 0) { estilo = "colorGray"; }
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab1">
 
-                                                    <tr class="@estilo">
-                                                        <td align="center">
-                                                            <input type="number" min="1" max="999" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control edtPeriodo" data-id="@odd" style="text-align: center;" value="@item.periodo" />
-                                                        </td>
-                                                        <td align="center">
-                                                            <label id="lblAnio_@odd" class="no-margin">@(item.anio?.ToString("N2"))</label>
-                                                        </td>
-                                                        <td align="center">
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control" style="text-align: center;" value="@(item.tasaSol?.ToString("P4"))" />
-                                                                <span class="input-group-addon">%</span>
-                                                            </div>
-                                                        </td>
-                                                        @*<td align="center">@(item.poolFondoSol?.ToString("P4"))</td>*@
-                                                        <td align="center">
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control" style="text-align: center;" value="@(item.tasaUsd?.ToString("P4"))" />
-                                                                <span class="input-group-addon">%</span>
-                                                            </div>
-                                                        </td>
-                                                        @*<td align="center">@(item.poolFondoUsd?.ToString("P4"))</td>*@
-                                                    </tr>
-                                                }
-                                            </tbody>
 
-                                        </table>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="10%">Meses</th>
+                                                            <th width="10%">Años</th>
+                                                            <th width="40%">Tasa S/.</th>
+                                                            @*<th>Pool Fondo S/.</th>*@
+                                                            <th width="40%">Tasa US$</th>
+                                                            @*<th>Pool Fondo US$</th>*@
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbodyTasa">
+                                                        @{ var odd = 0; var estilo = string.Empty;}
+                                                        @foreach (var item in Model.lstTasaTranf)
+                                                        {
+                                                            estilo = string.Empty;
+                                                            odd = odd + 1;
+                                                            if ((odd % 2) == 0) { estilo = "colorGray"; }
+
+                                                            <tr class="@estilo">
+                                                                <td align="center">
+                                                                    <input type="text" name="periodo" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control edtPeriodo" data-id="@odd" style="text-align: center;" value="@item.periodo" />
+                                                                </td>
+                                                                <td align="center">
+                                                                    <label id="lblAnio_@odd" class="no-margin">@(item.anio?.ToString("N2"))</label>
+                                                                </td>
+                                                                <td align="center">
+                                                                    <div class="input-group">
+                                                                        <input type="text" name="tasaPEN" class="form-control edtDecimal" style="text-align: center;" value="@(item.tasaSol?.ToString("P4"))" />
+                                                                        <span class="input-group-addon">%</span>
+                                                                    </div>
+                                                                </td>
+                                                                @*<td align="center">@(item.poolFondoSol?.ToString("P4"))</td>*@
+                                                                <td align="center">
+                                                                    <div class="input-group">
+                                                                        <input type="text" name="tasaUSD" class="form-control edtDecimal" style="text-align: center;" value="@(item.tasaUsd?.ToString("P4"))" />
+                                                                        <span class="input-group-addon">%</span>
+                                                                    </div>
+                                                                </td>
+                                                                @*<td align="center">@(item.poolFondoUsd?.ToString("P4"))</td>*@
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                            <!-- /bordered table -->
+                                        </div>
+                                        <div class="col-md-7">
+
+                                            <div class="row mb-10">
+                                                <div class="col-md-8">
+                                                    <table class="table table-bordered" style="border: none;">
+                                                        <tr>
+                                                            <td align="center" style="border: none;"></td>
+                                                            <td align="center" style="background-color: #3f444e; color: white;">S/.</td>
+                                                            <td align="center" style="background-color: #3f444e; color: white;">US$</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="center" style="border: none;" width="20%">
+                                                                <h6>Encaje:</h6>
+                                                            </td>
+                                                            <td align="center" width="35%">
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control" id="txtEncajePEN" style="text-align: center;" />
+                                                                    <span class="input-group-addon">%</span>
+                                                                </div>
+                                                            </td>
+                                                            <td align="center" width="35%">
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control" id="txtEncajeUSD" style="text-align: center;" />
+                                                                    <span class="input-group-addon">%</span>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            @*<th>Constantes de Nelson & Siege</th>*@
+                                                            <th>Moneda</th>
+                                                            <th>beta0</th>
+                                                            <th>beta1</th>
+                                                            <th>beta2</th>
+                                                            <th>beta3</th>
+                                                            <th>lambda1</th>
+                                                            <th>lambda2</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbodyValor">
+                                                        @{ var odd2 = 0; var estilo2 = string.Empty;}
+                                                        @foreach (var item in Model.lstTasaTranfValor)
+                                                        {
+                                                            estilo2 = string.Empty;
+                                                            odd2 = odd2 + 1;
+                                                            if ((odd2 % 2) == 0) { estilo2 = "colorGray"; }
+
+                                                            <tr class="@estilo2">
+                                                                <td align="left" class="tdMoneda">@item.moneda</td>
+                                                                <td align="center" class="tdBeta0">@(item.beta0?.ToString("N6"))</td>
+                                                                <td align="center" class="tdBeta1">@(item.beta1?.ToString("N6"))</td>
+                                                                <td align="center" class="tdBeta2">@(item.beta2?.ToString("N6"))</td>
+                                                                <td align="center" class="tdBeta3">@(item.beta3?.ToString("N6"))</td>
+                                                                <td align="center" class="tdLambda1">@(item.lambda1?.ToString("N6"))</td>
+                                                                <td align="center" class="tdLambda2">@(item.lambda2?.ToString("N6"))</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                            <!-- /bordered table -->
+                                        </div>
                                     </div>
+
                                 </div>
-                                <!-- /bordered table -->
-                            </div>
-                            <div class="col-md-7">
-                                <div class="form-group">
 
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    @*<th>Constantes de Nelson & Siege</th>*@
-                                                    <th>Moneda</th>
-                                                    <th>beta0</th>
-                                                    <th>beta1</th>
-                                                    <th>beta2</th>
-                                                    <th>beta3</th>
-                                                    <th>lambda1</th>
-                                                    <th>lambda2</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbody2">
-                                                @{ var odd2 = 0; var estilo2 = string.Empty;}
-                                                @foreach (var item in Model.lstTasaTranfValor)
-                                                {
-                                                    estilo2 = string.Empty;
-                                                    odd2 = odd2 + 1;
-                                                    if ((odd2 % 2) == 0) { estilo2 = "colorGray"; }
+                                <div class="tab-pane" id="tab2">
 
-                                                    <tr class="@estilo2">
-                                                        <td align="left">@item.moneda</td>
-                                                        @*<td align="center">@(item.encaje?.ToString("P2"))</td>*@
-                                                        <td align="center">@(item.beta0?.ToString("N6"))</td>
-                                                        <td align="center">@(item.beta1?.ToString("N6"))</td>
-                                                        <td align="center">@(item.beta2?.ToString("N6"))</td>
-                                                        <td align="center">@(item.beta3?.ToString("N6"))</td>
-                                                        <td align="center">@(item.lambda1?.ToString("N6"))</td>
-                                                        <td align="center">@(item.lambda2?.ToString("N6"))</td>
-                                                    </tr>
-                                                }
-                                            </tbody>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="10%">Meses</th>
+                                                            <th width="10%">Años</th>
+                                                            <th width="20%">Tasa</th>
+                                                            <th width="20%">Pool Pasivo</th>
+                                                            <th width="20%">Pool Activo</th>
+                                                            <th width="20%">Residuo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbodyTasaPEN">
+                                                        @{ var odd3 = 0; var estilo3 = string.Empty;}
+                                                        @foreach (var item in Model.lstTasaTranf.Where(x => x.ori.Equals("E")))
+                                                        {
+                                                            estilo3 = string.Empty;
+                                                            odd3 = odd3 + 1;
+                                                            if ((odd3 % 2) == 0) { estilo = "colorGray"; }
 
-                                        </table>
+                                                            {
+                                                                var poolPasivo = 0.0;
+                                                                var poolActivo = 0.0;
+                                                                var residuo = string.Empty;
+
+                                                                foreach (var item2 in Model.lstTasaTranfValor.Where(x => x.codMoneda == 0))
+                                                                {
+                                                                    var anio = item.anio.Value;
+                                                                    var beta0 = item2.beta0.Value;
+                                                                    var beta1 = item2.beta1.Value;
+                                                                    var beta2 = item2.beta2.Value;
+                                                                    var beta3 = item2.beta3.Value;
+                                                                    var lambda1 = item2.lambda1.Value;
+                                                                    var lambda2 = item2.lambda2.Value;
+
+                                                                    var factor1 = (1 - Math.Exp(-anio / lambda1)) / (anio / lambda1);
+                                                                    var factor2 = factor1 - Math.Exp(-anio / lambda1);
+                                                                    var factor3 = ((1 - Math.Exp(-anio / lambda2)) / (anio / lambda2)) - Math.Exp(-anio / lambda2);
+
+                                                                    poolPasivo =
+                                                                        beta0 +
+                                                                        beta1 * factor1 +
+                                                                        beta2 * factor2 +
+                                                                        beta3 * factor3;
+
+                                                                    var encaje = item2.encaje.Value;
+                                                                    poolActivo = poolPasivo / (1 - encaje);
+                                                                    if (item.tasaSol.HasValue)
+                                                                    {
+                                                                        residuo = (item.tasaSol.Value - poolPasivo).ToString("P4");
+
+                                                                    }
+                                                                }
+
+                                                                <tr class="@estilo3">
+                                                                    <td align="center">@item.periodo</td>
+                                                                    <td align="center">@(item.anio?.ToString("N2"))</td>
+                                                                    <td align="center">@(item.tasaSol?.ToString("P4"))</td>
+                                                                    <td align="center">@(poolPasivo.ToString("P4"))</td>
+                                                                    <td align="center">@(poolActivo.ToString("P4"))</td>
+                                                                    <td align="center">@(residuo)</td>
+                                                                </tr>
+                                                            }
+
+
+                                                        }
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                            <!-- /bordered table -->
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            @*<th>Constantes de Nelson & Siege</th>*@
+                                                            <th>Moneda</th>
+                                                            <th>beta0</th>
+                                                            <th>beta1</th>
+                                                            <th>beta2</th>
+                                                            <th>beta3</th>
+                                                            <th>lambda1</th>
+                                                            <th>lambda2</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbodyValorPEN">
+                                                        @{ var odd4 = 0; var estilo4 = string.Empty;}
+                                                        @foreach (var item in Model.lstTasaTranfValor.Where(x => x.codMoneda == 0))
+                                                        {
+                                                            estilo4 = string.Empty;
+                                                            odd4 = odd4 + 1;
+                                                            if ((odd4 % 2) == 0) { estilo4 = "colorGray"; }
+
+                                                            <tr class="@estilo4">
+                                                                <td align="left" class="tdMoneda">@item.moneda</td>
+                                                                <td align="center" class="tdBeta0">@(item.beta0?.ToString("N6"))</td>
+                                                                <td align="center" class="tdBeta1">@(item.beta1?.ToString("N6"))</td>
+                                                                <td align="center" class="tdBeta2">@(item.beta2?.ToString("N6"))</td>
+                                                                <td align="center" class="tdBeta3">@(item.beta3?.ToString("N6"))</td>
+                                                                <td align="center" class="tdLambda1">@(item.lambda1?.ToString("N6"))</td>
+                                                                <td align="center" class="tdLambda2">@(item.lambda2?.ToString("N6"))</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                            <!-- /bordered table -->
+                                            <br />
+                                            <canvas id="myChartPEN"></canvas>
+                                        </div>
                                     </div>
+
                                 </div>
-                                <!-- /bordered table -->
-                            
-                                <canvas id="myChart"></canvas>
+
+                                <div class="tab-pane" id="tab3">
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="10%">Meses</th>
+                                                            <th width="10%">Años</th>
+                                                            <th width="20%">Tasa</th>
+                                                            <th width="20%">Pool Pasivo</th>
+                                                            <th width="20%">Pool Activo</th>
+                                                            <th width="20%">Residuo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbodyTasaUSD">
+                                                        @{ var odd5 = 0; var estilo5 = string.Empty;}
+                                                        @foreach (var item in Model.lstTasaTranf.Where(x => x.ori.Equals("E")))
+                                                        {
+                                                            estilo5 = string.Empty;
+                                                            odd5 = odd5 + 1;
+                                                            if ((odd3 % 2) == 0) { estilo = "colorGray"; }
+
+                                                            {
+                                                                var poolPasivo = 0.0;
+                                                                var poolActivo = 0.0;
+                                                                var residuo = string.Empty;
+
+                                                                foreach (var item2 in Model.lstTasaTranfValor.Where(x => x.codMoneda == 1))
+                                                                {
+                                                                    var anio = item.anio.Value;
+                                                                    var beta0 = item2.beta0.Value;
+                                                                    var beta1 = item2.beta1.Value;
+                                                                    var beta2 = item2.beta2.Value;
+                                                                    var beta3 = item2.beta3.Value;
+                                                                    var lambda1 = item2.lambda1.Value;
+                                                                    var lambda2 = item2.lambda2.Value;
+
+                                                                    var factor1 = (1 - Math.Exp(-anio / lambda1)) / (anio / lambda1);
+                                                                    var factor2 = factor1 - Math.Exp(-anio / lambda1);
+                                                                    var factor3 = ((1 - Math.Exp(-anio / lambda2)) / (anio / lambda2)) - Math.Exp(-anio / lambda2);
+
+                                                                    poolPasivo =
+                                                                        beta0 +
+                                                                        beta1 * factor1 +
+                                                                        beta2 * factor2 +
+                                                                        beta3 * factor3;
+
+                                                                    var encaje = item2.encaje.Value;
+                                                                    poolActivo = poolPasivo / (1 - encaje);
+                                                                    if (item.tasaUsd.HasValue)
+                                                                    {
+                                                                        residuo = (item.tasaUsd.Value - poolPasivo).ToString("P4");
+
+                                                                    }
+                                                                }
+
+                                                                <tr class="@estilo3">
+                                                                    <td align="center">@item.periodo</td>
+                                                                    <td align="center">@(item.anio?.ToString("N2"))</td>
+                                                                    <td align="center">@(item.tasaUsd?.ToString("P4"))</td>
+                                                                    <td align="center">@(poolPasivo.ToString("P4"))</td>
+                                                                    <td align="center">@(poolActivo.ToString("P4"))</td>
+                                                                    <td align="center">@(residuo)</td>
+                                                                </tr>
+                                                            }
+
+
+                                                        }
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                            <!-- /bordered table -->
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            @*<th>Constantes de Nelson & Siege</th>*@
+                                                            <th>Moneda</th>
+                                                            <th>beta0</th>
+                                                            <th>beta1</th>
+                                                            <th>beta2</th>
+                                                            <th>beta3</th>
+                                                            <th>lambda1</th>
+                                                            <th>lambda2</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbodyValorUSD">
+                                                        @{ var odd6 = 0; var estilo6 = string.Empty;}
+                                                        @foreach (var item in Model.lstTasaTranfValor.Where(x => x.codMoneda == 1))
+                                                        {
+                                                            estilo6 = string.Empty;
+                                                            odd4 = odd6 + 1;
+                                                            if ((odd4 % 2) == 0) { estilo4 = "colorGray"; }
+
+                                                            <tr class="@estilo4">
+                                                                <td align="left" class="tdMoneda">@item.moneda</td>
+                                                                <td align="center" class="tdBeta0">@(item.beta0?.ToString("N6"))</td>
+                                                                <td align="center" class="tdBeta1">@(item.beta1?.ToString("N6"))</td>
+                                                                <td align="center" class="tdBeta2">@(item.beta2?.ToString("N6"))</td>
+                                                                <td align="center" class="tdBeta3">@(item.beta3?.ToString("N6"))</td>
+                                                                <td align="center" class="tdLambda1">@(item.lambda1?.ToString("N6"))</td>
+                                                                <td align="center" class="tdLambda2">@(item.lambda2?.ToString("N6"))</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                            <!-- /bordered table -->
+                                            <br />
+                                            <canvas id="myChartUSD"></canvas>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
+
+
+                        
                     </div>
                 </div>
             </div>
@@ -214,6 +506,105 @@
 
 
     $(document).ready(function () {
+
+        $('#btnProcesar').on('click', function () {
+            fnCargarConstantes();
+        });
+
+        function fnCargarConstantes(codProducto) {
+            $("#overlay").show();
+
+            var arrPeriodoPEN = [];
+            var arrPeriodoUSD = [];
+            var arrTasaPEN = [];
+            var arrTasaUSD = [];
+
+            $('#tbodyTasa tr').each(function () {
+                var fila = $(this);
+                var validarPEN = 1;
+                var validarUSD = 1;
+
+                var periodo = fila.find('input[name="periodo"]').val();
+                var tasaPEN = fila.find('input[name="tasaPEN"]').val();
+                var tasaUSD = fila.find('input[name="tasaUSD"]').val();
+
+                if (periodo == "" || periodo == undefined || periodo == null || periodo == 0) {
+                    validarPEN = 0;
+                    validarUSD = 0;
+                }
+                if (tasaPEN == "" || tasaPEN == undefined || tasaPEN == null || tasaPEN == 0) {
+                    validarPEN = 0;
+                }
+                if (tasaUSD == "" || tasaUSD == undefined || tasaUSD == null || tasaUSD == 0) {
+                    validarUSD = 0;
+                }
+
+                if (validarPEN == 1) {
+                    arrPeriodoPEN.push(Number(periodo)/12);
+                    arrTasaPEN.push(getPorcentaje(tasaPEN));
+                }
+                if (validarUSD == 1) {
+                    arrPeriodoUSD.push(Number(periodo)/12);
+                    arrTasaUSD.push(getPorcentaje(tasaUSD));
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("JSON_RegresionLogaritmica")',
+                traditional: true,
+                data: {
+                    xDataPEN: arrPeriodoPEN,
+                    yDataPEN: arrTasaPEN,
+                    xDataUSD: arrPeriodoUSD,
+                    yDataUSD: arrTasaUSD
+                },
+                success: function (res) {
+                    console.log("Respuesta:", res);
+
+                    var dataPEN = res.dataPEN || [];
+                    var dataUSD = res.dataUSD || [];
+
+                    $('#tbodyValor tr').each(function () {
+                        var fila = $(this);
+                        var moneda = fila.find('.tdMoneda').text().trim();
+
+                        var data = moneda === "Soles" ? dataPEN : dataUSD;
+
+                        if (data && data.length >= 6) {
+                            fila.find('.tdBeta0').text(data[0].toFixed(6));
+                            fila.find('.tdBeta1').text(data[1].toFixed(6));
+                            fila.find('.tdBeta2').text(data[2].toFixed(6));
+                            fila.find('.tdBeta3').text(data[3].toFixed(6));
+                            fila.find('.tdLambda1').text(data[4].toFixed(6));
+                            fila.find('.tdLambda2').text(data[5].toFixed(6));
+                        }
+                    });
+
+                    CargarTablaConstantesMoneda('#tbodyValorPEN', dataPEN);
+                    CargarTablaConstantesMoneda('#tbodyValorUSD', dataUSD);
+                    $("#overlay").hide();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error:", error);
+                    $("#overlay").hide();
+                }
+            });
+        }
+
+        function CargarTablaConstantesMoneda(tag, data) {
+            $(tag + ' tr').each(function () {
+                var fila = $(this);
+                if (data && data.length >= 6) {
+                    fila.find('.tdBeta0').text(data[0].toFixed(6));
+                    fila.find('.tdBeta1').text(data[1].toFixed(6));
+                    fila.find('.tdBeta2').text(data[2].toFixed(6));
+                    fila.find('.tdBeta3').text(data[3].toFixed(6));
+                    fila.find('.tdLambda1').text(data[4].toFixed(6));
+                    fila.find('.tdLambda2').text(data[5].toFixed(6));
+                }
+            });
+        }
 
         $('.edtPeriodo').on('input', function () {
             var id = $(this).data('id');
@@ -272,7 +663,7 @@
             return res;
         }
 
-        function generarDataGrafico(data, dataValor) {
+        function generarDataGrafico(codMoneda, data, dataValor) {
             /*
             1. 30 items para lograr la curva perfecta
             2. Para el primer ejemplo tenemos 11 datos reales, de los cuales restan 19 y estos tengo que inventar el dato.
@@ -291,7 +682,13 @@
             var colPoolPasivo = 0.0;
             var colPoolActivo = 0.0;
             var arrBase = [];
-            const dataBeta = dataValor.filter(x => x.codMoneda == "0");
+            var dataBeta = [];
+            if (codMoneda == "PEN") {
+                dataBeta = dataValor.filter(x => x.codMoneda == "0");
+            }
+            if (codMoneda == "USD") {
+                dataBeta = dataValor.filter(x => x.codMoneda == "1");
+            }
             var beta0 = dataBeta.map(x => x.beta0);
             var beta1 = dataBeta.map(x => x.beta1);
             var beta2 = dataBeta.map(x => x.beta2);
@@ -301,7 +698,7 @@
             var encaje = dataBeta.map(x => x.encaje);
             //const dataUSD = dataBeta.filter(x => x.codMoneda == "1");
 
-            
+
 
             var intervaloAcm = intervalo;
             for (let i = 0; i < numRegistros; i++) {
@@ -340,7 +737,7 @@
             var data1 = arrBase.map(x => x.tasa);
             var data2 = arrBase.map(x => x.poolPasivo);
             var data3 = arrBase.map(x => x.poolActivo);
-            construirGrafico(labels, data1, data2, data3);
+            construirGrafico(codMoneda, labels, data1, data2, data3);
         }
 
         function getPorcentaje(valor) {
@@ -379,6 +776,20 @@
             return valor;
         }
 
+        $(".edtDecimal").inputmask({
+            alias: "decimal",
+            radixPoint: ".",
+            digits: "4",
+            rightAlign: false,
+            integerDigits: 5,
+            digitsOptional: true,
+            allowPlus: true,
+            allowMinus: true,
+            placeholder: "0",
+            min: 0,
+            max: 100,
+            numericInput: true,
+        });
         $("#txtEncajePEN,#txtEncajeUSD").inputmask({
             alias: "decimal",
             radixPoint: ".",
@@ -418,10 +829,10 @@
         $("#txtEncajePEN").val(getPorcentajeNum(encajePEN)).change();
         $("#txtEncajeUSD").val(getPorcentajeNum(encajeUSD)).change();
 
-        generarDataGrafico(dataModel, dataValor);
-        //construirGrafico(periodo, poolFondoUsd, poolFondoSol);
+        generarDataGrafico("PEN", dataModel, dataValor);
+        generarDataGrafico("USD", dataModel, dataValor);
 
-        function construirGrafico(labels, data1, data2, data3){
+        function construirGrafico(codMoneda, labels, data1, data2, data3){
             const data = {
                 labels: labels,
                 datasets: [
@@ -448,7 +859,7 @@
             };
 
 
-            const ctx = document.getElementById('myChart');
+            const ctx = document.getElementById('myChart' + codMoneda);
             ctx.height = 200;
             var myChart = new Chart(ctx, {
                 type: 'line',
@@ -459,7 +870,7 @@
                             display: true,
                             text: 'Tasa Transferencia',
                             font: {
-                                size: 14,
+                                size: 16,
                             }
                         },
                         legend: {
@@ -499,7 +910,7 @@
             });
         }
 
-        
+
 
 
     });
