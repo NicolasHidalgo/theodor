@@ -406,7 +406,7 @@ namespace DA
             }
             return lista;
         }
-        public List<GEN_DDL_BE> fn_mant_sel_roracDDL(string accion, long codSuscriptor, string codUsuario)
+        public List<GEN_DDL_BE> fn_mant_sel_roracDDL(string accion, long codSuscriptor, string codUsuario, string codPersoneria)
         {
             Mensaje = string.Empty;
             List<GEN_DDL_BE> lista = new List<GEN_DDL_BE>();
@@ -418,6 +418,7 @@ namespace DA
             cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
             cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+            cmd.Parameters.Add("@cod_personeria", System.Data.SqlDbType.VarChar, 5).Value = codPersoneria;
 
             try
             {
@@ -443,6 +444,7 @@ namespace DA
                         {
                             bean.Value = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
                             bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_cliente"));
+                            bean.Aux1 = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_personeria"));
                         }
 
                         lista.Add(bean);

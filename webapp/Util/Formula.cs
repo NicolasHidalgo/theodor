@@ -25,7 +25,7 @@ namespace webapp.Util
 
             // Configuración del descenso de gradiente
             double learningRate = 0.000005; // Tasa de aprendizaje reducida para mayor precisión
-            int maxIterations = 500000; // Aumentar el número máximo de iteraciones
+            int maxIterations = 50000; // Aumentar el número máximo de iteraciones
             double tolerance = 1e-15; // Tolerancia más baja para mayor precisión
 
 
@@ -43,9 +43,9 @@ namespace webapp.Util
                 for (int i = 0; i < x.Length; i++)
                 {
                     double t = x[i];
-                    double term1 = (1 - Math.Exp(-paramLambda1 * t)) / (paramLambda1 * t);
-                    double term2 = term1 - Math.Exp(-paramLambda1 * t);
-                    double term3 = (1 - Math.Exp(-paramLambda2 * t)) / (paramLambda2 * t) - Math.Exp(-paramLambda2 * t);
+                    double term1 = (1 - Math.Exp(-t / paramLambda1)) / (t / paramLambda1);
+                    double term2 = term1 - Math.Exp(-t / paramLambda1);
+                    double term3 = (1 - Math.Exp(-t / paramLambda2)) / (t / paramLambda2) - Math.Exp(-t / paramLambda2);
 
                     yPred[i] = paramBeta0 + paramBeta1 * term1 + paramBeta2 * term2 + paramBeta3 * term3;
                 }

@@ -410,6 +410,7 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
             $("#ddlTipCliente, #ddlProducto").val('').change();
             $('#editModal').modal('show');
 
+            $('#chkAplicaPricing').prop('checked', true);
             var _codTipAmor = $("#ddlProductoBase option:selected").data('aux1');
             var _tipAmor = $("#ddlProductoBase option:selected").data('aux2');
 

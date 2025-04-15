@@ -198,7 +198,9 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
             $("#txtCodClasificacion").val(data.codClasificacionInterna).change();
             $("#txtNomClasificacion").val(data.clasificacionInterna).change();
 
+            debugger;
             let valores = data.operaciones.split(",");
+            $("#ddlOperacion option").prop('selected', false);
             $.each(valores, function (index, item) {
                 $("#ddlOperacion option[value='" + item + "']").prop('selected', true);
             });

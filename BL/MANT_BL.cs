@@ -51,9 +51,9 @@ namespace BL
         {
             return dat.fn_mant_sel_roracObjetivo(accion, codSuscriptor, cod_usuario);
         }
-        public List<GEN_DDL_BE> fn_mant_sel_roracDDL(string accion, long codSuscriptor, string codUsuario)
+        public List<GEN_DDL_BE> fn_mant_sel_roracDDL(string accion, long codSuscriptor, string codUsuario, string codPersoneria)
         {
-            return dat.fn_mant_sel_roracDDL(accion, codSuscriptor, codUsuario);
+            return dat.fn_mant_sel_roracDDL(accion, codSuscriptor, codUsuario, codPersoneria);
         }
         public GEN_REPLY_BE fn_mant_pro_roracObjetivo(string accion, long codSuscriptor, string codUsuario, RORACOBJETIVO_BE param)
         {

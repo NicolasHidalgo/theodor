@@ -212,22 +212,23 @@ namespace webapp.Controllers
             viewModel.CodUsuario = user.COD_USUARIO;
 
             viewModel.mantRorac = bl.fn_mant_sel_roracObjetivo("SELECT", user.SUSCRIPTOR, user.COD_USUARIO);
-            /*
-            var dataPersoneria = bl.fn_mant_sel_roracDDL("@PERSONERIA", user.SUSCRIPTOR, user.COD_USUARIO);
+
+            var dataPersoneria = bl.fn_mant_sel_roracDDL("@PERSONERIA", user.SUSCRIPTOR, user.COD_USUARIO, string.Empty);
             viewModel.ddlPersoneria = dataPersoneria.Select(x => new ExtendedSelectListItem
             {
                 Value = x.Value,
                 Text = x.Text,
                 Selected = x.Selected,
-            });*/
-            var dataTipCliente = bl.fn_mant_sel_roracDDL("@TIP_CLIENTE", user.SUSCRIPTOR, user.COD_USUARIO);
+            });
+            var dataTipCliente = bl.fn_mant_sel_roracDDL("@TIP_CLIENTE", user.SUSCRIPTOR, user.COD_USUARIO, string.Empty);
             viewModel.ddlTipCliente = dataTipCliente.Select(x => new ExtendedSelectListItem
             {
                 Value = x.Value,
                 Text = x.Text,
+                Aux1 = x.Aux1,
                 Selected = x.Selected,
             });
-            var dataProductoBase = bl.fn_mant_sel_roracDDL("@PRODUCTO_BASE", user.SUSCRIPTOR, user.COD_USUARIO);
+            var dataProductoBase = bl.fn_mant_sel_roracDDL("@PRODUCTO_BASE", user.SUSCRIPTOR, user.COD_USUARIO, string.Empty);
             viewModel.ddlProducto = dataProductoBase.Select(x => new ExtendedSelectListItem
             {
                 Value = x.Value,

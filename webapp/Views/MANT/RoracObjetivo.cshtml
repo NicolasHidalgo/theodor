@@ -63,7 +63,12 @@
                 <div class="form">
                     <div class="form-group">
                         <label>Tipo Cliente</label>
-                        @Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @class = "select" })
+                        @Html.DropDownList("ddlPersoneria", Model.ddlPersoneria, new { @class = "select" })
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo Cliente</label>
+                        @*@Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @class = "select" })*@
+                        <select id="ddlTipCliente" class="select"></select>
                     </div>
                     <div class="form-group">
                         <label>Producto Base</label>
@@ -89,8 +94,8 @@
                             </div>
                         </div>
                     </div>
-                    
-                    
+
+
 
                 </div>
 
@@ -212,12 +217,39 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
 
     var fSelEditar;
     var fSelEliminar;
-
+    var arrTipCliente = [];
 
     $(document).ready(function () {
         var gAccion = "";
+        var gCodPersoneria = "";
         var gCodTipCliente = "";
         var gCodProducto = 0;
+
+        debugger;
+        var jsModel = @Html.Raw(Json.Encode(Model));
+        arrTipCliente = jsModel.ddlTipCliente;
+
+        function cargarComboTipCliente() {
+            var _codPersoneria = $("#ddlPersoneria option:selected").val();
+            var _arrTipCliente = arrTipCliente.filter(x => x.Aux1 == _codPersoneria);
+            $('#ddlTipCliente').empty();
+            $.each(_arrTipCliente, function (index, item) {
+                $('#ddlTipCliente').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: false //item.Selected
+                }));
+            });
+        }
+        cargarComboTipCliente();
+
+        $("#ddlPersoneria").change(function (e, data) {
+            ddlPersoneriaChange();
+        });
+
+        function ddlPersoneriaChange(){
+            cargarComboTipCliente();
+        }
 
         function getPorcentaje(valor) {
             if (isNaN(valor)) {
@@ -272,19 +304,21 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
 
         fSelEditar = function (data) {
             $('#editModal').modal('show');
+            $("#ddlPersoneria").val(data.codPersoneria).change();
             $("#ddlTipCliente").val(data.codTipCliente).change();
             $("#ddlProducto").val(data.codProductoBase).change();
             $("#txtRORACObjetivo").val(getPorcentajeNum(data.roracObjetivo)).change();
             $("#txtAutonomiaComercial").val(getPorcentajeNum(data.autonomiaComercial)).change();
 
-            $('#ddlTipCliente,#ddlProducto').prop('disabled', true);
+            $('#ddlPersoneria,#ddlTipCliente,#ddlProducto').prop('disabled', true);
             $("#titulo").text('Editar Registro');
             gAccion = "UPDATE";
         }
         fSelEliminar = function (data) {
             $('#confirmBorrarModal').modal('show');
             gAccion = "DELETE";
-            console.log(data)
+            //console.log(data)
+            gCodPersoneria = data.codPersoneria;
             gCodTipCliente = data.codTipCliente;
             gCodProducto = data.codProductoBase;
         }
@@ -292,10 +326,10 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
         $("#btnNuevo,.classNuevo").on("click", function () {
             $("#titulo").text('Nuevo Registro');
             gAccion = "INSERT";
-            $('#ddlTipCliente,#ddlProducto').prop('disabled', false);
+            $('#ddlPersoneria,#ddlTipCliente,#ddlProducto').prop('disabled', false);
             $("#txtRoracObjetivo").val('0');
             $("#txtAutonomiaComercial").val('0');
-            $("#ddlTipCliente, #ddlProducto").val('').change();
+            $("#ddlPersoneria, #ddlTipCliente, #ddlProducto").val('').change();
             $('#editModal').modal('show');
         });
         $("#btnGrabar").on("click", function () {
@@ -334,7 +368,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
                         cadena += "<li><a onclick='fSelEditar(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
                         cadena += "<li><a onclick='fSelEliminar(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
                         cadena += '</ul></li></ul></td>';
-    
+
                         //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
                         cadena += "</tr>";
                     }
@@ -349,6 +383,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
             $("#overlay").show();
 
             var _obj = {
+                codPersoneria: gAccion == "DELETE" ? gCodPersoneria : $("#ddlPersoneria option:selected").val(),
                 codTipCliente: gAccion == "DELETE" ? gCodTipCliente : $("#ddlTipCliente option:selected").val(),
                 codProductoBase: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
                 RORACObjetivo: getPorcentaje($("#txtRORACObjetivo").val()),

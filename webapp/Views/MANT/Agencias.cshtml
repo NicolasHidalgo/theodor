@@ -160,10 +160,10 @@
             $("#titulo").text('Editar Registro');
             gAccion = "UPDATE";
         }
-        fSelEliminar = function (codAgencia) {
+        fSelEliminar = function (item) {
             $('#confirmBorrarModal').modal('show');
             gAccion = "DELETE";
-            gCodAgencia = codAgencia;
+            gCodAgencia = item.cod_agencia;
         }
 
         $("#btnNuevo,.classNuevo").on("click", function () {
@@ -267,6 +267,7 @@
                 ubigeo_reniec = distrito;
             }
 
+            debugger;
             var _obj = {
                 cod_agencia: gAccion == "DELETE" ? gCodAgencia : $("#txtCodAgencia").val(),
                 nom_agencia: $("#txtNomAgencia").val(),
