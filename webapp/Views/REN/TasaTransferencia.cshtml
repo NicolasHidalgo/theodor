@@ -129,9 +129,7 @@
                                                             <th width="10%">Meses</th>
                                                             <th width="10%">Años</th>
                                                             <th width="40%">Tasa S/.</th>
-                                                            @*<th>Pool Fondo S/.</th>*@
                                                             <th width="40%">Tasa US$</th>
-                                                            @*<th>Pool Fondo US$</th>*@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbodyTasa">
@@ -155,14 +153,12 @@
                                                                         <span class="input-group-addon">%</span>
                                                                     </div>
                                                                 </td>
-                                                                @*<td align="center">@(item.poolFondoSol?.ToString("P4"))</td>*@
                                                                 <td align="center">
                                                                     <div class="input-group">
                                                                         <input type="text" name="tasaUSD" class="form-control edtDecimal" style="text-align: center;" value="@(item.tasaUsd?.ToString("P4"))" />
                                                                         <span class="input-group-addon">%</span>
                                                                     </div>
                                                                 </td>
-                                                                @*<td align="center">@(item.poolFondoUsd?.ToString("P4"))</td>*@
                                                             </tr>
                                                         }
                                                     </tbody>
@@ -258,7 +254,7 @@
                                                             <th width="20%">Tasa</th>
                                                             <th width="20%">Pool Pasivo</th>
                                                             <th width="20%">Pool Activo</th>
-                                                            <th width="20%">Residuo</th>
+                                                            @*<th width="20%">Residuo</th>*@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbodyTasaPEN">
@@ -309,7 +305,7 @@
                                                                     <td align="center">@(item.tasaSol?.ToString("P4"))</td>
                                                                     <td align="center">@(poolPasivo.ToString("P4"))</td>
                                                                     <td align="center">@(poolActivo.ToString("P4"))</td>
-                                                                    <td align="center">@(residuo)</td>
+                                                                    @*<td align="center">@(residuo)</td>*@
                                                                 </tr>
                                                             }
 
@@ -346,6 +342,7 @@
 
                                                             <tr class="@estilo4">
                                                                 <td align="left" class="tdMoneda">@item.moneda</td>
+                                                                <td align="left" class="tdEncaje hidden">@item.encaje</td>
                                                                 <td align="center" class="tdBeta0">@(item.beta0?.ToString("N6"))</td>
                                                                 <td align="center" class="tdBeta1">@(item.beta1?.ToString("N6"))</td>
                                                                 <td align="center" class="tdBeta2">@(item.beta2?.ToString("N6"))</td>
@@ -379,7 +376,7 @@
                                                             <th width="20%">Tasa</th>
                                                             <th width="20%">Pool Pasivo</th>
                                                             <th width="20%">Pool Activo</th>
-                                                            <th width="20%">Residuo</th>
+                                                            @*<th width="20%">Residuo</th>*@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbodyTasaUSD">
@@ -430,7 +427,7 @@
                                                                     <td align="center">@(item.tasaUsd?.ToString("P4"))</td>
                                                                     <td align="center">@(poolPasivo.ToString("P4"))</td>
                                                                     <td align="center">@(poolActivo.ToString("P4"))</td>
-                                                                    <td align="center">@(residuo)</td>
+                                                                    @*<td align="center">@(residuo)</td>*@
                                                                 </tr>
                                                             }
 
@@ -467,6 +464,7 @@
 
                                                             <tr class="@estilo4">
                                                                 <td align="left" class="tdMoneda">@item.moneda</td>
+                                                                <td align="left" class="tdEncaje hidden">@item.encaje</td>
                                                                 <td align="center" class="tdBeta0">@(item.beta0?.ToString("N6"))</td>
                                                                 <td align="center" class="tdBeta1">@(item.beta1?.ToString("N6"))</td>
                                                                 <td align="center" class="tdBeta2">@(item.beta2?.ToString("N6"))</td>
@@ -507,9 +505,91 @@
 
     $(document).ready(function () {
 
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr("href") // activated tab
+            if (target == "#tab2") {
+                generarCurvaTransferencia('PEN');
+            }
+            if (target == "#tab3") {
+                generarCurvaTransferencia('USD');
+            }
+        });
+
         $('#btnProcesar').on('click', function () {
             fnCargarConstantes();
         });
+
+        function generarCurvaTransferencia(codMoneda) {
+            var arr = [];
+
+            $('#tbodyTasa tr').each(function () {
+                var fila = $(this);
+
+                var periodo = fila.find('input[name="periodo"]').val();
+                var tasa = fila.find('input[name="tasa'+codMoneda+'"]').val();
+
+                if (periodo && tasa && Number(periodo) != 0 && Number(tasa) != 0) {
+                    arr.push({
+                        periodo: Number(periodo),
+                        anio: Number(periodo) / 12,
+                        tasa: getPorcentaje(tasa)
+                    });
+                }
+            });
+            let beta0 = 0.0;
+            let beta1 = 0.0;
+            let beta2 = 0.0;
+            let beta3 = 0.0;
+            let lambda1 = 0.0;
+            let lambda2 = 0.0;
+            let dataBeta = [];
+            $('#tbodyValor'+codMoneda+' tr').each(function () {
+                var fila = $(this);
+                encaje = Number(fila.find('.tdEncaje').text());
+                beta0 = Number(fila.find('.tdBeta0').text());
+                beta1 = Number(fila.find('.tdBeta1').text());
+                beta2 = Number(fila.find('.tdBeta2').text());
+                beta3 = Number(fila.find('.tdBeta3').text());
+                lambda1 = Number(fila.find('.tdLambda1').text());
+                lambda2 = Number(fila.find('.tdLambda2').text());
+                dataBeta.push({
+                    encaje: encaje,
+                    beta0: beta0,
+                    beta1: beta1,
+                    beta2: beta2,
+                    beta3: beta3,
+                    lambda1: lambda1,
+                    lambda2: lambda2,
+                });
+            });
+
+            const tbody = $("#tbodyTasa" + codMoneda);
+            tbody.empty();
+
+            arr.forEach((item, index) => {
+                const estilo = ((index + 1) % 2 === 0) ? "colorGray" : "";
+                let poolPasivo = 0.0;
+                let poolActivo = 0.0;
+
+                poolPasivo = calcularPoolPasivo(item.anio, beta0, beta1, beta2, beta3, lambda1, lambda2);
+                poolActivo = calcularPoolActivo(poolPasivo, encaje);
+
+                const row = `
+            <tr class="${estilo}">
+                <td align="center">${item.periodo}</td>
+                <td align="center">${Number(item.anio).toFixed(2)}</td>
+                <td align="center">${getPorcentajeNum(item.tasa).toFixed(4)}%</td>
+                <td align="center">${getPorcentajeNum(poolPasivo).toFixed(4)}%</td>
+                <td align="center">${getPorcentajeNum(poolActivo).toFixed(4)}%</td>
+            </tr>
+        `;
+
+                tbody.append(row);
+            }); 
+
+            generarDataGrafico(codMoneda, arr, dataBeta);
+
+        }
 
         function fnCargarConstantes(codProducto) {
             $("#overlay").show();
@@ -663,7 +743,7 @@
             return res;
         }
 
-        function generarDataGrafico(codMoneda, data, dataValor) {
+        function generarDataGrafico(codMoneda, data, dataBeta) {
             /*
             1. 30 items para lograr la curva perfecta
             2. Para el primer ejemplo tenemos 11 datos reales, de los cuales restan 19 y estos tengo que inventar el dato.
@@ -682,13 +762,6 @@
             var colPoolPasivo = 0.0;
             var colPoolActivo = 0.0;
             var arrBase = [];
-            var dataBeta = [];
-            if (codMoneda == "PEN") {
-                dataBeta = dataValor.filter(x => x.codMoneda == "0");
-            }
-            if (codMoneda == "USD") {
-                dataBeta = dataValor.filter(x => x.codMoneda == "1");
-            }
             var beta0 = dataBeta.map(x => x.beta0);
             var beta1 = dataBeta.map(x => x.beta1);
             var beta2 = dataBeta.map(x => x.beta2);
@@ -696,9 +769,6 @@
             var lambda1 = dataBeta.map(x => x.lambda1);
             var lambda2 = dataBeta.map(x => x.lambda1);
             var encaje = dataBeta.map(x => x.encaje);
-            //const dataUSD = dataBeta.filter(x => x.codMoneda == "1");
-
-
 
             var intervaloAcm = intervalo;
             for (let i = 0; i < numRegistros; i++) {
@@ -722,7 +792,7 @@
                 }
                 colMeses = item.periodo;
                 colAnios = calcularAnios(colMeses);
-                colTasa = validarTasa(item.tasaSol);
+                colTasa = validarTasa(item.tasa);
                 colPoolPasivo = calcularPoolPasivo(colAnios, beta0, beta1, beta2, beta3, lambda1, lambda2);
                 colPoolActivo = calcularPoolActivo(colPoolPasivo, encaje);
 
@@ -732,7 +802,6 @@
             arrBase.sort(function (a, b) {
                 return a.mes - b.mes;
             });
-
             var labels = arrBase.map(x => x.mes);
             var data1 = arrBase.map(x => x.tasa);
             var data2 = arrBase.map(x => x.poolPasivo);
@@ -807,30 +876,17 @@
 
         var jsModel = @Html.Raw(Json.Encode(Model));
         var dataModel = jsModel.lstTasaTranf.filter(x => x.periodo != "0");
-        var periodo = dataModel.map(x => x.periodo);
-        var poolFondoUsd = dataModel.map(x => x.poolFondoUsd);
-        var poolFondoSol = dataModel.map(x => x.poolFondoSol);
-        var tasaSol = dataModel.map(x => x.tasaSol);
-        var tasaUsd = dataModel.map(x => x.tasaUsd);
-        //var maximoMes = Math.max(...periodo) + 60;
 
         var dataValor = jsModel.lstTasaTranfValor;
         const dataPEN = dataValor.filter(x => x.codMoneda == "0");
         const dataUSD = dataValor.filter(x => x.codMoneda == "1");
-
         var encajePEN = dataPEN.map(x => x.encaje);
         var encajeUSD = dataUSD.map(x => x.encaje);
-
-        //var vigencia = dataUSD.map(x => x.fecVigencia);
-        //const timestamp = parseInt(String(vigencia).match(/\d+/)[0]);
-        //const fecha = new Date(timestamp);
-        //$("#txtVigencia").val(fecha.toISOString().split('T')[0]);
-
         $("#txtEncajePEN").val(getPorcentajeNum(encajePEN)).change();
         $("#txtEncajeUSD").val(getPorcentajeNum(encajeUSD)).change();
 
-        generarDataGrafico("PEN", dataModel, dataValor);
-        generarDataGrafico("USD", dataModel, dataValor);
+        //generarDataGrafico("PEN", dataModel, dataPEN);
+        //generarDataGrafico("USD", dataModel, dataUSD);
 
         function construirGrafico(codMoneda, labels, data1, data2, data3){
             const data = {
@@ -858,10 +914,15 @@
                 ]
             };
 
-
-            const ctx = document.getElementById('myChart' + codMoneda);
+            const canvas = document.getElementById('myChart' + codMoneda);
+            // Verifica si ya hay un gráfico y destrúyelo
+            if (canvas.chartInstance) {
+                canvas.chartInstance.destroy();
+            }
+            const ctx = canvas.getContext("2d");
+            //const ctx = document.getElementById('myChart' + codMoneda);
             ctx.height = 200;
-            var myChart = new Chart(ctx, {
+            canvas.chartInstance = new Chart(ctx, {
                 type: 'line',
                 data: data,
                 options: {
