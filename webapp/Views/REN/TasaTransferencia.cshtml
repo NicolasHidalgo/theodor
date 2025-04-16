@@ -199,12 +199,13 @@
                                                 </div>
                                             </div>
 
+                                            
                                             <div class="table-responsive">
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
                                                             @*<th>Constantes de Nelson & Siege</th>*@
-                                                            <th>Moneda</th>
+                                                            <th></th>
                                                             <th>beta0</th>
                                                             <th>beta1</th>
                                                             <th>beta2</th>
@@ -221,14 +222,14 @@
                                                             odd2 = odd2 + 1;
                                                             if ((odd2 % 2) == 0) { estilo2 = "colorGray"; }
 
-                                                            <tr class="@estilo2">
+                                                            <tr class="@estilo2" style="font-size:10px;">
                                                                 <td align="left" class="tdMoneda">@item.moneda</td>
-                                                                <td align="center" class="tdBeta0">@(item.beta0?.ToString("N6"))</td>
-                                                                <td align="center" class="tdBeta1">@(item.beta1?.ToString("N6"))</td>
-                                                                <td align="center" class="tdBeta2">@(item.beta2?.ToString("N6"))</td>
-                                                                <td align="center" class="tdBeta3">@(item.beta3?.ToString("N6"))</td>
-                                                                <td align="center" class="tdLambda1">@(item.lambda1?.ToString("N6"))</td>
-                                                                <td align="center" class="tdLambda2">@(item.lambda2?.ToString("N6"))</td>
+                                                                <td align="center" class="tdBeta0">@(item.beta0?.ToString("N16"))</td>
+                                                                <td align="center" class="tdBeta1">@(item.beta1?.ToString("N16"))</td>
+                                                                <td align="center" class="tdBeta2">@(item.beta2?.ToString("N16"))</td>
+                                                                <td align="center" class="tdBeta3">@(item.beta3?.ToString("N16"))</td>
+                                                                <td align="center" class="tdLambda1">@(item.lambda1?.ToString("N16"))</td>
+                                                                <td align="center" class="tdLambda2">@(item.lambda2?.ToString("N16"))</td>
                                                             </tr>
                                                         }
                                                     </tbody>
@@ -318,12 +319,12 @@
                                             <!-- /bordered table -->
                                         </div>
                                         <div class="col-md-7">
+                                            <h5 class="center">Constantes de Nelson & Siege</h5>
                                             <div class="table-responsive">
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            @*<th>Constantes de Nelson & Siege</th>*@
-                                                            <th>Moneda</th>
+                                                            @*<th></th>*@
                                                             <th>beta0</th>
                                                             <th>beta1</th>
                                                             <th>beta2</th>
@@ -340,15 +341,15 @@
                                                             odd4 = odd4 + 1;
                                                             if ((odd4 % 2) == 0) { estilo4 = "colorGray"; }
 
-                                                            <tr class="@estilo4">
-                                                                <td align="left" class="tdMoneda">@item.moneda</td>
+                                                            <tr class="@estilo4" style="font-size:10px;">
+                                                                <td align="left" class="tdMoneda hidden">@item.moneda</td>
                                                                 <td align="left" class="tdEncaje hidden">@item.encaje</td>
-                                                                <td align="center" class="tdBeta0">@(item.beta0?.ToString("N6"))</td>
-                                                                <td align="center" class="tdBeta1">@(item.beta1?.ToString("N6"))</td>
-                                                                <td align="center" class="tdBeta2">@(item.beta2?.ToString("N6"))</td>
-                                                                <td align="center" class="tdBeta3">@(item.beta3?.ToString("N6"))</td>
-                                                                <td align="center" class="tdLambda1">@(item.lambda1?.ToString("N6"))</td>
-                                                                <td align="center" class="tdLambda2">@(item.lambda2?.ToString("N6"))</td>
+                                                                <td align="center" class="tdBeta0">@(item.beta0?.ToString("N16"))</td>
+                                                                <td align="center" class="tdBeta1">@(item.beta1?.ToString("N16"))</td>
+                                                                <td align="center" class="tdBeta2">@(item.beta2?.ToString("N16"))</td>
+                                                                <td align="center" class="tdBeta3">@(item.beta3?.ToString("N16"))</td>
+                                                                <td align="center" class="tdLambda1">@(item.lambda1?.ToString("N16"))</td>
+                                                                <td align="center" class="tdLambda2">@(item.lambda2?.ToString("N16"))</td>
                                                             </tr>
                                                         }
                                                     </tbody>
@@ -440,12 +441,12 @@
                                             <!-- /bordered table -->
                                         </div>
                                         <div class="col-md-7">
+                                            <h5 class="center">Constantes de Nelson & Siege</h5>
                                             <div class="table-responsive">
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            @*<th>Constantes de Nelson & Siege</th>*@
-                                                            <th>Moneda</th>
+                                                            @*<th></th>*@
                                                             <th>beta0</th>
                                                             <th>beta1</th>
                                                             <th>beta2</th>
@@ -462,15 +463,15 @@
                                                             odd4 = odd6 + 1;
                                                             if ((odd4 % 2) == 0) { estilo4 = "colorGray"; }
 
-                                                            <tr class="@estilo4">
-                                                                <td align="left" class="tdMoneda">@item.moneda</td>
+                                                            <tr class="@estilo4" style="font-size:10px;">
+                                                                <td align="left" class="tdMoneda hidden">@item.moneda</td>
                                                                 <td align="left" class="tdEncaje hidden">@item.encaje</td>
-                                                                <td align="center" class="tdBeta0">@(item.beta0?.ToString("N6"))</td>
-                                                                <td align="center" class="tdBeta1">@(item.beta1?.ToString("N6"))</td>
-                                                                <td align="center" class="tdBeta2">@(item.beta2?.ToString("N6"))</td>
-                                                                <td align="center" class="tdBeta3">@(item.beta3?.ToString("N6"))</td>
-                                                                <td align="center" class="tdLambda1">@(item.lambda1?.ToString("N6"))</td>
-                                                                <td align="center" class="tdLambda2">@(item.lambda2?.ToString("N6"))</td>
+                                                                <td align="center" class="tdBeta0">@(item.beta0?.ToString("N16"))</td>
+                                                                <td align="center" class="tdBeta1">@(item.beta1?.ToString("N16"))</td>
+                                                                <td align="center" class="tdBeta2">@(item.beta2?.ToString("N16"))</td>
+                                                                <td align="center" class="tdBeta3">@(item.beta3?.ToString("N16"))</td>
+                                                                <td align="center" class="tdLambda1">@(item.lambda1?.ToString("N16"))</td>
+                                                                <td align="center" class="tdLambda2">@(item.lambda2?.ToString("N16"))</td>
                                                             </tr>
                                                         }
                                                     </tbody>
@@ -566,6 +567,10 @@
             const tbody = $("#tbodyTasa" + codMoneda);
             tbody.empty();
 
+            arr.sort(function (a, b) {
+                return a.periodo - b.periodo;
+            });
+
             arr.forEach((item, index) => {
                 const estilo = ((index + 1) % 2 === 0) ? "colorGray" : "";
                 let poolPasivo = 0.0;
@@ -652,12 +657,12 @@
                         var data = moneda === "Soles" ? dataPEN : dataUSD;
 
                         if (data && data.length >= 6) {
-                            fila.find('.tdBeta0').text(data[0].toFixed(6));
-                            fila.find('.tdBeta1').text(data[1].toFixed(6));
-                            fila.find('.tdBeta2').text(data[2].toFixed(6));
-                            fila.find('.tdBeta3').text(data[3].toFixed(6));
-                            fila.find('.tdLambda1').text(data[4].toFixed(6));
-                            fila.find('.tdLambda2').text(data[5].toFixed(6));
+                            fila.find('.tdBeta0').text(data[0].toFixed(16));
+                            fila.find('.tdBeta1').text(data[1].toFixed(16));
+                            fila.find('.tdBeta2').text(data[2].toFixed(16));
+                            fila.find('.tdBeta3').text(data[3].toFixed(16));
+                            fila.find('.tdLambda1').text(data[4].toFixed(16));
+                            fila.find('.tdLambda2').text(data[5].toFixed(16));
                         }
                     });
 
@@ -676,22 +681,43 @@
             $(tag + ' tr').each(function () {
                 var fila = $(this);
                 if (data && data.length >= 6) {
-                    fila.find('.tdBeta0').text(data[0].toFixed(6));
-                    fila.find('.tdBeta1').text(data[1].toFixed(6));
-                    fila.find('.tdBeta2').text(data[2].toFixed(6));
-                    fila.find('.tdBeta3').text(data[3].toFixed(6));
-                    fila.find('.tdLambda1').text(data[4].toFixed(6));
-                    fila.find('.tdLambda2').text(data[5].toFixed(6));
+                    fila.find('.tdBeta0').text(data[0].toFixed(16));
+                    fila.find('.tdBeta1').text(data[1].toFixed(16));
+                    fila.find('.tdBeta2').text(data[2].toFixed(16));
+                    fila.find('.tdBeta3').text(data[3].toFixed(16));
+                    fila.find('.tdLambda1').text(data[4].toFixed(16));
+                    fila.find('.tdLambda2').text(data[5].toFixed(16));
                 }
             });
         }
 
         $('.edtPeriodo').on('input', function () {
-            var id = $(this).data('id');
-            var periodo = parseFloat($(this).val());
+            var inputActual = $(this);
+            var valorIngresado = inputActual.val();
+            var id = inputActual.data('id');
 
-            var nuevoAnio = isNaN(periodo) ? '' : calcularAnios(periodo).toFixed(2); // reemplaza con tu lógica
-            $('#lblAnio_' + id).text(nuevoAnio);
+            // Busca solo dentro del tbody más cercano
+            var $tbody = inputActual.closest('tbody');
+            var esRepetido = false;
+
+            $tbody.find('.edtPeriodo').not(this).each(function () {
+                if ($(this).val() === valorIngresado) {
+                    esRepetido = true;
+                    return false; // rompe el each
+                }
+            });
+
+            if (esRepetido) {
+                alert('El periodo "' + valorIngresado + '" ya fue ingresado.');
+                inputActual.val('');
+                $tbody.find('#lblAnio_' + id).text('');
+                return;
+            }
+
+            // Si es válido, actualizamos el año
+            var periodo = parseFloat(valorIngresado);
+            var nuevoAnio = isNaN(periodo) ? '' : calcularAnios(periodo).toFixed(2); // tu lógica
+            $tbody.find('#lblAnio_' + id).text(nuevoAnio);
         });
 
         function validarTasa(valor) {
@@ -892,17 +918,17 @@
             const data = {
                 labels: labels,
                 datasets: [
-                    {
-                        label: 'Tasa',
-                        data: data1,
-                        borderColor: "yellow",
-                        backgroundColor: "yellow",
-                        spanGaps: true, // Conectar puntos con valores nulos
-                    },
+                    //{
+                    //    label: 'Tasa',
+                    //    data: data1,
+                    //    borderColor: "yellow",
+                    //    backgroundColor: "yellow",
+                    //    spanGaps: true, // Conectar puntos con valores nulos
+                    //},
                     {
                         label: 'Pool Pasivo',
                         data: data2,
-                        borderColor: "red",
+                        borderColor: "red", 
                         backgroundColor: "red",
                     },
                     {
