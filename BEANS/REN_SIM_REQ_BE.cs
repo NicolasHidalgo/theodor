@@ -47,5 +47,6 @@ namespace BEANS
         public int? cod_tip_amortizacion { get; set; }
         public string tip_amortizacion { get; set; }
         public string buscar { get; set; }
+        public Int16 flgTEA { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace webapp.Util
 
             // Configuración del descenso de gradiente
             double learningRate = 0.000005; // Tasa de aprendizaje reducida para mayor precisión
-            int maxIterations = 50000; // Aumentar el número máximo de iteraciones
+            int maxIterations = 200000; // Aumentar el número máximo de iteraciones
             double tolerance = 1e-15; // Tolerancia más baja para mayor precisión
 
 

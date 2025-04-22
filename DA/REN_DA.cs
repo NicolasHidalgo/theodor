@@ -764,6 +764,7 @@ namespace DA
             cmd.Parameters.Add("@cod_clasificacion_garantia", System.Data.SqlDbType.VarChar, 5).Value = obj.cod_clasificacion_garantia;
             cmd.Parameters.Add("@cod_modelo_rorac", System.Data.SqlDbType.Int).Value = obj.cod_modelo_rorac;
             cmd.Parameters.Add("@ide_usuario", System.Data.SqlDbType.BigInt).Value = obj.ide_usuario;
+            cmd.Parameters.Add("@flgTEA", System.Data.SqlDbType.SmallInt).Value = obj.flgTEA;
 
             try
             {
