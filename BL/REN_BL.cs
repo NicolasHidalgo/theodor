@@ -123,5 +123,9 @@ namespace BL
         {
             return dat.fn_ren_sel_transferenciaDDL(accion, codSuscriptor, codUsuario, tipo);
         }
+        public GEN_REPLY_BE fn_ren_pro_transferencia(long codSuscriptor, string codUsuario, TASA_TRANFERENCIA_GRABAR param)
+        {
+            return dat.fn_ren_pro_transferencia(codSuscriptor, codUsuario, param);
+        }
     }
 }

@@ -1153,5 +1153,77 @@ namespace DA
             return lista;
         }
 
+        public GEN_REPLY_BE fn_ren_pro_transferencia(long codSuscriptor, string codUsuario, TASA_TRANFERENCIA_GRABAR param)
+        {
+            Mensaje = string.Empty;
+            GEN_REPLY_BE model = new GEN_REPLY_BE();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_tasaTransferencia]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = null;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.DateTime).Value = DateTime.Now;
+            cmd.Parameters.Add("@tipo", System.Data.SqlDbType.VarChar, 5).Value = null;
+            cmd.Parameters.Add("@periodo", System.Data.SqlDbType.Int).Value = null;
+            cmd.Parameters.Add("@tasa_MN", System.Data.SqlDbType.Float).Value = null;
+            cmd.Parameters.Add("@tasa_ME", System.Data.SqlDbType.Float).Value = null;
+            cmd.Parameters.Add("@cod_moneda", System.Data.SqlDbType.Int).Value = null;
+            cmd.Parameters.Add("@encaje", System.Data.SqlDbType.Float).Value = null;
+            cmd.Parameters.Add("@beta0", System.Data.SqlDbType.Float).Value = null;
+            cmd.Parameters.Add("@beta1", System.Data.SqlDbType.Float).Value = null;
+            cmd.Parameters.Add("@beta2", System.Data.SqlDbType.Float).Value = null;
+            cmd.Parameters.Add("@beta3", System.Data.SqlDbType.Float).Value = null;
+            cmd.Parameters.Add("@lambda1", System.Data.SqlDbType.Float).Value = null;
+            cmd.Parameters.Add("@lambda2", System.Data.SqlDbType.Float).Value = null;
+
+            try
+            {
+                con.InfoMessage += new SqlInfoMessageEventHandler(InfoMessageHandler);
+                con.FireInfoMessageEventOnUserErrors = true;
+                con.Open();
+
+                foreach (var item in param.lstTasas)
+                {
+                    cmd.Parameters["@accion"].Value = "SAVE";
+                    cmd.Parameters["@periodo"].Value = item.periodo ?? (object)DBNull.Value;
+                    cmd.Parameters["@tasa_MN"].Value = item.tasaSol ?? (object)DBNull.Value;
+                    cmd.Parameters["@tasa_ME"].Value = item.tasaUsd ?? (object)DBNull.Value;
+                    var iFilasAfectadas = cmd.ExecuteNonQuery();
+                }
+                foreach (var item in param.lstConstantes)
+                {
+                    cmd.Parameters["@accion"].Value = "SAVE_ENCAJE";
+                    cmd.Parameters["@cod_moneda"].Value = item.codMoneda;
+                    cmd.Parameters["@encaje"].Value = item.encaje ?? (object)DBNull.Value;
+                    var iFilasAfectadas = cmd.ExecuteNonQuery();
+
+                    cmd.Parameters["@accion"].Value = "SAVE_CONSTANTE";
+                    cmd.Parameters["@beta0"].Value = item.beta0 ?? (object)DBNull.Value;
+                    cmd.Parameters["@beta1"].Value = item.beta1 ?? (object)DBNull.Value;
+                    cmd.Parameters["@beta2"].Value = item.beta2 ?? (object)DBNull.Value;
+                    cmd.Parameters["@beta3"].Value = item.beta3 ?? (object)DBNull.Value;
+                    cmd.Parameters["@lambda1"].Value = item.lambda1 ?? (object)DBNull.Value;
+                    cmd.Parameters["@lambda2"].Value = item.lambda2 ?? (object)DBNull.Value;
+                    iFilasAfectadas = cmd.ExecuteNonQuery();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                model.MENSAJE += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                model.MENSAJE += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return model;
+        }
+
     }
 }

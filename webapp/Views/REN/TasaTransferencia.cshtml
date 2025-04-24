@@ -199,7 +199,8 @@
                                                 </div>
                                             </div>
 
-                                            
+
+                                            <h5 class="left">Constantes de Nelson & Siege</h5>
                                             <div class="table-responsive">
                                                 <table class="table table-bordered">
                                                     <thead>
@@ -224,6 +225,7 @@
 
                                                             <tr class="@estilo2" style="font-size:10px;">
                                                                 <td align="left" class="tdMoneda">@item.moneda</td>
+                                                                <td align="left" class="tdEncaje hidden">@item.encaje</td>
                                                                 <td align="center" class="tdBeta0">@(item.beta0?.ToString("N16"))</td>
                                                                 <td align="center" class="tdBeta1">@(item.beta1?.ToString("N16"))</td>
                                                                 <td align="center" class="tdBeta2">@(item.beta2?.ToString("N16"))</td>
@@ -319,7 +321,6 @@
                                             <!-- /bordered table -->
                                         </div>
                                         <div class="col-md-7">
-                                            <h5 class="center">Constantes de Nelson & Siege</h5>
                                             <div class="table-responsive">
                                                 <table class="table table-bordered">
                                                     <thead>
@@ -441,7 +442,6 @@
                                             <!-- /bordered table -->
                                         </div>
                                         <div class="col-md-7">
-                                            <h5 class="center">Constantes de Nelson & Siege</h5>
                                             <div class="table-responsive">
                                                 <table class="table table-bordered">
                                                     <thead>
@@ -519,6 +519,9 @@
         $('#btnProcesar').on('click', function () {
             fnCargarConstantes();
         });
+        $('#btnGrabar').on('click', function () {
+            fnGrabar();
+        });
 
         function generarCurvaTransferencia(codMoneda) {
             var arr = [];
@@ -590,10 +593,90 @@
         `;
 
                 tbody.append(row);
-            }); 
+            });
 
             generarDataGrafico(codMoneda, arr, dataBeta);
 
+        }
+
+        function fnGrabar() {
+            $("#overlay").show();
+
+            var lstTasa = [];
+            var lstConstante = [];
+
+            $('#tbodyTasa tr').each(function () {
+                var fila = $(this);
+                var periodo = fila.find('input[name="periodo"]').val();
+                var tasaPEN = fila.find('input[name="tasaPEN"]').val();
+                var tasaUSD = fila.find('input[name="tasaUSD"]').val();
+
+                // Validaciones y valores por defecto
+                periodo = (periodo == "" || periodo == undefined || periodo == null || periodo == 0) ? 0 : Number(periodo);
+                tasaPEN = (tasaPEN == "" || tasaPEN == undefined || tasaPEN == null || tasaPEN == 0) ? 0 : getPorcentaje(tasaPEN);
+                tasaUSD = (tasaUSD == "" || tasaUSD == undefined || tasaUSD == null || tasaUSD == 0) ? 0 : getPorcentaje(tasaUSD);
+
+                lstTasa.push({
+                    periodo: periodo,
+                    tasaSol: tasaPEN,
+                    tasaUsd: tasaUSD
+                });
+            });
+
+            let codMoneda = 0;
+            let beta0 = 0.0;
+            let beta1 = 0.0;
+            let beta2 = 0.0;
+            let beta3 = 0.0;
+            let lambda1 = 0.0;
+            let lambda2 = 0.0;
+            $('#tbodyValor tr').each(function () {
+                var fila = $(this);
+                codMoneda = fila.find('.tdMoneda').text() == "Dólares" ?  1 : codMoneda = 0;
+                encaje = Number(fila.find('.tdEncaje').text());
+                beta0 = Number(fila.find('.tdBeta0').text());
+                beta1 = Number(fila.find('.tdBeta1').text());
+                beta2 = Number(fila.find('.tdBeta2').text());
+                beta3 = Number(fila.find('.tdBeta3').text());
+                lambda1 = Number(fila.find('.tdLambda1').text());
+                lambda2 = Number(fila.find('.tdLambda2').text());
+                lstConstante.push({
+                    codMoneda: codMoneda,
+                    encaje: encaje,
+                    beta0: beta0,
+                    beta1: beta1,
+                    beta2: beta2,
+                    beta3: beta3,
+                    lambda1: lambda1,
+                    lambda2: lambda2,
+                });
+            });
+
+            var _obj = {
+                lstTasas: lstTasa,
+                lstConstantes: lstConstante,
+            };
+
+            var _reply = {
+                ACCION: '',
+                MENSAJE: '',
+                DATA: JSON.stringify(_obj),
+            };
+
+            var _url = '@Url.Action("GrabarTasaTransferencia", "REN")';
+            $.post(_url, _reply).done(function (data) {
+                if (data.Status === 200) {
+                    toastr.success(data.Message);
+                    //fnCargarLista();
+                    //PlantillaDataTable.draw();
+                }
+                else {
+                    toastr.error(data.Message);
+                }
+            }).fail(function (e) {
+            }).always(function () {
+                $("#overlay").hide();
+            });
         }
 
         function fnCargarConstantes(codProducto) {
@@ -928,7 +1011,7 @@
                     {
                         label: 'Pool Pasivo',
                         data: data2,
-                        borderColor: "red", 
+                        borderColor: "red",
                         backgroundColor: "red",
                     },
                     {

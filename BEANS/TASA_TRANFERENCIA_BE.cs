@@ -18,6 +18,7 @@ namespace BEANS
         public double? tasaUsd { get; set; }
         public double? poolFondoUsd { get; set; }
 
+
     }
 
     public class TASA_TRANF_VALOR_BE
@@ -33,5 +34,11 @@ namespace BEANS
         public double? lambda1 { get; set; }
         public double? lambda2 { get; set; }
 
+    }
+
+    public class TASA_TRANFERENCIA_GRABAR
+    {
+        public List<TASA_TRANFERENCIA_BE> lstTasas { get; set; }
+        public List<TASA_TRANF_VALOR_BE> lstConstantes { get; set; }
     }
 }

@@ -677,6 +677,42 @@ namespace webapp.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult GrabarTasaTransferencia(GEN_REPLY_BE model)
+        {
+            if (ModelState.IsValid)
+            {
+                var _obj = (string[])model.DATA;
+                var _param = JsonConvert.DeserializeObject<TASA_TRANFERENCIA_GRABAR>(_obj[0]);
+                var user = (SEG_USUARIO_BE)Session["Usuario"];
+                var viewModel = new AuxiliarEdit();
+                var ideUsuario = long.Parse(user.IDE_USUARIO.ToString());
+                var codSuscriptor = user.SUSCRIPTOR;
+
+                var reply = new GEN_REPLY_BE();
+                reply = bl.fn_ren_pro_transferencia(codSuscriptor, user.COD_USUARIO, _param);
+
+                var res = new Response();
+                res.Message = reply.MENSAJE;
+
+                res.Status = HttpStatusCode.BadRequest;
+
+                if (reply.MENSAJE.Equals(string.Empty) || reply.MENSAJE.Contains(Constantes.SUCCESS))
+                    res.Status = HttpStatusCode.OK;
+
+                res.Data = viewModel;
+
+                return Json(res);
+            }
+
+            return Json(
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Message = "No se puede continuar por errores en el modelo",
+                            Errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage),
+                        }); ;
+        }
         public JsonResult JSON_RegresionLogaritmica(double[] xDataPEN, double[] yDataPEN, double[] xDataUSD, double[] yDataUSD)
         {
             // Datos de evaluación
