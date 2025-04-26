@@ -110,5 +110,10 @@ namespace BL
         {
             return dat.fn_seg_sel_perfilRol(accion, codSuscriptor, codUsuario);
         }
+        public List<GEN_DDL_BE> fn_seg_sel_DDL(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_seg_sel_DDL(accion, codSuscriptor, codUsuario);
+        }
     }
+
 }

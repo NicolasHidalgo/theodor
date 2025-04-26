@@ -198,6 +198,7 @@
     <Compile Include="Controllers\api\MANTController.cs" />
     <Compile Include="Controllers\api\RENController.cs" />
     <Compile Include="Controllers\api\SEGController.cs" />
+    <Compile Include="Controllers\api\XLSController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DEMOController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -206,6 +207,7 @@
     <Compile Include="Controllers\MANTController.cs" />
     <Compile Include="Controllers\SEGController.cs" />
     <Compile Include="Controllers\RENController.cs" />
+    <Compile Include="Controllers\XLSController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2753,6 +2755,7 @@
     <Content Include="Views\MANT\ClasificacionInterna.cshtml" />
     <Content Include="Views\MANT\ComisionServicio.cshtml" />
     <Content Include="Views\REN\TasaTransferencia.cshtml" />
+    <Content Include="Views\XLS\CargaExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

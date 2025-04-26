@@ -59,7 +59,8 @@
                     </div>
                     <div class="form-group">
                         <label>Producto Base</label>
-                        @Html.DropDownList("ddlProductoBase", Model.ddlProducto, new { @class = "select" })
+                        <select id="ddlProductoBase" class="select"></select>
+                        @*@Html.DropDownList("ddlProductoBase", Model.ddlProducto, new { @class = "select" })*@
                     </div>
 
                     <div class="row">
@@ -140,13 +141,34 @@
 
     var fSelEditar;
     var fSelEliminar;
-
+    var arrProducto = [];
 
     $(document).ready(function () {
         var gAccion = "";
         var gCodTipCliente = "";
         var gCodClasificacion = "";
         var gCodProducto = 0;
+
+        var jsModel = @Html.Raw(Json.Encode(Model));
+        arrProducto = jsModel.ddlProducto;
+
+        function cargarComboProducto() {
+            debugger;
+            var _codParam = $("#ddlTipCliente option:selected").val();
+            var _filtered = arrProducto.filter(x => x.Aux1 == _codParam);
+            $('#ddlProductoBase').empty();
+            $.each(_filtered, function (index, item) {
+                $('#ddlProductoBase').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: false //item.Selected
+                }));
+            });
+        }
+        cargarComboProducto();
+        $("#ddlTipCliente").change(function (e, data) {
+            cargarComboProducto();
+        });
 
         function getPorcentaje(valor) {
             if (isNaN(valor)) {
@@ -193,7 +215,7 @@
 
             $("#txtProbabilidad").val(getPorcentajeNum(data.probabilidadDefault));
             $("#txtTasaRecuperacion").val(getPorcentajeNum(data.tasaRecuperacion));
- 
+
             $('#ddlTipCliente,#ddlClasificacionInterna,#ddlProductoBase').prop('disabled', true);
             $("#titulo").text('Editar Registro');
             gAccion = "UPDATE";

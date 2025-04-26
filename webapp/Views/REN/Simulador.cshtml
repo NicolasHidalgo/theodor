@@ -646,7 +646,6 @@
 
     $(document).ready(function () {
 
-
         $('input:text,input:radio,input[type=number],select').prop('disabled', true);
         $('#txtBuscar').prop('disabled', false);
 
@@ -1072,6 +1071,9 @@
             } else {
                 $("#txtPlazoMeses").val(_plazo).trigger('change', 'fSeleccionar');
                 $("#txtTasaEfectiva").val(getPorcentajeNum(_tea)).trigger('change', 'fSeleccionar');
+                if (_tea != null && _tea != undefined && _tea != 0 && _tea != "") {
+                    flgTEA = 1;
+                }
                 fnGrabar('simular');
             }
 
@@ -1918,7 +1920,6 @@
             let porcent = getPorcentaje($(this).val());
             if (flgTEA == 1 && porcent == 0) {
                 flgTEA = 0;
-                flgTEA_Aux = 0;
             }
             let cociente = 0;
             if ((porcent + 0.1) > 1) {
@@ -1972,7 +1973,6 @@
                     return;
                 }
             } else {
-                flgTEA_Aux = 0;
                 fnGrabar('simular');
             }
 

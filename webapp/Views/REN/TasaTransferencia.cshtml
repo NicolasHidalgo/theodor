@@ -73,8 +73,8 @@
                                         @*@Html.DropDownList("ddlVigencia", Model.ddlVigencia, new { @class = "select form-control" })*@
                                     </div>
                                 </td>
-                                <td class="center"><i class="icon-floppy-disk icon-custom-style" title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>
-                                <td class="center"><i class="icon-database-refresh icon-custom-style" title="Procesar" id="btnProcesar"></i><br /><a class="botonera classGrabar">Procesar</a></td>
+                                <td id="tdGrabar" class="center hidden"><i class="icon-floppy-disk icon-custom-style" title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>
+                                <td id="tdProcesar" class="center"><i class="icon-database-refresh icon-custom-style" title="Procesar" id="btnProcesar"></i><br /><a class="botonera classGrabar">Procesar</a></td>
 
 
                                 @*<td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>*@
@@ -112,8 +112,8 @@
                         <div class="tabbable">
                             <ul class="nav nav-tabs nav-tabs-highlight nav-justified" style="width:50%">
                                 <li id="liTab1" class="active"><a href="#tab1" data-toggle="tab">Registro</a></li>
-                                <li id="liTab2"><a href="#tab2" data-toggle="tab">Curva Transferencia S/.</a></li>
-                                <li id="liTab3"><a href="#tab3" data-toggle="tab">Curva Transferencia US$</a></li>
+                                <li id="liTab2" class="hidden"><a href="#tab2" data-toggle="tab">Curva Transferencia S/.</a></li>
+                                <li id="liTab3" class="hidden"><a href="#tab3" data-toggle="tab">Curva Transferencia US$</a></li>
                             </ul>
 
                             <div class="tab-content">
@@ -506,6 +506,14 @@
 
     $(document).ready(function () {
 
+        $('input[type="text"]').on('input', function () {
+            $("#tdGrabar,#liTab2,#liTab3").addClass("hidden");
+            $("#tdProcesar").removeClass("hidden");
+            //let nombre = $(this).attr('name') || $(this).attr('id');
+            //let valor = $(this).val();
+            //console.log(`Cambio en ${nombre}: ${valor}`);
+        });
+
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             var target = $(e.target).attr("href") // activated tab
             if (target == "#tab2") {
@@ -665,14 +673,26 @@
 
             var _url = '@Url.Action("GrabarTasaTransferencia", "REN")';
             $.post(_url, _reply).done(function (data) {
+                //console.log(data.Data.ddlVigencia);
                 if (data.Status === 200) {
                     toastr.success(data.Message);
-                    //fnCargarLista();
-                    //PlantillaDataTable.draw();
+                    var ddl = $('#ddlVigencia');
+                    ddl.empty();
+                    $.each(data.Data.ddlVigencia, function (index, item) {
+                        var option = $('<option></option>')
+                            .val(item.Value)
+                            .text(item.Text);
+                        if (item.Selected) {
+                            option.attr('selected', 'selected');
+                        }
+                        ddl.append(option);
+                    });
+                    
                 }
                 else {
                     toastr.error(data.Message);
                 }
+                
             }).fail(function (e) {
             }).always(function () {
                 $("#overlay").hide();
@@ -749,8 +769,10 @@
                         }
                     });
 
-                    CargarTablaConstantesMoneda('#tbodyValorPEN', dataPEN);
-                    CargarTablaConstantesMoneda('#tbodyValorUSD', dataUSD);
+                    $("#tdGrabar,#liTab2,#liTab3").removeClass("hidden");
+                    $("#tdProcesar").addClass("hidden");
+                    //CargarTablaConstantesMoneda('#tbodyValorPEN', dataPEN);
+                    //CargarTablaConstantesMoneda('#tbodyValorUSD', dataUSD);
                     $("#overlay").hide();
                 },
                 error: function (xhr, status, error) {

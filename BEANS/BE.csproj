@@ -65,6 +65,11 @@
     <Compile Include="SEG_USUARIO_BE.cs" />
     <Compile Include="TASA_TRANFERENCIA_BE.cs" />
     <Compile Include="UBIGEO_BE.cs" />
+    <Compile Include="XLS_CARGA_BE.cs" />
+    <Compile Include="XLS_PROCESO_BE.cs" />
+    <Compile Include="XLS_PROCESO_ESTRUCTURA_BE.cs" />
+    <Compile Include="XLS_PROCESO_PARAMETRO_BE.cs" />
+    <Compile Include="XLS_USUARIO_PROCESO_BE.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

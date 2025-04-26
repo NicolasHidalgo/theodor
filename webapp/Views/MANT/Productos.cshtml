@@ -386,7 +386,7 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
             $("#txtTea").val(getPorcentajeNum(data.tea)).change();
             $("#txtFactorUso").val(getPorcentajeNum(data.factorUsoLinea)).change();
             $("#txtFactorConversion").val(getPorcentajeNum(data.factorConversionIndirectos)).change();
-            if (data.factorUsoLinea == true) {
+            if (data.aplicaPricing == true) {
                 $('#chkAplicaPricing').prop('checked', true);
             } else {
                 $('#chkAplicaPricing').prop('checked', false);

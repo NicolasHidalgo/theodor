@@ -439,6 +439,7 @@ namespace DA
                         {
                             bean.Value = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto_base")).ToString();
                             bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("producto_base"));
+                            bean.Aux1 = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
                         }
                         if (accion.Equals("@TIP_CLIENTE"))
                         {
@@ -887,6 +888,7 @@ namespace DA
                         {
                             bean.Value = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto_base")).ToString();
                             bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("producto_base"));
+                            bean.Aux1 = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
                         }
                         if (accion.Equals("@CLASIFICACION_INTERNA"))
                         {

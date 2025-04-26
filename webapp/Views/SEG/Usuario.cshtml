@@ -80,28 +80,38 @@
                         <label for="txtCorreo" class="col-form-label">Correo</label>
                         <input type="text" class="form-control" id="txtCorreo" name="txtCorreo">
                     </div>
-                    <div class="form-group">
-                        <label for="txtDiaExpClave" class="col-form-label">Dia Exp. Clave</label>
-                        <input type="number" class="form-control" id="txtDiaExpClave" name="txtDiaExpClave">
-                    </div>
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input class="form-check-input" type="checkbox" value="" id="chkEstado" name="chkEstado">
-                                <label class="form-check-label" for="chkEstado">
-                                    Estado
-                                </label>
+                                <label for="txtDiaExpClave" class="col-form-label">Dia Exp. Clave</label>
+                                <input type="number" class="form-control" id="txtDiaExpClave" name="txtDiaExpClave">
                             </div>
                         </div>
-                        <div id="divResetPassword" class="col-md-6">
+
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <input class="form-check-input" type="checkbox" value="" id="chkResetPassword" name="chkResetPassword">
-                                <label class="form-check-label" for="chkResetPassword">
-                                    Reset Password
-                                </label>
+                                @*<input class="form-check-input" type="checkbox" value="" id="chkEstado" name="chkEstado">
+                    <label class="form-check-label" for="chkEstado">
+                        Estado
+                    </label>*@
+                                <label>Estado</label>
+                                @Html.DropDownList("ddlEstado", Model.ddlEstado, new { @class = "select" })
                             </div>
+                        </div>
+
+                    </div>
+
+
+                    <div id="divResetPassword">
+                        <div class="form-group">
+                            <input class="form-check-input" type="checkbox" value="" id="chkResetPassword" name="chkResetPassword">
+                            <label class="form-check-label" for="chkResetPassword">
+                                Reset Password
+                            </label>
                         </div>
                     </div>
+
                     <div class="form-group">
                         <label>Pefil Rol</label>
                         @Html.DropDownList("ddlPerfil", Model.ddlPerfil, new { @multiple = "multiple", @class = "select" })
@@ -207,14 +217,15 @@ $(function () {
         $("#txtCodUsuario").val(data.COD_USUARIO);
         $("#txtNomUsuario").val(data.NOM_USUARIO);
         $("#txtCorreo").val(data.CORREO_ELECTRONICO);
+        $("#ddlEstado").val(data.estUsuario).change();
         $("#txtDiaExpClave").val(data.diaExpiracionClave);
         $("#divResetPassword").removeClass('hidden');
 
-        if (data.estUsuario == 1) {
-            $('#chkEstado').prop('checked', true);
-        } else {
-            $('#chkEstado').prop('checked', false);
-        }
+        //if (data.estUsuario == 1) {
+        //    $('#chkEstado').prop('checked', true);
+        //} else {
+        //    $('#chkEstado').prop('checked', false);
+        //}
         if (data.resetPassword == 1) {
             $('#chkResetPassword').prop('checked', true);
         } else {
@@ -243,7 +254,7 @@ $(function () {
         $("#divResetPassword").addClass('hidden');
         $('#txtCodUsuario').prop('disabled', false);
         $("#txtCodUsuario, #txtNomUsuario, #txtCorreo, #txtDiaExpClave").val('');
-        $('#chkEstado').prop('checked', true);
+        /*$('#chkEstado').prop('checked', true);*/
         $('#chkResetPassword').prop('checked', false);
         $("#ddlPerfil").val('').change();
         $('#editModal').modal('show');
@@ -447,10 +458,10 @@ $(function () {
 
     function CargarUsuario() {
 
-        var isEstado = 0
-        if ($('#chkEstado').prop('checked')) {
-            isEstado = 1;
-        }
+        //var isEstado = 0
+        //if ($('#chkEstado').prop('checked')) {
+        //    isEstado = 1;
+        //}
         var isReset = 0
         if ($('#chkResetPassword').prop('checked')) {
             isReset = 1;
@@ -470,7 +481,7 @@ $(function () {
             NOM_USUARIO: $('#txtNomUsuario').val(),
             CORREO_ELECTRONICO: $("#txtCorreo").val(),
             diaExpiracionClave: $("#txtDiaExpClave").val(),
-            estUsuario: isEstado,
+            estUsuario: $("#ddlEstado option:selected").val(),
             resetPassword: isReset,
             codPerfilRol: arrDDL.join(',')
         };

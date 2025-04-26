@@ -31,6 +31,13 @@ namespace webapp.Controllers
                 Text = x.nomRolPefil,
                 Selected = false,
             });
+            var dataEstado = bl.fn_seg_sel_DDL("@ESTADO", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlEstado = dataEstado.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.Value,
+                Text = x.Text,
+                //Selected = false,
+            });
 
             return View(viewModel);
         }

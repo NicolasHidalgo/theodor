@@ -700,6 +700,14 @@ namespace webapp.Controllers
                 if (reply.MENSAJE.Equals(string.Empty) || reply.MENSAJE.Contains(Constantes.SUCCESS))
                     res.Status = HttpStatusCode.OK;
 
+                var dataVigencia = bl.fn_ren_sel_transferenciaDDL("@fec_vigencia", user.SUSCRIPTOR, user.COD_USUARIO, 1);
+                viewModel.ddlVigencia = dataVigencia.Select(x => new ExtendedSelectListItem
+                {
+                    Value = x.Value,
+                    Text = x.Text,
+                    Selected = x.Selected,
+                });
+
                 res.Data = viewModel;
 
                 return Json(res);

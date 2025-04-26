@@ -233,6 +233,7 @@ namespace webapp.Controllers
             {
                 Value = x.Value,
                 Text = x.Text,
+                Aux1 = x.Aux1,
                 Selected = x.Selected,
             });
 
@@ -451,6 +452,7 @@ namespace webapp.Controllers
             {
                 Value = x.Value,
                 Text = x.Text,
+                Aux1 = x.Aux1,
                 Selected = x.Selected,
             });
             var dataClasificacion = bl.fn_mant_sel_probabilidadDDL("@CLASIFICACION_INTERNA", user.SUSCRIPTOR, user.COD_USUARIO);

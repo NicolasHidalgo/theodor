@@ -222,6 +222,10 @@
         DEMOApi: {
             RoutePrefix: '@Url.Content("~")' + 'api/DEMO',
             GetDataTable_Movimiento: function () { return format('{}/{}', this.RoutePrefix, 'GetDataTable_Movimiento') },
+        },
+        XLSApi: {
+            RoutePrefix: '@Url.Content("~")' + 'api/XLS',
+            GetDataTable_Carga: function () { return format('{}/{}', this.RoutePrefix, 'GetDataTable_Carga') },
         }
     }
 

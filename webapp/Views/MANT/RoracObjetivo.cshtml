@@ -62,7 +62,7 @@
             <div class="modal-body">
                 <div class="form">
                     <div class="form-group">
-                        <label>Tipo Cliente</label>
+                        <label>Personería</label>
                         @Html.DropDownList("ddlPersoneria", Model.ddlPersoneria, new { @class = "select" })
                     </div>
                     <div class="form-group">
@@ -72,7 +72,8 @@
                     </div>
                     <div class="form-group">
                         <label>Producto Base</label>
-                        @Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })
+                        @*@Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })*@
+                        <select id="ddlProducto" class="select"></select>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -218,6 +219,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
     var fSelEditar;
     var fSelEliminar;
     var arrTipCliente = [];
+    var arrProducto = [];
 
     $(document).ready(function () {
         var gAccion = "";
@@ -225,16 +227,29 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
         var gCodTipCliente = "";
         var gCodProducto = 0;
 
-        debugger;
         var jsModel = @Html.Raw(Json.Encode(Model));
         arrTipCliente = jsModel.ddlTipCliente;
+        arrProducto = jsModel.ddlProducto;
 
         function cargarComboTipCliente() {
-            var _codPersoneria = $("#ddlPersoneria option:selected").val();
-            var _arrTipCliente = arrTipCliente.filter(x => x.Aux1 == _codPersoneria);
+            var _codParam = $("#ddlPersoneria option:selected").val();
+            var _filtered = arrTipCliente.filter(x => x.Aux1 == _codParam);
             $('#ddlTipCliente').empty();
-            $.each(_arrTipCliente, function (index, item) {
+            $.each(_filtered, function (index, item) {
                 $('#ddlTipCliente').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: false //item.Selected
+                }));
+            });
+            cargarComboProducto();
+        }
+        function cargarComboProducto() {
+            var _codParam = $("#ddlTipCliente option:selected").val();
+            var _filtered = arrProducto.filter(x => x.Aux1 == _codParam);
+            $('#ddlProducto').empty();
+            $.each(_filtered, function (index, item) {
+                $('#ddlProducto').append($('<option/>', {
                     value: item.Value,
                     text: item.Text,
                     selected: false //item.Selected
@@ -244,12 +259,11 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
         cargarComboTipCliente();
 
         $("#ddlPersoneria").change(function (e, data) {
-            ddlPersoneriaChange();
-        });
-
-        function ddlPersoneriaChange(){
             cargarComboTipCliente();
-        }
+        });
+        $("#ddlTipCliente").change(function (e, data) {
+            cargarComboProducto();
+        });
 
         function getPorcentaje(valor) {
             if (isNaN(valor)) {
@@ -327,8 +341,8 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
             $("#titulo").text('Nuevo Registro');
             gAccion = "INSERT";
             $('#ddlPersoneria,#ddlTipCliente,#ddlProducto').prop('disabled', false);
-            $("#txtRoracObjetivo").val('0');
-            $("#txtAutonomiaComercial").val('0');
+            $("#txtRORACObjetivo").val('');
+            $("#txtAutonomiaComercial").val('');
             $("#ddlPersoneria, #ddlTipCliente, #ddlProducto").val('').change();
             $('#editModal').modal('show');
         });
