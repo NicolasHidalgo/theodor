@@ -16,6 +16,21 @@ namespace BEANS
         public string Aux4 { get; set; }
         public bool Selected { get; set; } = false;  
     }
+
+    public class REP_INFO_BE
+    {
+        public List<GEN_DDL_BE> ddlMoneda { get; set; }
+        public List<GEN_DDL_BE> ddlTipCliente { get; set; }
+        public List<GEN_DDL_BE> ddlOperacion { get; set; }
+        public List<GEN_DDL_BE> ddlProducto { get; set; }
+        public List<GEN_DDL_BE> ddlPersoneria { get; set; }
+        public List<GEN_DDL_BE> ddlAgencia { get; set; }
+        public List<GEN_DDL_BE> ddlFuncionario { get; set; }
+        public List<GEN_DDL_BE> ddlGarantia { get; set; }
+        public List<GEN_DDL_BE> ddlClasificacion { get; set; }
+
+    }
+
     public class REN_INFO_BE
     {
         public List<GEN_INFO_BE> lstOperacion { get; set; }

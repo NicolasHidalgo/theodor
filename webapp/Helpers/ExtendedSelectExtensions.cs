@@ -14,6 +14,21 @@ namespace webapp
 {
     public class ExtendedSelectListItem : SelectListItem
     {
+        public ExtendedSelectListItem() { }
+        public ExtendedSelectListItem(BEANS.GEN_DDL_BE x) {
+            this.Value = x.Value;
+            this.Text = x.Text;
+            this.Selected = x.Selected;
+            this.Aux1 = x.Aux1;
+            this.Aux2 = x.Aux2;
+        }
+        public ExtendedSelectListItem(SelectListItem item)
+        {
+            this.Value = item.Value;
+            this.Text = item.Text;
+            this.Selected = item.Selected;
+            // si tienes más propiedades, también las copias aquí
+        }
         public object HtmlAttributes { get; set; }
         public string Aux1 { get; set; }
         public string Aux2 { get; set; }

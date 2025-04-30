@@ -1,0 +1,244 @@
+﻿@using ReportViewerForMvc;
+@model webapp.ViewModels.AuxiliarEdit
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Theme JS files -->
+
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+<script type="text/javascript" src="~/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+
+@*<script type="text/javascript" src="~/assets/js/pages/components_modals.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/styling/uniform.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_multiselect.js"></script>*@
+
+@*<script type="text/javascript" src="~/Scripts/jquery.stickytableheaders.min.js"></script>*@
+<!-- /theme JS files -->
+<!-- Main content -->
+<div class="container-fluid">
+    <!-- Page header -->
+    <div class="page-header">
+        <div class="page-header-content">
+        </div>
+        <div class="breadcrumb-line breadcrumb-line-component">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="icon-printer position-left"></i> Tablero de Control</a></li>
+            </ul>
+            <ul class="breadcrumb-elements">
+                <li><a id="btnControles"><i class="icon-cogs" title="Controles"></i></a></li>
+                <li><a id="btnExportar"><i class="icon-file-excel" title="Exportar Excel"></i></a></li>
+                <li><a id="btnReporte"><i class="icon-printer2" title="Reporte"></i></a></li>
+                @*<li><a id="btnCerrar"><i class="icon-lock" title="Cierre"></i></a></li>*@
+            </ul>
+        </div>
+    </div>
+    <!-- /page header -->
+    <!-- Content area -->
+    <div class="content">
+        <!-- Page length options -->
+        <div id="pControl" class="panel panel-flat">
+
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <div class="form-group col-md-1">
+                        <label>Moneda:</label>
+                        @Html.DropDownList("ddlMoneda", Model.ddlMoneda, new { @data_placeholder = "Moenda", @class = "select" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Personeria:</label>
+                        @Html.DropDownList("ddlPersoneria", Model.ddlPersoneria, new { @data_placeholder = "Personeria", @class = "select" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Tipo Cliente:</label>
+                        @Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @data_placeholder = "Tipo Cliente", @class = "select" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Operacion:</label>
+                        @Html.DropDownList("ddlOperacion", Model.ddlOperacion, new { @data_placeholder = "Operación", @class = "select" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Producto:</label>
+                        @Html.DropDownList("ddlProducto", Model.ddlProducto, new { @data_placeholder = "Producto", @class = "select" })
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label>Agencia:</label>
+                        @Html.DropDownList("ddlAgencia", Model.ddlAgencia, new { @data_placeholder = "Agencia", @class = "select" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Funcionario:</label>
+                        @Html.DropDownList("ddlFuncionario", Model.ddlFuncionario, new { @data_placeholder = "Funcionario", @class = "select" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Garantia:</label>
+                        @Html.DropDownList("ddlGarantia", Model.ddlGarantiaPersonal, new { @data_placeholder = "Garantia", @class = "select" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Clasificación:</label>
+                        @Html.DropDownList("ddlClasificacion", Model.ddlClasificacionInterna, new { @data_placeholder = "Clasificacion", @class = "select" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Fec Desde:</label>
+                        <input id="txtFecDesde" type="date" class="form-control" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Fec Hasta:</label>
+                        <input id="txtFecHasta" type="date" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page length options -->
+        <div id="reportView" class="img-fluid">
+            @*Aquí va el ReportView*@
+        </div>
+    </div>
+    <!-- /content area -->
+</div>
+<!-- /main content -->
+
+
+@section Scripts {
+<script type="text/javascript">
+
+    var arrTipCliente = [];
+    var arrProducto = [];
+
+    $(document).ready(function () {
+
+        var jsModel = @Html.Raw(Json.Encode(Model));
+        arrTipCliente = jsModel.ddlTipCliente;
+        arrProducto = jsModel.ddlProducto;
+
+        function cargarComboTipCliente() {
+            var _codParam = $("#ddlPersoneria option:selected").val();
+            var _filtered = arrTipCliente.filter(x => x.Aux2 == _codParam);
+            $('#ddlTipCliente').empty();
+            $.each(_filtered, function (index, item) {
+                $('#ddlTipCliente').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: false //item.Selected
+                }));
+            });
+            cargarComboProducto();
+        }
+        function cargarComboProducto() {
+            var _codParam = $("#ddlOperacion option:selected").val();
+            var _filtered = arrProducto.filter(x => x.Aux2 == _codParam);
+            $('#ddlProducto').empty();
+            $.each(_filtered, function (index, item) {
+                $('#ddlProducto').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: false //item.Selected
+                }));
+            });
+        }
+        cargarComboTipCliente();
+
+        $("#ddlPersoneria").change(function (e, data) {
+            cargarComboTipCliente();
+        });
+        $("#ddlOperacion").change(function (e, data) {
+            cargarComboProducto();
+        });
+
+        $("#btnExportar").click(function () {
+            return;
+            $("#overlay").show();
+            var codUnidadNegocio = $('#ddlUnidad').val();
+            var codFrecuencia = $('#ddlFrecuencia').val();
+            var codCargaAuxiliar = $('#ddlFormato').val();
+            var codRangoFecha = $('#ddlFecha option:selected').val();
+            var _url = '@Url.Action("RunXls", "KOP")?idx=@Session.SessionID&cod_unidad_negocio=' + codUnidadNegocio + '&cod_frecuencia=' + codFrecuencia + '&cod_rango_fecha=' + codRangoFecha +'&cod_carga_auxiliar='+codCargaAuxiliar;
+
+            $.post(_url, null).done(function (data) {
+                $("#overlay").hide();
+                if (data.Status === 200) {
+                    window.location.href = '@Url.Content("~")'+'KOP/DownloadFile?archivoDestino='+ data.Message+ '&idx=@Session.SessionID';
+                }
+                else {
+                    toastr.error(data.Message)
+                }
+            });
+        });
+
+        var url = '@Url.Action("_Dashboard", "REP")';
+        $('#btnReporte').click(function () {
+            $("#overlay").show();
+            $("#pControl").hide();
+            var fechaDesde = $('#txtFecDesde').val();
+            var fechaHasta = $('#txtFecHasta').val();
+            var codMoneda = $('#ddlMoneda option:selected').val();
+            var codPersoneria = $('#ddlPersoneria option:selected').val();
+            var codTipCliente = $('#ddlTipCliente option:selected').val();
+            var codOperacion = $('#ddlOperacion option:selected').val();
+            var codProducto = $('#ddlProducto option:selected').val();
+            var codClasificacionInterna = $('#ddlClasificacion option:selected').val();
+            var garantia = $('#ddlGarantia option:selected').val();
+            var codAgencia = $('#ddlAgencia option:selected').val();
+            var codFuncionario = $('#ddlFuncionario option:selected').val();
+
+            var _obj = {
+                fechaDesde: fechaDesde,
+                fechaHasta: fechaHasta,
+                codMoneda: codMoneda,
+                codPersoneria: codPersoneria,
+                codTipCliente: codTipCliente,
+                codOperacion: codOperacion,
+                codProducto: codProducto,
+                codClasificacionInterna: codClasificacionInterna,
+                garantia: garantia,
+                codAgencia: codAgencia,
+                codFuncionario: codFuncionario,
+            }
+
+            /*
+            $('#reportView').load(url, JSON.stringify(_obj), function () {
+                setTimeout(
+                  function(){
+                        $('iframe').contents().find('body').css('backgroundColor', '#ffffff');
+                        $("#overlay").hide();
+                  }, 8000);
+            });
+            */
+            $.ajax({
+                url: url,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(_obj),
+                success: function (response) {
+                    console.log(_obj);
+                    console.log(response);
+                    $('#reportView').html(response); // asumiendo que el servidor devuelve HTML
+
+                    setTimeout(function () {
+                        $('iframe').contents().find('body').css('backgroundColor', '#ffffff');
+                        $("#overlay").hide();
+                    }, 8000);
+                }
+            });
+
+        });
+
+        $('#btnControles').click(function () {
+            if ($("#pControl").is(":visible") == true) {
+                $("#pControl").hide();
+            } else {
+                $("#pControl").show();
+            }
+
+        });
+
+
+});
+
+</script>
+}
