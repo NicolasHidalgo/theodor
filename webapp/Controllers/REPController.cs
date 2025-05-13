@@ -21,7 +21,7 @@ namespace webapp.Controllers
         {
             var viewModel = new AuxiliarEdit();
             var user = (SEG_USUARIO_BE)Session["Usuario"];
-
+            var codSuscriptor = user.SUSCRIPTOR;
             //string ip = Request.UserHostAddress;
             viewModel.CodSuscriptor = user.SUSCRIPTOR;
 
@@ -64,7 +64,21 @@ namespace webapp.Controllers
                 BackColor = System.Drawing.ColorTranslator.FromHtml("#ffffff")
             };
 
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var codSuscriptor = user.SUSCRIPTOR;
+
+            if (dto.fechaDesde != null && dto.fechaDesde != string.Empty)
+            {
+                dto.fechaDesde = dto.fechaDesde + "-01";
+            }
+            if (dto.fechaHasta != null && dto.fechaHasta != string.Empty)
+            {
+                dto.fechaHasta = dto.fechaHasta + "-01";
+            }
+
             List<ReportParameter> reportParameters = new List<ReportParameter>();
+            reportParameters.Add(new ReportParameter("accion", "DASHBOARD", false));
+            reportParameters.Add(new ReportParameter("cod_suscriptor", codSuscriptor.ToString(), false));
             reportParameters.Add(new ReportParameter("fecha_desde", dto.fechaDesde, false));
             reportParameters.Add(new ReportParameter("fecha_hasta", dto.fechaHasta, false));
             reportParameters.Add(new ReportParameter("cod_moneda", dto.codMoneda, false));
@@ -72,12 +86,13 @@ namespace webapp.Controllers
             reportParameters.Add(new ReportParameter("cod_tip_cliente", dto.codTipCliente, false));
             reportParameters.Add(new ReportParameter("cod_operacion", dto.codOperacion, false));
             reportParameters.Add(new ReportParameter("cod_producto", dto.codProducto, false));
-            reportParameters.Add(new ReportParameter("cod_clasificacion_interna", dto.codClasificacionInterna, false));
             reportParameters.Add(new ReportParameter("garantia", dto.garantia, false));
+            reportParameters.Add(new ReportParameter("cod_clasificacion_interna", dto.codClasificacionInterna, false));
             reportParameters.Add(new ReportParameter("cod_agencia", dto.codAgencia, false));
             reportParameters.Add(new ReportParameter("cod_funcionario", dto.codFuncionario, false));
 
-            reportViewer.ServerReport.ReportPath = ConfigurationManager.AppSettings["Report_Path"] + "/rp_kop_gerencialIndicadorDia";
+
+            reportViewer.ServerReport.ReportPath = ConfigurationManager.AppSettings["Report_Path"] + "/rp_ren_dashboard0";
 
             reportViewer.ServerReport.ReportServerUrl = new Uri(ConfigurationManager.AppSettings["Report_Server"]);
             reportViewer.ServerReport.SetParameters(reportParameters);

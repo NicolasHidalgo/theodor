@@ -1,4 +1,4 @@
-﻿@using ReportViewerForMvc;
+﻿@using ReportViewerForMvc
 @model webapp.ViewModels.AuxiliarEdit
 @{
     ViewBag.Title = "Dashboard";
@@ -46,51 +46,113 @@
 
             <div class="panel-body">
                 <div class="col-md-12">
-                    <div class="form-group col-md-1">
+
+                    <div class="form-group col-md-2">
+                        <label>Fec Desde:</label>
+                        <input id="txtFecDesde" type="month" class="form-control" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Fec Hasta:</label>
+                        <input id="txtFecHasta" type="month" class="form-control" />
+                    </div>
+
+                    <div class="form-group col-md-2">
                         <label>Moneda:</label>
-                        @Html.DropDownList("ddlMoneda", Model.ddlMoneda, new { @data_placeholder = "Moenda", @class = "select" })
+                        <select id="ddlMoneda" name="ddlMoneda" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlMoneda)
+                            {
+                                @*<option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Text</option>*@
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Personeria:</label>
-                        @Html.DropDownList("ddlPersoneria", Model.ddlPersoneria, new { @data_placeholder = "Personeria", @class = "select" })
+                        <select id="ddlPersoneria" name="ddlPersoneria" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlPersoneria)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Tipo Cliente:</label>
-                        @Html.DropDownList("ddlTipCliente", Model.ddlTipCliente, new { @data_placeholder = "Tipo Cliente", @class = "select" })
+                        <select id="ddlTipCliente" name="ddlTipCliente" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlTipCliente)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Operacion:</label>
-                        @Html.DropDownList("ddlOperacion", Model.ddlOperacion, new { @data_placeholder = "Operación", @class = "select" })
+                        <select id="ddlOperacion" name="ddlOperacion" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlOperacion)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Producto:</label>
-                        @Html.DropDownList("ddlProducto", Model.ddlProducto, new { @data_placeholder = "Producto", @class = "select" })
+                        <select id="ddlProducto" name="ddlProducto" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlProducto)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label>Clasificación:</label>
+                        <select id="ddlClasificacion" name="ddlClasificacion" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlClasificacionInterna)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label>Garantia:</label>
+                        <select id="ddlGarantia" name="ddlGarantia" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlGarantiaPersonal)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
                     </div>
 
                     <div class="form-group col-md-2">
                         <label>Agencia:</label>
-                        @Html.DropDownList("ddlAgencia", Model.ddlAgencia, new { @data_placeholder = "Agencia", @class = "select" })
+                        <select id="ddlAgencia" name="ddlAgencia" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlAgencia)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Funcionario:</label>
-                        @Html.DropDownList("ddlFuncionario", Model.ddlFuncionario, new { @data_placeholder = "Funcionario", @class = "select" })
+                        <select id="ddlFuncionario" name="ddlFuncionario" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlFuncionario)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
                     </div>
-                    <div class="form-group col-md-2">
-                        <label>Garantia:</label>
-                        @Html.DropDownList("ddlGarantia", Model.ddlGarantiaPersonal, new { @data_placeholder = "Garantia", @class = "select" })
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label>Clasificación:</label>
-                        @Html.DropDownList("ddlClasificacion", Model.ddlClasificacionInterna, new { @data_placeholder = "Clasificacion", @class = "select" })
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label>Fec Desde:</label>
-                        <input id="txtFecDesde" type="date" class="form-control" />
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label>Fec Hasta:</label>
-                        <input id="txtFecHasta" type="date" class="form-control" />
-                    </div>
+
+
+
                 </div>
             </div>
         </div>
@@ -120,6 +182,11 @@
             var _codParam = $("#ddlPersoneria option:selected").val();
             var _filtered = arrTipCliente.filter(x => x.Aux2 == _codParam);
             $('#ddlTipCliente').empty();
+            $('#ddlTipCliente').append($('<option/>', {
+                value: '',
+                text: '--TODOS--',
+                selected: true
+            }));
             $.each(_filtered, function (index, item) {
                 $('#ddlTipCliente').append($('<option/>', {
                     value: item.Value,
@@ -133,6 +200,11 @@
             var _codParam = $("#ddlOperacion option:selected").val();
             var _filtered = arrProducto.filter(x => x.Aux2 == _codParam);
             $('#ddlProducto').empty();
+            $('#ddlProducto').append($('<option/>', {
+                value: '',
+                text: '--TODOS--',
+                selected: true
+            }));
             $.each(_filtered, function (index, item) {
                 $('#ddlProducto').append($('<option/>', {
                     value: item.Value,
