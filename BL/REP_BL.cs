@@ -34,6 +34,23 @@ namespace BL
 
             return info;
         }
+
+        public List<REP_DASHBOARD_BE> fn_rep_sel_dashboard0(REP_DASHBOARD_PARAM param)
+        {
+            return dat.fn_rep_sel_dashboard0(param);
+        }
+        public List<REP_DASHBOARD_BE> fn_rep_sel_dashboard1(REP_DASHBOARD_PARAM param)
+        {
+            return dat.fn_rep_sel_dashboard1(param);
+        }
+        public List<REP_DASHBOARD_BE> fn_rep_sel_dashboard2(REP_DASHBOARD_PARAM param)
+        {
+            return dat.fn_rep_sel_dashboard2(param);
+        }
+        public List<REP_DASHBOARD3_BE> fn_rep_sel_dashboard3(REP_DASHBOARD_PARAM param)
+        {
+            return dat.fn_rep_sel_dashboard3(param);
+        }
     }
 }
 

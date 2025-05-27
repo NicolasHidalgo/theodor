@@ -47,6 +47,15 @@ namespace webapp.Controllers
             viewModel.ddlGarantiaPersonal = dataInfo.ddlGarantia.Select(x => new ExtendedSelectListItem(x));
             viewModel.ddlClasificacionInterna = dataInfo.ddlClasificacion.Select(x => new ExtendedSelectListItem(x));
 
+            REP_DASHBOARD_PARAM param = new REP_DASHBOARD_PARAM();
+            param.accion = "DASHBOARD";
+            param.codSuscriptor = codSuscriptor;
+
+            var dashboard0 = bl.fn_rep_sel_dashboard0(param);
+            var dashboard1 = bl.fn_rep_sel_dashboard1(param);
+            var dashboard2 = bl.fn_rep_sel_dashboard2(param);
+            var dashboard3 = bl.fn_rep_sel_dashboard3(param);
+
             return View(viewModel);
         }
 

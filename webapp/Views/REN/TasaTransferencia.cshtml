@@ -524,7 +524,7 @@
             }
         });
 
-        $('#btnProcesar').on('click', function () {
+        $('#btnProcesar').on('click', function () { 
             fnCargarConstantes();
         });
         $('#btnGrabar').on('click', function () {
@@ -582,13 +582,15 @@
                 return a.periodo - b.periodo;
             });
 
+            var txtEncaje = getPorcentaje($('#txtEncaje' + codMoneda).val());
+
             arr.forEach((item, index) => {
                 const estilo = ((index + 1) % 2 === 0) ? "colorGray" : "";
                 let poolPasivo = 0.0;
                 let poolActivo = 0.0;
 
                 poolPasivo = calcularPoolPasivo(item.anio, beta0, beta1, beta2, beta3, lambda1, lambda2);
-                poolActivo = calcularPoolActivo(poolPasivo, encaje);
+                poolActivo = calcularPoolActivo(poolPasivo, txtEncaje);
 
                 const row = `
             <tr class="${estilo}">
@@ -638,10 +640,13 @@
             let beta3 = 0.0;
             let lambda1 = 0.0;
             let lambda2 = 0.0;
+            var txtEncajePEN = getPorcentaje($('#txtEncajePEN').val());
+            var txtEncajeUSD = getPorcentaje($('#txtEncajeUSD').val());
+
             $('#tbodyValor tr').each(function () {
                 var fila = $(this);
-                codMoneda = fila.find('.tdMoneda').text() == "Dólares" ?  1 : codMoneda = 0;
-                encaje = Number(fila.find('.tdEncaje').text());
+                codMoneda = fila.find('.tdMoneda').text() == "Dólares" ?  1 : 0;
+                encaje = codMoneda == 1 ? txtEncajeUSD : txtEncajePEN; //Number(fila.find('.tdEncaje').text());
                 beta0 = Number(fila.find('.tdBeta0').text());
                 beta1 = Number(fila.find('.tdBeta1').text());
                 beta2 = Number(fila.find('.tdBeta2').text());
@@ -795,33 +800,44 @@
                 }
             });
         }
-
-        $('.edtPeriodo').on('input', function () {
+        $('.edtPeriodo').on('blur', function () {
             var inputActual = $(this);
-            var valorIngresado = inputActual.val();
+            var valorIngresado = inputActual.val().trim();
             var id = inputActual.data('id');
-
-            // Busca solo dentro del tbody más cercano
             var $tbody = inputActual.closest('tbody');
-            var esRepetido = false;
 
+            // 👉 Convertir a número para normalizar (ej: "03" => 3)
+            var valorNormalizado = parseInt(valorIngresado, 10);
+
+            // 👉 Si no es número o está vacío, limpiar y salir
+            if (isNaN(valorNormalizado)) {
+                inputActual.val('');
+                $tbody.find('#lblAnio_' + id).text('');
+                return;
+            }
+
+            // 👉 Validación de duplicado con valor normalizado
+            var esRepetido = false;
             $tbody.find('.edtPeriodo').not(this).each(function () {
-                if ($(this).val() === valorIngresado) {
+                var otroValor = parseInt($(this).val().trim(), 10);
+                if (!isNaN(otroValor) && otroValor === valorNormalizado) {
                     esRepetido = true;
                     return false; // rompe el each
                 }
             });
 
             if (esRepetido) {
-                alert('El periodo "' + valorIngresado + '" ya fue ingresado.');
+                alert('El periodo "' + valorNormalizado + '" ya fue ingresado.');
                 inputActual.val('');
                 $tbody.find('#lblAnio_' + id).text('');
                 return;
             }
 
-            // Si es válido, actualizamos el año
-            var periodo = parseFloat(valorIngresado);
-            var nuevoAnio = isNaN(periodo) ? '' : calcularAnios(periodo).toFixed(2); // tu lógica
+            // 👉 Setea el valor normalizado de nuevo en el input (ej: reemplaza "03" por "3")
+            inputActual.val(valorNormalizado);
+
+            // 👉 Actualizar año calculado
+            var nuevoAnio = (isNaN(valorNormalizado) || valorNormalizado == 0) ? "" : calcularAnios(valorNormalizado).toFixed(2);
             $tbody.find('#lblAnio_' + id).text(nuevoAnio);
         });
 
@@ -866,7 +882,7 @@
 
             return res;
         }
-        function calcularPoolActivo(poolPasivo,encaje) {
+        function calcularPoolActivo(poolPasivo, encaje) {
             var res = 0.0;
             poolPasivo = Number(poolPasivo);
             encaje = Number(encaje);
