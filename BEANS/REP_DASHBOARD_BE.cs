@@ -29,6 +29,10 @@ namespace BEANS
         public double? TEAObjetivo { get; set; }
         public double? utilidadObjetivo { get; set; }
         public double? RORACObjetivo { get; set; }
+        public double? rankingDesembolso { get; set; }
+        public string rankingcDesembolso { get; set; }
+        public double? rankingRORAC { get; set; }
+        public string rankingcRORAC { get; set; }
     }
 
     public class REP_DASHBOARD3_BE

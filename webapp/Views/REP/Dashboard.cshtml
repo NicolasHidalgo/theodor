@@ -26,6 +26,7 @@
         text-align: center;
         color: dimgray;
         font-weight: 600;
+        font-size: 14px;
     }
     .tblHeader {
         text-align: center;
@@ -190,11 +191,11 @@
         <div class="panel panel-flat">
             <div id="reportView" class="img-fluid">
                 <div class="table-responsive">
-                    <table id="tblDashboard" class="table table-bordered" style="width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 9.5px; ">
+                    <table id="tblDashboard" class="table" style="width: 100%; table-layout: fixed; border-collapse: collapse;">
                         <colgroup>
-                            <col style="width: 9%;"> <!-- nomRef -->
+                            <col style="width: 8%; border-right: 1px solid #b8b8b8;" "> <!-- nomRef -->
                             <col style="width: 3%;">  <!-- noEnProceso -->
-                            <col style="width: 5%;">  <!-- montoEnProceso -->
+                            <col style="width: 5%; border-right: 1px solid #b8b8b8;">  <!-- montoEnProceso -->
                             <col style="width: 3%;">  <!-- noDesembolsado -->
                             <col style="width: 5%;">  <!-- desembolso -->
                             <col style="width: 5%;">  <!-- tea -->
@@ -202,17 +203,17 @@
                             <col style="width: 4%;">  <!-- spread -->
                             <col style="width: 4%;">  <!-- profit -->
                             <col style="width: 4%;">  <!-- RORAC -->
-                            <col style="width: 5%;">  <!-- utilidad -->
+                            <col style="width: 5%; border-right: 1px solid #b8b8b8;" ">  <!-- utilidad -->
                             <col style="width: 5%;">  <!-- desembolsoObjetivo -->
                             <col style="width: 4%;">  <!-- teaObjetivo -->
-                            <col style="width: 5%;">  <!-- RORACObjetivo -->
-                            <col style="width: 5%;">  <!-- Ranking RORAC -->
+                            <col style="width: 5%; border-right: 1px solid #b8b8b8;" ">  <!-- RORACObjetivo -->
+                            <col style="width: 5%; border-right: 1px solid #b8b8b8;" ">  <!-- Ranking RORAC -->
                             <col style="width: 5%;">  <!-- Ranking Desembolso -->
                         </colgroup>
                         <thead>
                             <tr>
                                 <th></th>
-                                <th colspan="2" class="tblTitle">Ope. En Proceso</th>
+                                <th colspan="2" class="tblTitle">En Proceso</th>
                                 <th colspan="8" class="tblTitle">Operaciones Desembolsadas</th>
                                 <th colspan="3" class="tblTitle">Objetivos</th>
                                 <th colspan="2" class="tblTitle">Ranking</th>
@@ -222,18 +223,18 @@
                                 <th class="tblHeader">No.</th>
                                 <th class="tblHeader">Monto</th>
                                 <th class="tblHeader">No.</th>
-                                <th class="tblHeader">Desembol</th>
+                                <th class="tblHeader">Desembolsos</th>
                                 <th class="tblHeader">Tasa Operación</th>
-                                <th class="tblHeader">Perdida Esperada</th>
+                                <th class="tblHeader">Pérdida Esperada</th>
                                 <th class="tblHeader">Spread</th>
                                 <th class="tblHeader">Profit</th>
                                 <th class="tblHeader">RORAC</th>
                                 <th class="tblHeader">Utilidad</th>
-                                <th class="tblHeader">Desembol</th>
+                                <th class="tblHeader">Desembolsos</th>
                                 <th class="tblHeader">Tasa</th>
                                 <th class="tblHeader">RORAC</th>
-                                <th class="tblHeader">Ranking RORAC</th>
-                                <th class="tblHeader">Ranking Desembol</th>
+                                <th class="tblHeader">RORAC</th>
+                                <th class="tblHeader">Desembolso</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -387,32 +388,39 @@
             var c = 0;
             var lastRubro = "";
             response.forEach(item => {
-                if (c == 0 || lastRubro != item.rubro) {
+                if ((c == 0 || lastRubro != item.rubro) && response.length != c + 1) {
                     lastRubro = item.rubro;
                     tbody.append(`
-                        <tr style="background-color:black;color:white;">
-                            <td align='left' colspan="16">${item.rubro}</td>
+                        <tr style="background-color:black;color:white;font-size:14px;">
+                            <td align='left' colspan="16" style="padding-left:10px;">${item.rubro}</td>
                         </tr>
                     `);
                 }
+
+                var style = 'font-size:12px;';
+                var nomRef = item.nomRef;
+                if (item.rubro.includes('Total')) {
+                    style = 'font-size:13px;font-weight: bold;'
+                    nomRef = item.rubro;
+                }
                 const row = `
-            <tr>
-                <td align='left'>${item.nomRef}</td>
-                <td align='right'>${item.noEnProceso}</td>
-                <td align='right'>${numeral(item.montoEnProceso).format('#,##0')}</td>
-                <td align='right'>${item.noDesembolsado}</td>
-                <td align='right'>${numeral(item.desembolso).format('#,##0')}</td>
-                <td align='right'>${numeral(item.tea).format('0.00%')}</td>
-                <td align='right'>${numeral(item.perdidaEsperada).format('0.00%')}</td>
-                <td align='right'>${numeral(item.spread).format('0.00%')}</td>
-                <td align='right'>${numeral(item.profit).format('0.00%')}</td>
-                <td align='right'>${numeral(item.RORAC).format('0.00%')}</td>
-                <td align='right'>${numeral(item.utilidad).format('#,##0')}</td>
-                <td align='right'>${numeral(item.desembolsoObjetivo).format('#,##0')}</td>
-                <td align='right'>${numeral(item.teaObjetivo).format('0.00%')}</td>
-                <td align='right'>${numeral(item.RORACObjetivo).format('0.00%')}</td>
-                <td align='right'>${numeral(item.RORACObjetivo).format('0.00%')} <img src="../assets/images/verde.png" /></td>
-                <td align='right'>${numeral(item.RORACObjetivo).format('0.00%')} <img src="../assets/images/verde.png" /></td>
+            <tr style='${style}'>
+                <td align='left' style="padding-left:10px;padding-top: 0px;padding-bottom: 0px;">${nomRef}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${item.noEnProceso}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.montoEnProceso).format('#,##0')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${item.noDesembolsado}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.desembolso).format('#,##0')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.tea).format('0.00%')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.perdidaEsperada).format('0.00%')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.spread).format('0.00%')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.profit).format('0.00%')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.RORAC).format('0.00%')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.utilidad).format('#,##0')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.desembolsoObjetivo).format('#,##0')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.teaObjetivo).format('0.00%')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.RORACObjetivo).format('0.00%')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.rankingRORAC).format('0.00%')} <img src="../assets/images/${item.rankingcRORAC}.png" /></td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.rankingDesembolso).format('0.00%')} <img src="../assets/images/${item.rankingcDesembolso}.png" /></td>
             </tr>
         `;
                 c++;

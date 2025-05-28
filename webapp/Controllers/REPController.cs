@@ -64,6 +64,7 @@ namespace webapp.Controllers
             return Json(dash, JsonRequestBehavior.AllowGet);
         }
 
+        /*
         public ActionResult _Dashboard(DASHBOARD_DTO dto)
         {
             var reportViewer = new ReportViewer()
@@ -116,6 +117,6 @@ namespace webapp.Controllers
 
             return PartialView("_Dashboard");
         }
-
+        */
     }
 }

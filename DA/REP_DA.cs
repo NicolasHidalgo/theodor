@@ -186,6 +186,10 @@ namespace DA
                         bean.TEAObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("TEA_objetivo"));
                         bean.utilidadObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Utilidad_objetivo"));
                         bean.RORACObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORAC_objetivo"));
+                        bean.rankingDesembolso = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Ranking_Desembolso"));
+                        bean.rankingcDesembolso = DataReader.SafeGetString(dr, dr.GetOrdinal("Ranking_cDesembolso"));
+                        bean.rankingRORAC = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Ranking_RORAC"));
+                        bean.rankingcRORAC = DataReader.SafeGetString(dr, dr.GetOrdinal("Ranking_cRORAC"));
 
                         lista.Add(bean);
                     }
