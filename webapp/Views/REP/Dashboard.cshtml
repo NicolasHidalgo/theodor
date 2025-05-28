@@ -1,4 +1,4 @@
-﻿@using ReportViewerForMvc
+﻿@*@using ReportViewerForMvc*@
 @model webapp.ViewModels.AuxiliarEdit
 @{
     ViewBag.Title = "Dashboard";
@@ -20,6 +20,35 @@
 
 @*<script type="text/javascript" src="~/Scripts/jquery.stickytableheaders.min.js"></script>*@
 <!-- /theme JS files -->
+
+<style>
+    .tblTitle {
+        text-align: center;
+        color: dimgray;
+        font-weight: 600;
+    }
+    .tblHeader {
+        text-align: center;
+        color: dimgray;
+        font-weight: 600;
+    }
+    #tblDashboard th {
+        height: 15px;
+        line-height: 15px;
+        padding: 5px;
+    }
+    #tblDashboard td {
+        height: 2px; /* Altura de fila fija */
+        /*padding: 0; Elimina relleno interno que aumente la altura */
+        line-height: 2px; /* Alinea verticalmente el texto en una sola línea */
+        overflow: hidden; /* Evita que el contenido se desborde */
+        white-space: nowrap; /* Evita saltos de línea */
+        vertical-align: middle; /* Centra verticalmente el contenido */
+        box-sizing: border-box; /* Asegura que padding no sume al alto */
+    }
+    
+</style>
+
 <!-- Main content -->
 <div class="container-fluid">
     <!-- Page header -->
@@ -35,6 +64,7 @@
                 <li><a id="btnExportar"><i class="icon-file-excel" title="Exportar Excel"></i></a></li>
                 <li><a id="btnReporte"><i class="icon-printer2" title="Reporte"></i></a></li>
                 @*<li><a id="btnCerrar"><i class="icon-lock" title="Cierre"></i></a></li>*@
+
             </ul>
         </div>
     </div>
@@ -157,9 +187,63 @@
             </div>
         </div>
         <!-- /page length options -->
-        <div id="reportView" class="img-fluid">
-            @*Aquí va el ReportView*@
+        <div class="panel panel-flat">
+            <div id="reportView" class="img-fluid">
+                <div class="table-responsive">
+                    <table id="tblDashboard" class="table table-bordered" style="width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 9.5px; ">
+                        <colgroup>
+                            <col style="width: 9%;"> <!-- nomRef -->
+                            <col style="width: 3%;">  <!-- noEnProceso -->
+                            <col style="width: 5%;">  <!-- montoEnProceso -->
+                            <col style="width: 3%;">  <!-- noDesembolsado -->
+                            <col style="width: 5%;">  <!-- desembolso -->
+                            <col style="width: 5%;">  <!-- tea -->
+                            <col style="width: 5%;">  <!-- perdidaEsperada -->
+                            <col style="width: 4%;">  <!-- spread -->
+                            <col style="width: 4%;">  <!-- profit -->
+                            <col style="width: 4%;">  <!-- RORAC -->
+                            <col style="width: 5%;">  <!-- utilidad -->
+                            <col style="width: 5%;">  <!-- desembolsoObjetivo -->
+                            <col style="width: 4%;">  <!-- teaObjetivo -->
+                            <col style="width: 5%;">  <!-- RORACObjetivo -->
+                            <col style="width: 5%;">  <!-- Ranking RORAC -->
+                            <col style="width: 5%;">  <!-- Ranking Desembolso -->
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th colspan="2" class="tblTitle">Ope. En Proceso</th>
+                                <th colspan="8" class="tblTitle">Operaciones Desembolsadas</th>
+                                <th colspan="3" class="tblTitle">Objetivos</th>
+                                <th colspan="2" class="tblTitle">Ranking</th>
+                            </tr>
+                            <tr>
+                                <th class="tblHeader"></th>
+                                <th class="tblHeader">No.</th>
+                                <th class="tblHeader">Monto</th>
+                                <th class="tblHeader">No.</th>
+                                <th class="tblHeader">Desembol</th>
+                                <th class="tblHeader">Tasa Operación</th>
+                                <th class="tblHeader">Perdida Esperada</th>
+                                <th class="tblHeader">Spread</th>
+                                <th class="tblHeader">Profit</th>
+                                <th class="tblHeader">RORAC</th>
+                                <th class="tblHeader">Utilidad</th>
+                                <th class="tblHeader">Desembol</th>
+                                <th class="tblHeader">Tasa</th>
+                                <th class="tblHeader">RORAC</th>
+                                <th class="tblHeader">Ranking RORAC</th>
+                                <th class="tblHeader">Ranking Desembol</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                
+            </div>
+            
         </div>
+        
     </div>
     <!-- /content area -->
 </div>
@@ -167,7 +251,7 @@
 
 
 @section Scripts {
-<script type="text/javascript">
+    <script type="text/javascript">
 
     var arrTipCliente = [];
     var arrProducto = [];
@@ -242,7 +326,7 @@
             });
         });
 
-        var url = '@Url.Action("_Dashboard", "REP")';
+        var url = '@Url.Action("JSON_GetDashboard01", "REP")';
         $('#btnReporte').click(function () {
             $("#overlay").show();
             $("#pControl").hide();
@@ -272,33 +356,69 @@
                 codFuncionario: codFuncionario,
             }
 
-            /*
-            $('#reportView').load(url, JSON.stringify(_obj), function () {
-                setTimeout(
-                  function(){
-                        $('iframe').contents().find('body').css('backgroundColor', '#ffffff');
-                        $("#overlay").hide();
-                  }, 8000);
-            });
-            */
             $.ajax({
                 url: url,
-                type: "POST",
+                type: "GET",
                 contentType: "application/json",
                 data: JSON.stringify(_obj),
                 success: function (response) {
-                    console.log(_obj);
                     console.log(response);
+                    /*
                     $('#reportView').html(response); // asumiendo que el servidor devuelve HTML
-
                     setTimeout(function () {
                         $('iframe').contents().find('body').css('backgroundColor', '#ffffff');
                         $("#overlay").hide();
                     }, 8000);
+                    */
+                    construirDashboard(response);
+                    $("#overlay").hide();
                 }
             });
 
         });
+
+        function construirDashboard(response) {
+            const tbody = $("#tblDashboard tbody");
+            tbody.empty(); // Limpia cualquier contenido previo
+
+            // Si necesitas mostrar un grupo (como "Vista Personería"), agrúpalo aquí
+            
+
+            var c = 0;
+            var lastRubro = "";
+            response.forEach(item => {
+                if (c == 0 || lastRubro != item.rubro) {
+                    lastRubro = item.rubro;
+                    tbody.append(`
+                        <tr style="background-color:black;color:white;">
+                            <td align='left' colspan="16">${item.rubro}</td>
+                        </tr>
+                    `);
+                }
+                const row = `
+            <tr>
+                <td align='left'>${item.nomRef}</td>
+                <td align='right'>${item.noEnProceso}</td>
+                <td align='right'>${numeral(item.montoEnProceso).format('#,##0')}</td>
+                <td align='right'>${item.noDesembolsado}</td>
+                <td align='right'>${numeral(item.desembolso).format('#,##0')}</td>
+                <td align='right'>${numeral(item.tea).format('0.00%')}</td>
+                <td align='right'>${numeral(item.perdidaEsperada).format('0.00%')}</td>
+                <td align='right'>${numeral(item.spread).format('0.00%')}</td>
+                <td align='right'>${numeral(item.profit).format('0.00%')}</td>
+                <td align='right'>${numeral(item.RORAC).format('0.00%')}</td>
+                <td align='right'>${numeral(item.utilidad).format('#,##0')}</td>
+                <td align='right'>${numeral(item.desembolsoObjetivo).format('#,##0')}</td>
+                <td align='right'>${numeral(item.teaObjetivo).format('0.00%')}</td>
+                <td align='right'>${numeral(item.RORACObjetivo).format('0.00%')}</td>
+                <td align='right'>${numeral(item.RORACObjetivo).format('0.00%')} <img src="../assets/images/verde.png" /></td>
+                <td align='right'>${numeral(item.RORACObjetivo).format('0.00%')} <img src="../assets/images/verde.png" /></td>
+            </tr>
+        `;
+                c++;
+                tbody.append(row);
+            });
+        }
 
         $('#btnControles').click(function () {
             if ($("#pControl").is(":visible") == true) {
@@ -312,5 +432,5 @@
 
 });
 
-</script>
+    </script>
 }

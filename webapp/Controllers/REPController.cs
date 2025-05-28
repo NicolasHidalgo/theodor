@@ -51,12 +51,17 @@ namespace webapp.Controllers
             param.accion = "DASHBOARD";
             param.codSuscriptor = codSuscriptor;
 
-            var dashboard0 = bl.fn_rep_sel_dashboard0(param);
             var dashboard1 = bl.fn_rep_sel_dashboard1(param);
-            var dashboard2 = bl.fn_rep_sel_dashboard2(param);
-            var dashboard3 = bl.fn_rep_sel_dashboard3(param);
-
             return View(viewModel);
+        }
+
+        public JsonResult JSON_GetDashboard01(REP_DASHBOARD_PARAM param)
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            param.accion = "DASHBOARD";
+            param.codSuscriptor = user.SUSCRIPTOR;
+            var dash = bl.fn_rep_sel_dashboard1(param);
+            return Json(dash, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult _Dashboard(DASHBOARD_DTO dto)

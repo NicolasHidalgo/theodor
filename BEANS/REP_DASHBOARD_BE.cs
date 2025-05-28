@@ -54,17 +54,17 @@ namespace BEANS
     {
         public string accion { get; set; }
         public long codSuscriptor { get; set;}
-        public DateTime fechaDesde { get; set; }
-        public DateTime fechaHasta { get; set; }
-        public int codMoneda { get; set; }
+        public DateTime? fechaDesde { get; set; }
+        public DateTime? fechaHasta { get; set; }
+        public int? codMoneda { get; set; }
         public string codPersoneria { get; set; }
         public string codTipCliente { get; set; }
         public string codOperacion { get; set; }
-        public int codProducto { get; set; }
+        public int? codProducto { get; set; }
         public string codClasificacionInterna { get; set; }
-        public bool garantia { get; set; }
+        public bool? garantia { get; set; }
         public string codAgencia { get; set; }
-        public int codFuncionario { get; set; }
+        public int? codFuncionario { get; set; }
 
     }
 }
