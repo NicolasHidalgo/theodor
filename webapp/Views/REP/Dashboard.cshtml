@@ -387,7 +387,7 @@
 
             var c = 0;
             var lastRubro = "";
-            response.forEach(item => {
+            response.forEach(item => {  
                 if ((c == 0 || lastRubro != item.rubro) && response.length != c + 1) {
                     lastRubro = item.rubro;
                     tbody.append(`
