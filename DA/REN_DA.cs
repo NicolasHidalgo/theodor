@@ -1013,7 +1013,7 @@ namespace DA
             cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
             cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
-            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = fecVigencia;
+            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.DateTime).Value = fecVigencia;
             cmd.Parameters.Add("@tipo", System.Data.SqlDbType.Int).Value = tipo;
 
             try
@@ -1064,7 +1064,7 @@ namespace DA
             cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
             cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
-            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = fecVigencia;
+            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.DateTime).Value = fecVigencia;
             cmd.Parameters.Add("@tipo", System.Data.SqlDbType.Int).Value = tipo;
 
             try
@@ -1117,7 +1117,7 @@ namespace DA
             cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 30).Value = accion;
             cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
-            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = null;
+            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.DateTime).Value = null;
             cmd.Parameters.Add("@tipo", System.Data.SqlDbType.Int).Value = tipo;
 
             try
@@ -1132,8 +1132,9 @@ namespace DA
                         bean = new GEN_DDL_BE();
                         if (accion.Equals("@fec_vigencia"))
                         {
-                            bean.Value = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("fec_vigencia")).ToString();
-                            bean.Text = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("fec_vigencia")).ToString();
+                            var fecha = DataReader.GetValueOrNull<DateTime>(dr, dr.GetOrdinal("fec_vigencia"));
+                            bean.Value = fecha?.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                            bean.Text = fecha?.ToString("yyyy-MM-dd HH:mm:ss.fff");
                         }
 
                         lista.Add(bean);

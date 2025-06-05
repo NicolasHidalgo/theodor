@@ -682,7 +682,7 @@ namespace webapp.Controllers
             var viewModel = new AuxiliarEdit();
             var user = (SEG_USUARIO_BE)Session["Usuario"];
 
-            string formato = "d/MM/yyyy HH:mm:ss";  // El formato correcto (sin ceros en el día)
+            string formato = "yyyy-MM-dd HH:mm:ss.fff";  // El formato correcto (sin ceros en el día)
             // Intentamos convertir la cadena usando el formato exacto
             DateTime fecVigencia = DateTime.ParseExact(strFecVigencia, formato, System.Globalization.CultureInfo.InvariantCulture);
 
