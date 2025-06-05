@@ -504,6 +504,7 @@
         });
 
         function fnCargarTasa() {
+            $("#overlay").show();
             $('#tbodyTasa').empty();
             $.getJSON('@Url.Action("JSON_CargarTasaTransferencia")', { strFecVigencia: $("#ddlVigencia option:selected").val() }, function (data) {
                 $.each(data.lstTasaTranf, function (index, item) {
@@ -556,7 +557,13 @@
                 $('#tbodyTasaUSD').empty();
                 generarFilasTasas(data.lstTasaTranf, data.lstTasaTranfValor, 0, "tbodyTasaPEN");
                 generarFilasTasas(data.lstTasaTranf, data.lstTasaTranfValor, 1, "tbodyTasaUSD");
+
                 
+            }).success(function () {
+                $("#tdGrabar,#liTab2,#liTab3").addClass("hidden");
+                $("#tdProcesar").removeClass("hidden");
+            }).done(function () {
+                $("#overlay").hide();
             });
         }
 
