@@ -667,8 +667,8 @@ namespace webapp.Controllers
                 Selected = x.Selected,
             });
 
-            var tasaTranf = bl.fn_ren_sel_tasaTranferencia("SELECT", user.SUSCRIPTOR, user.COD_USUARIO, 1);
-            var tasaTranfValor = bl.fn_ren_sel_tasaTranfValor("SELECT_VALOR", user.SUSCRIPTOR, user.COD_USUARIO, 1);
+            var tasaTranf = bl.fn_ren_sel_tasaTranferencia("SELECT", user.SUSCRIPTOR, user.COD_USUARIO, null, 1);
+            var tasaTranfValor = bl.fn_ren_sel_tasaTranfValor("SELECT_VALOR", user.SUSCRIPTOR, user.COD_USUARIO, null, 1);
 
             viewModel.lstTasaTranf = tasaTranf;
             viewModel.lstTasaTranfValor = tasaTranfValor;
@@ -676,6 +676,25 @@ namespace webapp.Controllers
             return View(viewModel);
 
         }
+
+        public JsonResult JSON_CargarTasaTransferencia(string strFecVigencia)
+        {
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+
+            string formato = "d/MM/yyyy HH:mm:ss";  // El formato correcto (sin ceros en el día)
+            // Intentamos convertir la cadena usando el formato exacto
+            DateTime fecVigencia = DateTime.ParseExact(strFecVigencia, formato, System.Globalization.CultureInfo.InvariantCulture);
+
+            var tasaTranf = bl.fn_ren_sel_tasaTranferencia("SELECT", user.SUSCRIPTOR, user.COD_USUARIO, fecVigencia, 1);
+            var tasaTranfValor = bl.fn_ren_sel_tasaTranfValor("SELECT_VALOR", user.SUSCRIPTOR, user.COD_USUARIO, fecVigencia, 1);
+
+            viewModel.lstTasaTranf = tasaTranf;
+            viewModel.lstTasaTranfValor = tasaTranfValor;
+
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
 
         [HttpPost]
         public ActionResult GrabarTasaTransferencia(GEN_REPLY_BE model)

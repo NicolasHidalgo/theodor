@@ -1001,7 +1001,7 @@ namespace DA
 
 
 
-        public List<TASA_TRANFERENCIA_BE> fn_ren_sel_tasaTranferencia(string accion, long codSuscriptor, string codUsuario, int tipo)
+        public List<TASA_TRANFERENCIA_BE> fn_ren_sel_tasaTranferencia(string accion, long codSuscriptor, string codUsuario, DateTime? fecVigencia, int tipo)
         {
             Mensaje = string.Empty;
             List<TASA_TRANFERENCIA_BE> lista = new List<TASA_TRANFERENCIA_BE>();
@@ -1013,7 +1013,7 @@ namespace DA
             cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
             cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
-            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = null;
+            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = fecVigencia;
             cmd.Parameters.Add("@tipo", System.Data.SqlDbType.Int).Value = tipo;
 
             try
@@ -1052,7 +1052,7 @@ namespace DA
             return lista;
         }
 
-        public List<TASA_TRANF_VALOR_BE> fn_ren_sel_tasaTranfValor(string accion, long codSuscriptor, string codUsuario, int tipo)
+        public List<TASA_TRANF_VALOR_BE> fn_ren_sel_tasaTranfValor(string accion, long codSuscriptor, string codUsuario, DateTime? fecVigencia, int tipo)
         {
             Mensaje = string.Empty;
             List<TASA_TRANF_VALOR_BE> lista = new List<TASA_TRANF_VALOR_BE>();
@@ -1064,7 +1064,7 @@ namespace DA
             cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
             cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
-            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = null;
+            cmd.Parameters.Add("@fec_vigencia", System.Data.SqlDbType.Date).Value = fecVigencia;
             cmd.Parameters.Add("@tipo", System.Data.SqlDbType.Int).Value = tipo;
 
             try

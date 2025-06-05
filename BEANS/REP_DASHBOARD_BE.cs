@@ -23,16 +23,16 @@ namespace BEANS
         public double? perdidaEsperada { get; set; }
         public double? spread { get; set; }
         public double? profit { get; set; }
-        public double? RORAC { get; set; }
+        public double? rorac { get; set; }
         public double? utilidad { get; set; }
         public double? desembolsoObjetivo { get; set; }
-        public double? TEAObjetivo { get; set; }
+        public double? teaObjetivo { get; set; }
         public double? utilidadObjetivo { get; set; }
-        public double? RORACObjetivo { get; set; }
+        public double? roracObjetivo { get; set; }
         public double? rankingDesembolso { get; set; }
         public string rankingcDesembolso { get; set; }
-        public double? rankingRORAC { get; set; }
-        public string rankingcRORAC { get; set; }
+        public double? rankingRorac { get; set; }
+        public string rankingcRorac { get; set; }
     }
 
     public class REP_DASHBOARD3_BE

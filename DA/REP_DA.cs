@@ -110,12 +110,12 @@ namespace DA
                         bean.perdidaEsperada = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Perdida_Esperada"));
                         bean.spread = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Spread"));
                         bean.profit = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Profit"));
-                        bean.RORAC = DataReader.GetValueOrNull<double>  (dr, dr.GetOrdinal("RORAC"));
+                        bean.rorac = DataReader.GetValueOrNull<double>  (dr, dr.GetOrdinal("RORAC"));
                         bean.utilidad = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Utilidad"));
                         bean.desembolsoObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Desembolso_objetivo"));
-                        bean.TEAObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("TEA_objetivo"));
+                        bean.teaObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("TEA_objetivo"));
                         bean.utilidadObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Utilidad_objetivo"));
-                        bean.RORACObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORAC_objetivo"));
+                        bean.roracObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORAC_objetivo"));
 
                         lista.Add(bean);
                     }
@@ -180,16 +180,16 @@ namespace DA
                         bean.perdidaEsperada = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Perdida_Esperada"));
                         bean.spread = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Spread"));
                         bean.profit = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Profit"));
-                        bean.RORAC = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORAC"));
+                        bean.rorac = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORAC"));
                         bean.utilidad = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Utilidad"));
                         bean.desembolsoObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Desembolso_objetivo"));
-                        bean.TEAObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("TEA_objetivo"));
+                        bean.teaObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("TEA_objetivo"));
                         bean.utilidadObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Utilidad_objetivo"));
-                        bean.RORACObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORAC_objetivo"));
+                        bean.roracObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORAC_objetivo"));
                         bean.rankingDesembolso = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Ranking_Desembolso"));
                         bean.rankingcDesembolso = DataReader.SafeGetString(dr, dr.GetOrdinal("Ranking_cDesembolso"));
-                        bean.rankingRORAC = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Ranking_RORAC"));
-                        bean.rankingcRORAC = DataReader.SafeGetString(dr, dr.GetOrdinal("Ranking_cRORAC"));
+                        bean.rankingRorac = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Ranking_RORAC"));
+                        bean.rankingcRorac = DataReader.SafeGetString(dr, dr.GetOrdinal("Ranking_cRORAC"));
 
                         lista.Add(bean);
                     }
@@ -249,7 +249,7 @@ namespace DA
                         bean.tea = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Tea"));
                         bean.utilidad = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Utilidad"));
                         bean.profit = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Profit"));
-                        bean.RORAC = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORAC"));
+                        bean.rorac = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORAC"));
                         
                         lista.Add(bean);
                     }

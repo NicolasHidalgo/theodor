@@ -70,38 +70,10 @@
                                                 <option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Text</option>
                                             }
                                         </select>
-                                        @*@Html.DropDownList("ddlVigencia", Model.ddlVigencia, new { @class = "select form-control" })*@
                                     </div>
                                 </td>
                                 <td id="tdGrabar" class="center hidden"><i class="icon-floppy-disk icon-custom-style" title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>
                                 <td id="tdProcesar" class="center"><i class="icon-database-refresh icon-custom-style" title="Procesar" id="btnProcesar"></i><br /><a class="botonera classGrabar">Procesar</a></td>
-
-
-                                @*<td class="center"><i class="icon-file-empty icon-custom-style" title="Nuevo" id="btnNuevo"></i><br /><a class="botonera classNuevo">Nuevo</a></td>*@
-                                @*<td class="center"><i class="icon-floppy-disk icon-custom-style" title="Grabar" id="btnGrabar"></i><br /><a class="botonera classGrabar">Grabar</a></td>*@
-                                <!--<td class="center"><i class="icon-bin icon-custom-style " title="Borrar" id="btnBorrar"></i><br /><a class="botonera classBorrar">Borrar</a></td>-->
-                                @*<td class="center"><i class="icon-search4 icon-custom-style" title="Buscar" id="btnBuscar"></i><br /><a class="botonera classBuscar">Buscar</a></td>*@
-
-
-
-                                @*<td style="width:160px;">
-            <div class="form-group">
-                <label>Encaje S/.:</label>
-                <div class="input-group">
-                    <input type="text" id="txtEncajePEN" name="txtEncajePEN" value="0" class="form-control" style="text-align: right;">
-                    <span class="input-group-addon">%</span>
-                </div>
-            </div>
-        </td>
-        <td style="width:160px;">
-            <div class="form-group">
-                <label>Encaje US$:</label>
-                <div class="input-group">
-                    <input type="text" id="txtEncajeUSD" name="txtEncajeUSD" value="0" class="form-control" style="text-align: right;">
-                    <span class="input-group-addon">%</span>
-                </div>
-            </div>
-        </td>*@
                             </tr>
                         </table>
 
@@ -118,7 +90,6 @@
 
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab1">
-
 
                                     <div class="row">
                                         <div class="col-md-5">
@@ -308,10 +279,8 @@
                                                                     <td align="center">@(item.tasaSol?.ToString("P4"))</td>
                                                                     <td align="center">@(poolPasivo.ToString("P4"))</td>
                                                                     <td align="center">@(poolActivo.ToString("P4"))</td>
-                                                                    @*<td align="center">@(residuo)</td>*@
                                                                 </tr>
                                                             }
-
 
                                                         }
                                                     </tbody>
@@ -524,12 +493,132 @@
             }
         });
 
-        $('#btnProcesar').on('click', function () { 
+        $('#btnProcesar').on('click', function () {
             fnCargarConstantes();
         });
         $('#btnGrabar').on('click', function () {
             fnGrabar();
         });
+        $('#ddlVigencia').on('change', function () {
+            fnCargarTasa();
+        });
+
+        function fnCargarTasa() {
+            $('#tbodyTasa').empty();
+            $.getJSON('@Url.Action("JSON_CargarTasaTransferencia")', { strFecVigencia: $("#ddlVigencia option:selected").val() }, function (data) {
+                $.each(data.lstTasaTranf, function (index, item) {
+                    // Creamos una nueva fila de la tabla con los datos recibidos
+                    var row = $('<tr></tr>').addClass(index % 2 === 0 ? 'colorGray' : ''); // Alterna entre clases para filas pares/impares
+
+                    // Creamos las celdas de la fila
+                    var cellPeriodo = $('<td></td>').attr('align', 'center')
+                        .html('<input type="text" name="periodo" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control edtPeriodo" data-id="' + (index + 1) + '" style="text-align: center;" value="' + item.periodo + '" />');
+                    var cellAnio = $('<td></td>').attr('align', 'center')
+                        .html('<label id="lblAnio_' + (index + 1) + '" class="no-margin">' + (item.anio ? item.anio.toFixed(2) : '') + '</label>');
+                    var cellTasaPEN = $('<td></td>').attr('align', 'center')
+                        .html('<div class="input-group"><input type="text" name="tasaPEN" class="form-control edtDecimal" style="text-align: center;" value="' + (item.tasaSol ? (item.tasaSol * 100).toFixed(4) : '') + '" /><span class="input-group-addon">%</span></div>');
+                    var cellTasaUSD = $('<td></td>').attr('align', 'center')
+                        .html('<div class="input-group"><input type="text" name="tasaUSD" class="form-control edtDecimal" style="text-align: center;" value="' + (item.tasaUsd ? (item.tasaUsd * 100).toFixed(4) : '') + '" /><span class="input-group-addon">%</span></div>');
+
+                    // Añadimos las celdas a la fila
+                    row.append(cellPeriodo, cellAnio, cellTasaPEN, cellTasaUSD);
+
+                    // Añadimos la fila a la tabla
+                    $('#tbodyTasa').append(row);
+                });
+
+                $('#tbodyValor').empty();
+                $.each(data.lstTasaTranfValor, function (index, item) {
+                    // Alternar clase colorGray para filas pares
+                    var rowClass = index % 2 === 0 ? 'colorGray' : '';
+
+                    // Crear una nueva fila con las celdas
+                    var row = $('<tr></tr>').addClass(rowClass).css('font-size', '10px');
+
+                    // Crear las celdas con los valores correspondientes
+                    var cellMoneda = $('<td></td>').attr('align', 'left').addClass('tdMoneda').text(item.moneda);
+                    var cellEncaje = $('<td></td>').attr('align', 'left').addClass('tdEncaje hidden').text(item.encaje);
+                    var cellBeta0 = $('<td></td>').attr('align', 'center').addClass('tdBeta0').text(item.beta0 ? item.beta0.toFixed(16) : '');
+                    var cellBeta1 = $('<td></td>').attr('align', 'center').addClass('tdBeta1').text(item.beta1 ? item.beta1.toFixed(16) : '');
+                    var cellBeta2 = $('<td></td>').attr('align', 'center').addClass('tdBeta2').text(item.beta2 ? item.beta2.toFixed(16) : '');
+                    var cellBeta3 = $('<td></td>').attr('align', 'center').addClass('tdBeta3').text(item.beta3 ? item.beta3.toFixed(16) : '');
+                    var cellLambda1 = $('<td></td>').attr('align', 'center').addClass('tdLambda1').text(item.lambda1 ? item.lambda1.toFixed(16) : '');
+                    var cellLambda2 = $('<td></td>').attr('align', 'center').addClass('tdLambda2').text(item.lambda2 ? item.lambda2.toFixed(16) : '');
+
+                    // Añadir las celdas a la fila
+                    row.append(cellMoneda, cellEncaje, cellBeta0, cellBeta1, cellBeta2, cellBeta3, cellLambda1, cellLambda2);
+
+                    // Añadir la fila a la tabla
+                    $('#tbodyValor').append(row);
+                });
+
+                $('#tbodyTasaPEN').empty();
+                $('#tbodyTasaUSD').empty();
+                generarFilasTasas(data.lstTasaTranf, data.lstTasaTranfValor, 0, "tbodyTasaPEN");
+                generarFilasTasas(data.lstTasaTranf, data.lstTasaTranfValor, 1, "tbodyTasaUSD");
+                
+            });
+        }
+
+        function generarFilasTasas(tasaTranf, tasaTranfValor, monedaCodigo, tbodyId) {
+            $.each(tasaTranf, function (index, item) {
+                var estilo = "";  // Variable para el estilo de la fila
+                var odd = index + 1; // Usamos el índice para el estilo
+                if (odd % 2 == 0) {
+                    estilo = "colorGray";  // Asignamos el estilo "colorGray" si es fila par
+                }
+
+                var poolPasivo = 0.0;
+                var poolActivo = 0.0;
+                var residuo = "";  // Inicializamos residuo
+
+                // Iteramos sobre tasaTranfValor para obtener los datos necesarios
+                $.each(tasaTranfValor, function (index2, item2) {
+                    if (item2.codMoneda == monedaCodigo) {  // Comprobamos si es el código de moneda correspondiente
+                        var anio = item.anio;
+                        var beta0 = item2.beta0;
+                        var beta1 = item2.beta1;
+                        var beta2 = item2.beta2;
+                        var beta3 = item2.beta3;
+                        var lambda1 = item2.lambda1;
+                        var lambda2 = item2.lambda2;
+
+                        var factor1 = (1 - Math.exp(-anio / lambda1)) / (anio / lambda1);
+                        var factor2 = factor1 - Math.exp(-anio / lambda1);
+                        var factor3 = ((1 - Math.exp(-anio / lambda2)) / (anio / lambda2)) - Math.exp(-anio / lambda2);
+
+                        poolPasivo =
+                            beta0 +
+                            beta1 * factor1 +
+                            beta2 * factor2 +
+                            beta3 * factor3;
+
+                        var encaje = item2.encaje;
+                        poolActivo = poolPasivo / (1 - encaje);
+
+                        if (item.tasaSol) {
+                            residuo = (item.tasaSol - poolPasivo).toFixed(4);  // Formateamos a porcentaje con 4 decimales
+                        }
+
+                        if (item.tasaUsd) {
+                            residuo = (item.tasaUsd - poolPasivo).toFixed(4);  // Similar para tasaUsd
+                        }
+                    }
+                });
+
+                // Armamos la fila de la tabla
+                var row = "<tr class='" + estilo + "'>" +
+                    "<td align='center'>" + item.periodo + "</td>" +
+                    "<td align='center'>" + (item.anio ? item.anio.toFixed(2) : "") + "</td>" +
+                    "<td align='center'>" + (item.tasaSol ? (item.tasaSol * 100).toFixed(4) + "%" : "") + "</td>" + // Formateamos la tasa en porcentaje
+                    "<td align='center'>" + (poolPasivo * 100).toFixed(4) + "%" + "</td>" + // Formateamos el poolPasivo en porcentaje
+                    "<td align='center'>" + (poolActivo * 100).toFixed(4) + "%" + "</td>" + // Formateamos el poolActivo en porcentaje
+                    "</tr>";
+
+                // Agregamos la fila al tbody correspondiente
+                $("#" + tbodyId).append(row);
+            });
+        }
 
         function generarCurvaTransferencia(codMoneda) {
             var arr = [];
@@ -692,12 +781,12 @@
                         }
                         ddl.append(option);
                     });
-                    
+
                 }
                 else {
                     toastr.error(data.Message);
                 }
-                
+
             }).fail(function (e) {
             }).always(function () {
                 $("#overlay").hide();

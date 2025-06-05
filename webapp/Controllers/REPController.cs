@@ -1,14 +1,7 @@
 ﻿using BEANS;
 using BL;
-using Microsoft.Reporting.WebForms;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
-using webapp.Models.DTO;
 using webapp.ViewModels;
 
 namespace webapp.Controllers
@@ -47,11 +40,6 @@ namespace webapp.Controllers
             viewModel.ddlGarantiaPersonal = dataInfo.ddlGarantia.Select(x => new ExtendedSelectListItem(x));
             viewModel.ddlClasificacionInterna = dataInfo.ddlClasificacion.Select(x => new ExtendedSelectListItem(x));
 
-            REP_DASHBOARD_PARAM param = new REP_DASHBOARD_PARAM();
-            param.accion = "DASHBOARD";
-            param.codSuscriptor = codSuscriptor;
-
-            var dashboard1 = bl.fn_rep_sel_dashboard1(param);
             return View(viewModel);
         }
 

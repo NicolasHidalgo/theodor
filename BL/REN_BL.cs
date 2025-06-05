@@ -111,13 +111,13 @@ namespace BL
             return dat.fn_ren_pro_clienteProducto_nuevo(codSuscriptor, ideUsuario);
         }
 
-        public List<TASA_TRANFERENCIA_BE> fn_ren_sel_tasaTranferencia(string accion, long codSuscriptor, string codUsuario, int tipo)
+        public List<TASA_TRANFERENCIA_BE> fn_ren_sel_tasaTranferencia(string accion, long codSuscriptor, string codUsuario, DateTime? fecVigencia, int tipo)
         {
-            return dat.fn_ren_sel_tasaTranferencia(accion, codSuscriptor, codUsuario, tipo);
+            return dat.fn_ren_sel_tasaTranferencia(accion, codSuscriptor, codUsuario, fecVigencia, tipo);
         }
-        public List<TASA_TRANF_VALOR_BE> fn_ren_sel_tasaTranfValor(string accion, long codSuscriptor, string codUsuario, int tipo)
+        public List<TASA_TRANF_VALOR_BE> fn_ren_sel_tasaTranfValor(string accion, long codSuscriptor, string codUsuario, DateTime? fecVigencia, int tipo)
         {
-            return dat.fn_ren_sel_tasaTranfValor(accion, codSuscriptor, codUsuario, tipo);
+            return dat.fn_ren_sel_tasaTranfValor(accion, codSuscriptor, codUsuario, fecVigencia, tipo);
         }
         public List<GEN_DDL_BE> fn_ren_sel_transferenciaDDL(string accion, long codSuscriptor, string codUsuario, int tipo)
         {

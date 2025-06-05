@@ -1,5 +1,4 @@
-﻿@*@using ReportViewerForMvc*@
-@model webapp.ViewModels.AuxiliarEdit
+﻿@model webapp.ViewModels.AuxiliarEdit
 @{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -356,10 +355,10 @@
                 codAgencia: codAgencia,
                 codFuncionario: codFuncionario,
             }
-
+            console.log(_obj);
             $.ajax({
                 url: url,
-                type: "GET",
+                type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(_obj),
                 success: function (response) {
@@ -414,12 +413,12 @@
                 <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.perdidaEsperada).format('0.00%')}</td>
                 <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.spread).format('0.00%')}</td>
                 <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.profit).format('0.00%')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.RORAC).format('0.00%')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.rorac).format('0.00%')}</td>
                 <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.utilidad).format('#,##0')}</td>
                 <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.desembolsoObjetivo).format('#,##0')}</td>
                 <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.teaObjetivo).format('0.00%')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.RORACObjetivo).format('0.00%')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.rankingRORAC).format('0.00%')} <img src="../assets/images/${item.rankingcRORAC}.png" /></td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.roracObjetivo).format('0.00%')}</td>
+                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.rankingRorac).format('0.00%')} <img src="../assets/images/${item.rankingcRorac}.png" /></td>
                 <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.rankingDesembolso).format('0.00%')} <img src="../assets/images/${item.rankingcDesembolso}.png" /></td>
             </tr>
         `;

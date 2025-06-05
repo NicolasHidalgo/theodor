@@ -32,6 +32,7 @@
         background-color: #88ccff;
         cursor: pointer;
     }
+
 </style>
 
 <div class="modal" id="confirmBorrarModal" tabindex="-1" role="dialog">
@@ -232,7 +233,7 @@
                                         <div class="col-md-8">
                                             <div class="form-group">
 
-                                                <div class="table-responsive">
+                                                <div class="table-responsive" style="overflow-x: visible;">
                                                     <h6 id="lblProductoSeleccionado"></h6>
                                                     <table id="tblProductoComision" class="table table-bordered">
                                                         <thead>
@@ -247,48 +248,7 @@
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-                                                            @*@{ var odd2 = 0; var estilo2 = string.Empty;}
-                                                                                                                @if (Model.comisionServicio != null)
-                                                                                                                {
-                                                                                                                    foreach (var item in Model.comisionServicio)
-                                                                                                                    {
-                                                                                                                        estilo2 = string.Empty;
-                                                                                                                        odd2 = odd2 + 1;
-                                                                                                                        if ((odd2 % 2) == 0) { estilo2 = "colorGray"; }
-
-                                                                                                                        var _valor1 = "";
-                                                                                                                        var _valor2 = "";
-                                                                                                                        if (item.tipValor.Equals("%"))
-                                                                                                                        {
-                                                                                                                            _valor1 = (item.valorMn1?.ToString("P2"));
-                                                                                                                            _valor2 = (item.valorMn2?.ToString("P2"));
-                                                                                                                        }
-                                                                                                                        else
-                                                                                                                        {
-                                                                                                                            _valor1 = (item.valorMn1?.ToString("#0.00"));
-                                                                                                                            _valor2 = (item.valorMn2?.ToString("#0.00"));
-                                                                                                                        }
-
-                                                                                                                        <tr class="@estilo2">
-                                                                                                                            <td>@item.codComisionServicio</td>
-                                                                                                                            <td>@item.comisionServicio</td>
-                                                                                                                            <td>@item.periodicidad</td>
-                                                                                                                            <td>@item.nomTipValor</td>
-                                                                                                                            <td>@item.veces</td>
-                                                                                                                            <td>@_valor1</td>
-                                                                                                                            <td>@_valor2</td>
-                                                                                                                            <td width="15%">
-                                                                                                                                <a class='btn btn-default' onclick='fSelEditar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
-                                                                Newtonsoft.Json.Formatting.Indented)))'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
-                                                                Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a>
-                                                                                                                            </td>
-                                                                                                                        </tr>
-                                                                                                                    }
-                                                                                                                }*@
-
-                                                        </tbody>
-
+                                                        <tbody></tbody>
                                                     </table>
                                                 </div>
                                             </div>
@@ -303,7 +263,7 @@
                                             <div class="form-group">
 
                                                 <div class="table-responsive">
-                                                    <table id="tblComision" class="table table-bordered table-hover">
+                                                    <table id="tblComision" class="table table-bordered table-hover" >
                                                         <thead>
                                                             <tr>
                                                                 <th>Cod.</th>
@@ -328,11 +288,11 @@
                                                                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>
                                                                                 <ul class="dropdown-menu dropdown-menu-right">
                                                                                     <li>
-                                                                                        <a onclick='fSelEditarComi(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+                                                                                        <a onclick='fSelEditar2(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
 Newtonsoft.Json.Formatting.Indented)))'><i class='icon-pencil4'></i> Editar</a>
                                                                                     </li>
                                                                                     <li>
-                                                                                        <a onclick='fSelEliminarComi(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
+                                                                                        <a onclick='fSelEliminar2(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(item,
 Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
                                                                                     </li>
                                                                                 </ul>
@@ -352,7 +312,7 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
                                         <div class="col-md-8">
                                             <div class="form-group">
 
-                                                <div class="table-responsive">
+                                                <div class="table-responsive" style="overflow-x: visible;">
                                                     <h6 id="lblComisionSeleccionado"></h6>
                                                     <table class="table table-bordered">
                                                         <thead>
@@ -389,12 +349,13 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
 
 <script type="text/javascript">
 
-    var fSelEditar;
-    var fSelEditarComi;
-    var fSelEliminar;
-    var fSelEliminarComi;
+    var fSelEditar1, fSelEditar2, fSelEditar3;
+    var fSelEliminar1, fSelEliminar2, fSelEliminar3;
 
     $(document).ready(function () {
+
+
+
         var gAccion = "";
         var gCodProducto = 0;
         var gCodComision = 0;
@@ -508,16 +469,7 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
             fnCargarLista2(gCodComision);
         });
 
-        fSelEditarComi = function (data) {
-            $("#titulo").text('Editar Registro');
-            gAccion = "UPDATE_COMISION";
-            $('#txtCodComision').prop('disabled', true);
-            $("#txtCodComision").val(data.codComisionServicio);
-            $("#txtComisionServicio").val(data.comisionServicio);
-            $('#editComisionModal').modal('show');
-        }
-
-        fSelEditar = function (data) {
+        function editar(data) {
             $("#ddlProducto").val(data.codProducto).change();
             $("#ddlComisionServicio").val(data.codComisionServicio).change();
             $("#ddlPeriodicidad").val(data.codPeriodicidad).change();
@@ -534,28 +486,42 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
 
             $('#ddlProducto,#ddlComisionServicio').prop('disabled', true);
             $("#titulo").text('Editar Registro');
-            
+
             gAccion = "UPDATE";
             $('#editModal').modal('show');
         }
-        fSelEliminar = function (data) {
+        fSelEditar1 = function (data) {
+            editar(data);
+        }
+        fSelEditar2 = function (data) {
+            $("#titulo").text('Editar Registro');
+            gAccion = "UPDATE_COMISION";
+            $('#txtCodComision').prop('disabled', true);
+            $("#txtCodComision").val(data.codComisionServicio);
+            $("#txtComisionServicio").val(data.comisionServicio);
+            $('#editComisionModal').modal('show');
+            
+        }
+        fSelEditar3 = function (data) {
+            editar(data);
+        }
+
+        function eliminar(data) {
             $('#confirmBorrarModal').modal('show');
-
-            if ($("#liTab1").hasClass("active")) {
-                gAccion = "DELETE";
-            }
-            if ($("#liTab2").hasClass("active")) {
-                gAccion = "DELETE_COMISION";
-            }
-
             gCodProducto = data.codProducto;
             gCodComision = data.codComisionServicio;
         }
-        fSelEliminarComi = function (data) {
-            $('#confirmBorrarModal').modal('show');
+        fSelEliminar1 = function (data) {
+            gAccion = "DELETE";
+            eliminar(data);
+        }
+        fSelEliminar2 = function (data) {
             gAccion = "DELETE_COMISION";
-            gCodProducto = data.codProducto;
-            gCodComision = data.codComisionServicio;
+            eliminar(data);
+        }
+        fSelEliminar3 = function (data) {
+            gAccion = "DELETE";
+            eliminar(data);
         }
 
         $("#btnNuevo,.classNuevo").on("click", function () {
@@ -613,12 +579,10 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
                     cadena += "<td>" + _valor2 + "</td>";
 
                     cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
-                    cadena += '<ul class="dropdown-menu dropdown-menu-right">';
-                    cadena += "<li><a onclick='fSelEditar(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
-                    cadena += "<li><a onclick='fSelEliminar(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
+                    cadena += '<ul class="dropdown-menu dropdown-menu-right" >';
+                    cadena += "<li><a onclick='fSelEditar1(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
+                    cadena += "<li><a onclick='fSelEliminar1(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
                     cadena += '</ul></li></ul></td>';
-
-                    //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
                     cadena += "</tr>";
                 });
                 $("#tblProductoComision tbody").append(cadena);
@@ -660,8 +624,8 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
 
                     cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
                     cadena += '<ul class="dropdown-menu dropdown-menu-right">';
-                    cadena += "<li><a onclick='fSelEditar(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
-                    cadena += "<li><a onclick='fSelEliminar(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
+                    cadena += "<li><a onclick='fSelEditar3(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
+                    cadena += "<li><a onclick='fSelEliminar3(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
                     cadena += '</ul></li></ul></td>';
 
                     cadena += "</tr>";
@@ -689,11 +653,9 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
 
                     cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
                     cadena += '<ul class="dropdown-menu dropdown-menu-right">';
-                    cadena += "<li><a onclick='fSelEditarComi(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
-                    cadena += "<li><a onclick='fSelEliminarComi(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
+                    cadena += "<li><a onclick='fSelEditar2(" + JSON.stringify(item) + ")'><i class='icon-pencil4'></i> Editar</a></li>";
+                    cadena += "<li><a onclick='fSelEliminar2(" + JSON.stringify(item) + ")'><i class='icon-bin'></i> Eliminar</a></li>";
                     cadena += '</ul></li></ul></td>';
-
-                    //cadena += "<td><a class='btn btn-default' onclick='fSelEditar(" + JSON.stringify(item) + ")'>Editar</a>&nbsp;<a class='btn btn-default' onclick='fSelEliminar(" + JSON.stringify(item) + ")'>Eliminar</a></td>";
                     cadena += "</tr>";
                 });
                 $("#tblComision tbody").append(cadena);
