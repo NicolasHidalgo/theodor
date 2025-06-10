@@ -1,6 +1,6 @@
 ﻿@model webapp.ViewModels.AuxiliarEdit
 @{
-    ViewBag.Title = "Dashboard";
+    ViewBag.Title = "Tablero Control Analisis";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!-- Theme JS files -->
@@ -13,9 +13,9 @@
 <script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
 
 @*<script type="text/javascript" src="~/assets/js/pages/components_modals.js"></script>
-<script type="text/javascript" src="~/assets/js/plugins/forms/styling/uniform.min.js"></script>
-<script type="text/javascript" src="~/assets/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
-<script type="text/javascript" src="~/assets/js/pages/form_multiselect.js"></script>*@
+    <script type="text/javascript" src="~/assets/js/plugins/forms/styling/uniform.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
+    <script type="text/javascript" src="~/assets/js/pages/form_multiselect.js"></script>*@
 
 @*<script type="text/javascript" src="~/Scripts/jquery.stickytableheaders.min.js"></script>*@
 <!-- /theme JS files -->
@@ -27,16 +27,19 @@
         font-weight: 600;
         font-size: 14px;
     }
+
     .tblHeader {
         text-align: center;
         color: dimgray;
         font-weight: 600;
     }
+
     #tblDashboard th {
         height: 15px;
         line-height: 15px;
         padding: 5px;
     }
+
     #tblDashboard td {
         height: 2px; /* Altura de fila fija */
         /*padding: 0; Elimina relleno interno que aumente la altura */
@@ -46,7 +49,6 @@
         vertical-align: middle; /* Centra verticalmente el contenido */
         box-sizing: border-box; /* Asegura que padding no sume al alto */
     }
-    
 </style>
 
 <!-- Main content -->
@@ -57,7 +59,7 @@
         </div>
         <div class="breadcrumb-line breadcrumb-line-component">
             <ul class="breadcrumb">
-                <li><a href="@Url.Action("Index","Home")"><i class="icon-printer position-left"></i> Tablero Control Operaciones</a></li>
+                <li><a href="@Url.Action("Index","Home")"><i class="icon-printer position-left"></i> Tablero Control Análisis</a></li>
             </ul>
             <ul class="breadcrumb-elements">
                 <li><a id="btnControles"><i class="icon-cogs" title="Controles"></i></a></li>
@@ -239,11 +241,11 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                
+
             </div>
-            
+
         </div>
-        
+
     </div>
     <!-- /content area -->
 </div>
@@ -382,11 +384,11 @@
             tbody.empty(); // Limpia cualquier contenido previo
 
             // Si necesitas mostrar un grupo (como "Vista Personería"), agrúpalo aquí
-            
+
 
             var c = 0;
             var lastRubro = "";
-            response.forEach(item => {  
+            response.forEach(item => {
                 if ((c == 0 || lastRubro != item.rubro) && response.length != c + 1) {
                     lastRubro = item.rubro;
                     tbody.append(`

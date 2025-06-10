@@ -1,0 +1,688 @@
+﻿@model webapp.ViewModels.AuxiliarEdit
+@{
+    ViewBag.Title = "Tablero Control Evolucion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Theme JS files -->
+
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+<script type="text/javascript" src="~/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+
+<script src="~/assets/otros/chart/chart.js"></script>
+<script src="~/assets/otros/chart/chartjs-plugin-datalabels.js"></script>
+<link href="~/assets/css/theodor.css" rel="stylesheet" />
+
+@*<script type="text/javascript" src="~/assets/js/pages/components_modals.js"></script>
+    <script type="text/javascript" src="~/assets/js/plugins/forms/styling/uniform.min.js"></script>
+    <script type="text/javascript" src="~/assets/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
+    <script type="text/javascript" src="~/assets/js/pages/form_multiselect.js"></script>*@
+
+@*<script type="text/javascript" src="~/Scripts/jquery.stickytableheaders.min.js"></script>*@
+<!-- /theme JS files -->
+
+<style>
+    .tblTitle {
+        text-align: center;
+        color: dimgray;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .tblHeader {
+        text-align: center;
+        color: dimgray;
+        font-weight: 600;
+    }
+
+    #tblDashboard th {
+        height: 15px;
+        line-height: 15px;
+        padding: 5px;
+    }
+
+    #tblDashboard td {
+        height: 2px; /* Altura de fila fija */
+        /*padding: 0; Elimina relleno interno que aumente la altura */
+        line-height: 2px; /* Alinea verticalmente el texto en una sola línea */
+        overflow: hidden; /* Evita que el contenido se desborde */
+        white-space: nowrap; /* Evita saltos de línea */
+        vertical-align: middle; /* Centra verticalmente el contenido */
+        box-sizing: border-box; /* Asegura que padding no sume al alto */
+    }
+</style>
+
+<!-- Main content -->
+<div class="container-fluid">
+    <!-- Page header -->
+    <div class="page-header">
+        <div class="page-header-content">
+        </div>
+        <div class="breadcrumb-line breadcrumb-line-component">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action("Index","Home")"><i class="icon-printer position-left"></i> Tablero Control Evolución</a></li>
+            </ul>
+            <ul class="breadcrumb-elements">
+                <li><a id="btnControles"><i class="icon-cogs" title="Controles"></i></a></li>
+                <li><a id="btnExportar"><i class="icon-file-excel" title="Exportar Excel"></i></a></li>
+                <li><a id="btnReporte"><i class="icon-printer2" title="Reporte"></i></a></li>
+                @*<li><a id="btnCerrar"><i class="icon-lock" title="Cierre"></i></a></li>*@
+
+            </ul>
+        </div>
+    </div>
+    <!-- /page header -->
+    <!-- Content area -->
+    <div class="content">
+        <!-- Page length options -->
+        <div id="pControl" class="panel panel-flat">
+
+            <div class="panel-body">
+                <div class="col-md-12">
+
+                    <div class="form-group col-md-2">
+                        <label>Fec Desde:</label>
+                        <input id="txtFecDesde" type="month" class="form-control" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Fec Hasta:</label>
+                        <input id="txtFecHasta" type="month" class="form-control" />
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label>Moneda:</label>
+                        <select id="ddlMoneda" name="ddlMoneda" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlMoneda)
+                            {
+                                @*<option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Text</option>*@
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Personeria:</label>
+                        <select id="ddlPersoneria" name="ddlPersoneria" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlPersoneria)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Tipo Cliente:</label>
+                        <select id="ddlTipCliente" name="ddlTipCliente" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlTipCliente)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Operacion:</label>
+                        <select id="ddlOperacion" name="ddlOperacion" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlOperacion)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Producto:</label>
+                        <select id="ddlProducto" name="ddlProducto" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlProducto)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label>Clasificación:</label>
+                        <select id="ddlClasificacion" name="ddlClasificacion" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlClasificacionInterna)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label>Garantia:</label>
+                        <select id="ddlGarantia" name="ddlGarantia" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlGarantiaPersonal)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label>Agencia:</label>
+                        <select id="ddlAgencia" name="ddlAgencia" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlAgencia)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Funcionario:</label>
+                        <select id="ddlFuncionario" name="ddlFuncionario" class="select">
+                            <option value="" selected>--TODOS--</option>
+                            @foreach (var item in Model.ddlFuncionario)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+        <!-- /page length options -->
+        <div class="panel panel-flat">
+            <div id="reportView" class="img-fluid">
+                <div class="row">
+                    <div class="col-md-4">
+                        <canvas id="chart01"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart02"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart03"></canvas>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <canvas id="chart04"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart05"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart06"></canvas>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <canvas id="chart07"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart08"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart09"></canvas>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <canvas id="chart10"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart11"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart12"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /content area -->
+</div>
+<!-- /main content -->
+
+
+@section Scripts {
+    <script type="text/javascript">
+
+    var arrTipCliente = [];
+    var arrProducto = [];
+    const charts = {};
+
+    $(document).ready(function () {
+
+        var jsModel = @Html.Raw(Json.Encode(Model));
+        arrTipCliente = jsModel.ddlTipCliente;
+        arrProducto = jsModel.ddlProducto;
+
+        function cargarComboTipCliente() {
+            var _codParam = $("#ddlPersoneria option:selected").val();
+            var _filtered = arrTipCliente.filter(x => x.Aux2 == _codParam);
+            $('#ddlTipCliente').empty();
+            $('#ddlTipCliente').append($('<option/>', {
+                value: '',
+                text: '--TODOS--',
+                selected: true
+            }));
+            $.each(_filtered, function (index, item) {
+                $('#ddlTipCliente').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: false //item.Selected
+                }));
+            });
+            cargarComboProducto();
+        }
+        function cargarComboProducto() {
+            var _codParam = $("#ddlOperacion option:selected").val();
+            var _filtered = arrProducto.filter(x => x.Aux2 == _codParam);
+            $('#ddlProducto').empty();
+            $('#ddlProducto').append($('<option/>', {
+                value: '',
+                text: '--TODOS--',
+                selected: true
+            }));
+            $.each(_filtered, function (index, item) {
+                $('#ddlProducto').append($('<option/>', {
+                    value: item.Value,
+                    text: item.Text,
+                    selected: false //item.Selected
+                }));
+            });
+        }
+        cargarComboTipCliente();
+
+        $("#ddlPersoneria").change(function (e, data) {
+            cargarComboTipCliente();
+        });
+        $("#ddlOperacion").change(function (e, data) {
+            cargarComboProducto();
+        });
+
+        $("#btnExportar").click(function () {
+            return;
+        });
+
+        var url = '@Url.Action("JSON_GetDashboard02", "REP")';
+        $('#btnReporte').click(function () {
+            //$("#overlay").show();
+            $("#pControl").hide();
+            var fechaDesde = $('#txtFecDesde').val();
+            var fechaHasta = $('#txtFecHasta').val();
+            var codMoneda = $('#ddlMoneda option:selected').val();
+            var codPersoneria = $('#ddlPersoneria option:selected').val();
+            var codTipCliente = $('#ddlTipCliente option:selected').val();
+            var codOperacion = $('#ddlOperacion option:selected').val();
+            var codProducto = $('#ddlProducto option:selected').val();
+            var codClasificacionInterna = $('#ddlClasificacion option:selected').val();
+            var garantia = $('#ddlGarantia option:selected').val();
+            var codAgencia = $('#ddlAgencia option:selected').val();
+            var codFuncionario = $('#ddlFuncionario option:selected').val();
+
+            var _obj = {
+                fechaDesde: fechaDesde,
+                fechaHasta: fechaHasta,
+                codMoneda: codMoneda,
+                codPersoneria: codPersoneria,
+                codTipCliente: codTipCliente,
+                codOperacion: codOperacion,
+                codProducto: codProducto,
+                codClasificacionInterna: codClasificacionInterna,
+                garantia: garantia,
+                codAgencia: codAgencia,
+                codFuncionario: codFuncionario,
+            }
+            console.log(_obj);
+            $.ajax({
+                url: url,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(_obj),
+                success: function (response) {
+                    console.log(response);
+                    /*
+                    $('#reportView').html(response); // asumiendo que el servidor devuelve HTML
+                    setTimeout(function () {
+                        $('iframe').contents().find('body').css('backgroundColor', '#ffffff');
+                        $("#overlay").hide();
+                    }, 8000);
+                    */
+                    construirDashboard(response);
+                    //$("#overlay").hide();
+                }
+            });
+
+        });
+
+        function construirDashboard(res) {
+            
+            var eTotal = res.filter(x => x.item == 1);
+            var eMN = res.filter(x => x.item == 2);
+            var eME = res.filter(x => x.item == 3);
+
+            var eTotalFecha = eTotal.map(x => { return moment(x.fecha).format('MMM/YYYY'); });
+            var eTotalTea = eTotal.map(x => x.tea);
+            var eTotalRorac = eTotal.map(x => x.rorac);
+            var eTotalDesembolsado = eTotal.map(x => x.desembolsado);
+            var eTotalUtilidad = eTotal.map(x => x.utilidad);
+            var eTotalProfit = eTotal.map(x => x.profit);
+
+            var eMNFecha = eMN.map(x => { return moment(x.fecha).format('MMM/YYYY'); });
+            var eMNTea = eMN.map(x => x.tea);
+            var eMNRorac = eMN.map(x => x.rorac);
+            var eMNDesembolsado = eMN.map(x => x.desembolsado);
+            var eMNUtilidad = eMN.map(x => x.utilidad);
+            var eMNProfit = eMN.map(x => x.profit);
+
+            var eMEFecha = eME.map(x => { return moment(x.fecha).format('MMM/YYYY'); });
+            var eMETea = eME.map(x => x.tea);
+            var eMERorac = eME.map(x => x.rorac);
+            var eMEDesembolsado = eME.map(x => x.desembolsado);
+            var eMEUtilidad = eME.map(x => x.utilidad);
+            var eMEProfit = eME.map(x => x.profit);
+
+            construirChartFila01('chart01', "", eTotalFecha, eTotalTea, eTotalRorac);
+            construirChartFila01('chart02', "MN", eMNFecha, eMNTea, eMNRorac);
+            construirChartFila01('chart03', "ME", eMEFecha, eMETea, eMERorac);
+
+            construirChartFila02('chart04', "", eTotalFecha, eTotalDesembolsado, "#22283f");
+            construirChartFila02('chart05', "MN", eMNFecha, eMNDesembolsado, "#a5343a");
+            construirChartFila02('chart06', "ME", eMEFecha, eMEDesembolsado, "#7b7356");
+
+            construirChartFila03('chart07', "", eTotalFecha, eTotalUtilidad, "#22283f");
+            construirChartFila03('chart08', "MN", eMNFecha, eMNUtilidad, "#a5343a");
+            construirChartFila03('chart09', "ME", eMEFecha, eMEProfit, "#7b7356");
+            
+            construirChartFila04('chart10', "", eTotalFecha, eTotalProfit, "cadetblue");
+            construirChartFila04('chart11', "MN", eMNFecha, eMNProfit, "cadetblue");
+            construirChartFila04('chart12', "ME", eMEFecha, eMEProfit, "cadetblue");
+        }
+        function construirChartFila04(chartId, titulo, fecha, importe, color) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            if (charts[chartId]) {
+                charts[chartId].destroy();
+            }
+            charts[chartId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: fecha,
+                    datasets: [{
+                        label: 'Utilidad Neta',
+                        data: importe,
+                        backgroundColor: color
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Evolución Profit '+titulo+' (%)',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            color: '#666'
+                        },
+                        legend: {
+                            display: false
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end',
+                            color: '#000',
+                            font: {
+                                weight: 'bold'
+                            },
+                            formatter: value => (value * 100).toFixed(2) + '%',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            border: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                display: false
+                            },
+                            border: {
+                                display: false
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+        function construirChartFila03(chartId, titulo, fecha, importe, color) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            if (charts[chartId]) {
+                charts[chartId].destroy();
+            }
+            charts[chartId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: fecha,
+                    datasets: [{
+                        label: 'Utilidad Neta',
+                        data: importe,
+                        backgroundColor: color
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Evolución Utilidad Neta '+titulo+' (US$)',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            color: '#666'
+                        },
+                        legend: {
+                            display: false
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end',
+                            color: '#000',
+                            font: {
+                                weight: 'bold'
+                            },
+                            formatter: value => Math.round(value).toLocaleString('en-US')
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                display: false
+                                //callback: value => value.toLocaleString('en-US')
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+        }
+        function construirChartFila02(chartId, titulo, fecha, importe, color) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            // Destruir el chart anterior si ya existe
+            if (charts[chartId]) {
+                charts[chartId].destroy();
+            }
+            charts[chartId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: fecha,
+                    datasets: [{
+                        label: 'Desembolsos',
+                        data: importe,
+                        backgroundColor: color
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Evolución Desembolsos '+titulo+' (US$)',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            color: '#666'
+                        },
+                        legend: {
+                            display: false
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end',
+                            color: '#000',
+                            font: {
+                                weight: 'bold'
+                            },
+                            formatter: value => Math.round(value).toLocaleString('en-US')
+                        }
+                    },
+                    scales: {
+                        x: {
+                            //offset: true,
+                            grid: {
+                                display: false // 👈 Esto quita las líneas verticales
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                callback: value => value.toLocaleString('en-US'),
+                                maxTicksLimit: 4
+                                //stepSize: 20000
+                            },
+
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+
+        }
+
+        function construirChartFila01(chartId, titulo, fecha, tea, rorac){
+            const ctx = document.getElementById(chartId).getContext('2d');
+            // Destruir el chart anterior si ya existe
+            if (charts[chartId]) {
+                charts[chartId].destroy();
+            }
+            charts[chartId] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: fecha,
+                    datasets: [
+                        {
+                            label: 'Tasa',
+                            data: tea,
+                            borderColor: 'navy',
+                            backgroundColor: 'navy',
+                            tension: 0.2,
+                            pointRadius: 4,
+                            pointHoverRadius: 5
+                        },
+                        {
+                            label: 'RORAC',
+                            data: rorac,
+                            borderColor: 'cadetblue',
+                            backgroundColor: 'cadetblue',
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointHoverRadius: 5
+                        }
+                    ]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Evolución Tasa & RORAC ' + titulo + '(%)',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            color: '#666'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'bottom' // 👈 Esto mueve la leyenda abajo
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: context => context.dataset.label + ': ' + context.raw.toFixed(2) + '%'
+                            }
+                        },
+                        datalabels: {
+                            align: 'top',
+                            anchor: 'end',
+                            formatter: value => (value * 100).toFixed(2) + '%',
+                            font: {
+                                weight: 'bold'
+                            },
+                            color: '#333'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            offset: true // 👈 Esto agrega ese "padding" visual a los extremos
+                        },
+                        y: {
+                            min: 0,
+                            max: 0.3,
+                            ticks: {
+                                callback: value => value * 100 + '%'
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+
+        $('#btnControles').click(function () {
+            if ($("#pControl").is(":visible") == true) {
+                $("#pControl").hide();
+            } else {
+                $("#pControl").show();
+            }
+
+        });
+
+
+});
+
+    </script>
+}

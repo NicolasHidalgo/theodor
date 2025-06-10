@@ -2759,6 +2759,8 @@
     <Content Include="Views\REN\TasaTransferencia.cshtml" />
     <Content Include="Views\XLS\CargaExcel.cshtml" />
     <Content Include="Views\REP\Dashboard.cshtml" />
+    <Content Include="Views\REP\TableroControlEvolucion.cshtml" />
+    <Content Include="Views\REP\TableroControlAnalisis.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

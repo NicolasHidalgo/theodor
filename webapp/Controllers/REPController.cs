@@ -52,6 +52,89 @@ namespace webapp.Controllers
             return Json(dash, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult TableroControlEvolucion()
+        {
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var codSuscriptor = user.SUSCRIPTOR;
+            //string ip = Request.UserHostAddress;
+            viewModel.CodSuscriptor = user.SUSCRIPTOR;
+
+            var dataInfo = new REP_INFO_BE();
+            if (Session["dataInfoRep"] == null)
+            {
+                dataInfo = bl.fn_rep_sel_info("FULL_DDL", user.SUSCRIPTOR);
+                //Session["dataInfo"] = dataInfo;
+            }
+            else
+            {
+                dataInfo = (REP_INFO_BE)Session["dataInfoRep"];
+            }
+
+            viewModel.ddlMoneda = dataInfo.ddlMoneda.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlTipCliente = dataInfo.ddlTipCliente.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlPersoneria = dataInfo.ddlPersoneria.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlOperacion = dataInfo.ddlOperacion.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlProducto = dataInfo.ddlProducto.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlPersoneria = dataInfo.ddlPersoneria.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlAgencia = dataInfo.ddlAgencia.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlFuncionario = dataInfo.ddlFuncionario.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlGarantiaPersonal = dataInfo.ddlGarantia.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlClasificacionInterna = dataInfo.ddlClasificacion.Select(x => new ExtendedSelectListItem(x));
+
+            return View(viewModel);
+        }
+
+        public JsonResult JSON_GetDashboard02(REP_DASHBOARD_PARAM param)
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            param.accion = "DASHBOARD";
+            param.codSuscriptor = user.SUSCRIPTOR;
+            var dash = bl.fn_rep_sel_dashboard2(param);
+            return Json(dash, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult TableroControlAnalisis()
+        {
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var codSuscriptor = user.SUSCRIPTOR;
+            //string ip = Request.UserHostAddress;
+            viewModel.CodSuscriptor = user.SUSCRIPTOR;
+
+            var dataInfo = new REP_INFO_BE();
+            if (Session["dataInfoRep"] == null)
+            {
+                dataInfo = bl.fn_rep_sel_info("FULL_DDL", user.SUSCRIPTOR);
+                //Session["dataInfo"] = dataInfo;
+            }
+            else
+            {
+                dataInfo = (REP_INFO_BE)Session["dataInfoRep"];
+            }
+
+            viewModel.ddlMoneda = dataInfo.ddlMoneda.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlTipCliente = dataInfo.ddlTipCliente.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlPersoneria = dataInfo.ddlPersoneria.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlOperacion = dataInfo.ddlOperacion.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlProducto = dataInfo.ddlProducto.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlPersoneria = dataInfo.ddlPersoneria.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlAgencia = dataInfo.ddlAgencia.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlFuncionario = dataInfo.ddlFuncionario.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlGarantiaPersonal = dataInfo.ddlGarantia.Select(x => new ExtendedSelectListItem(x));
+            viewModel.ddlClasificacionInterna = dataInfo.ddlClasificacion.Select(x => new ExtendedSelectListItem(x));
+
+            return View(viewModel);
+        }
+
+        public JsonResult JSON_GetDashboard03(REP_DASHBOARD_PARAM param)
+        {
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            param.accion = "DASHBOARD";
+            param.codSuscriptor = user.SUSCRIPTOR;
+            var dash = bl.fn_rep_sel_dashboard3(param);
+            return Json(dash, JsonRequestBehavior.AllowGet);
+        }
         /*
         public ActionResult _Dashboard(DASHBOARD_DTO dto)
         {
