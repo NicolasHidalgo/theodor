@@ -12,6 +12,10 @@
 <script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
 <script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
 
+<script src="~/assets/otros/chart/chart.js"></script>
+<script src="~/assets/otros/chart/chartjs-plugin-datalabels.js"></script>
+<link href="~/assets/css/theodor.css" rel="stylesheet" />
+
 @*<script type="text/javascript" src="~/assets/js/pages/components_modals.js"></script>
     <script type="text/javascript" src="~/assets/js/plugins/forms/styling/uniform.min.js"></script>
     <script type="text/javascript" src="~/assets/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
@@ -191,57 +195,41 @@
         <!-- /page length options -->
         <div class="panel panel-flat">
             <div id="reportView" class="img-fluid">
-                <div class="table-responsive">
-                    <table id="tblDashboard" class="table" style="width: 100%; table-layout: fixed; border-collapse: collapse;">
-                        <colgroup>
-                            <col style="width: 8%; border-right: 1px solid #b8b8b8;" "> <!-- nomRef -->
-                            <col style="width: 3%;">  <!-- noEnProceso -->
-                            <col style="width: 5%; border-right: 1px solid #b8b8b8;">  <!-- montoEnProceso -->
-                            <col style="width: 3%;">  <!-- noDesembolsado -->
-                            <col style="width: 5%;">  <!-- desembolso -->
-                            <col style="width: 5%;">  <!-- tea -->
-                            <col style="width: 5%;">  <!-- perdidaEsperada -->
-                            <col style="width: 4%;">  <!-- spread -->
-                            <col style="width: 4%;">  <!-- profit -->
-                            <col style="width: 4%;">  <!-- RORAC -->
-                            <col style="width: 5%; border-right: 1px solid #b8b8b8;" ">  <!-- utilidad -->
-                            <col style="width: 5%;">  <!-- desembolsoObjetivo -->
-                            <col style="width: 4%;">  <!-- teaObjetivo -->
-                            <col style="width: 5%; border-right: 1px solid #b8b8b8;" ">  <!-- RORACObjetivo -->
-                            <col style="width: 5%; border-right: 1px solid #b8b8b8;" ">  <!-- Ranking RORAC -->
-                            <col style="width: 5%;">  <!-- Ranking Desembolso -->
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th colspan="2" class="tblTitle">En Proceso</th>
-                                <th colspan="8" class="tblTitle">Operaciones Desembolsadas</th>
-                                <th colspan="3" class="tblTitle">Objetivos</th>
-                                <th colspan="2" class="tblTitle">Ranking</th>
-                            </tr>
-                            <tr>
-                                <th class="tblHeader"></th>
-                                <th class="tblHeader">No.</th>
-                                <th class="tblHeader">Monto</th>
-                                <th class="tblHeader">No.</th>
-                                <th class="tblHeader">Desembolsos</th>
-                                <th class="tblHeader">Tasa Operación</th>
-                                <th class="tblHeader">Pérdida Esperada</th>
-                                <th class="tblHeader">Spread</th>
-                                <th class="tblHeader">Profit</th>
-                                <th class="tblHeader">RORAC</th>
-                                <th class="tblHeader">Utilidad</th>
-                                <th class="tblHeader">Desembolsos</th>
-                                <th class="tblHeader">Tasa</th>
-                                <th class="tblHeader">RORAC</th>
-                                <th class="tblHeader">RORAC</th>
-                                <th class="tblHeader">Desembolso</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="row">
+                    <div class="col-md-4">
+                        <canvas id="chart01"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart02"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart03"></canvas>
+                    </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-4">
+                        <canvas id="chart04"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart05"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart06"></canvas>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <canvas id="chart07"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart08"></canvas>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="chart09"></canvas>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -257,6 +245,7 @@
 
     var arrTipCliente = [];
     var arrProducto = [];
+    const charts = {};
 
     $(document).ready(function () {
 
@@ -310,27 +299,11 @@
 
         $("#btnExportar").click(function () {
             return;
-            $("#overlay").show();
-            var codUnidadNegocio = $('#ddlUnidad').val();
-            var codFrecuencia = $('#ddlFrecuencia').val();
-            var codCargaAuxiliar = $('#ddlFormato').val();
-            var codRangoFecha = $('#ddlFecha option:selected').val();
-            var _url = '@Url.Action("RunXls", "KOP")?idx=@Session.SessionID&cod_unidad_negocio=' + codUnidadNegocio + '&cod_frecuencia=' + codFrecuencia + '&cod_rango_fecha=' + codRangoFecha +'&cod_carga_auxiliar='+codCargaAuxiliar;
-
-            $.post(_url, null).done(function (data) {
-                $("#overlay").hide();
-                if (data.Status === 200) {
-                    window.location.href = '@Url.Content("~")'+'KOP/DownloadFile?archivoDestino='+ data.Message+ '&idx=@Session.SessionID';
-                }
-                else {
-                    toastr.error(data.Message)
-                }
-            });
         });
 
-        var url = '@Url.Action("JSON_GetDashboard01", "REP")';
+        var url = '@Url.Action("JSON_GetDashboard03", "REP")';
         $('#btnReporte').click(function () {
-            $("#overlay").show();
+            //$("#overlay").show();
             $("#pControl").hide();
             var fechaDesde = $('#txtFecDesde').val();
             var fechaHasta = $('#txtFecHasta').val();
@@ -373,60 +346,418 @@
                     }, 8000);
                     */
                     construirDashboard(response);
-                    $("#overlay").hide();
+                    //$("#overlay").hide();
                 }
             });
 
         });
 
-        function construirDashboard(response) {
-            const tbody = $("#tblDashboard tbody");
-            tbody.empty(); // Limpia cualquier contenido previo
+        function construirDashboard(res) {
 
-            // Si necesitas mostrar un grupo (como "Vista Personería"), agrúpalo aquí
+            var data0 = res.filter(x => x.item == 0);
+            var categoria = data0.map(x => x.categoria);
+            var color = data0.map(x => x.color);
+            var no = data0.map(x => x.no);
+            var profit = data0.map(x => x.profit);
+            var rorac = data0.map(x => x.rorac);
 
+            construirChartPie('chart01', "Distribucion WIN/LOSS", categoria, no, color);
+            construirChartBarVer('chart02', "Análisis de Rentabilidad Esperada", categoria, "Profit", "RORAC", profit, rorac);
 
-            var c = 0;
-            var lastRubro = "";
-            response.forEach(item => {
-                if ((c == 0 || lastRubro != item.rubro) && response.length != c + 1) {
-                    lastRubro = item.rubro;
-                    tbody.append(`
-                        <tr style="background-color:black;color:white;font-size:14px;">
-                            <td align='left' colspan="16" style="padding-left:10px;">${item.rubro}</td>
-                        </tr>
-                    `);
+            var data3 = res.filter(x => x.item == 3);
+
+            var categorias = [];
+            data3.forEach(item => {
+                if (!categorias.some(c => c.nombre === item.categoria)) {
+                    categorias.push({ nombre: item.categoria, codCat: item.codCat });
                 }
-
-                var style = 'font-size:12px;';
-                var nomRef = item.nomRef;
-                if (item.rubro.includes('Total')) {
-                    style = 'font-size:13px;font-weight: bold;'
-                    nomRef = item.rubro;
-                }
-                const row = `
-            <tr style='${style}'>
-                <td align='left' style="padding-left:10px;padding-top: 0px;padding-bottom: 0px;">${nomRef}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${item.noEnProceso}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.montoEnProceso).format('#,##0')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${item.noDesembolsado}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.desembolso).format('#,##0')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.tea).format('0.00%')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.perdidaEsperada).format('0.00%')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.spread).format('0.00%')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.profit).format('0.00%')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.rorac).format('0.00%')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.utilidad).format('#,##0')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.desembolsoObjetivo).format('#,##0')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.teaObjetivo).format('0.00%')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.roracObjetivo).format('0.00%')}</td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.rankingRorac).format('0.00%')} <img src="../assets/images/${item.rankingcRorac}.png" /></td>
-                <td align='right' style="padding-top: 2px;padding-bottom: 2px;">${numeral(item.rankingDesembolso).format('0.00%')} <img src="../assets/images/${item.rankingcDesembolso}.png" /></td>
-            </tr>
-        `;
-                c++;
-                tbody.append(row);
             });
+            var rubros = [...new Set(data3.map(item => item.rubro))];
+            var datasets = categorias.map(categoria => {
+                return {
+                    label: categoria.nombre,
+                    data: rubros.map(rubro => {
+                        const entry = data3.find(d => d.rubro === rubro && d.categoria === categoria.nombre);
+                        return entry ? parseFloat((entry.ratio * 100).toFixed(1)) : 0;
+                    }),
+                    backgroundColor: getColor(categoria.codCat),
+                    datalabels: {
+                        color: '#fff', // blanco fijo
+                        anchor: 'center',
+                        align: 'center',
+                        formatter: v => (v && v > 0) ? v + '%' : null // null oculta etiquetas con valor 0 o null
+                    }
+                };
+            });
+
+            construirChart03('chart03', "Distribución WIN/LOSS por Producto", rubros, datasets);
+
+            var data1 = res.filter(x => x.item == 0);
+            var categoria1 = data1.map(x => x.categoria);
+            no = data1.map(x => x.no);
+
+            construirChartPie('chart04', "No tomadas por el Banco", categoria1, no, color);
+
+            var spread = data0.map(x => x.spread);
+            var tea = data0.map(x => x.tea);
+            construirChartBarVer('chart05', "Análisis de Margen", categoria, "Spread", "Tasa", spread, tea);
+
+
+            var data4 = res.filter(x => x.item == 4);
+            var categorias = [];
+            data4.forEach(item => {
+                if (!categorias.some(c => c.nombre === item.categoria)) {
+                    categorias.push({ nombre: item.categoria, codCat: item.codCat });
+                }
+            });
+            var rubros = [...new Set(data4.map(item => item.rubro))];
+            var datasets = categorias.map(categoria => {
+                return {
+                    label: categoria.nombre,
+                    data: rubros.map(rubro => {
+                        const entry = data4.find(d => d.rubro === rubro && d.categoria === categoria.nombre);
+                        return entry ? parseFloat((entry.ratio * 100).toFixed(1)) : 0;
+                    }),
+                    backgroundColor: getColor(categoria.codCat),
+                    datalabels: {
+                        color: '#fff', // blanco fijo
+                        anchor: 'center',
+                        align: 'center',
+                        formatter: v => (v && v > 0) ? v + '%' : null // null oculta etiquetas con valor 0 o null
+                    }
+                };
+            });
+            construirChart03('chart06', "Distribución WIN/LOSS por Tipo Cliente", rubros, datasets);
+
+            var data2 = res.filter(x => x.item == 2);
+            var categoria2 = data2.map(x => x.categoria);
+            var no = data2.map(x => x.no);
+            construirChartBarHor('chart07', "Ganadas por la Competencia", categoria2, no)
+
+            var esperada = data0.map(x => x.esperada);
+            construirChartBarVer('chart08', "Análisis de Rorac vs Pérdida Esperada", categoria, "Pérdida Esperada", "RORAC", esperada, rorac);
+
+            var data5 = res.filter(x => x.item == 5);
+            var categorias = [];
+            data5.forEach(item => {
+                if (!categorias.some(c => c.nombre === item.categoria)) {
+                    categorias.push({ nombre: item.categoria, codCat: item.codCat });
+                }
+            });
+            var rubros = [...new Set(data5.map(item => item.rubro))];
+            var datasets = categorias.map(categoria => {
+                return {
+                    label: categoria.nombre,
+                    data: rubros.map(rubro => {
+                        const entry = data5.find(d => d.rubro === rubro && d.categoria === categoria.nombre);
+                        return entry ? parseFloat((entry.ratio * 100).toFixed(1)) : 0;
+                    }),
+                    backgroundColor: getColor(categoria.codCat),
+                    datalabels: {
+                        color: '#fff', // blanco fijo
+                        anchor: 'center',
+                        align: 'center',
+                        formatter: v => (v && v > 0) ? v + '%' : null // null oculta etiquetas con valor 0 o null
+                    }
+                };
+            });
+            construirChart03('chart09', "Distribución WIN/LOSS por Funcionario", rubros, datasets);
+        }
+
+        function getColor(codCat) {
+            if (codCat === "1") return '#8c1b1b';
+            if (codCat === "2") return '#bcb88a';
+            return '#444'; // cod_cat 3 u otros
+        }
+
+        function construirChartPie(chartId, titulo, label, importe, color){
+            const ctx = document.getElementById(chartId).getContext('2d');
+            // Destruir el chart anterior si ya existe
+            if (charts[chartId]) {
+                charts[chartId].destroy();
+            }
+            charts[chartId] = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: label,
+                    datasets: [{
+                        data: importe,
+                        backgroundColor: color,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: titulo,
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            },
+                            color: '#000'
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#000',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    //return `${context.label}: ${context.raw.toFixed(2)}%`;
+                                    const value = context.raw;
+                                    const data = context.dataset.data;
+                                    const total = data.reduce((acc, val) => acc + val, 0);
+                                    const percentage = ((value / total) * 100).toFixed(2);
+                                    return `${context.label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            //formatter: (value) => value.toFixed(2) + '%',
+                            //color: '#fff'
+                            formatter: (value, context) => {
+                                const data = context.chart.data.datasets[0].data;
+                                const total = data.reduce((acc, val) => acc + val, 0);
+                                const percentage = (value / total * 100).toFixed(2);
+                                return `${percentage}%`;
+                            },
+                            color: '#fff'
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels] // Si usas data labels
+            });
+        }
+
+        function construirChartBarHor(chartId, titulo, label, importe) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            // Destruir el chart anterior si ya existe
+            if (charts[chartId]) {
+                charts[chartId].destroy();
+            }
+            charts[chartId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: label,
+                    datasets: [{
+                        data: importe,
+                        backgroundColor: ['#4A4A4A', '#8C8A6E', '#D3C48D', '#B23A36', '#C0C0C0', '#1E2330'],
+                        barThickness: 24
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Ganadas por la Competencia',
+                            font: { size: 18 }
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'right',
+                            formatter: v => v,
+                            font: { weight: 'bold' },
+                            color: '#000'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false,
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        },
+                        y: {
+                            grid: { display: false }
+                        }
+                    },
+                    layout: {
+                        padding: { top: 10, right: 20, bottom: 10, left: 10 }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+        function construirChartBarVer(chartId, titulo, label, etiqueta1, etiqueta2, importe1, importe2) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            // Destruir el chart anterior si ya existe
+            if (charts[chartId]) {
+                charts[chartId].destroy();
+            }
+            charts[chartId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: label,
+                    datasets: [
+                        {
+                            label: etiqueta1,
+                            data: importe1,
+                            backgroundColor: chartId == "chart05" ? '#55585a' : '#444',
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end',
+                                offset: -4,
+                                color: '#000',
+                                formatter: (value) => {
+                                    return (typeof value === 'number' && !isNaN(value)) ? (value * 100).toFixed(2) + '%' : '';
+                                }
+                            }
+                        },
+                        {
+                            label: etiqueta2,
+                            data: importe2,
+                            backgroundColor: chartId == "chart05" ? '#929172' : '#8c1b1b',
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end',
+                                offset: -4,
+                                color: '#000',
+                                formatter: (value) => {
+                                    return (typeof value === 'number' && !isNaN(value)) ? (value * 100).toFixed(2) + '%' : '';
+                                }
+                            }
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: titulo,
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            },
+                            color: '#000'
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#000',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return `${context.dataset.label}: ${(context.raw * 100).toFixed(2)}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            display: false,
+                            beginAtZero: true,
+                            grid: {
+                                display: false // ❌ sin grilla Y
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    size: 11 // o incluso 9
+                                }
+                            },
+                            grid: {
+                                display: false // ❌ sin grilla X
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+
+        function construirChart03(chartId, titulo, label, dataset) {
+
+            const ctx = document.getElementById(chartId).getContext('2d');
+            // Destruir el chart anterior si ya existe
+            if (charts[chartId]) {
+                charts[chartId].destroy();
+            }
+            charts[chartId] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: label,
+                    datasets: dataset,
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: titulo,
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            },
+                            color: '#000'
+                        },
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return `${context.dataset.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                callback: v => v + '%'
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
         }
 
         $('#btnControles').click(function () {

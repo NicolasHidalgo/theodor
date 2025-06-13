@@ -50,7 +50,7 @@ namespace BEANS
         public double? esperada { get; set; }
         public double? spread { get; set; }
         public double? profit { get; set; }
-        public double? RORAC { get; set; }
+        public double? rorac { get; set; }
         public double? utilidad { get; set; }
     }
 

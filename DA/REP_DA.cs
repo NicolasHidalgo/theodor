@@ -275,7 +275,7 @@ namespace DA
             SqlConnection con = cn.getConexion();
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
-            cmd.CommandText = "[up_ren_rep_dashboard2]";
+            cmd.CommandText = "[up_ren_rep_dashboard3]";
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 50).Value = param.accion;
             cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = param.codSuscriptor;
@@ -315,7 +315,7 @@ namespace DA
                         bean.esperada = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Esperada"));
                         bean.spread = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Spread"));
                         bean.profit = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Profit"));
-                        bean.RORAC = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORAC"));
+                        bean.rorac = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORAC"));
                         bean.utilidad = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("Utilidad"));
 
                         lista.Add(bean);
