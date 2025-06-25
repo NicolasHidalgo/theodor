@@ -228,8 +228,8 @@ namespace webapp.Controllers
                 Aux1 = x.Aux1,
                 Selected = x.Selected,
             });
-            var dataProductoBase = bl.fn_mant_sel_roracDDL("@PRODUCTO_BASE", user.SUSCRIPTOR, user.COD_USUARIO, string.Empty);
-            viewModel.ddlProducto = dataProductoBase.Select(x => new ExtendedSelectListItem
+            var dataProducto = bl.fn_mant_sel_roracDDL("@PRODUCTO", user.SUSCRIPTOR, user.COD_USUARIO, string.Empty);
+            viewModel.ddlProducto = dataProducto.Select(x => new ExtendedSelectListItem
             {
                 Value = x.Value,
                 Text = x.Text,

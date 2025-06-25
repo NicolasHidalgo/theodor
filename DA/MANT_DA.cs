@@ -384,8 +384,8 @@ namespace DA
                         //bean.personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("personeria"));
                         bean.codTipCliente = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
                         bean.tipCliente = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_cliente"));
-                        bean.codProductoBase = DataReader.GetValueOrNull<Int32>(dr, dr.GetOrdinal("cod_producto_base"));
-                        bean.productoBase = DataReader.SafeGetString(dr, dr.GetOrdinal("producto_base"));
+                        bean.codProducto = DataReader.GetValueOrNull<Int32>(dr, dr.GetOrdinal("cod_producto"));
+                        bean.producto = DataReader.SafeGetString(dr, dr.GetOrdinal("producto"));
                         bean.roracObjetivo = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("RORACObjetivo"));
                         bean.autonomiaComercial = DataReader.GetValueOrNull<double>(dr, dr.GetOrdinal("autonomia_comercial"));
                         bean.tipReg = DataReader.SafeGetString(dr, dr.GetOrdinal("tipreg"));
@@ -435,6 +435,12 @@ namespace DA
                             bean.Value = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_personeria"));
                             bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("personeria"));
                         }
+                        if (accion.Equals("@PRODUCTO"))
+                        {
+                            bean.Value = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto")).ToString();
+                            bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("producto"));
+                            bean.Aux1 = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
+                        }
                         if (accion.Equals("@PRODUCTO_BASE"))
                         {
                             bean.Value = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto_base")).ToString();
@@ -479,7 +485,7 @@ namespace DA
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
             cmd.Parameters.Add("@cod_personeria", System.Data.SqlDbType.VarChar, 5).Value = param.codPersoneria;
             cmd.Parameters.Add("@cod_tip_cliente", System.Data.SqlDbType.VarChar, 5).Value = param.codTipCliente;
-            cmd.Parameters.Add("@cod_producto_base", System.Data.SqlDbType.Int).Value = param.codProductoBase;
+            cmd.Parameters.Add("@cod_producto", System.Data.SqlDbType.Int).Value = param.codProducto;
             cmd.Parameters.Add("@RORACObjetivo", System.Data.SqlDbType.Float).Value = param.roracObjetivo;
             cmd.Parameters.Add("@autonomia_comercial", System.Data.SqlDbType.Float).Value = param.autonomiaComercial;
 

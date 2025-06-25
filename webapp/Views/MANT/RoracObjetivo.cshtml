@@ -71,7 +71,7 @@
                         <select id="ddlTipCliente" class="select"></select>
                     </div>
                     <div class="form-group">
-                        <label>Producto Base</label>
+                        <label>Producto</label>
                         @*@Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })*@
                         <select id="ddlProducto" class="select"></select>
                     </div>
@@ -142,8 +142,8 @@
                                                     <th>Cod. Personeria</th>
                                                     <th>Cod. Tipo Cliente</th>
                                                     <th>Tipo Cliente</th>
-                                                    <th>Cod. Producto Base</th>
-                                                    <th>Producto Base</th>
+                                                    <th>Cod. Producto</th>
+                                                    <th>Producto</th>
                                                     <th>RORAC Objetivo</th>
                                                     <th>Autonomia Comercial</th>
                                                     <th></th>
@@ -170,8 +170,8 @@
                                                             <td>@item.codPersoneria</td>
                                                             <td>@item.codTipCliente</td>
                                                             <td>@item.tipCliente</td>
-                                                            <td>@item.codProductoBase</td>
-                                                            <td>@item.productoBase</td>
+                                                            <td>@item.codProducto</td>
+                                                            <td>@item.producto</td>
                                                             <td>@(item.roracObjetivo?.ToString("P2"))
                                                                 @*<input type="text" class="form-control" value="@item.roracObjetivo" />*@
                                                             </td>
@@ -320,7 +320,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
             $('#editModal').modal('show');
             $("#ddlPersoneria").val(data.codPersoneria).change();
             $("#ddlTipCliente").val(data.codTipCliente).change();
-            $("#ddlProducto").val(data.codProductoBase).change();
+            $("#ddlProducto").val(data.codProducto).change();
             $("#txtRORACObjetivo").val(getPorcentajeNum(data.roracObjetivo)).change();
             $("#txtAutonomiaComercial").val(getPorcentajeNum(data.autonomiaComercial)).change();
 
@@ -334,7 +334,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
             //console.log(data)
             gCodPersoneria = data.codPersoneria;
             gCodTipCliente = data.codTipCliente;
-            gCodProducto = data.codProductoBase;
+            gCodProducto = data.codProducto;
         }
 
         $("#btnNuevo,.classNuevo").on("click", function () {
@@ -372,8 +372,8 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
                         cadena += "<td>" + item.codPersoneria + "</td>";
                         cadena += "<td>" + item.codTipCliente + "</td>";
                         cadena += "<td>" + item.tipCliente + "</td>";
-                        cadena += "<td>" + replaceNullEmpty(item.codProductoBase) + "</td>";
-                        cadena += "<td>" + item.productoBase + "</td>";
+                        cadena += "<td>" + replaceNullEmpty(item.codProducto) + "</td>";
+                        cadena += "<td>" + item.producto + "</td>";
                         cadena += "<td>" + numeral(item.roracObjetivo).format('0.00%') + "</td>";
                         cadena += "<td>" + numeral(item.autonomiaComercial).format('0.00%') + "</td>";
 
@@ -399,7 +399,7 @@ Newtonsoft.Json.Formatting.Indented)))'>Eliminar</a></td>*@
             var _obj = {
                 codPersoneria: gAccion == "DELETE" ? gCodPersoneria : $("#ddlPersoneria option:selected").val(),
                 codTipCliente: gAccion == "DELETE" ? gCodTipCliente : $("#ddlTipCliente option:selected").val(),
-                codProductoBase: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
+                codProducto: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
                 RORACObjetivo: getPorcentaje($("#txtRORACObjetivo").val()),
                 autonomiaComercial: getPorcentaje($("#txtAutonomiaComercial").val()),
             };

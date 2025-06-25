@@ -100,13 +100,13 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div id="fgPlazo" class="form-group">
                                 <label>Plazo</label>
                                 <input type="number" class="form-control" id="txtPlazo" />
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div id="fgTea" class="form-group">
                                 <label>TEA</label>
                                 <div class="input-group">
                                     <input type="text" id="txtTea" name="txtTea" value="0" class="form-control" style="text-align: right;">
@@ -320,9 +320,9 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
             var _isFactorConv = $("#ddlProductoBase option:selected").data('aux4');
 
             if (_isFactorUso == "1") {
-                $("#fgFactorUso").removeClass('hidden');
+                $("#fgFactorUso,#fgTea,#fgPlazo").removeClass('hidden');
             } else {
-                $("#fgFactorUso").addClass('hidden');
+                $("#fgFactorUso,#fgTea,#fgPlazo").addClass('hidden');
             }
             if (_isFactorConv == "1") {
                 $("#fgFactorConv").removeClass('hidden');
@@ -446,10 +446,10 @@ Newtonsoft.Json.Formatting.Indented)))'><i class='icon-bin'></i> Eliminar</a>
                         cadena += "<td>" + item.productoBase + "</td>";
                         cadena += "<td>" + item.codTipClientes + "</td>";
                         cadena += "<td>" + item.tipAmortizacion + "</td>";
-                        cadena += "<td>" + item.plazo + "</td>";
-                        cadena += "<td>" + numeral(item.tea).format('0.00%') + "</td>";
-                        cadena += "<td>" + numeral(item.factorUsoLinea).format('0.00%') + "</td>";
-                        cadena += "<td>" + numeral(item.factorConversionIndirectos).format('0.00%') + "</td>";
+                        cadena += "<td>" + (item.plazo == null || item.plazo === '' ? '' : item.plazo) + "</td>";
+                        cadena += "<td>" + (item.tea == null || item.tea === '' ? '' : numeral(item.tea).format('0.00%')) + "</td>";
+                        cadena += "<td>" + (item.factorUsoLinea == null || item.factorUsoLinea === '' ? '' : numeral(item.factorUsoLinea).format('0.00%')) + "</td>";
+                        cadena += "<td>" + (item.factorConversionIndirectos == null || item.factorConversionIndirectos === '' ? '' : numeral(item.factorConversionIndirectos).format('0.00%')) + "</td>";
 
                         cadena += '<td><ul class="icons-list"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-menu9"></i></a>';
                         cadena += '<ul class="dropdown-menu dropdown-menu-right">';

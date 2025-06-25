@@ -67,7 +67,7 @@
             </ul>
             <ul class="breadcrumb-elements">
                 <li><a id="btnControles"><i class="icon-cogs" title="Controles"></i></a></li>
-                <li><a id="btnExportar"><i class="icon-file-excel" title="Exportar Excel"></i></a></li>
+                @*<li><a id="btnExportar"><i class="icon-file-excel" title="Exportar Excel"></i></a></li>*@
                 <li><a id="btnReporte"><i class="icon-printer2" title="Reporte"></i></a></li>
                 @*<li><a id="btnCerrar"><i class="icon-lock" title="Cierre"></i></a></li>*@
 
@@ -593,7 +593,6 @@
 
 
         }
-
         function construirChartFila01(chartId, titulo, fecha, tea, rorac){
             const ctx = document.getElementById(chartId).getContext('2d');
             // Destruir el chart anterior si ya existe

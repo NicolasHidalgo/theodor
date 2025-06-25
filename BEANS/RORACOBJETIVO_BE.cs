@@ -12,6 +12,8 @@ namespace BEANS
         public string personeria { get; set; }
         public string codTipCliente { get; set; }
         public string tipCliente { get; set; }
+        public int? codProducto { get; set; }
+        public string producto { get; set; }
         public int? codProductoBase { get; set; }
         public string productoBase { get; set; }
         public double? roracObjetivo { get; set; }
