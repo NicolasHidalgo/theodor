@@ -447,8 +447,8 @@ namespace webapp.Controllers
                 Text = x.Text,
                 Selected = x.Selected,
             });
-            var dataProductoBase = bl.fn_mant_sel_probabilidadDDL("@PRODUCTO_BASE", user.SUSCRIPTOR, user.COD_USUARIO);
-            viewModel.ddlProducto = dataProductoBase.Select(x => new ExtendedSelectListItem
+            var dataProducto = bl.fn_mant_sel_probabilidadDDL("@PRODUCTO", user.SUSCRIPTOR, user.COD_USUARIO);
+            viewModel.ddlProducto = dataProducto.Select(x => new ExtendedSelectListItem
             {
                 Value = x.Value,
                 Text = x.Text,

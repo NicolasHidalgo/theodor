@@ -286,8 +286,8 @@ namespace webapp.Controllers.api
                 {
                     codTipCliente = x.codTipCliente,
                     codClasificacionInterna = x.codClasificacionInterna,
-                    codProductoBase = x.codProductoBase,
-                    productoBase = x.productoBase,
+                    codProducto = x.codProducto,
+                    producto = x.producto,
                     probabilidadDefault = x.probabilidadDefault,
                     tasaRecuperacion = x.tasaRecuperacion,
                     LGD = x.LGD,

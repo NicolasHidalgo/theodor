@@ -58,9 +58,9 @@
                         @Html.DropDownList("ddlClasificacionInterna", Model.ddlClasificacionInterna, new { @class = "select" })
                     </div>
                     <div class="form-group">
-                        <label>Producto Base</label>
-                        <select id="ddlProductoBase" class="select"></select>
-                        @*@Html.DropDownList("ddlProductoBase", Model.ddlProducto, new { @class = "select" })*@
+                        <label>Producto</label>
+                        <select id="ddlProducto" class="select"></select>
+                        @*@Html.DropDownList("ddlProducto", Model.ddlProducto, new { @class = "select" })*@
                     </div>
 
                     <div class="row">
@@ -156,9 +156,9 @@
             debugger;
             var _codParam = $("#ddlTipCliente option:selected").val();
             var _filtered = arrProducto.filter(x => x.Aux1 == _codParam);
-            $('#ddlProductoBase').empty();
+            $('#ddlProducto').empty();
             $.each(_filtered, function (index, item) {
-                $('#ddlProductoBase').append($('<option/>', {
+                $('#ddlProducto').append($('<option/>', {
                     value: item.Value,
                     text: item.Text,
                     selected: false //item.Selected
@@ -211,12 +211,12 @@
             $('#editModal').modal('show');
             $('#ddlTipCliente').val(data.codTipCliente).change();
             $('#ddlClasificacionInterna').val(data.codClasificacionInterna).change();
-            $('#ddlProductoBase').val(data.codProductoBase).change();
+            $('#ddlProducto').val(data.codProducto).change();
 
             $("#txtProbabilidad").val(getPorcentajeNum(data.probabilidadDefault));
             $("#txtTasaRecuperacion").val(getPorcentajeNum(data.tasaRecuperacion));
 
-            $('#ddlTipCliente,#ddlClasificacionInterna,#ddlProductoBase').prop('disabled', true);
+            $('#ddlTipCliente,#ddlClasificacionInterna,#ddlProducto').prop('disabled', true);
             $("#titulo").text('Editar Registro');
             gAccion = "UPDATE";
         }
@@ -225,13 +225,13 @@
             gAccion = "DELETE";
             gCodTipCliente = item.codTipCliente;
             gCodClasificacion = item.codClasificacionInterna;
-            gCodProducto = item.codProductoBase;
+            gCodProducto = item.codProducto;
         }
 
         $("#btnNuevo,.classNuevo").on("click", function () {
             $("#titulo").text('Nuevo Registro');
             gAccion = "INSERT";
-            $('#ddlTipCliente,#ddlClasificacionInterna,#ddlProductoBase').prop('disabled', false);
+            $('#ddlTipCliente,#ddlClasificacionInterna,#ddlProducto').prop('disabled', false);
             $("#txtProbabilidad").val('');
             $("#txtTasaRecuperacion").val('');
             //$("#ddlDepartamento").val('').change();
@@ -251,7 +251,7 @@
             var _obj = {
                 codTipCliente: gAccion == "DELETE" ? gCodTipCliente : $("#ddlTipCliente option:selected").val(),
                 codClasificacionInterna: gAccion == "DELETE" ? gCodClasificacion : $("#ddlClasificacionInterna option:selected").val(),
-                codProductoBase: gAccion == "DELETE" ? gCodProducto : $("#ddlProductoBase option:selected").val(),
+                codProducto: gAccion == "DELETE" ? gCodProducto : $("#ddlProducto option:selected").val(),
                 probabilidadDefault: getPorcentaje($("#txtProbabilidad").val()),
                 tasaRecuperacion: getPorcentaje($("#txtTasaRecuperacion").val()),
             };
@@ -340,15 +340,15 @@
                     className: 'dt-left',
                 },
                 {
-                    title: 'Cód. Producto Base',
-                    data: 'codProductoBase',
-                    name: 'codProductoBase',
+                    title: 'Cód. Producto',
+                    data: 'codProducto',
+                    name: 'codProducto',
                     className: 'dt-left',
                 },
                 {
-                    title: 'Producto Base',
-                    data: 'productoBase',
-                    name: 'productoBase',
+                    title: 'Producto',
+                    data: 'producto',
+                    name: 'producto',
                     className: 'dt-left',
                 },
                 {

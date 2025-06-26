@@ -837,8 +837,8 @@ namespace DA
                         bean = new PROBABILIDAD_DEFAULT_BE();
                         bean.codTipCliente = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
                         bean.codClasificacionInterna = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_clasificacion_interna"));
-                        bean.codProductoBase = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto_base"));
-                        bean.productoBase = DataReader.SafeGetString(dr, dr.GetOrdinal("producto_base"));
+                        bean.codProducto = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto"));
+                        bean.producto = DataReader.SafeGetString(dr, dr.GetOrdinal("producto"));
                         bean.probabilidadDefault = DataReader.GetValueOrNull<decimal>(dr, dr.GetOrdinal("probabilidadDefault"));
                         bean.tasaRecuperacion = DataReader.GetValueOrNull<decimal>(dr, dr.GetOrdinal("Tasa_Recuperacion"));
                         bean.LGD = DataReader.GetValueOrNull<decimal>(dr, dr.GetOrdinal("LGD"));
@@ -889,6 +889,12 @@ namespace DA
                             bean.Value = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
                             bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_cliente"));
                             bean.Aux1 = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_personeria"));
+                        }
+                        if (accion.Equals("@PRODUCTO"))
+                        {
+                            bean.Value = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_producto")).ToString();
+                            bean.Text = DataReader.SafeGetString(dr, dr.GetOrdinal("producto"));
+                            bean.Aux1 = DataReader.SafeGetString(dr, dr.GetOrdinal("cod_tip_cliente"));
                         }
                         if (accion.Equals("@PRODUCTO_BASE"))
                         {

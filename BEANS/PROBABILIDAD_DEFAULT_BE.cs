@@ -12,7 +12,9 @@ namespace BEANS
         public string codUsuario { get; set; }
         public string codTipCliente { get; set; }
         public string codClasificacionInterna { get; set; }
-        public int codProductoBase { get; set; }
+        public int? codProducto { get; set; }
+        public string producto { get; set; }
+        public int? codProductoBase { get; set; }
         public string productoBase { get; set; }
         public decimal? probabilidadDefault { get; set; }
         public decimal? tasaRecuperacion { get; set; }

@@ -463,13 +463,11 @@
             });
             construirChart03('chart09', "Distribución WIN/LOSS por Funcionario", rubros, datasets);
         }
-
         function getColor(codCat) {
             if (codCat === "1") return '#8c1b1b';
             if (codCat === "2") return '#bcb88a';
             return '#444'; // cod_cat 3 u otros
         }
-
         function construirChartPie(chartId, titulo, label, importe, color){
             const ctx = document.getElementById(chartId).getContext('2d');
             // Destruir el chart anterior si ya existe
@@ -540,7 +538,6 @@
                 plugins: [ChartDataLabels] // Si usas data labels
             });
         }
-
         function construirChartBarHor(chartId, titulo, label, importe) {
             const ctx = document.getElementById(chartId).getContext('2d');
             // Destruir el chart anterior si ya existe
@@ -693,7 +690,6 @@
                 plugins: [ChartDataLabels]
             });
         }
-
         function construirChart03(chartId, titulo, label, dataset) {
 
             const ctx = document.getElementById(chartId).getContext('2d');
