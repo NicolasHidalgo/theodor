@@ -178,6 +178,7 @@
                                                         <tr>
                                                             @*<th>Constantes de Nelson & Siege</th>*@
                                                             <th></th>
+                                                            @*<th>Encaje</th>*@
                                                             <th>beta0</th>
                                                             <th>beta1</th>
                                                             <th>beta2</th>
@@ -196,7 +197,7 @@
 
                                                             <tr class="@estilo2" style="font-size:10px;">
                                                                 <td align="left" class="tdMoneda">@item.moneda</td>
-                                                                <td align="left" class="tdEncaje hidden">@item.encaje</td>
+                                                                @*<td align="left" class="tdEncaje">@item.encaje</td>*@
                                                                 <td align="center" class="tdBeta0">@(item.beta0?.ToString("N16"))</td>
                                                                 <td align="center" class="tdBeta1">@(item.beta1?.ToString("N16"))</td>
                                                                 <td align="center" class="tdBeta2">@(item.beta2?.ToString("N16"))</td>
@@ -274,11 +275,11 @@
                                                                 }
 
                                                                 <tr class="@estilo3">
-                                                                    <td align="center">@item.periodo</td>
-                                                                    <td align="center">@(item.anio?.ToString("N2"))</td>
-                                                                    <td align="center">@(item.tasaSol?.ToString("P4"))</td>
-                                                                    <td align="center">@(poolPasivo.ToString("P4"))</td>
-                                                                    <td align="center">@(poolActivo.ToString("P4"))</td>
+                                                                    <td align="center" class="tdPeriodo">@item.periodo</td>
+                                                                    <td align="center" class="tdAnio">@(item.anio?.ToString("N2"))</td>
+                                                                    <td align="center" class="tdTasa">@(item.tasaSol?.ToString("P4"))</td>
+                                                                    <td align="center" class="tdPasivo">@(poolPasivo.ToString("P4"))</td>
+                                                                    <td align="center" class="tdActivo">@(poolActivo.ToString("P4"))</td>
                                                                 </tr>
                                                             }
 
@@ -393,11 +394,11 @@
                                                                 }
 
                                                                 <tr class="@estilo3">
-                                                                    <td align="center">@item.periodo</td>
-                                                                    <td align="center">@(item.anio?.ToString("N2"))</td>
-                                                                    <td align="center">@(item.tasaUsd?.ToString("P4"))</td>
-                                                                    <td align="center">@(poolPasivo.ToString("P4"))</td>
-                                                                    <td align="center">@(poolActivo.ToString("P4"))</td>
+                                                                    <td align="center" class="tdPeriodo">@item.periodo</td>
+                                                                    <td align="center" class="tdAnio">@(item.anio?.ToString("N2"))</td>
+                                                                    <td align="center" class="tdTasa">@(item.tasaUsd?.ToString("P4"))</td>
+                                                                    <td align="center" class="tdPasivo">@(poolPasivo.ToString("P4"))</td>
+                                                                    <td align="center" class="tdActivo">@(poolActivo.ToString("P4"))</td>
                                                                     @*<td align="center">@(residuo)</td>*@
                                                                 </tr>
                                                             }
@@ -538,7 +539,7 @@
 
                     // Crear las celdas con los valores correspondientes
                     var cellMoneda = $('<td></td>').attr('align', 'left').addClass('tdMoneda').text(item.moneda);
-                    var cellEncaje = $('<td></td>').attr('align', 'left').addClass('tdEncaje hidden').text(item.encaje);
+                    /*var cellEncaje = $('<td></td>').attr('align', 'left').addClass('tdEncaje hidden').text(item.encaje);*/
                     var cellBeta0 = $('<td></td>').attr('align', 'center').addClass('tdBeta0').text(item.beta0 ? item.beta0.toFixed(16) : '');
                     var cellBeta1 = $('<td></td>').attr('align', 'center').addClass('tdBeta1').text(item.beta1 ? item.beta1.toFixed(16) : '');
                     var cellBeta2 = $('<td></td>').attr('align', 'center').addClass('tdBeta2').text(item.beta2 ? item.beta2.toFixed(16) : '');
@@ -615,11 +616,11 @@
 
                 // Armamos la fila de la tabla
                 var row = "<tr class='" + estilo + "'>" +
-                    "<td align='center'>" + item.periodo + "</td>" +
-                    "<td align='center'>" + (item.anio ? item.anio.toFixed(2) : "") + "</td>" +
-                    "<td align='center'>" + (item.tasaSol ? (item.tasaSol * 100).toFixed(4) + "%" : "") + "</td>" + // Formateamos la tasa en porcentaje
-                    "<td align='center'>" + (poolPasivo * 100).toFixed(4) + "%" + "</td>" + // Formateamos el poolPasivo en porcentaje
-                    "<td align='center'>" + (poolActivo * 100).toFixed(4) + "%" + "</td>" + // Formateamos el poolActivo en porcentaje
+                    "<td align='center' class='tdPeriodo'>" + item.periodo + "</td>" +
+                    "<td align='center' class='tdAnio'>" + (item.anio ? item.anio.toFixed(2) : "") + "</td>" +
+                    "<td align='center' class='tdTasa'>" + (item.tasaSol ? (item.tasaSol * 100).toFixed(4) + "%" : "") + "</td>" + // Formateamos la tasa en porcentaje
+                    "<td align='center' class='tdPasivo'>" + (poolPasivo * 100).toFixed(4) + "%" + "</td>" + // Formateamos el poolPasivo en porcentaje
+                    "<td align='center' class='tdActivo'>" + (poolActivo * 100).toFixed(4) + "%" + "</td>" + // Formateamos el poolActivo en porcentaje
                     "</tr>";
 
                 // Agregamos la fila al tbody correspondiente
@@ -690,11 +691,11 @@
 
                 const row = `
             <tr class="${estilo}">
-                <td align="center">${item.periodo}</td>
-                <td align="center">${Number(item.anio).toFixed(2)}</td>
-                <td align="center">${getPorcentajeNum(item.tasa).toFixed(4)}%</td>
-                <td align="center">${getPorcentajeNum(poolPasivo).toFixed(4)}%</td>
-                <td align="center">${getPorcentajeNum(poolActivo).toFixed(4)}%</td>
+                <td align="center" class='tdPeriodo'>${item.periodo}</td>
+                <td align="center" class='tdAnio'>${Number(item.anio).toFixed(2)}</td>
+                <td align="center" class='tdTasa'>${getPorcentajeNum(item.tasa).toFixed(4)}%</td>
+                <td align="center" class='tdPasivo'>${getPorcentajeNum(poolPasivo).toFixed(4)}%</td>
+                <td align="center" class='tdActivo'>${getPorcentajeNum(poolActivo).toFixed(4)}%</td>
             </tr>
         `;
 
@@ -853,12 +854,13 @@
 
                     var dataPEN = res.dataPEN || [];
                     var dataUSD = res.dataUSD || [];
-
                     $('#tbodyValor tr').each(function () {
                         var fila = $(this);
                         var moneda = fila.find('.tdMoneda').text().trim();
 
                         var data = moneda === "Soles" ? dataPEN : dataUSD;
+                        var codMoneda = moneda === "Soles" ? "PEN" : "USD";
+                        var txtEncaje = getPorcentaje($('#txtEncaje' + codMoneda).val());
 
                         if (data && data.length >= 6) {
                             fila.find('.tdBeta0').text(data[0].toFixed(16));
@@ -868,12 +870,11 @@
                             fila.find('.tdLambda1').text(data[4].toFixed(16));
                             fila.find('.tdLambda2').text(data[5].toFixed(16));
                         }
+                        CargarTablaConstantesMoneda('#tbodyValor' + codMoneda, data, txtEncaje);
                     });
 
                     $("#tdGrabar,#liTab2,#liTab3").removeClass("hidden");
                     $("#tdProcesar").addClass("hidden");
-                    //CargarTablaConstantesMoneda('#tbodyValorPEN', dataPEN);
-                    //CargarTablaConstantesMoneda('#tbodyValorUSD', dataUSD);
                     $("#overlay").hide();
                 },
                 error: function (xhr, status, error) {
@@ -883,10 +884,11 @@
             });
         }
 
-        function CargarTablaConstantesMoneda(tag, data) {
+        function CargarTablaConstantesMoneda(tag, data, encaje) {
             $(tag + ' tr').each(function () {
                 var fila = $(this);
                 if (data && data.length >= 6) {
+                    fila.find('.tdEncaje').text(encaje);
                     fila.find('.tdBeta0').text(data[0].toFixed(16));
                     fila.find('.tdBeta1').text(data[1].toFixed(16));
                     fila.find('.tdBeta2').text(data[2].toFixed(16));
@@ -1021,7 +1023,7 @@
                 colPoolPasivo = calcularPoolPasivo(colAnios, beta0, beta1, beta2, beta3, lambda1, lambda2);
                 colPoolActivo = calcularPoolActivo(colPoolPasivo,encaje);
 
-                arrBase.push({ mes: colMeses, tasa: colTasa, poolPasivo: colPoolPasivo, poolActivo: colPoolActivo });
+                arrBase.push({ mes: colMeses, tasa: colTasa, poolPasivo: colPoolPasivo, poolActivo: colPoolActivo, tipo: 'temp' });
 
                 intervaloAcm += intervalo;
             }
@@ -1039,16 +1041,19 @@
                 colPoolPasivo = calcularPoolPasivo(colAnios, beta0, beta1, beta2, beta3, lambda1, lambda2);
                 colPoolActivo = calcularPoolActivo(colPoolPasivo, encaje);
 
-                arrBase.push({ mes: colMeses, tasa: colTasa, poolPasivo: colPoolPasivo, poolActivo: colPoolActivo });
+                arrBase.push({ mes: colMeses, tasa: colTasa, poolPasivo: colPoolPasivo, poolActivo: colPoolActivo, tipo: 'entry' });
             });
 
             arrBase.sort(function (a, b) {
                 return a.mes - b.mes;
             });
-            var labels = arrBase.map(x => x.mes);
-            var data1 = arrBase.map(x => x.tasa);
-            var data2 = arrBase.map(x => x.poolPasivo);
-            var data3 = arrBase.map(x => x.poolActivo);
+
+            const arrFiltrado = arrBase.filter(x => x.tipo === 'entry');
+
+            var labels = arrFiltrado.map(x => x.mes);
+            var data1 = arrFiltrado.map(x => x.tasa);
+            var data2 = arrFiltrado.map(x => x.poolPasivo);
+            var data3 = arrFiltrado.map(x => x.poolActivo);
             construirGrafico(codMoneda, labels, data1, data2, data3);
         }
 
@@ -1128,12 +1133,55 @@
         $("#txtEncajePEN").val(getPorcentajeNum(encajePEN)).change();
         $("#txtEncajeUSD").val(getPorcentajeNum(encajeUSD)).change();
 
-        //generarDataGrafico("PEN", dataModel, dataPEN);
-        //generarDataGrafico("USD", dataModel, dataUSD);
+        function construirGrafico(codMoneda, meses, tasa, poolPasivo, poolActivo) {
 
-        function construirGrafico(codMoneda, labels, data1, data2, data3){
+            var maximoMes = Math.max.apply(null,
+                $('#tbodyTasa' + codMoneda + ' .tdPeriodo').map(function () {
+                    return parseFloat($(this).text()) || -Infinity;
+                }).get()
+            );
+            var maximoActivo = Math.max.apply(null,
+                $('#tbodyTasa' + codMoneda + ' .tdActivo').map(function () {
+                    return parseFloat(getPorcentaje($(this).text().replace('%', '').replace(',', '.').trim())) || -Infinity;
+                }).get()
+            );
+            var minimoActivo = Math.min.apply(null,
+                $('#tbodyTasa' + codMoneda + ' .tdActivo').map(function () {
+                    return parseFloat(getPorcentaje($(this).text().replace('%', '').replace(',', '.').trim())) || -Infinity;
+                }).get()
+            );
+            var maximoPasivo = Math.max.apply(null,
+                $('#tbodyTasa' + codMoneda + ' .tdPasivo').map(function () {
+                    return parseFloat(getPorcentaje($(this).text().replace('%', '').replace(',', '.').trim())) || -Infinity;
+                }).get()
+            );
+            var minimoPasivo = Math.min.apply(null,
+                $('#tbodyTasa' + codMoneda + ' .tdPasivo').map(function () {
+                    return parseFloat(getPorcentaje($(this).text().replace('%', '').replace(',', '.').trim())) || -Infinity;
+                }).get()
+            );
+
+            console.log(maximoActivo, minimoActivo, maximoPasivo, minimoPasivo);
+            var maxY = maximoPasivo;
+            if (maximoActivo >= maximoPasivo) {
+                maxY = maximoActivo;
+            }
+            var minY = minimoPasivo;
+            if (minimoActivo >= minimoPasivo) {
+                minY = minimoActivo;
+            }
+
+            maxY = maxY + 0.025;
+            minY = minY - 0.040;
+            if (minY < 0) {
+                minY = 0;
+            }
+
+            console.log(maxY);
+            console.log(minY);
+
             const data = {
-                labels: labels,
+                labels: meses,
                 datasets: [
                     //{
                     //    label: 'Tasa',
@@ -1144,15 +1192,17 @@
                     //},
                     {
                         label: 'Pool Pasivo',
-                        data: data2,
-                        borderColor: "red",
-                        backgroundColor: "red",
+                        data: poolPasivo,
+                        borderColor: "#142f83",
+                        backgroundColor: "#142f83",
+                        spanGaps: true // esto conecta los puntos aunque haya nulls
                     },
                     {
                         label: 'Pool Activo',
-                        data: data3,
-                        borderColor: "green",
-                        backgroundColor: "green",
+                        data: poolActivo,
+                        borderColor: "#107028",
+                        backgroundColor: "#107028",
+                        spanGaps: true // esto conecta los puntos aunque haya nulls
                     },
                 ]
             };
@@ -1179,24 +1229,34 @@
                         },
                         legend: {
                             position: 'bottom' // Mueve la leyenda debajo del gráfico
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.y;
+                                    return label + ': ' + (value * 100).toFixed(2) + '%';
+                                }
+                            }
                         }
                     },
                     scales: {
                         x: {
+                            offset: true, // 👈 Esto agrega ese "padding" visual a los extremos
                             type: 'linear',
                             //stacked: true,
                             //beginAtZero: true,
                             min: 0,
-                            max: 300, //maximoMes,
+                            max: maximoMes,
                             ticks: {
-                                stepSize: 50, //maximoMes / 6,
+                                stepSize: maximoMes / 5,
                             },
                         },
                         y: {
                             //stacked: true,
                             //beginAtZero: true,
-                            max: .14,
-                            min: .0,
+                            max: maxY, //.14,
+                            min: minY, //.0,
                             ticks: {
                                 stepSize: .02,
                                 callback: function (value) {
