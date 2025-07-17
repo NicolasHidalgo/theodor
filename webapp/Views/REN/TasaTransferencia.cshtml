@@ -1048,7 +1048,8 @@
                 return a.mes - b.mes;
             });
 
-            const arrFiltrado = arrBase.filter(x => x.tipo === 'entry');
+            //const arrFiltrado = arrBase.filter(x => x.tipo === 'entry');
+            const arrFiltrado = arrBase;
 
             var labels = arrFiltrado.map(x => x.mes);
             var data1 = arrFiltrado.map(x => x.tasa);
@@ -1140,6 +1141,8 @@
                     return parseFloat($(this).text()) || -Infinity;
                 }).get()
             );
+            maximoMes = maximoMes < 240 ? 240 : maximoMes;
+
             var maximoActivo = Math.max.apply(null,
                 $('#tbodyTasa' + codMoneda + ' .tdActivo').map(function () {
                     return parseFloat(getPorcentaje($(this).text().replace('%', '').replace(',', '.').trim())) || -Infinity;
@@ -1170,15 +1173,20 @@
             if (minimoActivo >= minimoPasivo) {
                 minY = minimoActivo;
             }
-
-            maxY = maxY + 0.025;
-            minY = minY - 0.040;
+            let incY;
+            
             if (minY < 0) {
                 minY = 0;
             }
+            incY = (maxY - minY) / 4
+            maxY = maxY + incY;
+            minY = minY - incY;
 
+
+            console.log(incY);
             console.log(maxY);
             console.log(minY);
+            debugger;
 
             const data = {
                 labels: meses,
@@ -1235,7 +1243,7 @@
                                 label: function (context) {
                                     const label = context.dataset.label || '';
                                     const value = context.parsed.y;
-                                    return label + ': ' + (value * 100).toFixed(2) + '%';
+                                    return label + ': ' + (value * 100).toFixed(4) + '%';
                                 }
                             }
                         }
@@ -1249,7 +1257,7 @@
                             min: 0,
                             max: maximoMes,
                             ticks: {
-                                stepSize: maximoMes / 5,
+                                stepSize: maximoMes / 6,
                             },
                         },
                         y: {
@@ -1258,9 +1266,9 @@
                             max: maxY, //.14,
                             min: minY, //.0,
                             ticks: {
-                                stepSize: .02,
+                                stepSize: incY,
                                 callback: function (value) {
-                                    return (value * 100).toFixed(0) + '%';
+                                    return (value * 100).toFixed(4) + '%';
                                 },
                             },
                             scaleLabel: {
