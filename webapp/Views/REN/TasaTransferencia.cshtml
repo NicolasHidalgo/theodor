@@ -329,7 +329,7 @@
                                             </div>
                                             <!-- /bordered table -->
                                             <br />
-                                            <canvas id="myChartPEN"></canvas>
+                                             <canvas id="myChartPEN"></canvas>
                                         </div>
                                     </div>
 
@@ -775,7 +775,6 @@
 
             var _url = '@Url.Action("GrabarTasaTransferencia", "REN")';
             $.post(_url, _reply).done(function (data) {
-                //console.log(data.Data.ddlVigencia);
                 if (data.Status === 200) {
                     toastr.success(data.Message);
                     var ddl = $('#ddlVigencia');
@@ -850,8 +849,6 @@
                     yDataUSD: arrTasaUSD
                 },
                 success: function (res) {
-                    console.log("Respuesta:", res);
-
                     var dataPEN = res.dataPEN || [];
                     var dataUSD = res.dataUSD || [];
                     $('#tbodyValor tr').each(function () {
@@ -954,16 +951,18 @@
             res = meses / 12;
             return res;
         }
-        function calcularPoolPasivo(anios,beta0,beta1,beta2,beta3,lambda1,lambda2) {
+        function calcularPoolPasivo(anio,beta0,beta1,beta2,beta3,lambda1,lambda2) {
             var res = 0.0;
             // Convertir a números explícitamente, en caso de que sean cadenas
-            anios = Number(anios);
+            anio = Number(anio);
             beta0 = Number(beta0);
             beta1 = Number(beta1);
             beta2 = Number(beta2);
             beta3 = Number(beta3);
             lambda1 = Number(lambda1);
             lambda2 = Number(lambda2);
+
+            
             if (lambda1 == "" || lambda1 == 0 || lambda1 == undefined || lambda1 == null) {
                 return null;
             }
@@ -971,12 +970,21 @@
                 return null;
             }
 
-            res = beta0
-                + (beta1 * ((1 - Math.exp(-anios / lambda1)) / (anios / lambda1)))
-                + (beta2 * (((1 - Math.exp(-anios / lambda1)) / (anios / lambda1)) - Math.exp(-anios / lambda1)))
-                + (beta3 * (((1 - Math.exp(-anios / lambda2)) / (anios / lambda2)) - Math.exp(-anios / lambda2)));
+            var factor1 = (1 - Math.exp(-anio / lambda1)) / (anio / lambda1);
+            var factor2 = factor1 - Math.exp(-anio / lambda1);
+            var factor3 = ((1 - Math.exp(-anio / lambda2)) / (anio / lambda2)) - Math.exp(-anio / lambda2);
 
-            res = (isNaN(res) || !isFinite(res)) ? "" : res;
+            res = beta0 +
+                beta1 * factor1 +
+                beta2 * factor2 +
+                beta3 * factor3;
+
+            //res = beta0
+            //    + beta1 * ((1 - Math.exp(-anios / lambda1)) / (anios / lambda1))
+            //    + beta2 * ((1 - Math.exp(-anios / lambda1)) / (anios / lambda1) - Math.exp(-anios / lambda1))
+            //    + beta3 * ((1 - Math.exp(-anios / lambda2)) / (anios / lambda2) - Math.exp(-anios / lambda2));
+
+            res = (isNaN(res) ?? !isFinite(res)) ? "" : res;
 
             return res;
         }
@@ -998,30 +1006,37 @@
             5. Para llenar los datos "ficticios" por ejemplo el primero Meses: 8, Año: Calculado (8/12),
                 ...Tasa se queda en blanco, Pool Pasivo: formula, Pool Activo Formula.
             */
+
             var numRegistros = 30;
             var maxPeriodo = 240;
             var intervalo = Math.round(maxPeriodo / numRegistros);
             var colMeses = 0.0;
-            var colAnios = 0.0;
+            var anio = 0.0;
             var colTasa = 0.0;
             var colPoolPasivo = 0.0;
             var colPoolActivo = 0.0;
             var arrBase = [];
-            var beta0 = dataBeta.map(x => x.beta0);
-            var beta1 = dataBeta.map(x => x.beta1);
-            var beta2 = dataBeta.map(x => x.beta2);
-            var beta3 = dataBeta.map(x => x.beta3);
-            var lambda1 = dataBeta.map(x => x.lambda1);
-            var lambda2 = dataBeta.map(x => x.lambda1);
-            var encaje = dataBeta.map(x => x.encaje);
-
+            var beta0 = Number(dataBeta.map(x => x.beta0));
+            var beta1 = Number(dataBeta.map(x => x.beta1));
+            var beta2 = Number(dataBeta.map(x => x.beta2));
+            var beta3 = Number(dataBeta.map(x => x.beta3));
+            var lambda1 = Number(dataBeta.map(x => x.lambda1));
+            var lambda2 = Number(dataBeta.map(x => x.lambda2));
+            var encaje = Number(dataBeta.map(x => x.encaje));
+            var factor1 = 0.00;
+            var factor2 = 0.00;
+            var factor3 = 0.00;
+            
             var intervaloAcm = intervalo;
             for (let i = 0; i < numRegistros; i++) {
                 colMeses = intervaloAcm;
-                colAnios = calcularAnios(intervaloAcm);
+                colPoolPasivo = 0.0;
+                colPoolActivo = 0.0;
                 colTasa = validarTasa(null);
-                colPoolPasivo = calcularPoolPasivo(colAnios, beta0, beta1, beta2, beta3, lambda1, lambda2);
-                colPoolActivo = calcularPoolActivo(colPoolPasivo,encaje);
+
+                anio = Number(calcularAnios(intervaloAcm));
+                colPoolPasivo = calcularPoolPasivo(anio,beta0,beta1,beta2,beta3,lambda1,lambda2);
+                colPoolActivo = calcularPoolActivo(colPoolPasivo, encaje);
 
                 arrBase.push({ mes: colMeses, tasa: colTasa, poolPasivo: colPoolPasivo, poolActivo: colPoolActivo, tipo: 'temp' });
 
@@ -1036,9 +1051,12 @@
                     arrBase.splice(indice, 1);
                 }
                 colMeses = item.periodo;
-                colAnios = calcularAnios(colMeses);
+                colPoolPasivo = 0.0;
+                colPoolActivo = 0.0;
                 colTasa = validarTasa(item.tasa);
-                colPoolPasivo = calcularPoolPasivo(colAnios, beta0, beta1, beta2, beta3, lambda1, lambda2);
+
+                anio = Number(calcularAnios(colMeses));
+                colPoolPasivo = calcularPoolPasivo(anio, beta0, beta1, beta2, beta3, lambda1, lambda2);
                 colPoolActivo = calcularPoolActivo(colPoolPasivo, encaje);
 
                 arrBase.push({ mes: colMeses, tasa: colTasa, poolPasivo: colPoolPasivo, poolActivo: colPoolActivo, tipo: 'entry' });
@@ -1055,6 +1073,7 @@
             var data1 = arrFiltrado.map(x => x.tasa);
             var data2 = arrFiltrado.map(x => x.poolPasivo);
             var data3 = arrFiltrado.map(x => x.poolActivo);
+
             construirGrafico(codMoneda, labels, data1, data2, data3);
         }
 
@@ -1135,69 +1154,23 @@
         $("#txtEncajeUSD").val(getPorcentajeNum(encajeUSD)).change();
 
         function construirGrafico(codMoneda, meses, tasa, poolPasivo, poolActivo) {
-
-            var maximoMes = Math.max.apply(null,
-                $('#tbodyTasa' + codMoneda + ' .tdPeriodo').map(function () {
-                    return parseFloat($(this).text()) || -Infinity;
-                }).get()
-            );
-            maximoMes = maximoMes < 240 ? 240 : maximoMes;
-
-            var maximoActivo = Math.max.apply(null,
-                $('#tbodyTasa' + codMoneda + ' .tdActivo').map(function () {
-                    return parseFloat(getPorcentaje($(this).text().replace('%', '').replace(',', '.').trim())) || -Infinity;
-                }).get()
-            );
-            var minimoActivo = Math.min.apply(null,
-                $('#tbodyTasa' + codMoneda + ' .tdActivo').map(function () {
-                    return parseFloat(getPorcentaje($(this).text().replace('%', '').replace(',', '.').trim())) || -Infinity;
-                }).get()
-            );
-            var maximoPasivo = Math.max.apply(null,
-                $('#tbodyTasa' + codMoneda + ' .tdPasivo').map(function () {
-                    return parseFloat(getPorcentaje($(this).text().replace('%', '').replace(',', '.').trim())) || -Infinity;
-                }).get()
-            );
-            var minimoPasivo = Math.min.apply(null,
-                $('#tbodyTasa' + codMoneda + ' .tdPasivo').map(function () {
-                    return parseFloat(getPorcentaje($(this).text().replace('%', '').replace(',', '.').trim())) || -Infinity;
-                }).get()
-            );
-
-            console.log(maximoActivo, minimoActivo, maximoPasivo, minimoPasivo);
-            var maxY = maximoPasivo;
-            if (maximoActivo >= maximoPasivo) {
-                maxY = maximoActivo;
-            }
-            var minY = minimoPasivo;
-            if (minimoActivo >= minimoPasivo) {
-                minY = minimoActivo;
-            }
-            let incY;
+            var maximoMes = Math.max(...meses);
+            var maximoActivo = Math.max(...poolActivo);
+            var minimoActivo = Math.min(...poolActivo);
+            var maximoPasivo = Math.max(...poolPasivo);
+            var minimoPasivo = Math.min(...poolPasivo);
             
-            if (minY < 0) {
-                minY = 0;
-            }
+            var maxY = Math.max(maximoPasivo, maximoActivo);
+            var minY = Math.max(Math.min(minimoPasivo, minimoActivo),0);
+            let incY;
+
             incY = (maxY - minY) / 4
             maxY = maxY + incY;
             minY = minY - incY;
 
-
-            console.log(incY);
-            console.log(maxY);
-            console.log(minY);
-            debugger;
-
             const data = {
                 labels: meses,
                 datasets: [
-                    //{
-                    //    label: 'Tasa',
-                    //    data: data1,
-                    //    borderColor: "yellow",
-                    //    backgroundColor: "yellow",
-                    //    spanGaps: true, // Conectar puntos con valores nulos
-                    //},
                     {
                         label: 'Pool Pasivo',
                         data: poolPasivo,
@@ -1221,8 +1194,9 @@
                 canvas.chartInstance.destroy();
             }
             const ctx = canvas.getContext("2d");
-            //const ctx = document.getElementById('myChart' + codMoneda);
-            ctx.height = 200;
+
+            //ctx.height = 253;
+            canvas.height = 150;
             canvas.chartInstance = new Chart(ctx, {
                 type: 'line',
                 data: data,
@@ -1252,8 +1226,10 @@
                         x: {
                             offset: true, // 👈 Esto agrega ese "padding" visual a los extremos
                             type: 'linear',
+
                             //stacked: true,
                             //beginAtZero: true,
+                            
                             min: 0,
                             max: maximoMes,
                             ticks: {

@@ -565,6 +565,8 @@
     <Content Include="assets\images\spille-coffe1.png" />
     <Content Include="assets\images\spilled-coffe.jpg" />
     <Content Include="assets\images\spilled-coffe2.png" />
+    <Content Include="assets\images\suscriptor\logo_20509507199.png" />
+    <Content Include="assets\images\suscriptor\logo_20601042682.png" />
     <Content Include="assets\images\ui\datepicker_trigger.png" />
     <Content Include="assets\images\ui\map_marker.png" />
     <Content Include="assets\images\verde.png" />
