@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ADM_ESTADO_BE.cs" />
     <Compile Include="AGENCIA_BE.cs" />
     <Compile Include="CLASIFICACION_INTERNA_BE.cs" />
     <Compile Include="COMISIONSERVICIO_BE.cs" />

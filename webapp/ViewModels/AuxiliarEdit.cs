@@ -36,6 +36,7 @@ namespace webapp.ViewModels
         public IEnumerable<ExtendedSelectListItem> ddlComisionServicio { get; set; } = new HashSet<ExtendedSelectListItem>();
         public IEnumerable<ExtendedSelectListItem> ddlPeriocidad { get; set; } = new HashSet<ExtendedSelectListItem>();
         public IEnumerable<ExtendedSelectListItem> ddlTipValor { get; set; } = new HashSet<ExtendedSelectListItem>();
+        public IEnumerable<ExtendedSelectListItem> ddlBandeja { get; set; } = new HashSet<ExtendedSelectListItem>();
 
         public List<REN_PYG_BE> dataPYG { get; set; }
         public List<CLASIFICACION_INTERNA_BE> dataCI { get; set; }
@@ -58,6 +59,7 @@ namespace webapp.ViewModels
 
         public List<TASA_TRANFERENCIA_BE> lstTasaTranf { get; set; }
         public List<TASA_TRANF_VALOR_BE> lstTasaTranfValor { get; set; }
+        public List<ADM_ESTADO_BE> lstAdmEstado { get; set; }
 
     }
 }

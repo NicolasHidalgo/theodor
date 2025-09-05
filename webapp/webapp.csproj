@@ -2766,6 +2766,7 @@
     <Content Include="Views\REP\Dashboard.cshtml" />
     <Content Include="Views\REP\TableroControlEvolucion.cshtml" />
     <Content Include="Views\REP\TableroControlAnalisis.cshtml" />
+    <Content Include="Views\REN\AdmEstado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

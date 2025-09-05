@@ -373,6 +373,13 @@ $(function() {
         $('body').toggleClass('sidebar-xs');
     });
 
+    $('.sidebar-main2-toggle').on('click', function (e) {
+        e.preventDefault();
+
+        // Toggle min sidebar class
+        $('body').toggleClass('sidebar-xs');
+    });
+
 
 
     // Sidebar controls

@@ -1,0 +1,257 @@
+﻿@model webapp.ViewModels.AuxiliarEdit
+@{
+    ViewBag.Title = "AdmEstado";
+}
+
+<!-- Theme JS files -->
+<script type="text/javascript" src="~/assets/js/core/app.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+<script type="text/javascript" src="~/assets/js/core/libraries/jquery_ui/interactions.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+<script type="text/javascript" src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="~/assets/js/pages/form_select2.js"></script>
+
+<style>
+    /* Estado normal */
+    .sidebar-main2 {
+        width: 220px;
+        transition: all 0.3s ease;
+    }
+
+        /* Estado colapsado */
+        .sidebar-main2.collapsed {
+            width: 60px; /* solo deja espacio para íconos */
+        }
+
+            .sidebar-main2.collapsed .navigation span {
+                display: none; /* oculta textos */
+            }
+
+
+
+        /* --- Base hover (como ya tienes) --- */
+        .sidebar-main2 .navigation li > a:hover {
+            background-color: #1abc9c;
+            color: #fff;
+        }
+
+            .sidebar-main2 .navigation li > a:hover i {
+                color: #fff;
+            }
+
+    /* --- Asegura que podemos posicionar el label --- */
+    .sidebar-main2 {
+        position: relative;
+        overflow: visible;
+    }
+
+        .sidebar-main2 .navigation {
+            position: relative;
+            overflow: visible;
+        }
+
+            .sidebar-main2 .navigation > li {
+                position: relative;
+            }
+
+        /* --- Cuando está colapsado --- */
+        .sidebar-main2.collapsed {
+            width: 60px;
+        }
+
+            .sidebar-main2.collapsed .navigation > li > a {
+                justify-content: center; /* centra el ícono */
+            }
+
+                /* IMPORTANT: anula cualquier display:none del tema */
+                .sidebar-main2.collapsed .navigation > li > a > span {
+                    display: inline-block !important;
+                    position: absolute;
+                    left: 64px; /* aparece a la derecha del sidebar */
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: #1abc9c;
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                    color: #fff;
+                    white-space: nowrap;
+                    z-index: 9999;
+                    /* oculto por defecto pero presente en el flujo */
+                    opacity: 0;
+                    visibility: hidden;
+                    pointer-events: none; /* no roba el hover */
+                    transition: opacity .15s ease, visibility .15s ease;
+                }
+
+            /* al hover del ítem, se muestra el label */
+            .sidebar-main2.collapsed .navigation > li:hover > a > span {
+                opacity: 1;
+                visibility: visible;
+            }
+
+    .td-common-style {
+        padding: 4px 4px !important; 
+        line-height: 1 !important;
+    }
+    .td-info-style {
+        padding: 6px 20px !important;
+        line-height: 1 !important;
+    }
+    .td-color-style {
+        padding: 2px 2px !important;
+        line-height: 1 !important;
+    }
+
+    .table,
+    .table th,
+    .table td {
+        border: none !important;
+    }
+        .table > :not(caption) > * > * {
+            border: none !important;
+        }
+
+    .menu-item.active {
+        background-color: #20c997; /* verde */
+        color: #fff;
+    }
+</style>    
+
+
+<!-- Page container -->
+<div class="page-container">
+    <!-- Page content -->
+    <div class="page-content">
+        <!-- Main sidebar -->
+        <div class="sidebar sidebar-main2">
+            <div class="sidebar-content">
+                <!-- Main navigation -->
+                <div class="sidebar-category sidebar-category-visible">
+                    <div class="category-content no-padding">
+                        <ul class="navigation navigation-main navigation-accordion" id="sidebarMenu">
+
+                            <!-- Main -->
+                            <li><a class="sidebar-control sidebar-main-toggle2 hidden-xs"><i class="icon-paragraph-justify3"></i></a></li>
+                            @foreach (var item in Model.ddlBandeja)
+                            {
+                                <li><a class="menu-item" onclick="fn_selBandeja(@item.Value)"><i class="icon-home4"></i> <span>@item.Text</span></a></li>
+                            }
+
+                            <!-- /main -->
+                        </ul>
+                    </div>
+                </div>
+                <!-- /main navigation -->
+            </div>
+        </div>
+        <!-- /main sidebar -->
+
+        <!-- Main content -->
+        <div class="content-wrapper">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td align="right" class="td-common-style">Buscar:</td>
+                        <td colspan="5" class="td-common-style"><input type="text" class="form-control" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="td-style"></td>
+                        <td style="padding: 1px 4px; line-height: 1;">Por Fecha<i class="icon-arrow-down5"></i></td>
+                    </tr>
+                </tbody>
+                <tbody id="tblAdmEstado"></tbody>
+            </table>
+        </div>
+
+    </div>
+    <!-- /page content -->
+</div>
+<!-- /page container -->
+
+<script type="text/javascript">
+    $(function () {
+        $(".sidebar-main-toggle2").on("click", function () {
+            $(".sidebar-main2").toggleClass("collapsed");
+        });
+        $("#sidebarMenu").on("click", ".menu-item", function () {
+            $("#sidebarMenu .menu-item").removeClass("active");
+            $(this).addClass("active");
+        });
+
+    });
+
+    var jsModel = @Html.Raw(Json.Encode(Model));
+
+    function fn_selBandeja(cod) {
+        var dataModel = jsModel.lstAdmEstado.filter(x => x.codBandeja == cod);
+        var $tbody = $("#tblAdmEstado");
+        $tbody.empty(); // limpiar contenido previo
+
+        var usuario = dataModel[0].usuario;
+        var etiqueta = dataModel[0].etiqueta;
+        debugger;
+
+        var rows = `
+        <tr style="border-top:2px double black; border-bottom:3px double black; border-collapse: collapse;">
+            <td colspan="6" class="td-common-style" style="font-size: 15px; font-weight: bold;">${usuario}</td>
+        </tr>
+        <tr style="border-bottom:2px double black; border-collapse: collapse;">
+            <td colspan="6" class="td-common-style" style="font-size: 14px; font-weight: bold;"><i class="icon-arrow-down5"></i>${etiqueta}</td>
+        </tr>`;
+        $tbody.append(rows);
+
+        $.each(dataModel, function (i, item) {
+            var _aut = item.autonomia.toUpperCase().includes("FUERA") ? "bg-danger" : "bg-success";
+
+            // construir bloque completo de 4 filas
+            var rows = `
+            <tr style="background-color:white;">
+                <td class="td-info-style">${item.codigo}</td>
+                <td class="td-info-style">${item.documento}</td>
+                <td class="td-info-style"></td>
+                <td class="td-info-style">${item.cliente}</td>
+                <td class="td-info-style"></td>
+                <td rowspan="4" class="td-info-style" align="center">
+                    ${item.fecha}<br /><br /><a class="icon-attachment"></a>
+                </td>
+            </tr>
+            <tr style="background-color:white;">
+                <td class="td-info-style">${item.producto}</td>
+                <td class="td-info-style">${item.monto}</td>
+                <td class="td-info-style">${item.plazo}</td>
+                <td class="td-info-style">${item.teaBase}</td>
+                <td class="td-info-style">${item.teaEfectiva}</td>
+            </tr>
+            <tr style="background-color:white;">
+                <td class="td-info-style">${item.profit}</td>
+                <td class="td-info-style">${item.rorac}</td>
+                <td class="td-info-style"></td>
+                <td colspan="2" class="td-color-style">
+                    <div style="display:flex; justify-content:center;">
+                        <div class="alert ${_aut} alert-rounded" style="padding:5px;text-align:center;margin:0 auto;width:80%">
+                            <span class="text-semibold">${item.autonomia}</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr style="background-color:white; border-bottom:1px solid grey; border-collapse:collapse;">
+                <td class="td-color-style">
+                    <div style="display:flex; justify-content:center;">
+                        <div class="alert bg-success alert-rounded" 
+                             style="padding:5px;text-align:center;margin:0 auto;width:70%;cursor:pointer;">
+                            <span class="text-semibold">Por Enviar</span>
+                        </div>
+                    </div>
+                </td>
+                <td colspan="4" class="td-info-style">
+                    19-06-24 18:56 Regresado Finanzas, Falta Documentación
+                </td>
+            </tr>
+        `;
+
+            // agregar bloque al tbody
+            $tbody.append(rows);
+        });
+    }
+
+</script>

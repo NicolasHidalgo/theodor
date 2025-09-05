@@ -693,7 +693,7 @@
 
             construirChartEFila03('chartE07', "", eTotalFecha, eTotalUtilidad, "#22283f");
             construirChartEFila03('chartE08', "MN", eMNFecha, eMNUtilidad, "#a5343a");
-            construirChartEFila03('chartE09', "ME", eMEFecha, eMEProfit, "#7b7356");
+            construirChartEFila03('chartE09', "ME", eMEFecha, eMEUtilidad, "#7b7356");
 
             construirChartEFila04('chartE10', "", eTotalFecha, eTotalProfit, "cadetblue");
             construirChartEFila04('chartE11', "MN", eMNFecha, eMNProfit, "cadetblue");
@@ -1012,7 +1012,7 @@
 
             construirChartA03('chartA03', "Distribución WIN/LOSS por Producto", rubros, datasets);
 
-            var data1 = res.filter(x => x.item == 0);
+            var data1 = res.filter(x => x.item == 1);
             var categoria1 = data1.map(x => x.categoria);
             no = data1.map(x => x.no);
 
@@ -1392,15 +1392,12 @@
 
         }
 
-
-
         $('#btnControles').click(function () {
             if ($("#pControl").is(":visible") == true) {
                 $("#pControl").hide();
             } else {
                 $("#pControl").show();
             }
-
         });
 
 
