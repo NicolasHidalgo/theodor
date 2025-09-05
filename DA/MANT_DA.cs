@@ -939,7 +939,7 @@ namespace DA
             cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
             cmd.Parameters.Add("@cod_tip_cliente", System.Data.SqlDbType.VarChar, 5).Value = param.codTipCliente;
             cmd.Parameters.Add("@cod_clasificacion_interna", System.Data.SqlDbType.VarChar, 5).Value = param.codClasificacionInterna;
-            cmd.Parameters.Add("@cod_producto_base", System.Data.SqlDbType.Int).Value = param.codProductoBase;
+            cmd.Parameters.Add("@cod_producto", System.Data.SqlDbType.Int).Value = param.codProducto;
             cmd.Parameters.Add("@probabilidadDefault", System.Data.SqlDbType.Float).Value = param.probabilidadDefault;
             cmd.Parameters.Add("@tasa_recuperacion", System.Data.SqlDbType.Float).Value = param.tasaRecuperacion;
 
