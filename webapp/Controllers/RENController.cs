@@ -765,7 +765,40 @@ namespace webapp.Controllers
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult AdmEstado()
+        {
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            viewModel.CodSuscriptor = user.SUSCRIPTOR;
+            viewModel.CodUsuario = user.COD_USUARIO;
 
+            var data = bl.fn_ren_sel_bandeja("BANDEJA", viewModel.CodSuscriptor, viewModel.CodUsuario);
+
+            viewModel.ddlBandeja = data.Select(x => new ExtendedSelectListItem
+            {
+                Value = x.codBandeja.ToString(),
+                Text = x.bandeja,
+                //Selected = x.selected,
+            });
+
+            viewModel.lstAdmEstado = bl.fn_ren_sel_admEstado("LISTADO", viewModel.CodSuscriptor, viewModel.CodUsuario, 0);
+            
+
+            return View(viewModel);
+        }
+
+        public JsonResult JSON_GetAdmEstado(int cod)
+        {
+            var viewModel = new AuxiliarEdit();
+            var user = (SEG_USUARIO_BE)Session["Usuario"];
+            var model = new REN_SIM_REQ_BE();
+            model.accion = "@EDITAR";
+            model.cod_suscriptor = user.SUSCRIPTOR;
+
+            viewModel.lstAdmEstado = bl.fn_ren_sel_admEstado("LISTADO", viewModel.CodSuscriptor, viewModel.CodUsuario, cod);
+
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
 
     }
 }

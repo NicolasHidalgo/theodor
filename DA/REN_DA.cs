@@ -1226,5 +1226,108 @@ namespace DA
             return model;
         }
 
+        public List<BANDEJA_BE> fn_ren_sel_bandeja(string accion, long codSuscriptor, string codUsuario)
+        {
+            Mensaje = string.Empty;
+            List<BANDEJA_BE> lista = new List<BANDEJA_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_admEstado]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    BANDEJA_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new BANDEJA_BE();
+                        bean.codBandeja = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_bandeja"));
+                        bean.bandeja = DataReader.SafeGetString(dr, dr.GetOrdinal("bandeja"));
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
+        public List<ADM_ESTADO_BE> fn_ren_sel_admEstado(string accion, long codSuscriptor, string codUsuario, int codBandeja)
+        {
+            Mensaje = string.Empty;
+            List<ADM_ESTADO_BE> lista = new List<ADM_ESTADO_BE>();
+            SqlConnection con = cn.getConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "[up_ren_cud_admEstado]";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.Add("@accion", System.Data.SqlDbType.VarChar, 20).Value = accion;
+            cmd.Parameters.Add("@cod_suscriptor", System.Data.SqlDbType.BigInt).Value = codSuscriptor;
+            cmd.Parameters.Add("@cod_usuario", System.Data.SqlDbType.VarChar, 50).Value = codUsuario;
+            cmd.Parameters.Add("@cod_bandeja", System.Data.SqlDbType.Int).Value = codBandeja;
+
+            try
+            {
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows == true)
+                {
+                    ADM_ESTADO_BE bean = null;
+                    while (dr.Read())
+                    {
+                        bean = new ADM_ESTADO_BE();
+                        bean.codBandeja = DataReader.SafeGetInt32(dr, dr.GetOrdinal("cod_bandeja"));
+                        bean.bandeja = DataReader.SafeGetString(dr, dr.GetOrdinal("bandeja"));
+                        bean.usuario = DataReader.SafeGetString(dr, dr.GetOrdinal("usuario"));
+                        bean.etiqueta = DataReader.SafeGetString(dr, dr.GetOrdinal("etiqueta"));
+                        bean.codigo = DataReader.SafeGetString(dr, dr.GetOrdinal("codigo"));
+                        bean.documento = DataReader.SafeGetString(dr, dr.GetOrdinal("documento"));
+                        bean.personeria = DataReader.SafeGetString(dr, dr.GetOrdinal("personeria"));
+                        bean.cliente = DataReader.SafeGetString(dr, dr.GetOrdinal("cliente"));
+                        bean.producto = DataReader.SafeGetString(dr, dr.GetOrdinal("producto"));
+                        bean.monto = DataReader.SafeGetString(dr, dr.GetOrdinal("monto"));
+                        bean.plazo = DataReader.SafeGetString(dr, dr.GetOrdinal("plazo"));
+                        bean.teaBase = DataReader.SafeGetString(dr, dr.GetOrdinal("tea_base"));
+                        bean.teaEfectiva = DataReader.SafeGetString(dr, dr.GetOrdinal("tea_efectiva"));
+                        bean.profit = DataReader.SafeGetString(dr, dr.GetOrdinal("profit"));
+                        bean.rorac = DataReader.SafeGetString(dr, dr.GetOrdinal("rorac"));
+                        bean.autonomia = DataReader.SafeGetString(dr, dr.GetOrdinal("autonomia"));
+                        bean.fecha = DataReader.SafeGetString(dr, dr.GetOrdinal("fecha"));
+
+                        lista.Add(bean);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje += " ERROR: " + ex.Message;
+            }
+            finally
+            {
+                Mensaje += Mensaje;
+                if (con.State == System.Data.ConnectionState.Open)
+                    con.Close();
+            }
+            return lista;
+        }
+
     }
 }

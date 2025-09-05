@@ -127,5 +127,13 @@ namespace BL
         {
             return dat.fn_ren_pro_transferencia(codSuscriptor, codUsuario, param);
         }
+        public List<BANDEJA_BE> fn_ren_sel_bandeja(string accion, long codSuscriptor, string codUsuario)
+        {
+            return dat.fn_ren_sel_bandeja(accion,codSuscriptor,codUsuario);
+        }
+        public List<ADM_ESTADO_BE> fn_ren_sel_admEstado(string accion, long codSuscriptor, string codUsuario, int codBandeja)
+        {
+            return dat.fn_ren_sel_admEstado(accion, codSuscriptor, codUsuario, codBandeja);
+        }
     }
 }
