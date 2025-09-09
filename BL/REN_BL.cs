@@ -131,9 +131,49 @@ namespace BL
         {
             return dat.fn_ren_sel_bandeja(accion,codSuscriptor,codUsuario);
         }
-        public List<ADM_ESTADO_BE> fn_ren_sel_admEstado(string accion, long codSuscriptor, string codUsuario, int codBandeja)
+        public List<ADM_ESTADO_USUARIO_BE> fn_ren_sel_admEstado(string accion, long codSuscriptor, string codUsuario, int codBandeja)
         {
-            return dat.fn_ren_sel_admEstado(accion, codSuscriptor, codUsuario, codBandeja);
+            var data = dat.fn_ren_sel_admEstado(accion, codSuscriptor, codUsuario, codBandeja);
+
+            var resultado = data
+                .GroupBy(d => d.usuario) // agrupar por usuario
+                .Select(gUsuario => new ADM_ESTADO_USUARIO_BE
+                {
+                    usuario = gUsuario.Key,
+                    lstEtiqueta = gUsuario
+                        .GroupBy(d => d.etiqueta) // agrupar por etiqueta
+                        .Select(gEtiqueta => new ADM_ESTADO_ETIQUETA_BE
+                        {
+                            etiqueta = gEtiqueta.Key,
+                            lstEstado = gEtiqueta
+                                .Select(e => new ADM_ESTADO_BE
+                                {
+                                    codBandeja = e.codBandeja,
+                                    bandeja = e.bandeja,
+                                    usuario = e.usuario,
+                                    etiqueta = e.etiqueta,
+                                    codigo = e.codigo,
+                                    documento = e.documento,
+                                    personeria = e.personeria,
+                                    cliente = e.cliente,
+                                    producto = e.producto,
+                                    monto = e.monto,
+                                    plazo = e.plazo,
+                                    teaBase = e.teaBase,
+                                    teaEfectiva = e.teaEfectiva,
+                                    profit = e.profit,
+                                    rorac = e.rorac,
+                                    autonomia = e.autonomia,
+                                    fecha = e.fecha
+                                })
+                                .ToList()
+                        })
+                        .ToList()
+                })
+                .ToList();
+
+            return resultado;
+
         }
     }
 }

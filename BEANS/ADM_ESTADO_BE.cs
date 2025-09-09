@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BEANS
 {
+
     public class ADM_ESTADO_BE
     {
         public int codBandeja { get; set; }
@@ -25,6 +26,17 @@ namespace BEANS
         public string rorac { get; set; }
         public string autonomia { get; set; }
         public string fecha { get; set; }
+    }
+
+    public class ADM_ESTADO_USUARIO_BE
+    {
+        public string usuario { get; set; }
+        public List<ADM_ESTADO_ETIQUETA_BE> lstEtiqueta { get; set; }
+    }
+    public class ADM_ESTADO_ETIQUETA_BE
+    {
+        public string etiqueta { get; set; }
+        public List<ADM_ESTADO_BE> lstEstado { get; set; }
     }
     public class BANDEJA_BE
     {

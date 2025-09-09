@@ -59,7 +59,7 @@ namespace webapp.ViewModels
 
         public List<TASA_TRANFERENCIA_BE> lstTasaTranf { get; set; }
         public List<TASA_TRANF_VALOR_BE> lstTasaTranfValor { get; set; }
-        public List<ADM_ESTADO_BE> lstAdmEstado { get; set; }
+        public List<ADM_ESTADO_USUARIO_BE> lstAdmEstado { get; set; }
 
     }
 }
