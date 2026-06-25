@@ -197,7 +197,7 @@
 
                                                             <tr class="@estilo2" style="font-size:10px;">
                                                                 <td align="left" class="tdMoneda">@item.moneda</td>
-                                                                @*<td align="left" class="tdEncaje">@item.encaje</td>*@
+                                                                <td align="left" class="tdEncaje hidden">@item.encaje</td>
                                                                 <td align="center" class="tdBeta0">@(item.beta0?.ToString("N16"))</td>
                                                                 <td align="center" class="tdBeta1">@(item.beta1?.ToString("N16"))</td>
                                                                 <td align="center" class="tdBeta2">@(item.beta2?.ToString("N16"))</td>
@@ -539,7 +539,7 @@
 
                     // Crear las celdas con los valores correspondientes
                     var cellMoneda = $('<td></td>').attr('align', 'left').addClass('tdMoneda').text(item.moneda);
-                    /*var cellEncaje = $('<td></td>').attr('align', 'left').addClass('tdEncaje hidden').text(item.encaje);*/
+                    var cellEncaje = $('<td></td>').attr('align', 'left').addClass('tdEncaje hidden').text(item.encaje);
                     var cellBeta0 = $('<td></td>').attr('align', 'center').addClass('tdBeta0').text(item.beta0 ? item.beta0.toFixed(16) : '');
                     var cellBeta1 = $('<td></td>').attr('align', 'center').addClass('tdBeta1').text(item.beta1 ? item.beta1.toFixed(16) : '');
                     var cellBeta2 = $('<td></td>').attr('align', 'center').addClass('tdBeta2').text(item.beta2 ? item.beta2.toFixed(16) : '');

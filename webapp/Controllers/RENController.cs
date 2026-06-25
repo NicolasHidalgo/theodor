@@ -717,8 +717,11 @@ namespace webapp.Controllers
                 res.Status = HttpStatusCode.BadRequest;
 
                 if (reply.MENSAJE.Equals(string.Empty) || reply.MENSAJE.Contains(Constantes.SUCCESS))
+                {
                     res.Status = HttpStatusCode.OK;
-
+                    res.Message = "Grabación exitosa";
+                }
+                    
                 var dataVigencia = bl.fn_ren_sel_transferenciaDDL("@fec_vigencia", user.SUSCRIPTOR, user.COD_USUARIO, 1);
                 viewModel.ddlVigencia = dataVigencia.Select(x => new ExtendedSelectListItem
                 {
