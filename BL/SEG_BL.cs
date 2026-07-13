@@ -29,7 +29,7 @@ namespace BL
             lista = dat.fn_seg_sel_menu(model);
 
             SEG_OPCION_BE bean = null;
-            foreach (var item in lista.Where(x => x.COD_MENU_PADRE == 0))
+            foreach (var item in lista.Where(x => x.COD_MENU_PADRE == 0).OrderBy(x => x.ORDEN))
             {
                 bean = new SEG_OPCION_BE();
                 bean.COD_MENU = item.COD_MENU;
@@ -54,7 +54,7 @@ namespace BL
         {
             List<SEG_OPCION_BE> listaObj = new List<SEG_OPCION_BE>();
             SEG_OPCION_BE bean = null;
-            foreach (var item in lista.Where(x => x.COD_MENU_PADRE == idOpcion))
+            foreach (var item in lista.Where(x => x.COD_MENU_PADRE == idOpcion).OrderBy(x=> x.ORDEN))
             {
                 bean = new SEG_OPCION_BE();
                 bean.COD_MENU = item.COD_MENU;

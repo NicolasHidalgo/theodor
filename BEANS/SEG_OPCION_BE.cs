@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Odbc;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,5 +33,6 @@ namespace BEANS
         public string cod_aplicacion { get; set; }
         public int ide_aplicacion { get; set; }
         public string nom_aplicacion { get; set; }
+        public int ORDEN { get; set; }
     }
 }

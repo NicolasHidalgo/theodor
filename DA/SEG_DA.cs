@@ -214,6 +214,7 @@ namespace DA
                         bean.ICONO = DataReader.SafeGetString(dr, dr.GetOrdinal("icono"));
                         bean.TIP_MENU = DataReader.SafeGetString(dr, dr.GetOrdinal("tip_menu"));
                         bean.PARAMETRO = DataReader.SafeGetString(dr, dr.GetOrdinal("parametro"));
+                        bean.ORDEN = DataReader.SafeGetInt32(dr, dr.GetOrdinal("orden"));
                         lista.Add(bean);
                     }
                 }
