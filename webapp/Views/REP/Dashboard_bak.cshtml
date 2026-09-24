@@ -77,355 +77,362 @@
     <!-- Content area -->
     <div class="content">
         <div class="panel panel-flat">
-
+            <div class="tabbable">
+                <ul class="nav nav-tabs nav-tabs-highlight nav-justified" style="width:50%">
+                    <li id="liTab0" class="active"><a href="#tab0" data-toggle="tab">Control</a></li>
+                    <li id="liTab1"><a href="#tab1" data-toggle="tab">Operaciones</a></li>
+                    @*<li id="liTab2"><a href="#tab2" data-toggle="tab">Evolución</a></li>
+                    <li id="liTab3"><a href="#tab3" data-toggle="tab">Análisis</a></li>*@
+                </ul>
+            </div>
             <div id="pControl" class="tab-content">
-                <div class="panel-body">
-                    <div class="col-md-12">
+                <div class="tab-pane active" id="tab0">
+                    <div class="panel-body">
+                        <div class="col-md-12">
 
-                        <div class="form-group col-md-2">
-                            <label>Fec Desde:</label>
-                            <input id="txtFecDesde" type="month" class="form-control" />
+                            <div class="form-group col-md-2">
+                                <label>Fec Desde:</label>
+                                <input id="txtFecDesde" type="month" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Fec Hasta:</label>
+                                <input id="txtFecHasta" type="month" class="form-control" />
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label>Moneda:</label>
+                                <select id="ddlMoneda" name="ddlMoneda" class="select">
+                                    <option value="" selected>--TODOS--</option>
+                                    @foreach (var item in Model.ddlMoneda)
+                                    {
+                                        @*<option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Text</option>*@
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Personeria:</label>
+                                <select id="ddlPersoneria" name="ddlPersoneria" class="select">
+                                    <option value="" selected>--TODOS--</option>
+                                    @foreach (var item in Model.ddlPersoneria)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Tipo Cliente:</label>
+                                <select id="ddlTipCliente" name="ddlTipCliente" class="select">
+                                    <option value="" selected>--TODOS--</option>
+                                    @foreach (var item in Model.ddlTipCliente)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Operacion:</label>
+                                <select id="ddlOperacion" name="ddlOperacion" class="select">
+                                    <option value="" selected>--TODOS--</option>
+                                    @foreach (var item in Model.ddlOperacion)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Producto:</label>
+                                <select id="ddlProducto" name="ddlProducto" class="select">
+                                    <option value="" selected>--TODOS--</option>
+                                    @foreach (var item in Model.ddlProducto)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label>Clasificación:</label>
+                                <select id="ddlClasificacion" name="ddlClasificacion" class="select">
+                                    <option value="" selected>--TODOS--</option>
+                                    @foreach (var item in Model.ddlClasificacionInterna)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label>Garantia:</label>
+                                <select id="ddlGarantia" name="ddlGarantia" class="select">
+                                    <option value="" selected>--TODOS--</option>
+                                    @foreach (var item in Model.ddlGarantiaPersonal)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label>Agencia:</label>
+                                <select id="ddlAgencia" name="ddlAgencia" class="select">
+                                    <option value="" selected>--TODOS--</option>
+                                    @foreach (var item in Model.ddlAgencia)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Funcionario:</label>
+                                <select id="ddlFuncionario" name="ddlFuncionario" class="select">
+                                    <option value="" selected>--TODOS--</option>
+                                    @foreach (var item in Model.ddlFuncionario)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+
+
                         </div>
-                        <div class="form-group col-md-2">
-                            <label>Fec Hasta:</label>
-                            <input id="txtFecHasta" type="month" class="form-control" />
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab1" style="background-color: #F2F1F0;">
+                    <div class="img-fluid">
+                        <div class="table-responsive">
+                            <table id="tblDashboard" class="table" style="width: 100%; table-layout: fixed; border-collapse: collapse;">
+                                <colgroup>
+                                    <col style="width: 8%; border-right: 1px solid #b8b8b8;" "> <!-- nomRef -->
+                                    <col style="width: 3%;">  <!-- noEnProceso -->
+                                    <col style="width: 5%; border-right: 1px solid #b8b8b8;">  <!-- montoEnProceso -->
+                                    <col style="width: 3%;">  <!-- noDesembolsado -->
+                                    <col style="width: 5%;">  <!-- desembolso -->
+                                    <col style="width: 5%;">  <!-- tea -->
+                                    <col style="width: 5%;">  <!-- perdidaEsperada -->
+                                    <col style="width: 4%;">  <!-- spread -->
+                                    <col style="width: 4%;">  <!-- profit -->
+                                    <col style="width: 4%;">  <!-- RORAC -->
+                                    <col style="width: 5%; border-right: 1px solid #b8b8b8;" ">  <!-- utilidad -->
+                                    <col style="width: 5%;">  <!-- desembolsoObjetivo -->
+                                    <col style="width: 4%;">  <!-- teaObjetivo -->
+                                    <col style="width: 5%; border-right: 1px solid #b8b8b8;" ">  <!-- RORACObjetivo -->
+                                    <col style="width: 5%; border-right: 1px solid #b8b8b8;" ">  <!-- Ranking RORAC -->
+                                    <col style="width: 5%;">  <!-- Ranking Desembolso -->
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th colspan="2" class="tblTitle">En Proceso</th>
+                                        <th colspan="8" class="tblTitle">Operaciones Desembolsadas</th>
+                                        <th colspan="3" class="tblTitle">Objetivos</th>
+                                        <th colspan="2" class="tblTitle">Ranking</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="tblHeader"></th>
+                                        <th class="tblHeader">No.</th>
+                                        <th class="tblHeader">Monto</th>
+                                        <th class="tblHeader">No.</th>
+                                        <th class="tblHeader">Desembolsos</th>
+                                        <th class="tblHeader">Tasa Operación</th>
+                                        <th class="tblHeader">Pérdida Esperada</th>
+                                        <th class="tblHeader">Spread</th>
+                                        <th class="tblHeader">Profit</th>
+                                        <th class="tblHeader">RORAC</th>
+                                        <th class="tblHeader">Utilidad</th>
+                                        <th class="tblHeader">Desembolsos</th>
+                                        <th class="tblHeader">Tasa</th>
+                                        <th class="tblHeader">RORAC</th>
+                                        <th class="tblHeader">RORAC</th>
+                                        <th class="tblHeader">Desembolso</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
 
-                        <div class="form-group col-md-2">
-                            <label>Moneda:</label>
-                            <select id="ddlMoneda" name="ddlMoneda" class="select">
-                                <option value="" selected>--TODOS--</option>
-                                @foreach (var item in Model.ddlMoneda)
-                                {
-                                    @*<option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Text</option>*@
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label>Personería:</label>
-                            <select id="ddlPersoneria" name="ddlPersoneria" class="select">
-                                <option value="" selected>--TODOS--</option>
-                                @foreach (var item in Model.ddlPersoneria)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label>Tipo Cliente:</label>
-                            <select id="ddlTipCliente" name="ddlTipCliente" class="select">
-                                <option value="" selected>--TODOS--</option>
-                                @foreach (var item in Model.ddlTipCliente)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label>Operación:</label>
-                            <select id="ddlOperacion" name="ddlOperacion" class="select">
-                                <option value="" selected>--TODOS--</option>
-                                @foreach (var item in Model.ddlOperacion)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label>Producto:</label>
-                            <select id="ddlProducto" name="ddlProducto" class="select">
-                                <option value="" selected>--TODOS--</option>
-                                @foreach (var item in Model.ddlProducto)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
+                    </div>
+
+                </div>
+
+                <div class="tab-pane" id="tab2" style="background-color: #F2F1F0;">
+                    <div class="img-fluid">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartE01"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartE02"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartE03"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-group col-md-2">
-                            <label>Clasificación:</label>
-                            <select id="ddlClasificacion" name="ddlClasificacion" class="select">
-                                <option value="" selected>--TODOS--</option>
-                                @foreach (var item in Model.ddlClasificacionInterna)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartE04"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartE05"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartE06"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-group col-md-2">
-                            <label>Garantía:</label>
-                            <select id="ddlGarantia" name="ddlGarantia" class="select">
-                                <option value="" selected>--TODOS--</option>
-                                @foreach (var item in Model.ddlGarantiaPersonal)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartE07"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartE08"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartE09"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-group col-md-2">
-                            <label>Agencia:</label>
-                            <select id="ddlAgencia" name="ddlAgencia" class="select">
-                                <option value="" selected>--TODOS--</option>
-                                @foreach (var item in Model.ddlAgencia)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartE10"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartE11"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartE12"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group col-md-2">
-                            <label>Funcionario:</label>
-                            <select id="ddlFuncionario" name="ddlFuncionario" class="select">
-                                <option value="" selected>--TODOS--</option>
-                                @foreach (var item in Model.ddlFuncionario)
-                                {
-                                    <option value="@item.Value">@item.Text</option>
-                                }
-                            </select>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab3" style="background-color: #F2F1F0;">
+                    <div class="img-fluid">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartA01"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartA02"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartA03"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartA04"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartA05"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartA06"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartA07"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartA08"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default card-look">
+                                    <div class="panel-body">
+                                        <canvas id="chartA09"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-        </div>
-
-        <!--desempeno-->
-        <div id="divDesempeno" class="panel panel-flat">
-            <div class="img-fluid">
-                <div class="table-responsive">
-                    <table id="tblDashboard" class="table" style="width: 100%; table-layout: fixed; border-collapse: collapse;">
-                        <colgroup>
-                            <col style="width: 8%; border-right: 1px solid #b8b8b8;" "> <!-- nomRef -->
-                            <col style="width: 3%;">  <!-- noEnProceso -->
-                            <col style="width: 5%; border-right: 1px solid #b8b8b8;">  <!-- montoEnProceso -->
-                            <col style="width: 3%;">  <!-- noDesembolsado -->
-                            <col style="width: 5%;">  <!-- desembolso -->
-                            <col style="width: 5%;">  <!-- tea -->
-                            <col style="width: 5%;">  <!-- perdidaEsperada -->
-                            <col style="width: 4%;">  <!-- spread -->
-                            <col style="width: 4%;">  <!-- profit -->
-                            <col style="width: 4%;">  <!-- RORAC -->
-                            <col style="width: 5%; border-right: 1px solid #b8b8b8;" ">  <!-- utilidad -->
-                            <col style="width: 5%;">  <!-- desembolsoObjetivo -->
-                            <col style="width: 4%;">  <!-- teaObjetivo -->
-                            <col style="width: 5%; border-right: 1px solid #b8b8b8;" ">  <!-- RORACObjetivo -->
-                            <col style="width: 5%; border-right: 1px solid #b8b8b8;" ">  <!-- Ranking RORAC -->
-                            <col style="width: 5%;">  <!-- Ranking Desembolso -->
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th colspan="2" class="tblTitle">En Proceso</th>
-                                <th colspan="8" class="tblTitle">Operaciones Desembolsadas</th>
-                                <th colspan="3" class="tblTitle">Objetivos</th>
-                                <th colspan="2" class="tblTitle">Ranking</th>
-                            </tr>
-                            <tr>
-                                <th class="tblHeader"></th>
-                                <th class="tblHeader">No.</th>
-                                <th class="tblHeader">Monto</th>
-                                <th class="tblHeader">No.</th>
-                                <th class="tblHeader">Desembolsos</th>
-                                <th class="tblHeader">Tasa Operación</th>
-                                <th class="tblHeader">Pérdida Esperada</th>
-                                <th class="tblHeader">Spread</th>
-                                <th class="tblHeader">Profit</th>
-                                <th class="tblHeader">RORAC</th>
-                                <th class="tblHeader">Utilidad</th>
-                                <th class="tblHeader">Desembolsos</th>
-                                <th class="tblHeader">Tasa</th>
-                                <th class="tblHeader">RORAC</th>
-                                <th class="tblHeader">RORAC</th>
-                                <th class="tblHeader">Desembolso</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-
-            </div>
-
-        </div>
-
-        <!--indicadores-->
-        <div id="divIndicadores" class="panel panel-flat">
-            <div class="img-fluid">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE01"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE02"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE03"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE04"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE05"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE06"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE07"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE08"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE09"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE10"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE11"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE12"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!--winloss-->
-        <div id="divWinloss" class="panel panel-flat">
-            <div class="img-fluid">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartA01"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartA02"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartA03"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartA04"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartA05"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartA06"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartA07"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartA08"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartA09"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </div>
@@ -440,22 +447,8 @@
     var arrTipCliente = [];
     var arrProducto = [];
     const charts = {};
-    var tipo = "";
 
     $(document).ready(function () {
-
-        tipo = new URLSearchParams(window.location.search).get('tipo');
-        if (tipo == "desempeno") {
-            $("#imgApp div").html('Gestión de Desempeño');
-            $("#divIndicadores,#divWinloss").hide();
-        }else if (tipo == "indicadores") {
-            $("#imgApp div").html('Indicadores Financieros');
-            $("#divDesempeno,#divWinloss").hide();
-        } else if (tipo == "winloss") {
-            $("#imgApp div").html('WIN/LOSS');
-            $("#divDesempeno,#divIndicadores").hide();
-        }
-        
 
         let fecha = new Date();
         let anio = fecha.getFullYear();
@@ -467,11 +460,13 @@
             btnReporteClick();
         });
         function tabDashboard(res) {
-            if (tipo === "desempeno") {
+            var hrefActivo = $(".nav-tabs li.active a").attr("href");
+
+            if (hrefActivo === "#tab1") {
                 construirDashboard01(res);
-            } else if (tipo === "indicadores") {
+            } else if (hrefActivo === "#tab2") {
                 construirDashboard02(res);
-            } else if (tipo === "winloss") {
+            } else if (hrefActivo === "#tab3") {
                 construirDashboard03(res);
             }
         }
@@ -524,7 +519,6 @@
             cargarComboProducto();
         });
 
-
         $("#btnExportar").click(function () {
             return;
             $("#overlay").show();
@@ -553,11 +547,13 @@
             $("#overlay").show();
             //$("#pControl").hide();
 
-            if (tipo === "desempeno") {
+            var url = "";
+            var hrefActivo = $(".nav-tabs li.active a").attr("href");
+            if (hrefActivo === "#tab1") {
                 url = '@Url.Action("JSON_GetDashboard01", "REP")';
-            } else if (tipo === "indicadores") {
+            } else if (hrefActivo === "#tab2") {
                 url = '@Url.Action("JSON_GetDashboard02", "REP")';
-            } else if (tipo === "winloss") {
+            } else if (hrefActivo === "#tab3") {
                 url = '@Url.Action("JSON_GetDashboard03", "REP")';
             }
 

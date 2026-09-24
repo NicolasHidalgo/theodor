@@ -10,7 +10,7 @@ namespace webapp.Controllers
     public class REPController : BaseController
     {
         private REP_BL bl = new REP_BL();
-        public ActionResult Dashboard()
+        public ActionResult Dashboard(string tipo)
         {
             var viewModel = new AuxiliarEdit();
             var user = (SEG_USUARIO_BE)Session["Usuario"];
@@ -43,6 +43,7 @@ namespace webapp.Controllers
             return View(viewModel);
         }
 
+        //  gestion de desempeño
         public JsonResult JSON_GetDashboard01(REP_DASHBOARD_PARAM param)
         {
             var user = (SEG_USUARIO_BE)Session["Usuario"];
@@ -85,6 +86,7 @@ namespace webapp.Controllers
             return View(viewModel);
         }
 
+        //  indicadores financieros
         public JsonResult JSON_GetDashboard02(REP_DASHBOARD_PARAM param)
         {
             var user = (SEG_USUARIO_BE)Session["Usuario"];
@@ -127,6 +129,7 @@ namespace webapp.Controllers
             return View(viewModel);
         }
 
+        // win/loss
         public JsonResult JSON_GetDashboard03(REP_DASHBOARD_PARAM param)
         {
             var user = (SEG_USUARIO_BE)Session["Usuario"];

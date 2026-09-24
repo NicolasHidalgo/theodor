@@ -123,6 +123,30 @@
     <!-- Page content -->
     <div class="page-content">
 
+        <!-- Main sidebar -->
+        <div class="sidebar sidebar-main2">
+            <div class="sidebar-content">
+                <!-- Main navigation -->
+                <div class="sidebar-category sidebar-category-visible">
+                    <div class="category-content no-padding">
+                        <ul class="navigation navigation-main navigation-accordion" id="sidebarMenu">
+
+                            <!-- Main -->
+                            <li><a class="sidebar-control sidebar-main-toggle2 hidden-xs"><i class="icon-paragraph-justify3"></i></a></li>
+                            @foreach (var item in Model.ddlBandeja)
+                            {
+                                <li><a class="menu-item" onclick="fn_selBandeja(@item.Value)"><i class="icon-home4"></i> <span>@item.Text</span></a></li>
+                            }
+
+                            <!-- /main -->
+                        </ul>
+                    </div>
+                </div>
+                <!-- /main navigation -->
+            </div>
+        </div>
+        <!-- /main sidebar -->
+
         <!-- Main content -->
         <div class="content-wrapper">
             <table class="table">
