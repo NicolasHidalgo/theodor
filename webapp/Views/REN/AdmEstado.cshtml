@@ -128,11 +128,11 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <td align="right" class="td-common-style">Buscar:</td>
-                        <td colspan="5" class="td-common-style"><input type="text" class="form-control" /></td>
+                        <td align="right" class="td-common-style col-md-2">Buscar:</td>
+                        <td class="td-common-style col-md-10"><input type="text" class="form-control" /></td>
                     </tr>
                     <tr>
-                        <td colspan="5" class="td-style"></td>
+                        @*<td colspan="5" class="td-style"></td>*@
                         <td style="padding: 1px 4px; line-height: 1;">Por Fecha<i class="icon-arrow-down5"></i></td>
                     </tr>
                 </tbody>
@@ -158,7 +158,8 @@
     });
 
     var jsModel = @Html.Raw(Json.Encode(Model));
-
+    var cod = new URLSearchParams(window.location.search).get('cod');
+    fn_selBandeja(cod);
 
     function fn_selBandeja(cod) {
         var $tbody = $("#tblAdmEstado");

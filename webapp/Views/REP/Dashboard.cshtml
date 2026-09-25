@@ -51,6 +51,14 @@
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         border: 1px solid #ddd;
     }
+
+
+
+    .chart-container {
+        position: relative;
+        width: 100%;
+        height: 280px;
+    }
 </style>
 
 <!-- Main content -->
@@ -61,7 +69,7 @@
         </div>
         <div class="breadcrumb-line breadcrumb-line-component">
             <ul class="breadcrumb">
-                <li><a href="@Url.Action("Index","Home")"><i class="icon-printer position-left"></i> Tablero Control Operaciones</a></li>
+                <li><a href="@Url.Action("Index","Home")"><i class="icon-printer position-left"></i> Tablero Control</a></li>
             </ul>
             <ul class="breadcrumb-elements">
                 <li><a id="btnControles"><i id="iDownUp" class="icon-circle-up2" title="Controles"></i></a></li>
@@ -256,45 +264,27 @@
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartE01"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartE01"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartE02"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartE02"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartE03"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE04"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE05"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartE06"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartE03"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -304,21 +294,27 @@
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartE07"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartE04"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartE08"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartE05"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartE09"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartE06"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -328,21 +324,57 @@
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartE10"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartE07"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartE11"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartE08"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartE12"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartE09"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-default card-look">
+                            <div class="panel-body">
+                                <div class="chart-container">
+                                    <canvas id="chartE10"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default card-look">
+                            <div class="panel-body">
+                                <div class="chart-container">
+                                    <canvas id="chartE11"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default card-look">
+                            <div class="panel-body">
+                                <div class="chart-container">
+                                    <canvas id="chartE12"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -358,45 +390,27 @@
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartA01"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartA01"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartA02"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartA02"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartA03"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartA04"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartA05"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="panel panel-default card-look">
-                            <div class="panel-body">
-                                <canvas id="chartA06"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartA03"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -406,21 +420,57 @@
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartA07"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartA04"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartA08"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartA05"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-default card-look">
                             <div class="panel-body">
-                                <canvas id="chartA09"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="chartA06"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-default card-look">
+                            <div class="panel-body">
+                                <div class="chart-container">
+                                    <canvas id="chartA07"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default card-look">
+                            <div class="panel-body">
+                                <div class="chart-container">
+                                    <canvas id="chartA08"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default card-look">
+                            <div class="panel-body">
+                                <div class="chart-container">
+                                    <canvas id="chartA09"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -443,6 +493,7 @@
     var tipo = "";
 
     $(document).ready(function () {
+        $("#overlay").show();
 
         tipo = new URLSearchParams(window.location.search).get('tipo');
         if (tipo == "desempeno") {
@@ -460,12 +511,10 @@
         let fecha = new Date();
         let anio = fecha.getFullYear();
         let mes = String(fecha.getMonth() + 1).padStart(2, "0");
-        $("#txtFecDesde, #txtFecHasta").val(`${anio}-${mes}`);
+        $("#txtFecDesde").val("2024-05");
+        $("#txtFecHasta").val(`${anio}-${mes}`);
+        btnReporteClick();
 
-
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            btnReporteClick();
-        });
         function tabDashboard(res) {
             if (tipo === "desempeno") {
                 construirDashboard01(res);
@@ -719,6 +768,8 @@
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
@@ -780,7 +831,7 @@
         }
         function construirChartEFila03(chartId, titulo, fecha, importe, color) {
             const canvas = document.getElementById(chartId);
-            canvas.height = 150; // 👈 aquí cambias la altura
+            //canvas.height = 150; // 👈 aquí cambias la altura
             const ctx = canvas.getContext('2d');
             if (charts[chartId]) {
                 charts[chartId].destroy();
@@ -796,6 +847,8 @@
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
@@ -857,7 +910,7 @@
         }
         function construirChartEFila02(chartId, titulo, fecha, importe, color) {
             const canvas = document.getElementById(chartId);
-            canvas.height = 150; // 👈 aquí cambias la altura
+            //canvas.height = 150; // 👈 aquí cambias la altura
             const ctx = canvas.getContext('2d');
             // Destruir el chart anterior si ya existe
             if (charts[chartId]) {
@@ -874,6 +927,8 @@
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
@@ -936,7 +991,7 @@
         }
         function construirChartEFila01(chartId, titulo, fecha, tea, rorac) {
             const canvas = document.getElementById(chartId);
-            canvas.height = 150; // 👈 aquí cambias la altura
+            //canvas.height = 150; // 👈 aquí cambias la altura
             const ctx = canvas.getContext('2d');
             // Destruir el chart anterior si ya existe
             if (charts[chartId]) {
@@ -968,6 +1023,8 @@
                     ]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
@@ -1146,7 +1203,7 @@
         }
         function construirChartAPie(chartId, titulo, label, importe, color) {
             const canvas = document.getElementById(chartId);
-            canvas.height = 210; // 👈 aquí cambias la altura
+            //canvas.height = 210; // 👈 aquí cambias la altura
             const ctx = canvas.getContext('2d');
             // Destruir el chart anterior si ya existe
             if (charts[chartId]) {
@@ -1229,7 +1286,7 @@
         }
         function construirChartABarHor(chartId, titulo, label, importe) {
             const canvas = document.getElementById(chartId);
-            canvas.height = 150; // 👈 aquí cambias la altura
+            //canvas.height = 150; // 👈 aquí cambias la altura
             const ctx = canvas.getContext('2d');
             // Destruir el chart anterior si ya existe
             if (charts[chartId]) {
@@ -1282,7 +1339,7 @@
         }
         function construirChartABarVer(chartId, titulo, label, etiqueta1, etiqueta2, importe1, importe2) {
             const canvas = document.getElementById(chartId);
-            canvas.height = 150; // 👈 aquí cambias la altura
+            //canvas.height = 150; // 👈 aquí cambias la altura
             const ctx = canvas.getContext('2d');
             // Destruir el chart anterior si ya existe
             if (charts[chartId]) {
@@ -1327,6 +1384,7 @@
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
@@ -1386,7 +1444,7 @@
         }
         function construirChartA03(chartId, titulo, label, dataset) {
             const canvas = document.getElementById(chartId);
-            canvas.height = 150; // 👈 aquí cambias la altura
+            //canvas.height = 150; // 👈 aquí cambias la altura
             const ctx = canvas.getContext('2d');
             // Destruir el chart anterior si ya existe
             if (charts[chartId]) {
@@ -1401,6 +1459,7 @@
                 options: {
                     indexAxis: 'y',
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
